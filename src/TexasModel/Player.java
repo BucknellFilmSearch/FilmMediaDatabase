@@ -5,8 +5,9 @@
  */
 package TexasModel;
 
-import CardDeckHand.Card;
+import CardDeckHand.Deck;
 import CardDeckHand.Hand;
+import CardDeckHand.SixCardHandException;
 
 /**
  *
@@ -19,6 +20,14 @@ public class Player {
     private boolean isPlay;
     private double bet;
     private Hand hand;
+
+    public Player() {
+        this.name = "Player";
+        this.money = 100;
+        this.isPlay = false;
+        this.bet = 0;
+        this.hand = new Hand();
+    }
 
     public Player(String name, double money, boolean isPlay, Hand hand) {
         this.name = name;
@@ -41,8 +50,10 @@ public class Player {
         this.hand = h;
     }
 
-    public void setHand(Card card1, Card card2) {
-        this.hand = new Hand(card1, card2);
+    public void setHand(Deck deck) throws SixCardHandException {
+        this.hand = new Hand();
+        this.hand.addCard(deck.drawRandomCard());
+        this.hand.addCard(deck.drawRandomCard());
     }
 
     public String getName() {
@@ -80,6 +91,10 @@ public class Player {
         }
         this.bet += amount;
         this.money -= amount;
+    }
+
+    public void raise(double amount) {
+
     }
 
     public void allIn() {
