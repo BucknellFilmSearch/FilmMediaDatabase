@@ -5,6 +5,9 @@
  */
 package CardDeckHand;
 
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,11 +53,20 @@ public class HandTest {
      */
     @Test
     public void testDefineHand() {
-        System.out.println("defineHand");
-        Hand instance = new Hand();
-        instance.defineHand();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            System.out.println("defineHand");
+            // also testing my drawRandomCard method here
+            hand.addCard(deck.drawRandomCard());
+            hand.addCard(deck.drawRandomCard());
+            hand.addCard(deck.drawRandomCard());
+            hand.addCard(deck.drawRandomCard());
+            hand.addCard(deck.drawRandomCard());
+            // after fifth card is added, hand automatically defines itself
+            assert (hand.getHandType() != HandType.INCOMPLETE_HAND);
+            assert (hand.getHandRank() != 0);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -62,13 +74,20 @@ public class HandTest {
      */
     @Test
     public void testLowCard() {
-        System.out.println("lowCard");
-        Hand instance = new Hand();
-        Card expResult = null;
-        Card result = instance.lowCard();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            System.out.println("lowCard");
+            Card card1 = new Card(Suite.Clubs, "A");
+            Card card2 = new Card(Suite.Diamonds, 2);
+            Card card3 = new Card(Suite.Spades, 5);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            assert (hand.lowCard().equals(card2));
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -76,13 +95,20 @@ public class HandTest {
      */
     @Test
     public void testHighCard() {
-        System.out.println("highCard");
-        Hand instance = new Hand();
-        Card expResult = null;
-        Card result = instance.highCard();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            System.out.println("lowCard");
+            Card card1 = new Card(Suite.Clubs, "A");
+            Card card2 = new Card(Suite.Diamonds, 2);
+            Card card3 = new Card(Suite.Spades, 5);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            assert (hand.highCard().equals(card1));
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -90,13 +116,24 @@ public class HandTest {
      */
     @Test
     public void testIsRoyalFlush() {
-        System.out.println("isRoyalFlush");
-        Hand instance = new Hand();
-        boolean expResult = false;
-        boolean result = instance.isRoyalFlush();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, "A");
+            Card card2 = new Card(Suite.Clubs, "K");
+            Card card3 = new Card(Suite.Clubs, "Q");
+            Card card4 = new Card(Suite.Clubs, "J");
+            Card card5 = new Card(Suite.Clubs, 10);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            System.out.println(hand.getHandType().name());
+            assert (hand.getHandType() == HandType.ROYAL_FLUSH);
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -104,13 +141,24 @@ public class HandTest {
      */
     @Test
     public void testIsStraightFlush() {
-        System.out.println("isStraightFlush");
-        Hand instance = new Hand();
-        boolean expResult = false;
-        boolean result = instance.isStraightFlush();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, "K");
+            Card card2 = new Card(Suite.Clubs, "Q");
+            Card card3 = new Card(Suite.Clubs, "J");
+            Card card4 = new Card(Suite.Clubs, 10);
+            Card card5 = new Card(Suite.Clubs, 9);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            System.out.println(hand.getHandType().name());
+            assert (hand.getHandType() == HandType.STRAIGHT_FLUSH);
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -118,13 +166,24 @@ public class HandTest {
      */
     @Test
     public void testIsFourOfAKind() {
-        System.out.println("isFourOfAKind");
-        Hand instance = new Hand();
-        boolean expResult = false;
-        boolean result = instance.isFourOfAKind();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, 9);
+            Card card2 = new Card(Suite.Diamonds, 10);
+            Card card3 = new Card(Suite.Hearts, 10);
+            Card card4 = new Card(Suite.Spades, 10);
+            Card card5 = new Card(Suite.Clubs, 10);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            System.out.println(hand.getHandType().name());
+            assert (hand.getHandType() == HandType.FOUR_OF_A_KIND);
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -132,13 +191,24 @@ public class HandTest {
      */
     @Test
     public void testIsFullHouse() {
-        System.out.println("isFullHouse");
-        Hand instance = new Hand();
-        boolean expResult = false;
-        boolean result = instance.isFullHouse();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, 9);
+            Card card2 = new Card(Suite.Diamonds, 9);
+            Card card3 = new Card(Suite.Hearts, 10);
+            Card card4 = new Card(Suite.Spades, 10);
+            Card card5 = new Card(Suite.Clubs, 10);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            System.out.println(hand.getHandType().name());
+            assert (hand.getHandType() == HandType.FULL_HOUSE);
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -146,13 +216,24 @@ public class HandTest {
      */
     @Test
     public void testIsFlush() {
-        System.out.println("isFlush");
-        Hand instance = new Hand();
-        boolean expResult = false;
-        boolean result = instance.isFlush();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, 3);
+            Card card2 = new Card(Suite.Clubs, 9);
+            Card card3 = new Card(Suite.Clubs, "J");
+            Card card4 = new Card(Suite.Clubs, 10);
+            Card card5 = new Card(Suite.Clubs, "A");
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            System.out.println(hand.getHandType().name());
+            assert (hand.getHandType() == HandType.FLUSH);
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -160,13 +241,24 @@ public class HandTest {
      */
     @Test
     public void testIsStraight() {
-        System.out.println("isStraight");
-        Hand instance = new Hand();
-        boolean expResult = false;
-        boolean result = instance.isStraight();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, 3);
+            Card card2 = new Card(Suite.Diamonds, 4);
+            Card card3 = new Card(Suite.Clubs, 6);
+            Card card4 = new Card(Suite.Spades, 5);
+            Card card5 = new Card(Suite.Hearts, 2);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            System.out.println(hand.getHandType().name());
+            assert (hand.getHandType() == HandType.STRAIGHT);
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -174,13 +266,24 @@ public class HandTest {
      */
     @Test
     public void testIsThreeOfAKind() {
-        System.out.println("isThreeOfAKind");
-        Hand instance = new Hand();
-        boolean expResult = false;
-        boolean result = instance.isThreeOfAKind();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, 3);
+            Card card2 = new Card(Suite.Diamonds, 3);
+            Card card3 = new Card(Suite.Clubs, 6);
+            Card card4 = new Card(Suite.Spades, 3);
+            Card card5 = new Card(Suite.Hearts, 2);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            System.out.println(hand.getHandType().name());
+            assert (hand.getHandType() == HandType.THREE_OF_A_KIND);
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -188,13 +291,24 @@ public class HandTest {
      */
     @Test
     public void testIsTwoPair() {
-        System.out.println("isTwoPair");
-        Hand instance = new Hand();
-        boolean expResult = false;
-        boolean result = instance.isTwoPair();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, 3);
+            Card card2 = new Card(Suite.Diamonds, 4);
+            Card card3 = new Card(Suite.Clubs, 4);
+            Card card4 = new Card(Suite.Spades, 3);
+            Card card5 = new Card(Suite.Hearts, 2);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            System.out.println(hand.getHandType().name());
+            assert (hand.getHandType() == HandType.TWO_PAIR);
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -202,13 +316,24 @@ public class HandTest {
      */
     @Test
     public void testIsPair() {
-        System.out.println("isPair");
-        Hand instance = new Hand();
-        boolean expResult = false;
-        boolean result = instance.isPair();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, 3);
+            Card card2 = new Card(Suite.Diamonds, 4);
+            Card card3 = new Card(Suite.Clubs, 5);
+            Card card4 = new Card(Suite.Spades, 3);
+            Card card5 = new Card(Suite.Hearts, 2);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            System.out.println(hand.getHandType().name());
+            assert (hand.getHandType() == HandType.PAIR);
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -216,14 +341,38 @@ public class HandTest {
      */
     @Test
     public void testCompareTo() {
-        System.out.println("compareTo");
-        Hand other = null;
-        Hand instance = new Hand();
-        int expResult = 0;
-        int result = instance.compareTo(other);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            Card card1 = new Card(Suite.Clubs, 3);
+            Card card2 = new Card(Suite.Diamonds, 4);
+            Card card3 = new Card(Suite.Clubs, 4);
+            Card card4 = new Card(Suite.Spades, 3);
+            Card card5 = new Card(Suite.Hearts, 2);
+            hand.addCard(card1);
+            hand.addCard(card2);
+            hand.addCard(card3);
+            hand.addCard(card4);
+            hand.addCard(card5);
+            Hand hand1 = new Hand();
+            Card card6 = new Card(Suite.Clubs, "A");
+            Card card7 = new Card(Suite.Clubs, "K");
+            Card card8 = new Card(Suite.Clubs, "Q");
+            Card card9 = new Card(Suite.Clubs, "J");
+            Card card10 = new Card(Suite.Clubs, 10);
+            hand1.addCard(card6);
+            hand1.addCard(card7);
+            hand1.addCard(card8);
+            hand1.addCard(card9);
+            hand1.addCard(card10);
+            ArrayList<Hand> handList = new ArrayList<>();
+            handList.add(hand);
+            handList.add(hand1);
+            handList.sort(null);
+            assert (handList.get(0).equals(hand1));
+        } catch (BadCardCreationException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
