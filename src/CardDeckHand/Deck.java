@@ -40,8 +40,12 @@ public class Deck {
         }
         for (Suite suit : suitList) {
             for (int value : valueList) {
-                Card card = new Card(suit, value);
-                deck.add(card);
+                try {
+                    Card card = new Card(suit, value);
+                    deck.add(card);
+                } catch (BadCardCreationException ex) {
+                    System.out.println(ex.getMessage());
+                }
             }
         }
     }
@@ -66,8 +70,12 @@ public class Deck {
         deck = new LinkedList<>();
         for (Suite suit : suitList) {
             for (int value : valueList) {
-                Card card = new Card(suit, value);
-                deck.add(card);
+                try {
+                    Card card = new Card(suit, value);
+                    deck.add(card);
+                } catch (BadCardCreationException ex) {
+                    System.out.println(ex.getMessage());
+                }
             }
         }
     }
