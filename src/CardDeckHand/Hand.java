@@ -19,7 +19,7 @@ enum HandType {
  *
  * @author justi_000
  */
-public class Hand implements Comparable {
+public class Hand implements Comparable<Hand> {
 
     private ArrayList<Card> hand;
 
@@ -418,9 +418,25 @@ public class Hand implements Comparable {
         }
     }
 
+    /**
+     * Allows hands to be sorted, best to worst.
+     *
+     * @param other
+     * @return
+     */
     @Override
-    public int compareTo(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int compareTo(Hand other) {
+        final int BEFORE = -1;
+        final int EQUAL = 0;
+        final int AFTER = 1;
+
+        if (this.handRank > other.handRank) {
+            return BEFORE;
+        } else if (this.handRank < other.handRank) {
+            return AFTER;
+        } else {
+            return EQUAL;
+        }
     }
 
 }
