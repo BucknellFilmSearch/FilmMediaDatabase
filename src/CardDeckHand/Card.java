@@ -6,19 +6,32 @@
 package CardDeckHand;
 
 /**
+ * Software representation of a playing card.
  *
  * @author justi_000
  */
 public class Card {
 
+    /**
+     * Enum used for selecting the suite type.
+     */
     public enum Suite {
 
         Spades, Hearts, Clubs, Diamonds;
     }
 
+    // the suite of the card
     private Suite suite;
+    // the value of the card 2-14 (2-Ace)
     private int value;
 
+    /**
+     * Initializes the playing card with specified Suite enum type and int
+     * value.
+     *
+     * @param suite
+     * @param value
+     */
     public Card(Suite suite, int value) {
         this.suite = suite;
         this.value = value;

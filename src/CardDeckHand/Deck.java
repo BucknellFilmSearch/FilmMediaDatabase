@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 /**
+ * Software representation of a deck of cards.
  *
  * @author justi_000
  */
@@ -22,6 +23,9 @@ public class Deck {
     private ArrayList<Suite> suitList;
     private ArrayList<Integer> valueList;
 
+    /**
+     * Initialized a software representation of a standard deck of 52 cards.
+     */
     public Deck() {
         suitList.add(Suite.Clubs);
         suitList.add(Suite.Spades);
@@ -46,7 +50,7 @@ public class Deck {
      * Allows user to draw a random card from the deck; IMPORTANT: THIS MEANS
      * THAT THE DRAWN CARD IS REMOVED FROM THE DECK!
      *
-     * @return Card drawn at random from deck.
+     * @return The Card object drawn at random from deck.
      */
     public Card drawRandomCard() {
         Random selector = new Random();
