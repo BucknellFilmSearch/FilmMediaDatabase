@@ -127,7 +127,6 @@ public class HandTest {
             hand.addCard(card3);
             hand.addCard(card4);
             hand.addCard(card5);
-            System.out.println(hand.getHandType().name());
             assert (hand.getHandType() == HandType.ROYAL_FLUSH);
         } catch (BadCardCreationException ex) {
             Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -152,7 +151,6 @@ public class HandTest {
             hand.addCard(card3);
             hand.addCard(card4);
             hand.addCard(card5);
-            System.out.println(hand.getHandType().name());
             assert (hand.getHandType() == HandType.STRAIGHT_FLUSH);
         } catch (BadCardCreationException ex) {
             Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -177,7 +175,6 @@ public class HandTest {
             hand.addCard(card3);
             hand.addCard(card4);
             hand.addCard(card5);
-            System.out.println(hand.getHandType().name());
             assert (hand.getHandType() == HandType.FOUR_OF_A_KIND);
         } catch (BadCardCreationException ex) {
             Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -202,7 +199,6 @@ public class HandTest {
             hand.addCard(card3);
             hand.addCard(card4);
             hand.addCard(card5);
-            System.out.println(hand.getHandType().name());
             assert (hand.getHandType() == HandType.FULL_HOUSE);
         } catch (BadCardCreationException ex) {
             Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -227,7 +223,6 @@ public class HandTest {
             hand.addCard(card3);
             hand.addCard(card4);
             hand.addCard(card5);
-            System.out.println(hand.getHandType().name());
             assert (hand.getHandType() == HandType.FLUSH);
         } catch (BadCardCreationException ex) {
             Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -252,7 +247,6 @@ public class HandTest {
             hand.addCard(card3);
             hand.addCard(card4);
             hand.addCard(card5);
-            System.out.println(hand.getHandType().name());
             assert (hand.getHandType() == HandType.STRAIGHT);
         } catch (BadCardCreationException ex) {
             Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -277,7 +271,6 @@ public class HandTest {
             hand.addCard(card3);
             hand.addCard(card4);
             hand.addCard(card5);
-            System.out.println(hand.getHandType().name());
             assert (hand.getHandType() == HandType.THREE_OF_A_KIND);
         } catch (BadCardCreationException ex) {
             Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -302,7 +295,6 @@ public class HandTest {
             hand.addCard(card3);
             hand.addCard(card4);
             hand.addCard(card5);
-            System.out.println(hand.getHandType().name());
             assert (hand.getHandType() == HandType.TWO_PAIR);
         } catch (BadCardCreationException ex) {
             Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -327,7 +319,6 @@ public class HandTest {
             hand.addCard(card3);
             hand.addCard(card4);
             hand.addCard(card5);
-            System.out.println(hand.getHandType().name());
             assert (hand.getHandType() == HandType.PAIR);
         } catch (BadCardCreationException ex) {
             Logger.getLogger(HandTest.class.getName()).log(Level.SEVERE, null, ex);
