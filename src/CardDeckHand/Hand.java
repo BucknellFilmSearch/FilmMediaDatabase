@@ -57,6 +57,14 @@ public class Hand implements Comparable<Hand> {
         this.hand.add(card2);
     }
 
+    /**
+     * Adds a card to the hand; Use with Deck.drawRandomCard() to simulate
+     * drawing a random card from the deck and adding it to the hand. The syntax
+     * for the operation described above would be: addCard(drawRandomCard());
+     *
+     * @param card
+     * @throws SixCardHandException
+     */
     public void addCard(Card card) throws SixCardHandException {
         if (hand.size() < 5) {
             hand.add(card);
@@ -72,7 +80,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Updates handType and handRank variables. Happens automatically Once fifth
+     * Updates handType and handRank variables. Called automatically Once fifth
      * card has been added to the hand.
      *
      * Our ranking system for hands works as follows: A high rank number
