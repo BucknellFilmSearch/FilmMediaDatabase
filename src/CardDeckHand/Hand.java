@@ -59,7 +59,8 @@ public class Hand implements Comparable<Hand> {
     /**
      * Adds a card to the hand; Use with Deck.drawRandomCard() to simulate
      * drawing a random card from the deck and adding it to the hand. The syntax
-     * for the operation described above would be: addCard(drawRandomCard());
+     * for the operation described above would be:
+     * hand.addCard(deck.drawRandomCard());
      *
      * @param card
      * @throws SixCardHandException
@@ -162,7 +163,7 @@ public class Hand implements Comparable<Hand> {
      */
     public boolean isRoyalFlush() {
         // if we have a flush and the high card is an ace...
-        if (isFlush() && isStraight() && highCard().getStringValue() == "A") {
+        if (isFlush() && isStraight() && highCard().getValue() == 14) {
             return true;
         } else {
             return false;
@@ -203,6 +204,7 @@ public class Hand implements Comparable<Hand> {
                 value1Count++;
             } else if (value2 == 0) {
                 value2 = card.getValue();
+                value2Count++;
             } else if (card.getValue() == value2) {
                 value2Count++;
             } else {
@@ -238,6 +240,7 @@ public class Hand implements Comparable<Hand> {
                 value1Count++;
             } else if (value2 == 0) {
                 value2 = card.getValue();
+                value2Count++;
             } else if (card.getValue() == value2) {
                 value2Count++;
             } else {
@@ -319,10 +322,12 @@ public class Hand implements Comparable<Hand> {
                 value1Count++;
             } else if (value2 == 0) {
                 value2 = card.getValue();
+                value2Count++;
             } else if (card.getValue() == value2) {
                 value2Count++;
             } else if (value3 == 0) {
                 value3 = card.getValue();
+                value3Count++;
             } else if (card.getValue() == value3) {
                 value3Count++;
             } else {
@@ -359,10 +364,12 @@ public class Hand implements Comparable<Hand> {
                 value1Count++;
             } else if (value2 == 0) {
                 value2 = card.getValue();
+                value2Count++;
             } else if (card.getValue() == value2) {
                 value2Count++;
             } else if (value3 == 0) {
                 value3 = card.getValue();
+                value3Count++;
             } else if (card.getValue() == value3) {
                 value3Count++;
             } else {
@@ -403,14 +410,17 @@ public class Hand implements Comparable<Hand> {
                 value1Count++;
             } else if (value2 == 0) {
                 value2 = card.getValue();
+                value2Count++;
             } else if (card.getValue() == value2) {
                 value2Count++;
             } else if (value3 == 0) {
                 value3 = card.getValue();
+                value3Count++;
             } else if (card.getValue() == value3) {
                 value3Count++;
             } else if (value4 == 0) {
                 value4 = card.getValue();
+                value4Count++;
             } else if (card.getValue() == value4) {
                 value4Count++;
             } else {
@@ -441,8 +451,15 @@ public class Hand implements Comparable<Hand> {
             return BEFORE;
         } else if (this.handRank < other.handRank) {
             return AFTER;
+            // if same hand rank, compare high card
         } else {
-            return EQUAL;
+            if (this.highCard().getValue() > other.highCard().getValue()) {
+                return BEFORE;
+            } else if (this.highCard().getValue() < other.highCard().getValue()) {
+                return AFTER;
+            } else {
+                return EQUAL;
+            }
         }
     }
 
