@@ -5,7 +5,6 @@
  */
 package CardDeckHand;
 
-import CardDeckHand.Card.Suite;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
@@ -18,10 +17,10 @@ import java.util.Random;
 public class Deck {
 
     // LL for fast adding/removing of cards
-    private LinkedList<Card> deck;
+    private LinkedList<Card> deck = new LinkedList<>();
     // AL for fast indexing for creating deck
-    private ArrayList<Suite> suitList;
-    private ArrayList<Integer> valueList;
+    private ArrayList<Suite> suitList = new ArrayList<>();
+    private ArrayList<Integer> valueList = new ArrayList<>();
 
     /**
      * Initialized a software representation of a standard deck of 52 cards.
@@ -80,4 +79,7 @@ public class Deck {
         }
     }
 
+    public LinkedList<Card> getDeck() {
+        return deck;
+    }
 }
