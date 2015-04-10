@@ -421,8 +421,8 @@ public class Hand implements Comparable<Hand> {
     /**
      * Allows hands to be sorted, best to worst.
      *
-     * @param other
-     * @return
+     * @param other - another Hand object
+     * @return an int, signifying before, after, or equal
      */
     @Override
     public int compareTo(Hand other) {
