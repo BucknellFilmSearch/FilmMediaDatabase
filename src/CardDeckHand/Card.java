@@ -29,12 +29,46 @@ public class Card {
      * Initializes the playing card with specified Suite enum type and int
      * value.
      *
+     * The value card system is as follows: Cards 2-10 - their card number, Jack
+     * - 11, Queen - 12, King - 13, Ace - 14.
+     *
      * @param suite
      * @param value
      */
-    public Card(Suite suite, int value) {
+    public Card(Suite suite, int value) throws BadCardCreationException {
         this.suite = suite;
         this.value = value;
+        if (this.value > 14 || this.value < 2) {
+            throw new BadCardCreationException("Tried to create card with value outside correct range. Use 2-14.");
+
+        }
+    }
+
+    /**
+     * Initializes the playing card with the specified Suite enum type and
+     * string value J, Q, K, or A
+     *
+     * @param suite
+     * @param str
+     */
+    public Card(Suite suite, String str) throws BadCardCreationException {
+        this.suite = suite;
+        switch (str) {
+            case "J":
+                this.value = 11;
+                break;
+            case "Q":
+                this.value = 12;
+                break;
+            case "K":
+                this.value = 13;
+                break;
+            case "A":
+                this.value = 14;
+                break;
+            default:
+                throw new BadCardCreationException("Provided bad string to create card. Use J, Q, K, or A.");
+        }
     }
 
     public Suite getSuite() {
