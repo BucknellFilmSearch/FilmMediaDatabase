@@ -15,13 +15,16 @@ import org.junit.Test;
  */
 public class HandTest {
 
+    public Hand hand;
+    public Deck deck;
+
     public HandTest() {
     }
 
     @Before
     public void setUp() {
-        Deck deck = new Deck();
-        Hand hand = new Hand();
+        deck = new CardDeckHand.Deck();
+        hand = new CardDeckHand.Hand();
     }
 
     @After
@@ -34,11 +37,12 @@ public class HandTest {
     @Test
     public void testAddCard() throws Exception {
         System.out.println("addCard");
-        Card card = new Card(Suite.Clubs,);
-        Hand instance = new Hand();
-        instance.addCard(card);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Card card1 = new Card(Suite.Clubs, "A");
+        Card card2 = new Card(Suite.Diamonds, 2);
+        hand.addCard(card1);
+        hand.addCard(card2);
+        assert hand.getHand().contains(card1);
+        assert hand.getHand().contains(card1);
     }
 
     /**
