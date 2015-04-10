@@ -194,7 +194,7 @@ public class Hand implements Comparable<Hand> {
          Otherwise, we know it's not.
          */
         int value1 = hand.get(0).getValue();
-        int value1Count = 1;
+        int value1Count = 0;
         int value2 = 0;
         int value2Count = 0;
         // Count # cards of each of the two values we care about.
@@ -229,7 +229,7 @@ public class Hand implements Comparable<Hand> {
          the other should be 3. Otherwise, we know it's not a full house.
          */
         int value1 = hand.get(0).getValue();
-        int value1Count = 1;
+        int value1Count = 0;
         int value2 = 0;
         int value2Count = 0;
         // Count # cards of each of the two values we care about.
@@ -308,7 +308,7 @@ public class Hand implements Comparable<Hand> {
          One of counts should be 3, to be three of a kind.
          */
         int value1 = hand.get(0).getValue();
-        int value1Count = 1;
+        int value1Count = 0;
         int value2 = 0;
         int value2Count = 0;
         int value3 = 0;
@@ -348,7 +348,7 @@ public class Hand implements Comparable<Hand> {
          Two of the counts should be 2, to be a two pair.
          */
         int value1 = hand.get(0).getValue();
-        int value1Count = 1;
+        int value1Count = 0;
         int value2 = 0;
         int value2Count = 0;
         int value3 = 0;
@@ -390,7 +390,7 @@ public class Hand implements Comparable<Hand> {
          One of the counts should be 2, to be a two pair.
          */
         int value1 = hand.get(0).getValue();
-        int value1Count = 1;
+        int value1Count = 0;
         int value2 = 0;
         int value2Count = 0;
         int value3 = 0;
