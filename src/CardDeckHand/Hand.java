@@ -5,7 +5,6 @@
  */
 package CardDeckHand;
 
-import CardDeckHand.Card.Suite;
 import java.util.ArrayList;
 
 enum HandType {
@@ -21,7 +20,7 @@ enum HandType {
  */
 public class Hand implements Comparable<Hand> {
 
-    private ArrayList<Card> hand;
+    private ArrayList<Card> hand = new ArrayList<>();
 
     /* Our ranking system for hands works as follows:
      A high rank number indicates a better hand.
@@ -445,6 +444,22 @@ public class Hand implements Comparable<Hand> {
         } else {
             return EQUAL;
         }
+    }
+
+    public ArrayList<Card> getHand() {
+        return hand;
+    }
+
+    public void setHand(ArrayList<Card> hand) {
+        this.hand = hand;
+    }
+
+    public int getHandRank() {
+        return handRank;
+    }
+
+    public HandType getHandType() {
+        return handType;
     }
 
 }

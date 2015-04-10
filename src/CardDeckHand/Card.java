@@ -6,19 +6,19 @@
 package CardDeckHand;
 
 /**
+ * Enum used for selecting the suite type.
+ */
+enum Suite {
+
+    Spades, Hearts, Clubs, Diamonds;
+}
+
+/**
  * Software representation of a playing card.
  *
  * @author justi_000
  */
 public class Card {
-
-    /**
-     * Enum used for selecting the suite type.
-     */
-    public enum Suite {
-
-        Spades, Hearts, Clubs, Diamonds;
-    }
 
     // the suite of the card
     private Suite suite;
