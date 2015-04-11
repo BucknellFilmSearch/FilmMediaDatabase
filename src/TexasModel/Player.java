@@ -5,9 +5,6 @@
  */
 package TexasModel;
 
-import CardDeckHand.Deck;
-import CardDeckHand.Hand;
-import CardDeckHand.SixCardHandException;
 import java.util.Comparator;
 
 /**

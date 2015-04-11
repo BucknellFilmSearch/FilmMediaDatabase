@@ -5,6 +5,13 @@
  */
 package CardDeckHand;
 
+import TexasModel.BadCardCreationException;
+import TexasModel.Card;
+import TexasModel.Deck;
+import TexasModel.Hand;
+import TexasModel.HandType;
+import TexasModel.SixCardHandException;
+import TexasModel.Suite;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,8 +33,8 @@ public class HandTest {
 
     @Before
     public void setUp() {
-        deck = new CardDeckHand.Deck();
-        hand = new CardDeckHand.Hand();
+        deck = new TexasModel.Deck();
+        hand = new TexasModel.Hand();
     }
 
     @After
