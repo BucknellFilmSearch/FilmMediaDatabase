@@ -10,6 +10,11 @@ import CardDeckHand.Hand;
 import CardDeckHand.SixCardHandException;
 import java.util.Comparator;
 
+enum Action {
+
+    CALL, CHECK, RAISE, ALL_IN, BLANK
+}
+
 /**
  * Player Class for The Texas Holdem
  *
@@ -26,6 +31,7 @@ public class Player implements Comparator {
     private boolean isAllin; //If the player chooses to ALL IN
     private boolean isCall; //If the player called (So that he don't HAVE to call)
     private boolean isCheck; //If the player chooses to check
+    private Action action;
 
     //*IMPORTANT not all of the boolean is useful right now. Just creat them incase.
     public boolean isIsRaise() {
@@ -59,6 +65,7 @@ public class Player implements Comparator {
         this.isAllin = false;
         this.isCall = false;
         this.isCheck = false;
+        this.action = Action.BLANK;
     }
 
     public Player(String name) {
@@ -72,6 +79,7 @@ public class Player implements Comparator {
         this.isAllin = false;
         this.isCall = false;
         this.isCheck = false;
+        this.action = Action.BLANK;
     }
 
     public boolean isIsCall() {
@@ -172,4 +180,21 @@ public class Player implements Comparator {
         Hand h2 = ((Player) o2).getHand();
         return h1.compareTo(h2);
     }
+
+    public void call() {
+        this.action = Action.CALL;
+    }
+
+    public void raise() {
+        this.action = Action.RAISE;
+    }
+
+    public void allin() {
+        this.action = Action.ALL_IN;
+    }
+
+    public void check() {
+        this.action = Action.CHECK;
+    }
+
 }

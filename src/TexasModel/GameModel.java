@@ -198,6 +198,26 @@ public class GameModel {
 
     }
 
+    public boolean isIsBlind() {
+        return isBlind;
+    }
+
+    public boolean isIsTurnhand() {
+        return isTurnhand;
+    }
+
+    public boolean isIsRiverhand() {
+        return isRiverhand;
+    }
+
+    public ArrayList<Card> getPoolcards() {
+        return poolcards;
+    }
+
+    public static double getCallAmount() {
+        return callAmount;
+    }
+
     //TODO ISRAISE EXCEPTION
     public void raise(double amount) throws NoMoneyException, SixCardHandException {
         if (this.getCurrentPlayer().getMoney() < amount) {
