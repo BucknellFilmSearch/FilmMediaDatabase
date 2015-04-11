@@ -7,22 +7,30 @@ package TexasModel;
 
 import java.util.Comparator;
 
+enum Action {
+
+    CALL, CHECK, RAISE, ALL_IN, BLANK
+}
+
 /**
+ * Player Class for The Texas Holdem
  *
  * @author huangjiayu
  */
 public class Player implements Comparator {
 
     private String name;
-    private double money;
-    private boolean isPlay;
-    private boolean isRaise;
-    private boolean isFold;
-    private boolean callable;
-    private boolean isAllin;
-    private boolean isCall;
-    private boolean isCheck;
+    private double money; //Money Amount
+    private boolean isPlay; // If it is in he's round or not
+    private boolean isRaise; //If the player raise
+    private boolean isFold; //If the player Fold
+    private boolean callable; //If the Player has money to call
+    private boolean isAllin; //If the player chooses to ALL IN
+    private boolean isCall; //If the player called (So that he don't HAVE to call)
+    private boolean isCheck; //If the player chooses to check
+    private Action action;
 
+    //*IMPORTANT not all of the boolean is useful right now. Just creat them incase.
     public boolean isIsRaise() {
         return isRaise;
     }
@@ -40,6 +48,9 @@ public class Player implements Comparator {
     }
     private Hand hand;
 
+    /**
+     * Constructor for the Player
+     */
     public Player() {
         this.name = "Player";
         this.money = 100;
@@ -51,6 +62,21 @@ public class Player implements Comparator {
         this.isAllin = false;
         this.isCall = false;
         this.isCheck = false;
+        this.action = Action.BLANK;
+    }
+
+    public Player(String name) {
+        this.name = name;
+        this.money = 100;
+        this.isPlay = false;
+        this.hand = new Hand();
+        this.isRaise = false;
+        this.isFold = false;
+        this.callable = true;
+        this.isAllin = false;
+        this.isCall = false;
+        this.isCheck = false;
+        this.action = Action.BLANK;
     }
 
     public boolean isIsCall() {
@@ -137,6 +163,10 @@ public class Player implements Comparator {
         this.money = money;
     }
 
+    public void addMoney(double add) {
+        this.money += add;
+    }
+
     public void setIsPlay(boolean isPlay) {
         this.isPlay = isPlay;
     }
@@ -147,4 +177,21 @@ public class Player implements Comparator {
         Hand h2 = ((Player) o2).getHand();
         return h1.compareTo(h2);
     }
+
+    public void call() {
+        this.action = Action.CALL;
+    }
+
+    public void raise() {
+        this.action = Action.RAISE;
+    }
+
+    public void allin() {
+        this.action = Action.ALL_IN;
+    }
+
+    public void check() {
+        this.action = Action.CHECK;
+    }
+
 }

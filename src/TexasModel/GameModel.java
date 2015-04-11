@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
+ * A Main Model Class for Texas Holdem Game
  *
  * @author huangjiayu
  */
@@ -26,6 +27,12 @@ public class GameModel {
     public static double callAmount;
     private Player currentPlayer;
 
+    /**
+     * This is a constructor for GameModel
+     *
+     * @param moneypool
+     * @param numplayer
+     */
     public GameModel(double moneypool, int numplayer) {
         this.theDeck = new Deck();
         this.players = new ArrayList<Player>();
@@ -76,6 +83,12 @@ public class GameModel {
         return true;
     }
 
+    public void addPlayer(Player a) {
+        this.players.add(a);
+        this.playerinGame.add(a);
+        this.playerthisRound.add(a);
+    }
+
     public void nextTurn() throws SixCardHandException {
         if (this.isRiverhand) {
             checkWin();
@@ -124,20 +137,29 @@ public class GameModel {
                 p.setHand(GameUtil.findTheBest(h));
             }
             playerinGame.sort(new Player());
-            this.playerinGame.getFirst().setMoney(moneypool + this.playerinGame.
-                    getFirst().getMoney());
+            int tie = checkTie();
+            for (int i = 0; i < tie; i++) {
+                playerinGame.pop().addMoney(moneypool / tie);
+            }
         }
 
     }
 
-    public void checkTie() {
+    public int checkTie() {
+        LinkedList<Player> temp = playerinGame;
         int tienumber = 1;
-        //if(this.playerinGame.getFirst())
-        //}
+        while (temp.size() > 0) {
+            if (temp.getFirst().getHand().compareTo(temp.get(1).getHand()) != 0) {
+                return tienumber;
+            } else {
+                temp.removeFirst();
+                tienumber++;
+            }
+        }
+        return tienumber;
     }
 
     //To do two more method about the river stage and etc. Done
-
     public Deck getTheDeck() {
         return theDeck;
     }
@@ -170,6 +192,26 @@ public class GameModel {
         this.getCurrentPlayer().setIsCall(true);
         nextPlayer();
 
+    }
+
+    public boolean isIsBlind() {
+        return isBlind;
+    }
+
+    public boolean isIsTurnhand() {
+        return isTurnhand;
+    }
+
+    public boolean isIsRiverhand() {
+        return isRiverhand;
+    }
+
+    public ArrayList<Card> getPoolcards() {
+        return poolcards;
+    }
+
+    public static double getCallAmount() {
+        return callAmount;
     }
 
     //TODO ISRAISE EXCEPTION
