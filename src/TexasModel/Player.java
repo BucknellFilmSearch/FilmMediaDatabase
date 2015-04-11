@@ -9,7 +9,7 @@ import java.util.Comparator;
 
 enum Action {
 
-    CALL, CHECK, RAISE, ALL_IN, BLANK
+    CALL, CHECK, RAISE, ALL_IN, BLANK, FOLD
 }
 
 /**
@@ -211,6 +211,10 @@ public class Player implements Comparator {
 
     public void check() {
         this.action = Action.CHECK;
+    }
+
+    public void fold() {
+        this.action = Action.FOLD;
     }
 
 }
