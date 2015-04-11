@@ -27,7 +27,7 @@ public class GameModel {
     public GameModel(double moneypool) {
         this.theDeck = new Deck();
         this.player1 = new Player();
-        this.player2 = new Player();
+        this.player2 = new Player();//This can also be an AI
         this.moneypool = moneypool;
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());

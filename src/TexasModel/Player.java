@@ -93,10 +93,6 @@ public class Player {
         this.money -= amount;
     }
 
-    public void raise(double amount) {
-
-    }
-
     public void allIn() {
         this.bet += this.money;
         this.money = 0;
