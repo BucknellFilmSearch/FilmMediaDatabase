@@ -89,36 +89,40 @@ public class Hand implements Comparable<Hand> {
      * house: 20, Four of a kind: 21, Straight flush: 22, Royal flush: 23,
      */
     public void defineHand() {
-        if (isRoyalFlush()) {
-            this.handRank = 23;
-            this.handType = HandType.ROYAL_FLUSH;
-        } else if (isStraightFlush()) {
-            this.handRank = 22;
-            this.handType = HandType.STRAIGHT_FLUSH;
-        } else if (isFourOfAKind()) {
-            this.handRank = 21;
-            this.handType = HandType.FOUR_OF_A_KIND;
-        } else if (isFullHouse()) {
-            this.handRank = 20;
-            this.handType = HandType.FULL_HOUSE;
-        } else if (isFlush()) {
-            this.handRank = 19;
-            this.handType = HandType.FLUSH;
-        } else if (isStraight()) {
-            this.handRank = 18;
-            this.handType = HandType.STRAIGHT;
-        } else if (isThreeOfAKind()) {
-            this.handRank = 17;
-            this.handType = HandType.THREE_OF_A_KIND;
-        } else if (isTwoPair()) {
-            this.handRank = 16;
-            this.handType = HandType.TWO_PAIR;
-        } else if (isPair()) {
-            this.handRank = 15;
-            this.handType = HandType.PAIR;
+        if (hand.size() == 5) {
+            if (isRoyalFlush()) {
+                this.handRank = 23;
+                this.handType = HandType.ROYAL_FLUSH;
+            } else if (isStraightFlush()) {
+                this.handRank = 22;
+                this.handType = HandType.STRAIGHT_FLUSH;
+            } else if (isFourOfAKind()) {
+                this.handRank = 21;
+                this.handType = HandType.FOUR_OF_A_KIND;
+            } else if (isFullHouse()) {
+                this.handRank = 20;
+                this.handType = HandType.FULL_HOUSE;
+            } else if (isFlush()) {
+                this.handRank = 19;
+                this.handType = HandType.FLUSH;
+            } else if (isStraight()) {
+                this.handRank = 18;
+                this.handType = HandType.STRAIGHT;
+            } else if (isThreeOfAKind()) {
+                this.handRank = 17;
+                this.handType = HandType.THREE_OF_A_KIND;
+            } else if (isTwoPair()) {
+                this.handRank = 16;
+                this.handType = HandType.TWO_PAIR;
+            } else if (isPair()) {
+                this.handRank = 15;
+                this.handType = HandType.PAIR;
+            } else {
+                this.handRank = highCard().getValue();
+                this.handType = HandType.HIGH_CARD;
+            }
         } else {
-            this.handRank = highCard().getValue();
-            this.handType = HandType.HIGH_CARD;
+            System.out.println("Tried to define an incomplete hand.");
         }
     }
 
@@ -277,27 +281,22 @@ public class Hand implements Comparable<Hand> {
      * @return boolean - true for straight, false otherwise
      */
     public boolean isStraight() {
-        if (hand.size() == 5) {
-            int lowCardValue = lowCard().getValue();
-            /* Increment through values required to have a straight. (low card value,
-             low card value +1, low card value +2, etc.) */
-            for (int value = lowCardValue; value < lowCardValue + hand.size(); value++) {
-                boolean nextReqCardIsInHand = false;
-                for (Card card : hand) {
-                    // Check if card of certain required value is in the deck.
-                    if (card.getValue() == value) {
-                        nextReqCardIsInHand = true;
-                    }
-                }
-                if (nextReqCardIsInHand == false) {
-                    return false;
+        int lowCardValue = lowCard().getValue();
+        /* Increment through values required to have a straight. (low card value,
+         low card value +1, low card value +2, etc.) */
+        for (int value = lowCardValue; value < lowCardValue + hand.size(); value++) {
+            boolean nextReqCardIsInHand = false;
+            for (Card card : hand) {
+                // Check if card of certain required value is in the deck.
+                if (card.getValue() == value) {
+                    nextReqCardIsInHand = true;
                 }
             }
-            return true;
-        } else {
-            // Don't have 5 cards.
-            return false;
+            if (nextReqCardIsInHand == false) {
+                return false;
+            }
         }
+        return true;
     }
 
     /**
