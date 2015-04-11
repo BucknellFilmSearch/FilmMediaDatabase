@@ -8,38 +8,102 @@ package TexasModel;
 import CardDeckHand.Deck;
 import CardDeckHand.Hand;
 import CardDeckHand.SixCardHandException;
+import java.util.Comparator;
 
 /**
  *
  * @author huangjiayu
  */
-public class Player {
+public class Player implements Comparator {
 
     private String name;
     private double money;
     private boolean isPlay;
-    private double bet;
+    private boolean isRaise;
+    private boolean isFold;
+    private boolean callable;
+    private boolean isAllin;
+    private boolean isCall;
+    private boolean isCheck;
+
+    public boolean isIsRaise() {
+        return isRaise;
+    }
+
+    public boolean isIsFold() {
+        return isFold;
+    }
+
+    public void setIsFold(boolean isFold) {
+        this.isFold = isFold;
+    }
+
+    public void setIsRaise(boolean isRaise) {
+        this.isRaise = isRaise;
+    }
     private Hand hand;
 
     public Player() {
         this.name = "Player";
         this.money = 100;
         this.isPlay = false;
-        this.bet = 0;
         this.hand = new Hand();
+        this.isRaise = false;
+        this.isFold = false;
+        this.callable = true;
+        this.isAllin = false;
+        this.isCall = false;
+        this.isCheck = false;
+    }
+
+    public boolean isIsCall() {
+        return isCall;
+    }
+
+    public void setIsCall(boolean isCall) {
+        this.isCall = isCall;
+    }
+
+    public boolean isCallable() {
+        if (this.money > GameModel.callAmount) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void setCallable(boolean callable) {
+        this.callable = callable;
     }
 
     public Player(String name, double money, boolean isPlay, Hand hand) {
         this.name = name;
         this.money = money;
         this.isPlay = isPlay;
-        this.bet = 0;
         this.hand = hand;
+        this.isRaise = false;
+        this.isFold = false;
+        this.callable = true;
+        this.isAllin = false;
+        this.isCall = false;
+        this.isCheck = false;
 
     }
 
-    public double getBet() {
-        return bet;
+    public boolean isIsCheck() {
+        return isCheck;
+    }
+
+    public void setIsCheck(boolean isCheck) {
+        this.isCheck = isCheck;
+    }
+
+    public boolean isIsAllin() {
+        return isAllin;
+    }
+
+    public void setIsAllin(boolean isAllin) {
+        this.isAllin = isAllin;
     }
 
     public Hand getHand() {
@@ -80,21 +144,10 @@ public class Player {
         this.isPlay = isPlay;
     }
 
-    public void fold() {
-        this.bet = 0;
-
-    }
-
-    public void call(double amount) throws NoMoneyException {
-        if (this.money < amount) {
-            throw new NoMoneyException("You don't have enough money to call!");
-        }
-        this.bet += amount;
-        this.money -= amount;
-    }
-
-    public void allIn() {
-        this.bet += this.money;
-        this.money = 0;
+    @Override
+    public int compare(Object o1, Object o2) {
+        Hand h1 = ((Player) o1).getHand();
+        Hand h2 = ((Player) o2).getHand();
+        return h1.compareTo(h2);
     }
 }
