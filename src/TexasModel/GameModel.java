@@ -24,6 +24,8 @@ public class GameModel {
     private LinkedList<Player> playerthisRound;
     private double moneypool;
     private boolean isBlind;
+    private boolean isTurnhand;
+    private boolean isRiverhand;
     private ArrayList<Card> poolcards;
     public static double callAmount;
     private Player currentPlayer;
@@ -33,6 +35,9 @@ public class GameModel {
         this.players = new ArrayList<Player>();
         this.moneypool = moneypool;
         this.poolcards = new ArrayList<Card>();
+        this.isBlind = true;
+        this.isTurnhand = false;
+        this.isRiverhand = false;
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
@@ -76,7 +81,7 @@ public class GameModel {
     }
 
     public void nextTurn() throws SixCardHandException {
-        if (isAllCheck()) {
+        if (this.isRiverhand) {
             checkWin();
         }
         if (this.playerinGame.size() == 1) {
@@ -86,6 +91,14 @@ public class GameModel {
         this.currentPlayer = this.playerthisRound.pop();
         if (this.isBlind == true) {
             this.isBlind = false;
+        }
+        if (this.isBlind == false && this.isTurnhand == false && this.isRiverhand == false) {
+            this.isTurnhand = true;
+            this.poolcards.add(this.theDeck.drawRandomCard());
+        }
+        if (this.isTurnhand == true) {
+            this.isRiverhand = true;
+            this.poolcards.add(this.theDeck.drawRandomCard());
         }
     }
 
@@ -98,6 +111,7 @@ public class GameModel {
     }
 
     //To do a Static to deal with 5 cards issue
+    //Maybe we need a system to find if the player ties
     public void checkWin() throws SixCardHandException {
         if (this.playerinGame.size() == 1) {
             this.playerinGame.getFirst().setMoney(moneypool + this.playerinGame.
@@ -105,11 +119,13 @@ public class GameModel {
         } else {
             ArrayList<Hand> handlist = new ArrayList<>();
             for (Player p : playerinGame) {
-                Hand h = p.getHand();
-                h.addCard(this.poolcards.get(0));
-                h.addCard(this.poolcards.get(1));
-                h.addCard(this.poolcards.get(2));
-                p.setHand(h);
+                ArrayList<Card> h = p.getHand().getHand();
+                h.add(this.poolcards.get(0));
+                h.add(this.poolcards.get(1));
+                h.add(this.poolcards.get(2));
+                h.add(this.poolcards.get(3));
+                h.add(this.poolcards.get(4));
+                p.setHand(GameUtil.findTheBest(h));
             }
             playerinGame.sort(new Player());
             this.playerinGame.getFirst().setMoney(moneypool + this.playerinGame.
@@ -118,7 +134,14 @@ public class GameModel {
 
     }
 
-    //To do two more method about the river stage and etc.
+    public void checkTie() {
+        int tienumber = 1;
+        //if(this.playerinGame.getFirst())
+        //}
+    }
+
+    //To do two more method about the river stage and etc. Done
+
     public Deck getTheDeck() {
         return theDeck;
     }
@@ -160,6 +183,9 @@ public class GameModel {
         }
         this.callAmount += amount;
         this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - amount);
+        for (Player p : playerinGame) {
+            p.setIsCall(false);
+        }
         this.getCurrentPlayer().setIsRaise(true);
         this.getCurrentPlayer().setIsCall(true);
         nextPlayer();
