@@ -122,7 +122,7 @@ public class GameModel {
      */
     public boolean isAllCheck() {
         for (Player p : playerinGame) {
-            if (!p.isIsCheck()) {
+            if (!p.isIsCheck() && p != this.currentPlayer) {
                 return false;
             }
 
