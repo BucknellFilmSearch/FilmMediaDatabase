@@ -20,9 +20,9 @@ public class GameModel {
     private LinkedList<Player> playerinGame;
     private LinkedList<Player> playerthisRound;
     private double moneypool;
-    private boolean isBlind;
-    private boolean isTurnhand;
-    private boolean isRiverhand;
+    private static boolean isBlind;
+    private static boolean isTurnhand;
+    private static boolean isRiverhand;
     private ArrayList<Card> poolcards;
     public static double callAmount;
     private Player currentPlayer;
@@ -194,15 +194,15 @@ public class GameModel {
 
     }
 
-    public boolean isIsBlind() {
+    public static boolean isIsBlind() {
         return isBlind;
     }
 
-    public boolean isIsTurnhand() {
+    public static boolean isIsTurnhand() {
         return isTurnhand;
     }
 
-    public boolean isIsRiverhand() {
+    public static boolean isIsRiverhand() {
         return isRiverhand;
     }
 

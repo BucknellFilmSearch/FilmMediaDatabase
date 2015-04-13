@@ -6,9 +6,10 @@
 package TexasModel;
 
 /**
- * Enum used for selecting the suite type.
+ * Enum used for selecting or describing the suite type.
  */
 public enum Suite {
 
     Spades, Hearts, Clubs, Diamonds;
+
 }

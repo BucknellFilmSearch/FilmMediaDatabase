@@ -29,13 +29,42 @@ public class AI extends Player {
         this.setName(name);
     }
 
-    /**
-     * This is all of the decision making logic for the AI; Where the AI decides
-     * whether to raise, call, or fold.
-     */
-    public void performTurnAction() {
-        Hand twoCardHand = this.getHand();
-
-    }
-
+// WE DECIDED TO IMPLEMENT THE FOLLOWING IN THE CONTROLLER:
+    // WAS RUNNING INTO PROBLEMS WITH OBJECTS NOT BEING INSTATIATED
+//    /**
+//     * This is all of the decision making logic for the AI; Where the AI decides
+//     * whether to raise, call, or fold.
+//     *
+//     * @param commonCards - the ArrayList of cards that are common to all
+//     * players.
+//     */
+//    public void performTurnAction(ArrayList<Card> commonCards) {
+//        Hand twoCardHand = this.getHand();
+//        if (GameModel.isIsBlind()) {
+//            blindAction();
+//            // TO-DO insert boolean variable for flop stage
+//        } else if (GameModel.isIsBlind() == false && GameModel.isIsRiverhand() == false && GameModel.isIsTurnhand()) {
+//            flopAction(commonCards);
+//        } else if (GameModel.isIsTurnhand()) {
+//            turnhandAction(commonCards);
+//        } else if (GameModel.isIsRiverhand()) {
+//            riverhandAction(commonCards);
+//        }
+//    }
+//
+//    public void blindAction() {
+//
+//    }
+//
+//    public void flopAction(ArrayList<Card> commonCards) {
+//
+//    }
+//
+//    public void turnhandAction(ArrayList<Card> commonCards) {
+//
+//    }
+//
+//    public void riverhandAction(ArrayList<Card> commonCards) {
+//
+//    }
 }
