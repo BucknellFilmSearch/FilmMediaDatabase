@@ -9,7 +9,7 @@ import java.util.Comparator;
 
 enum Action {
 
-    CALL, CHECK, RAISE, ALL_IN, BLANK
+    CALL, CHECK, RAISE, ALL_IN, BLANK, FOLD
 }
 
 /**
@@ -29,6 +29,7 @@ public class Player implements Comparator {
     private boolean isCall; //If the player called (So that he don't HAVE to call)
     private boolean isCheck; //If the player chooses to check
     private Action action;
+    private double raiseamount;
 
     //*IMPORTANT not all of the boolean is useful right now. Just creat them incase.
     public boolean isIsRaise() {
@@ -63,6 +64,7 @@ public class Player implements Comparator {
         this.isCall = false;
         this.isCheck = false;
         this.action = Action.BLANK;
+        this.raiseamount = 0;
     }
 
     public Player(String name) {
@@ -77,6 +79,23 @@ public class Player implements Comparator {
         this.isCall = false;
         this.isCheck = false;
         this.action = Action.BLANK;
+        this.raiseamount = 0;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
+    public double getRaiseamount() {
+        return raiseamount;
+    }
+
+    public void setRaiseamount(double raiseamount) {
+        this.raiseamount = raiseamount;
     }
 
     public boolean isIsCall() {
@@ -192,6 +211,10 @@ public class Player implements Comparator {
 
     public void check() {
         this.action = Action.CHECK;
+    }
+
+    public void fold() {
+        this.action = Action.FOLD;
     }
 
 }

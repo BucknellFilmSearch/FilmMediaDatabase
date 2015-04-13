@@ -38,22 +38,32 @@ public class GameModel {
         this.players = new ArrayList<Player>();
         this.moneypool = moneypool;
         this.poolcards = new ArrayList<Card>();
-        this.isBlind = true;
-        this.isTurnhand = false;
-        this.isRiverhand = false;
+        this.isBlind = true; //If the Game is in Blind Stage(without three card
+        //shown
+
+        this.isTurnhand = false;//If the Game is in Turn Hand Stage
+        this.isRiverhand = false; //If the Game is in RiverHand Stage
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
-        this.callAmount = 0;
+        this.callAmount = 50; //Initialize the Call Amount =50, So that it assures
+        //the Game will have some money
         for (int i = 0; i < numplayer; i++) {
             this.players.add(new Player());
         }
-        this.playerinGame.addAll(players);
-        this.playerthisRound.addAll(playerinGame);
+
+        this.playerinGame.addAll(players);// The Player that is still in this game
+
+        this.playerthisRound.addAll(playerinGame);//The Player left in this ROUND That is a player moves one by one system
         this.currentPlayer = this.playerthisRound.pop();
         currentPlayer.setIsPlay(true);
     }
 
+    /**
+     * This is a method to make every player in this Game has two cards
+     *
+     * @throws SixCardHandException
+     */
     public void giveCards() throws SixCardHandException {
         for (Player p : this.playerinGame) {
             p.setHand(this.theDeck);
@@ -65,17 +75,54 @@ public class GameModel {
         return currentPlayer;
     }
 
-    public void nextPlayer() throws SixCardHandException {
+    /**
+     * This is the Listener in the Model to make sure the game moves on turn by
+     * turn
+     *
+     * @throws NoMoneyException
+     * @throws SixCardHandException
+     */
+    public void getPlayerChoice() throws NoMoneyException, SixCardHandException {
+        if (this.currentPlayer.getAction() == Action.CALL) {
+            this.call();
+        }
+        if (this.currentPlayer.getAction() == Action.ALL_IN) {
+            this.allIn();
+        }
+        if (this.currentPlayer.getAction() == Action.RAISE) {
+            this.raise(this.getCurrentPlayer().getRaiseamount());
+        }
+        if (this.currentPlayer.getAction() == Action.FOLD) {
+            this.fold();
+        }
+        if (this.currentPlayer.getAction() == Action.CHECK) {
+            this.check();
+        }
+    }
+
+    /**
+     * Next Player
+     *
+     * @throws SixCardHandException
+     * @throws NoMoneyException
+     */
+    public void nextPlayer() throws SixCardHandException, NoMoneyException {
         if (this.playerthisRound.size() == 0) {
             nextTurn();
         } else {
             this.currentPlayer = this.playerthisRound.pop();
+            this.getPlayerChoice();
         }
     }
 
+    /**
+     * If all of the players choose to check
+     *
+     * @return
+     */
     public boolean isAllCheck() {
         for (Player p : playerinGame) {
-            if (!p.isIsCheck()) {
+            if (!p.isIsCheck() && p != this.currentPlayer) {
                 return false;
             }
 
@@ -83,12 +130,22 @@ public class GameModel {
         return true;
     }
 
+    /**
+     * Add a Player to this Game
+     *
+     * @param a
+     */
     public void addPlayer(Player a) {
         this.players.add(a);
         this.playerinGame.add(a);
         this.playerthisRound.add(a);
     }
 
+    /**
+     * Next Turn, Means Next Round More precisely
+     *
+     * @throws SixCardHandException
+     */
     public void nextTurn() throws SixCardHandException {
         if (this.isRiverhand) {
             checkWin();
@@ -111,6 +168,9 @@ public class GameModel {
         }
     }
 
+    /**
+     * A method to reset the pool
+     */
     public void resetpool() {
         this.theDeck.resetDeck();
         this.poolcards.clear();
@@ -119,8 +179,11 @@ public class GameModel {
         this.poolcards.add(this.theDeck.drawRandomCard());
     }
 
-    //To do a Static to deal with 5 cards issue
-    //Maybe we need a system to find if the player ties
+    /**
+     * Check who wins the game
+     *
+     * @throws SixCardHandException
+     */
     public void checkWin() throws SixCardHandException {
         if (this.playerinGame.size() == 1) {
             this.playerinGame.getFirst().setMoney(moneypool + this.playerinGame.
@@ -172,7 +235,7 @@ public class GameModel {
         return moneypool;
     }
 
-    public void fold() throws SixCardHandException {
+    public void fold() throws SixCardHandException, NoMoneyException {
         this.playerinGame.remove(this.currentPlayer);
         nextPlayer();
     }
@@ -239,7 +302,7 @@ public class GameModel {
 
     }
 
-    public void check() throws SixCardHandException {
+    public void check() throws SixCardHandException, NoMoneyException {
         if (this.getCurrentPlayer().isIsCall()) {
             this.currentPlayer.setIsCheck(true);
             nextPlayer();
