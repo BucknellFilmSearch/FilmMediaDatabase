@@ -59,7 +59,8 @@ public class GameViewController implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        //TODO
+        System.out.println("Clicked");
+
     }
 
     /**
