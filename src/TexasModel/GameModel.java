@@ -16,16 +16,17 @@ import java.util.LinkedList;
 public class GameModel {
 
     private Deck theDeck;
-    private ArrayList<Player> players;
-    private LinkedList<Player> playerinGame;
-    private LinkedList<Player> playerthisRound;
+    private static ArrayList<Player> players;
+    private static LinkedList<Player> playerinGame;
+    private static LinkedList<Player> playerthisRound;
     private double moneypool;
-    private static boolean isBlind;
-    private static boolean isTurnhand;
-    private static boolean isRiverhand;
+    private boolean isBlind;
+    private boolean isTurnhand;
+    private boolean isRiverhand;
     private ArrayList<Card> poolcards;
     public static double callAmount;
     private Player currentPlayer;
+    private boolean isFlop;
 
     /**
      * This is a constructor for GameModel
@@ -40,9 +41,9 @@ public class GameModel {
         this.poolcards = new ArrayList<Card>();
         this.isBlind = true; //If the Game is in Blind Stage(without three card
         //shown
-
         this.isTurnhand = false;//If the Game is in Turn Hand Stage
         this.isRiverhand = false; //If the Game is in RiverHand Stage
+        this.isFlop = false;
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
@@ -52,8 +53,33 @@ public class GameModel {
             this.players.add(new Player());
         }
 
+        this.playerinGame = new LinkedList<Player>();
         this.playerinGame.addAll(players);// The Player that is still in this game
+        this.playerthisRound = new LinkedList<Player>();
+        this.playerthisRound.addAll(playerinGame);//The Player left in this ROUND That is a player moves one by one system
+        this.currentPlayer = this.playerthisRound.pop();
+        currentPlayer.setIsPlay(true);
+    }
 
+    public GameModel(double moneypool, ArrayList<Player> play) {
+        this.theDeck = new Deck();
+        this.players = play;
+        this.moneypool = moneypool;
+        this.poolcards = new ArrayList<Card>();
+        this.isBlind = true; //If the Game is in Blind Stage(without three card
+        //shown
+
+        this.isTurnhand = false;//If the Game is in Turn Hand Stage
+        this.isRiverhand = false; //If the Game is in RiverHand Stage
+        this.isFlop = false;
+        this.poolcards.add(this.theDeck.drawRandomCard());
+        this.poolcards.add(this.theDeck.drawRandomCard());
+        this.poolcards.add(this.theDeck.drawRandomCard());
+        this.callAmount = 50; //Initialize the Call Amount =50, So that it assures
+        //the Game will have some money
+        this.playerinGame = new LinkedList<Player>();
+        this.playerinGame.addAll(players);// The Player that is still in this game
+        this.playerthisRound = new LinkedList<Player>();
         this.playerthisRound.addAll(playerinGame);//The Player left in this ROUND That is a player moves one by one system
         this.currentPlayer = this.playerthisRound.pop();
         currentPlayer.setIsPlay(true);
@@ -73,6 +99,14 @@ public class GameModel {
     public Player getCurrentPlayer() {
 
         return currentPlayer;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public boolean isIsFlop() {
+        return isFlop;
     }
 
     /**
@@ -111,7 +145,6 @@ public class GameModel {
             nextTurn();
         } else {
             this.currentPlayer = this.playerthisRound.pop();
-            this.getPlayerChoice();
         }
     }
 
@@ -120,9 +153,9 @@ public class GameModel {
      *
      * @return
      */
-    public boolean isAllCheck() {
+    public boolean isAllCall() {
         for (Player p : playerinGame) {
-            if (!p.isIsCheck() && p != this.currentPlayer) {
+            if (!p.isIsCall()) {
                 return false;
             }
 
@@ -147,24 +180,27 @@ public class GameModel {
      * @throws SixCardHandException
      */
     public void nextTurn() throws SixCardHandException {
-        if (this.isRiverhand) {
-            checkWin();
-        }
         if (this.playerinGame.size() == 1) {
             checkWin();
-        }
-        this.playerthisRound.addAll(this.playerinGame);
-        this.currentPlayer = this.playerthisRound.pop();
-        if (this.isBlind == true) {
-            this.isBlind = false;
-        }
-        if (this.isBlind == false && this.isTurnhand == false && this.isRiverhand == false) {
-            this.isTurnhand = true;
-            this.poolcards.add(this.theDeck.drawRandomCard());
-        }
-        if (this.isTurnhand == true) {
-            this.isRiverhand = true;
-            this.poolcards.add(this.theDeck.drawRandomCard());
+        } else if (this.isRiverhand && this.isAllCall()) {
+            checkWin();
+        } else {
+
+            if (this.isTurnhand == true && this.isAllCall()) {
+                this.isTurnhand = false;
+                this.isRiverhand = true;
+                this.poolcards.add(this.theDeck.drawRandomCard());
+            } else if (this.isAllCall() && this.isFlop) {
+                this.isFlop = false;
+                this.isTurnhand = true;
+                this.poolcards.add(this.theDeck.drawRandomCard());
+            } else if (this.isBlind == true && this.isAllCall()) {
+                this.isBlind = false;
+                this.isFlop = true;
+            }
+
+            this.playerthisRound.addAll(this.playerinGame);
+            this.currentPlayer = this.playerthisRound.pop();
         }
     }
 
@@ -237,6 +273,7 @@ public class GameModel {
 
     public void fold() throws SixCardHandException, NoMoneyException {
         this.playerinGame.remove(this.currentPlayer);
+        this.getCurrentPlayer().setAction(Action.BLANK);
         nextPlayer();
     }
 
@@ -253,19 +290,20 @@ public class GameModel {
         this.moneypool += moneyallin;
         this.getCurrentPlayer().setIsAllin(true);
         this.getCurrentPlayer().setIsCall(true);
+        this.getCurrentPlayer().setAction(Action.BLANK);
         nextPlayer();
 
     }
 
-    public static boolean isIsBlind() {
+    public boolean isIsBlind() {
         return isBlind;
     }
 
-    public static boolean isIsTurnhand() {
+    public boolean isIsTurnhand() {
         return isTurnhand;
     }
 
-    public static boolean isIsRiverhand() {
+    public boolean isIsRiverhand() {
         return isRiverhand;
     }
 
@@ -289,15 +327,17 @@ public class GameModel {
         }
         this.getCurrentPlayer().setIsRaise(true);
         this.getCurrentPlayer().setIsCall(true);
+        this.getCurrentPlayer().setAction(Action.BLANK);
         nextPlayer();
     }
 
     public void call() throws NoMoneyException, SixCardHandException {
-        if (this.getCurrentPlayer().getMoney() < this.moneypool) {
+        if (this.getCurrentPlayer().getMoney() < this.callAmount) {
             throw new NoMoneyException("You don't have enough money to call!");
         }
         this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - this.callAmount);
         this.getCurrentPlayer().setIsCall(true);
+        this.getCurrentPlayer().setAction(Action.BLANK);
         nextPlayer();
 
     }
@@ -305,8 +345,10 @@ public class GameModel {
     public void check() throws SixCardHandException, NoMoneyException {
         if (this.getCurrentPlayer().isIsCall()) {
             this.currentPlayer.setIsCheck(true);
+            this.getCurrentPlayer().setAction(Action.BLANK);
             nextPlayer();
         }
+        this.getCurrentPlayer().setAction(Action.BLANK);
     }
 
 }

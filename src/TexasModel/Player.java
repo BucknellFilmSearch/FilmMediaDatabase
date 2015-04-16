@@ -30,6 +30,7 @@ public class Player implements Comparator {
     private boolean isCheck; //If the player chooses to check
     private Action action;
     private double raiseamount;
+    private int callamount;
 
     //*IMPORTANT not all of the boolean is useful right now. Just creat them incase.
     public boolean isIsRaise() {
@@ -65,6 +66,7 @@ public class Player implements Comparator {
         this.isCheck = false;
         this.action = Action.BLANK;
         this.raiseamount = 0;
+        this.callamount = 0;
     }
 
     public Player(String name) {
@@ -80,6 +82,7 @@ public class Player implements Comparator {
         this.isCheck = false;
         this.action = Action.BLANK;
         this.raiseamount = 0;
+        this.callamount = 0;
     }
 
     public Action getAction() {
@@ -96,6 +99,10 @@ public class Player implements Comparator {
 
     public void setRaiseamount(double raiseamount) {
         this.raiseamount = raiseamount;
+    }
+
+    public void resetRase() {
+        this.raiseamount = 0;
     }
 
     public boolean isIsCall() {
@@ -116,20 +123,6 @@ public class Player implements Comparator {
 
     public void setCallable(boolean callable) {
         this.callable = callable;
-    }
-
-    public Player(String name, double money, boolean isPlay, Hand hand) {
-        this.name = name;
-        this.money = money;
-        this.isPlay = isPlay;
-        this.hand = hand;
-        this.isRaise = false;
-        this.isFold = false;
-        this.callable = true;
-        this.isAllin = false;
-        this.isCall = false;
-        this.isCheck = false;
-
     }
 
     public boolean isIsCheck() {
@@ -201,8 +194,17 @@ public class Player implements Comparator {
         this.action = Action.CALL;
     }
 
-    public void raise() {
+    public int getCallamount() {
+        return callamount;
+    }
+
+    public void setCallamount(int callamount) {
+        this.callamount = callamount;
+    }
+
+    public void raise(double amount) {
         this.action = Action.RAISE;
+        this.raiseamount = amount;
     }
 
     public void allin() {
