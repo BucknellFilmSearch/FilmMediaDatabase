@@ -47,7 +47,7 @@ public class MainApp extends Application {
         this.primaryStage.setTitle("Texas Hold'em");
 
         FXMLLoader loader = new FXMLLoader();
-        File xmlFile = new File("E:/CS/csci205_finalproject/src/view/gameView.fxml");
+        File xmlFile = new File("C:/CS/csci205_finalproject/src/view/gameView.fxml");
         loader.setLocation(xmlFile.toURI().toURL());
         root = (AnchorPane) loader.load();
 
