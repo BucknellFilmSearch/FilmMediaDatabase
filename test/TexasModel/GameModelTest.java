@@ -97,18 +97,21 @@ public class GameModelTest {
         Assert.assertEquals(gametest.isIsFlop(), true);
 
     }
-}
 
-//    /**
-//     * Test of addPlayer method, of class GameModel.
-//     */
-//    @Test
-//    public void testAddPlayer() {
-//        System.out.println("addPlayer");
-//        Player a = null;
-//        GameModel instance = null;
-//        instance.addPlayer(a);
-//    }
+    /**
+     * Test of addPlayer method, of class GameModel.
+     */
+    @Test
+    public void testAddPlayer() throws SixCardHandException, NoMoneyException {
+        gametest.addPlayer(new Player("Brian King"));
+        Assert.assertEquals(gametest.getPlayers().size(), 4);
+        gametest.nextPlayer();
+        gametest.nextPlayer();
+        gametest.nextPlayer();
+        Player instance = gametest.getCurrentPlayer();
+        Assert.assertEquals(instance.getName(), "Brian King");
+    }
+}
 //
 //    /**
 //     * Test of nextTurn method, of class GameModel.

@@ -101,7 +101,7 @@ public class Player implements Comparator {
         this.raiseamount = raiseamount;
     }
 
-    public void resetRase() {
+    public void resetRaise() {
         this.raiseamount = 0;
     }
 

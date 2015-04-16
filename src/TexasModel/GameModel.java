@@ -23,6 +23,7 @@ public class GameModel {
     private boolean isBlind;
     private boolean isTurnhand;
     private boolean isRiverhand;
+    private boolean isEnd;
     private ArrayList<Card> poolcards;
     public static double callAmount;
     private Player currentPlayer;
@@ -44,6 +45,7 @@ public class GameModel {
         this.isTurnhand = false;//If the Game is in Turn Hand Stage
         this.isRiverhand = false; //If the Game is in RiverHand Stage
         this.isFlop = false;
+        this.isEnd = false;
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
@@ -72,6 +74,7 @@ public class GameModel {
         this.isTurnhand = false;//If the Game is in Turn Hand Stage
         this.isRiverhand = false; //If the Game is in RiverHand Stage
         this.isFlop = false;
+        this.isEnd = false;
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
@@ -221,6 +224,7 @@ public class GameModel {
      * @throws SixCardHandException
      */
     public void checkWin() throws SixCardHandException {
+        this.isEnd = true;
         if (this.playerinGame.size() == 1) {
             this.playerinGame.getFirst().setMoney(moneypool + this.playerinGame.
                     getFirst().getMoney());
@@ -321,13 +325,16 @@ public class GameModel {
             throw new NoMoneyException("You don't have enough money to raise!");
         }
         this.callAmount += amount;
+        this.moneypool += amount;
         this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - amount);
         for (Player p : playerinGame) {
             p.setIsCall(false);
         }
         this.getCurrentPlayer().setIsRaise(true);
+        this.currentPlayer.resetRaise();
         this.getCurrentPlayer().setIsCall(true);
         this.getCurrentPlayer().setAction(Action.BLANK);
+
         nextPlayer();
     }
 
@@ -336,6 +343,7 @@ public class GameModel {
             throw new NoMoneyException("You don't have enough money to call!");
         }
         this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - this.callAmount);
+        this.moneypool += this.callAmount;
         this.getCurrentPlayer().setIsCall(true);
         this.getCurrentPlayer().setAction(Action.BLANK);
         nextPlayer();
