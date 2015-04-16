@@ -84,7 +84,7 @@
                   <Pane prefHeight="240.0" prefWidth="426.0" />
                   <HBox prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <ImageView fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="cmnCard1" fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -92,7 +92,7 @@
                               <Insets top="60.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="cmnCard2" fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -100,7 +100,7 @@
                               <Insets top="60.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="cmnCard3" fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -108,7 +108,7 @@
                               <Insets top="60.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="cmnCard4" fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -116,7 +116,7 @@
                               <Insets top="60.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="cmnCard5" fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -128,7 +128,7 @@
                   </HBox>
                   <HBox prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <ImageView fitHeight="154.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="usrCard1" fitHeight="154.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -136,7 +136,7 @@
                               <Insets left="100.0" top="43.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fitHeight="154.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -149,9 +149,9 @@
                               <Insets bottom="60.0" top="60.0" />
                            </HBox.margin>
                            <children>
-                              <Button layoutX="14.0" layoutY="2.0" mnemonicParsing="false" text="Call" />
-                              <Button layoutX="14.0" layoutY="36.0" mnemonicParsing="false" text="Raise" />
-                              <Button layoutX="14.0" layoutY="72.0" mnemonicParsing="false" text="Fold" />
+                              <Button fx:id="btnCall" layoutX="14.0" layoutY="2.0" mnemonicParsing="false" text="Call" />
+                              <Button fx:id="btnRaise" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" text="Raise" />
+                              <Button fx:id="btnFold" layoutX="14.0" layoutY="72.0" mnemonicParsing="false" text="Fold" />
                            </children>
                         </Pane>
                      </children></HBox>

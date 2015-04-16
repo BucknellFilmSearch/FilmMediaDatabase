@@ -7,8 +7,10 @@ package Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
@@ -17,13 +19,48 @@ import javafx.scene.layout.HBox;
  *
  * @author Zhengri Fan
  */
-public class FXMLController implements Initializable {
+public class GameViewController implements Initializable {
 
     @FXML
     private HBox bscBox;
 
     @FXML
     private ImageView tableImage;
+
+    @FXML
+    private ImageView usrCard1;
+
+    @FXML
+    private ImageView usrCard2;
+
+    @FXML
+    private ImageView cmnCard1;
+
+    @FXML
+    private ImageView cmnCard2;
+
+    @FXML
+    private ImageView cmnCard3;
+
+    @FXML
+    private ImageView cmnCard4;
+
+    @FXML
+    private ImageView cmnCard5;
+
+    @FXML
+    private Button btnCall;
+
+    @FXML
+    private Button btnRaise;
+
+    @FXML
+    private Button btnFold;
+
+    @FXML
+    private void handleButtonAction(ActionEvent event) {
+        //TODO
+    }
 
     /**
      * Initializes the controller class.
