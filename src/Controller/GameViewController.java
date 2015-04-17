@@ -59,7 +59,13 @@ public class GameViewController implements Initializable {
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        System.out.println("Clicked");
+        if (event.getSource() == this.btnCall) {
+            System.out.println("Called");
+        } else if (event.getSource() == this.btnRaise) {
+            System.out.println("Raised");
+        } else if (event.getSource() == this.btnFold) {
+            System.out.println("Folded");
+        }
 
     }
 

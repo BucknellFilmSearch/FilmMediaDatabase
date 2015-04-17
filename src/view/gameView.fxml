@@ -149,9 +149,9 @@
                               <Insets bottom="60.0" top="60.0" />
                            </HBox.margin>
                            <children>
-                              <Button fx:id="btnCall" layoutX="14.0" layoutY="2.0" mnemonicParsing="false" text="Call" />
-                              <Button fx:id="btnRaise" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" text="Raise" />
-                              <Button fx:id="btnFold" layoutX="14.0" layoutY="72.0" mnemonicParsing="false" text="Fold" />
+                              <Button fx:id="btnCall" layoutX="14.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Call" />
+                              <Button fx:id="btnRaise" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Raise" />
+                              <Button fx:id="btnFold" layoutX="14.0" layoutY="72.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Fold" />
                            </children>
                         </Pane>
                      </children></HBox>
