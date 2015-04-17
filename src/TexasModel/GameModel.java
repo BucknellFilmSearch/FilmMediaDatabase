@@ -16,9 +16,9 @@ import java.util.LinkedList;
 public class GameModel {
 
     private Deck theDeck;
-    private static ArrayList<Player> players;
-    private static LinkedList<Player> playerinGame;
-    private static LinkedList<Player> playerthisRound;
+    private ArrayList<Player> players;
+    private LinkedList<Player> playerinGame;
+    private LinkedList<Player> playerthisRound;
     private double moneypool;
     private boolean isBlind;
     private boolean isTurnhand;
@@ -119,7 +119,7 @@ public class GameModel {
      * @throws NoMoneyException
      * @throws SixCardHandException
      */
-    public void getPlayerChoice() throws NoMoneyException, SixCardHandException {
+    public void getPlayerChoice() throws NoMoneyException, SixCardHandException, CallMoreException {
         if (this.currentPlayer.getAction() == Action.CALL) {
             this.call();
         }
@@ -159,7 +159,9 @@ public class GameModel {
     public boolean isAllCall() {
         for (Player p : playerinGame) {
             if (!p.isIsCall()) {
-                return false;
+                if (!p.isIsAllin()) {
+                    return false;
+                }
             }
 
         }
@@ -192,14 +194,17 @@ public class GameModel {
             if (this.isTurnhand == true && this.isAllCall()) {
                 this.isTurnhand = false;
                 this.isRiverhand = true;
+                this.callAmount = 0;
                 this.poolcards.add(this.theDeck.drawRandomCard());
-            } else if (this.isAllCall() && this.isFlop) {
+            } else if (this.isAllCall() && this.isFlop == true) {
                 this.isFlop = false;
                 this.isTurnhand = true;
+                this.callAmount = 0;
                 this.poolcards.add(this.theDeck.drawRandomCard());
             } else if (this.isBlind == true && this.isAllCall()) {
                 this.isBlind = false;
                 this.isFlop = true;
+                this.callAmount = 0;
             }
 
             this.playerthisRound.addAll(this.playerinGame);
@@ -216,6 +221,33 @@ public class GameModel {
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
+    }
+
+    public void reset() {
+        this.resetpool();
+        this.moneypool = 0;
+        this.isEnd = false;
+        this.isFlop = false;
+        this.isTurnhand = false;
+        this.isRiverhand = false;
+        this.isBlind = true;
+
+        this.playerinGame.addAll(this.players);
+        this.playerthisRound.addAll(playerinGame);
+        this.currentPlayer = this.playerthisRound.pop();
+        for (int i = 0; i < this.players.size(); i++) {
+            if (this.players.get(i).getMoney() <= 0) {
+                this.players.remove(i);
+            }
+        }
+        for (int i = 0; i < this.players.size(); i++) {
+            this.players.get(i).reset();
+        }
+
+    }
+
+    public boolean isIsEnd() {
+        return isEnd;
     }
 
     /**
@@ -245,6 +277,7 @@ public class GameModel {
                 playerinGame.pop().addMoney(moneypool / tie);
             }
         }
+        this.moneypool = 0;
 
     }
 
@@ -265,6 +298,10 @@ public class GameModel {
     //To do two more method about the river stage and etc. Done
     public Deck getTheDeck() {
         return theDeck;
+    }
+
+    public void setPoolcards(ArrayList<Card> poolcards) {
+        this.poolcards = poolcards;
     }
 
     public void setMoneypool(double moneypool) {
@@ -320,11 +357,14 @@ public class GameModel {
     }
 
     //TODO ISRAISE EXCEPTION
-    public void raise(double amount) throws NoMoneyException, SixCardHandException {
+    public void raise(double amount) throws NoMoneyException, SixCardHandException, CallMoreException {
+        if (amount <= this.callAmount) {
+            throw new CallMoreException("You need to call more!");
+        }
         if (this.getCurrentPlayer().getMoney() < amount) {
             throw new NoMoneyException("You don't have enough money to raise!");
         }
-        this.callAmount += amount;
+        this.callAmount = amount;
         this.moneypool += amount;
         this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - amount);
         for (Player p : playerinGame) {
@@ -339,15 +379,22 @@ public class GameModel {
     }
 
     public void call() throws NoMoneyException, SixCardHandException {
-        if (this.getCurrentPlayer().getMoney() < this.callAmount) {
+        if (this.callAmount == 0) {
+            this.check();
+        } else if (this.getCurrentPlayer().getMoney() < this.callAmount) {
             throw new NoMoneyException("You don't have enough money to call!");
-        }
-        this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - this.callAmount);
-        this.moneypool += this.callAmount;
-        this.getCurrentPlayer().setIsCall(true);
-        this.getCurrentPlayer().setAction(Action.BLANK);
-        nextPlayer();
+        } else {
+            if (this.currentPlayer.isIsCall()) {
+                check();
+            } else {
+                this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - this.callAmount);
+                this.moneypool += this.callAmount;
+                this.getCurrentPlayer().setIsCall(true);
+                this.getCurrentPlayer().setAction(Action.BLANK);
+                nextPlayer();
 
+            }
+        }
     }
 
     public void check() throws SixCardHandException, NoMoneyException {
@@ -355,8 +402,9 @@ public class GameModel {
             this.currentPlayer.setIsCheck(true);
             this.getCurrentPlayer().setAction(Action.BLANK);
             nextPlayer();
+        } else {
+            this.getCurrentPlayer().setAction(Action.BLANK);
         }
-        this.getCurrentPlayer().setAction(Action.BLANK);
     }
 
 }

@@ -35,7 +35,7 @@ public class GameModelTest {
 
         play.add(play2);
         play.add(play3);
-        gametest = new GameModel(100, play);
+        gametest = new GameModel(0, play);
 
     }
 
@@ -53,6 +53,7 @@ public class GameModelTest {
         for (Player p : gametest.getPlayers()) {
             Assert.assertEquals(p.getHand().getHand().size(), cardnum);
         }
+        Assert.assertEquals(gametest.getTheDeck().getDeck().size(), 43);
     }
 
     @Test
@@ -74,7 +75,7 @@ public class GameModelTest {
      * Test of isAllCheck method, of class GameModel.
      */
     @Test
-    public void testisAllCall() throws NoMoneyException, SixCardHandException {
+    public void testisAllCall() throws NoMoneyException, SixCardHandException, CallMoreException {
 
         Player play1 = gametest.getPlayers().get(0);
         play1.setMoney(10000);
@@ -111,52 +112,189 @@ public class GameModelTest {
         Player instance = gametest.getCurrentPlayer();
         Assert.assertEquals(instance.getName(), "Brian King");
     }
+
+    /**
+     * Test of nextTurn method, of class GameModel.
+     */
+    @Test
+    public void testNextTurn() throws Exception {
+        Player play1 = gametest.getPlayers().get(0);
+        play1.setMoney(10000);
+        Player play2 = gametest.getPlayers().get(1);
+        play2.setMoney(10000);
+        Player play3 = gametest.getPlayers().get(2);
+        play3.setMoney(10000);
+        play1.raise(100);
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsFlop(), true);
+        play1.raise(200);
+        play2.raise(400);
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsFlop(), true);
+        play1.call();
+        play2.check();
+        play3.check();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsTurnhand(), true);
+        play1.call();
+        play2.check();
+        play3.check();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsRiverhand(), true);
+
+    }
+
+    /**
+     * Test of resetpool method, of class GameModel.
+     */
+    @Test
+    public void testReset() throws NoMoneyException, SixCardHandException, CallMoreException {
+        Player play1 = gametest.getPlayers().get(0);
+        play1.setMoney(10000);
+        Player play2 = gametest.getPlayers().get(1);
+        play2.setMoney(10000);
+        Player play3 = gametest.getPlayers().get(2);
+        play3.setMoney(10000);
+        play1.raise(100);
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsFlop(), true);
+        play1.raise(200);
+        play2.raise(400);
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsFlop(), true);
+        gametest.reset();
+        Assert.assertEquals(gametest.getMoneypool(), 0, 0);
+        Assert.assertEquals(gametest.isIsBlind(), true);
+        Assert.assertEquals(gametest.isIsFlop(), false);
+        play1.setMoney(0);
+        gametest.reset();
+        Assert.assertEquals(gametest.getPlayers().size(), 2);
+        Assert.assertEquals(play1.isIsCall(), false);
+        Assert.assertEquals(play2.isIsCall(), false);
+        Assert.assertEquals(play3.isIsCall(), false);
+    }
+
+    /**
+     * Test of checkWin method, of class GameModel.
+     */
+    @Test
+    public void testCheckWin() throws Exception {
+        play1.raise(60);
+        play2.call();
+        play3.fold();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.call();
+        play2.fold();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsEnd(), true);
+        Assert.assertEquals(play1.getMoney(), 160, 0);
+    }
+
+    @Test
+    public void testCheckHand() throws Exception {
+        play1.raise(60);
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        ArrayList<Card> temptest = gametest.getPoolcards();
+        temptest.removeAll(temptest);
+        temptest.add(new Card(Suite.Clubs, "A"));
+        temptest.add(new Card(Suite.Clubs, 2));
+        temptest.add(new Card(Suite.Clubs, 3));
+        temptest.add(new Card(Suite.Clubs, 4));
+        temptest.add(new Card(Suite.Hearts, 6));
+        play1.setHand(new Hand(new Card(Suite.Clubs, 5), new Card(Suite.Diamonds, 5)));
+        play2.setHand(new Hand(new Card(Suite.Diamonds, 7), new Card(Suite.Diamonds, 8)));
+        play3.setHand(new Hand(new Card(Suite.Hearts, 9), new Card(Suite.Hearts, 10)));
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsEnd(), true);
+        Assert.assertEquals(play1.getMoney(), 220, 0);
+    }
+
+    /**
+     * Test of checkTie method, of class GameModel.
+     */
+    @Test
+    public void testCheckTie() throws NoMoneyException, SixCardHandException, CallMoreException, BadCardCreationException {
+        play1.raise(60);
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        ArrayList<Card> temptest = gametest.getPoolcards();
+        temptest.removeAll(temptest);
+        temptest.add(new Card(Suite.Clubs, "A"));
+        temptest.add(new Card(Suite.Clubs, 2));
+        temptest.add(new Card(Suite.Clubs, 3));
+        temptest.add(new Card(Suite.Clubs, 4));
+        temptest.add(new Card(Suite.Clubs, 5));
+        play1.setHand(new Hand(new Card(Suite.Clubs, 7), new Card(Suite.Diamonds, 8)));
+        play2.setHand(new Hand(new Card(Suite.Diamonds, 7), new Card(Suite.Diamonds, 9)));
+        play3.setHand(new Hand(new Card(Suite.Hearts, 9), new Card(Suite.Hearts, 10)));
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsEnd(), true);
+        Assert.assertEquals(play1.getMoney(), 100, 0);
+
+    }
 }
-//
-//    /**
-//     * Test of nextTurn method, of class GameModel.
-//     */
-//    @Test
-//    public void testNextTurn() throws Exception {
-//        System.out.println("nextTurn");
-//        GameModel instance = null;
-//        instance.nextTurn();
-//
-//    }
-//
-//    /**
-//     * Test of resetpool method, of class GameModel.
-//     */
-//    @Test
-//    public void testResetpool() {
-//        System.out.println("resetpool");
-//        GameModel instance = null;
-//        instance.resetpool();
-//
-//    }
-//
-//    /**
-//     * Test of checkWin method, of class GameModel.
-//     */
-//    @Test
-//    public void testCheckWin() throws Exception {
-//        System.out.println("checkWin");
-//        GameModel instance = null;
-//        instance.checkWin();
-//
-//    }
-//
-//    /**
-//     * Test of checkTie method, of class GameModel.
-//     */
-//    @Test
-//    public void testCheckTie() {
-//        System.out.println("checkTie");
-//        GameModel instance = null;
-//        int expResult = 0;
-//        int result = instance.checkTie();
-//
-//    }
 //
 //    /**
 //     * Test of getTheDeck method, of class GameModel.

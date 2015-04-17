@@ -219,4 +219,20 @@ public class Player implements Comparator {
         this.action = Action.FOLD;
     }
 
+    public void reset() {
+        double money = this.getMoney();
+        String name = this.getName();
+        this.isPlay = false;
+        this.hand = new Hand();
+        this.isRaise = false;
+        this.isFold = false;
+        this.callable = true;
+        this.isAllin = false;
+        this.isCall = false;
+        this.isCheck = false;
+        this.action = Action.BLANK;
+        this.raiseamount = 0;
+        this.callamount = 0;
+    }
+
 }
