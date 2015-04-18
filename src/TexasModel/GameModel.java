@@ -13,6 +13,19 @@ import java.util.LinkedList;
  *
  * @author huangjiayu
  */
+/**
+ * ReadMe: How to use this model To start the game: Use constructor to new a
+ * Game To add player: Use addPlayer method To process the game: First: let
+ * player choose what to do, Then Call method: getPlayerChoice. Model will do
+ * anything else for you
+ *
+ * How it works: Get player choice will get current player's choice and modify
+ * needed information then, it will automatically process to next player. While
+ * all players did something, It will automatically process to next round. When
+ * the game ends, It will automatically Checkwin and ends game.
+ *
+ * @author huangjiayu
+ */
 public class GameModel {
 
     private Deck theDeck;
@@ -30,7 +43,8 @@ public class GameModel {
     private boolean isFlop;
 
     /**
-     * This is a constructor for GameModel
+     * This is a constructor for GameModel, It will construct the game model
+     * with several players. While AI is finished, we can change it to AI
      *
      * @param moneypool
      * @param numplayer
@@ -63,6 +77,12 @@ public class GameModel {
         currentPlayer.setIsPlay(true);
     }
 
+    /**
+     * It will construct a game with several Players in an arraylist
+     *
+     * @param moneypool
+     * @param play
+     */
     public GameModel(double moneypool, ArrayList<Player> play) {
         this.theDeck = new Deck();
         this.players = play;
@@ -79,7 +99,7 @@ public class GameModel {
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.callAmount = 50; //Initialize the Call Amount =50, So that it assures
-        //the Game will have some money
+        //the Game will have some money. We might change it to 0.
         this.playerinGame = new LinkedList<Player>();
         this.playerinGame.addAll(players);// The Player that is still in this game
         this.playerthisRound = new LinkedList<Player>();
@@ -99,6 +119,11 @@ public class GameModel {
         }
     }
 
+    /**
+     * Returns the Current Player making decision
+     *
+     * @return
+     */
     public Player getCurrentPlayer() {
 
         return currentPlayer;
@@ -114,7 +139,7 @@ public class GameModel {
 
     /**
      * This is the Listener in the Model to make sure the game moves on turn by
-     * turn
+     * turn. It is a very IMPORTANT method. The game steps forward with this
      *
      * @throws NoMoneyException
      * @throws SixCardHandException
@@ -223,6 +248,9 @@ public class GameModel {
         this.poolcards.add(this.theDeck.drawRandomCard());
     }
 
+    /**
+     * A method to reset to make the game restart with the same players
+     */
     public void reset() {
         this.resetpool();
         this.moneypool = 0;
@@ -246,12 +274,17 @@ public class GameModel {
 
     }
 
+    /**
+     * To see if everything is end.
+     *
+     * @return
+     */
     public boolean isIsEnd() {
         return isEnd;
     }
 
     /**
-     * Check who wins the game
+     * Check who wins the game. This is very hardcoded beautiful class
      *
      * @throws SixCardHandException
      */
@@ -272,19 +305,30 @@ public class GameModel {
                 p.setHand(GameUtil.findTheBest(h));
             }
             playerinGame.sort(new Player());
+            ArrayList<Player> temp = new ArrayList<>();
+            temp.addAll(playerinGame);
             int tie = checkTie();
-            for (int i = 0; i < tie; i++) {
-                playerinGame.pop().addMoney(moneypool / tie);
+            if (tie > 1) {
+                for (int i = 0; i < tie; i++) {
+                    temp.get(i).addMoney(moneypool / tie);
+                }
+            } else {
+                playerinGame.pop().addMoney(moneypool);
             }
         }
         this.moneypool = 0;
 
     }
 
+    /**
+     * Check how many ties exist
+     *
+     * @return
+     */
     public int checkTie() {
         LinkedList<Player> temp = playerinGame;
         int tienumber = 1;
-        while (temp.size() > 0) {
+        while (temp.size() > 1) {
             if (temp.getFirst().getHand().compareTo(temp.get(1).getHand()) != 0) {
                 return tienumber;
             } else {
