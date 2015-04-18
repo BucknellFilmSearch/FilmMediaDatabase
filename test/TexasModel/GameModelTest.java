@@ -32,7 +32,6 @@ public class GameModelTest {
         play3 = new Player("Jaspr");
         ArrayList<Player> play = new ArrayList<>();
         play.add(play1);
-
         play.add(play2);
         play.add(play3);
         gametest = new GameModel(0, play);
@@ -294,5 +293,46 @@ public class GameModelTest {
         Assert.assertEquals(play1.getMoney(), 100, 0);
 
     }
+
+    @Test
+    public void testAllIn() throws Exception {
+        play1.allin();
+        play2.setMoney(10000);
+        play2.call();
+        play3.setMoney(10000);
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.raise(400); //This will be INVALID, Because play1 is already all-in!
+        play2.raise(500);
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        ArrayList<Card> temptest = gametest.getPoolcards();
+        temptest.removeAll(temptest);
+        temptest.add(new Card(Suite.Clubs, "A"));
+        temptest.add(new Card(Suite.Clubs, 2));
+        temptest.add(new Card(Suite.Clubs, 3));
+        temptest.add(new Card(Suite.Clubs, 4));
+        temptest.add(new Card(Suite.Hearts, 6));
+        play1.setHand(new Hand(new Card(Suite.Clubs, 5), new Card(Suite.Diamonds, 5)));
+        play2.setHand(new Hand(new Card(Suite.Diamonds, 7), new Card(Suite.Diamonds, 8)));
+        play3.setHand(new Hand(new Card(Suite.Hearts, 9), new Card(Suite.Hearts, 10)));
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsEnd(), true);
+        Assert.assertEquals(play1.getMoney(), 1300, 0);
+    }
 }
-//Todo Test ALLIN

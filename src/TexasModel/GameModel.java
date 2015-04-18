@@ -145,19 +145,17 @@ public class GameModel {
      * @throws SixCardHandException
      */
     public void getPlayerChoice() throws NoMoneyException, SixCardHandException, CallMoreException {
-        if (this.currentPlayer.getAction() == Action.CALL) {
+        if (this.currentPlayer.isIsAllin()) {
+            this.check();
+        } else if (this.currentPlayer.getAction() == Action.CALL) {
             this.call();
-        }
-        if (this.currentPlayer.getAction() == Action.ALL_IN) {
+        } else if (this.currentPlayer.getAction() == Action.ALL_IN) {
             this.allIn();
-        }
-        if (this.currentPlayer.getAction() == Action.RAISE) {
+        } else if (this.currentPlayer.getAction() == Action.RAISE) {
             this.raise(this.getCurrentPlayer().getRaiseamount());
-        }
-        if (this.currentPlayer.getAction() == Action.FOLD) {
+        } else if (this.currentPlayer.getAction() == Action.FOLD) {
             this.fold();
-        }
-        if (this.currentPlayer.getAction() == Action.CHECK) {
+        } else if (this.currentPlayer.getAction() == Action.CHECK) {
             this.check();
         }
     }
@@ -442,7 +440,7 @@ public class GameModel {
     }
 
     public void check() throws SixCardHandException, NoMoneyException {
-        if (this.getCurrentPlayer().isIsCall()) {
+        if (this.getCurrentPlayer().isIsCall() || this.getCurrentPlayer().isIsAllin()) {
             this.currentPlayer.setIsCheck(true);
             this.getCurrentPlayer().setAction(Action.BLANK);
             nextPlayer();
