@@ -23,8 +23,7 @@ public class Player implements Comparator {
     private double money; //Money Amount
     private boolean isPlay; // If it is in he's round or not
     private boolean isRaise; //If the player raise
-    private boolean isFold; //If the player Fold
-    private boolean callable; //If the Player has money to call
+    private boolean isFold; //If the player Fold//If the Player has money to call
     private boolean isAllin; //If the player chooses to ALL IN
     private boolean isCall; //If the player called (So that he don't HAVE to call)
     private boolean isCheck; //If the player chooses to check
@@ -60,7 +59,6 @@ public class Player implements Comparator {
         this.hand = new Hand();
         this.isRaise = false;
         this.isFold = false;
-        this.callable = true;
         this.isAllin = false;
         this.isCall = true;
         this.isCheck = false;
@@ -76,7 +74,6 @@ public class Player implements Comparator {
         this.hand = new Hand();
         this.isRaise = false;
         this.isFold = false;
-        this.callable = true;
         this.isAllin = false;
         this.isCall = true;
         this.isCheck = false;
@@ -111,18 +108,6 @@ public class Player implements Comparator {
 
     public void setIsCall(boolean isCall) {
         this.isCall = isCall;
-    }
-
-    public boolean isCallable() {
-        if (this.money > GameModel.callAmount) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void setCallable(boolean callable) {
-        this.callable = callable;
     }
 
     public boolean isIsCheck() {
@@ -226,7 +211,6 @@ public class Player implements Comparator {
         this.hand = new Hand();
         this.isRaise = false;
         this.isFold = false;
-        this.callable = true;
         this.isAllin = false;
         this.isCall = false;
         this.isCheck = false;
