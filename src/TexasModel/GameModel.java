@@ -106,6 +106,31 @@ public class GameModel {
         currentPlayer.setIsPlay(true);
     }
 
+    public GameModel(double moneypool) {
+        this.theDeck = new Deck();
+        this.players = new ArrayList<Player>();
+        this.players.add(new Player("new Player"));
+        this.moneypool = moneypool;
+        this.poolcards = new ArrayList<Card>();
+        this.isBlind = true; //If the Game is in Blind Stage(without three card
+        //shown
+        this.isTurnhand = false;//If the Game is in Turn Hand Stage
+        this.isRiverhand = false; //If the Game is in RiverHand Stage
+        this.isFlop = false;
+        this.isEnd = false;
+        this.poolcards.add(this.theDeck.drawRandomCard());
+        this.poolcards.add(this.theDeck.drawRandomCard());
+        this.poolcards.add(this.theDeck.drawRandomCard());
+        this.callAmount = 0; //Initialize the Call Amount =50, So that it assures
+        //the Game will have some money. We might change it to 0.
+        this.playerinGame = new LinkedList<Player>();
+        this.playerinGame.addAll(players);// The Player that is still in this game
+        this.playerthisRound = new LinkedList<Player>();
+        this.playerthisRound.addAll(playerinGame);//The Player left in this ROUND That is a player moves one by one system
+        this.currentPlayer = this.playerthisRound.pop();
+        currentPlayer.setIsPlay(true);
+    }
+
     /**
      * This is a method to make every player in this Game has two cards
      *
