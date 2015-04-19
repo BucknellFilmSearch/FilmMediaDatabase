@@ -101,7 +101,6 @@ public class MainController implements Initializable {
         } else if (event.getSource() == this.raiseOK) {
             closeRaiseChoices();
         }
-
     }
 
     private void closeRaiseChoices() {
