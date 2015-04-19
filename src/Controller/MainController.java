@@ -27,6 +27,8 @@ import javafx.scene.text.Text;
  */
 public class MainController implements Initializable {
 
+    // <editor-fold defaultstate="collapsed" desc="FXML">
+
     @FXML
     private HBox bscBox;
 
@@ -83,6 +85,7 @@ public class MainController implements Initializable {
 
     @FXML
     private Group raiseGroup;
+    // </editor-fold> 
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
