@@ -1,11 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainPageController">
-    
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="view.MainPageController">
+   <children>
+      <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../res/View/mainpage.png" />
+         </image>
+      </ImageView>
+      <StackPane layoutX="50.0" layoutY="28.0" prefHeight="664.0" prefWidth="153.0">
+         <children>
+            <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+               <image>
+                  <Image url="@../../res/View/1d.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets top="260.0" />
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+               <StackPane.margin>
+                  <Insets top="200.0" />
+               </StackPane.margin>
+               <image>
+                  <Image url="@../../res/View/1c.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+               <StackPane.margin>
+                  <Insets top="140.0" />
+               </StackPane.margin>
+               <image>
+                  <Image url="@../../res/View/1h.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+               <StackPane.margin>
+                  <Insets top="75.0" />
+               </StackPane.margin>
+               <image>
+                  <Image url="@../../res/View/1s.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+               <image>
+                  <Image url="@../../res/View/cardbox.jpg" />
+               </image>
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start" StackPane.alignment="TOP_CENTER">
+               <font>
+                  <Font size="35.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets top="260.0" />
+               </StackPane.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Option" StackPane.alignment="TOP_CENTER">
+               <font>
+                  <Font size="35.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets top="330.0" />
+               </StackPane.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
+               <font>
+                  <Font size="35.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets top="390.0" />
+               </StackPane.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exit" StackPane.alignment="TOP_CENTER">
+               <font>
+                  <Font size="35.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets top="450.0" />
+               </StackPane.margin>
+            </Text>
+         </children>
+      </StackPane>
+   </children>
 </AnchorPane>
