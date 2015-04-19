@@ -10,6 +10,9 @@ import TexasModel.GameModel;
 import TexasModel.GameUtil;
 import TexasModel.NoMoneyException;
 import TexasModel.SixCardHandException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -99,7 +102,7 @@ public class MainController implements Initializable {
     // </editor-fold>
 
     @FXML
-    private void handleButtonAction(ActionEvent event) throws NoMoneyException, SixCardHandException, CallMoreException {
+    private void handleButtonAction(ActionEvent event) throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
         if (event.getSource() == this.btnCall) {
             closeRaiseChoices();
             //this.themodel.getPlayers().get(0).call();
@@ -127,7 +130,7 @@ public class MainController implements Initializable {
     }
 
     @SuppressWarnings("empty-statement")
-    private void updateView() throws NoMoneyException, SixCardHandException, CallMoreException {
+    private void updateView() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
         if (this.themodel.isIsEnd()) {
             this.getBscBox().setDisable(true);
         }
@@ -143,8 +146,9 @@ public class MainController implements Initializable {
         this.themodel.getPlayerChoice();
         this.textCurMoney.setText(Double.toString(this.themodel.getCurrentPlayer().getMoney()));
         if (this.themodel.isIsFlop()) {
-            this.cmnCard1.setImage(new Image(GameUtil.cardpic(this.themodel.getPoolcards().get(0))));
-            this.cmnCard2.setImage(new Image(GameUtil.cardpic(this.themodel.getPoolcards().get(1))));
+            File f = new File(GameUtil.cardpic(this.themodel.getPoolcards().get(0)));
+            this.cmnCard1.setImage(new Image(new FileInputStream(f)));
+            //this.cmnCard2.setImage(new Image(GameUtil.cardpic(this.themodel.getPoolcards().get(1))));
 
         }
 
