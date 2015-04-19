@@ -38,7 +38,7 @@ public class GameModel {
     private boolean isRiverhand;
     private boolean isEnd;
     private ArrayList<Card> poolcards;
-    public static double callAmount;
+    public double callAmount;
     private Player currentPlayer;
     private boolean isFlop;
 
@@ -422,7 +422,7 @@ public class GameModel {
         return poolcards;
     }
 
-    public static double getCallAmount() {
+    public double getCallAmount() {
         return callAmount;
     }
 
