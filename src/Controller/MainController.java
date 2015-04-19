@@ -25,7 +25,7 @@ import javafx.scene.text.Text;
  *
  * @author Zhengri Fan
  */
-public class GameViewController implements Initializable {
+public class MainController implements Initializable {
 
     @FXML
     private HBox bscBox;
