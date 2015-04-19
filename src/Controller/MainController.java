@@ -28,14 +28,14 @@ import javafx.scene.text.Text;
  */
 public class MainController implements Initializable {
 
+    public MainController() {
+        this.themodel = new GameModel(100);
+    }
+
     // <editor-fold defaultstate="collapsed" desc="FXML">
     @FXML
     private HBox bscBox;
     private GameModel themodel;
-
-    public MainController() {
-        this.themodel = new GameModel(100);
-    }
 
     @FXML
     private ImageView tableImage;
