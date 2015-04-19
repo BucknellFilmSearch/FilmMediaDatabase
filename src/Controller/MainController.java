@@ -101,17 +101,32 @@ public class MainController implements Initializable {
             closeRaiseChoices();
             this.themodel.getPlayers().get(0).call();
         } else if (event.getSource() == this.btnRaise) {
-            System.out.println("Raised");
+            //System.out.println("Raised");
             this.raiseGroup.setOpacity(1.0);
             this.raiseGroup.setDisable(false);
         } else if (event.getSource() == this.btnFold) {
-            System.out.println("Folded");
+            //System.out.println("Folded");
+            this.themodel.getPlayers().get(0).fold();
             closeRaiseChoices();
         } else if (event.getSource() == this.raiseCancel) {
             closeRaiseChoices();
         } else if (event.getSource() == this.raiseOK) {
+            this.themodel.getPlayers().get(0).raise(Double.parseDouble(this.textMoneyRaised.getText()));
             closeRaiseChoices();
         }
+    }
+
+    private void updateView() {
+        if (this.themodel.getCurrentPlayer() != this.themodel.getPlayers().get(0)) {
+            this.btnCall.setDisable(true);
+            this.btnFold.setDisable(true);
+            this.btnRaise.setDisable(true);
+        } else {
+            this.btnCall.setDisable(false);
+            this.btnFold.setDisable(false);
+            this.btnRaise.setDisable(false);
+        }
+        this.textCurMoney.setText(Double.toString(this.themodel.getPlayers().get(0).getMoney()));
     }
 
     private void closeRaiseChoices() {
