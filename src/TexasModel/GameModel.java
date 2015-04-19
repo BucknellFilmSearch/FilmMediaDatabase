@@ -63,8 +63,7 @@ public class GameModel {
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
-        this.callAmount = 50; //Initialize the Call Amount =50, So that it assures
-        //the Game will have some money
+        this.callAmount = 0;
         for (int i = 0; i < numplayer; i++) {
             this.players.add(new Player());
         }
@@ -90,7 +89,6 @@ public class GameModel {
         this.poolcards = new ArrayList<Card>();
         this.isBlind = true; //If the Game is in Blind Stage(without three card
         //shown
-
         this.isTurnhand = false;//If the Game is in Turn Hand Stage
         this.isRiverhand = false; //If the Game is in RiverHand Stage
         this.isFlop = false;
@@ -98,7 +96,7 @@ public class GameModel {
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
         this.poolcards.add(this.theDeck.drawRandomCard());
-        this.callAmount = 50; //Initialize the Call Amount =50, So that it assures
+        this.callAmount = 0; //Initialize the Call Amount =50, So that it assures
         //the Game will have some money. We might change it to 0.
         this.playerinGame = new LinkedList<Player>();
         this.playerinGame.addAll(players);// The Player that is still in this game
@@ -369,6 +367,9 @@ public class GameModel {
         if (moneyallin > this.callAmount) {
             this.callAmount = moneyallin;
             this.getCurrentPlayer().setIsRaise(true);
+            for (Player p : playerinGame) {
+                p.setIsCall(false);
+            }
         }
         this.moneypool += moneyallin;
         this.getCurrentPlayer().setIsAllin(true);
@@ -401,7 +402,7 @@ public class GameModel {
     //TODO ISRAISE EXCEPTION
     public void raise(double amount) throws NoMoneyException, SixCardHandException, CallMoreException {
         if (amount <= this.callAmount) {
-            throw new CallMoreException("You need to call more!");
+            throw new CallMoreException("You need to bet more!");
         }
         if (this.getCurrentPlayer().getMoney() < amount) {
             throw new NoMoneyException("You don't have enough money to raise!");

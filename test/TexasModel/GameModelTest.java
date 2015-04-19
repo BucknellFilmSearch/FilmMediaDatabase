@@ -295,7 +295,7 @@ public class GameModelTest {
     }
 
     @Test
-    public void testAllIn() throws Exception {
+    public void testAllInraise() throws Exception {
         play1.allin();
         play2.setMoney(10000);
         play2.call();
@@ -334,5 +334,53 @@ public class GameModelTest {
         gametest.getPlayerChoice();
         Assert.assertEquals(gametest.isIsEnd(), true);
         Assert.assertEquals(play1.getMoney(), 1300, 0);
+    }
+
+    @Test
+    public void testAllInCall() throws Exception {
+        play1.raise(20);
+        play2.setMoney(10000);
+        play2.raise(1000);
+        play3.setMoney(10000);
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.allin(); //This will be INVALID, Because play1 is already all-in!
+        play2.raise(1500);
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        ArrayList<Card> temptest = gametest.getPoolcards();
+        temptest.removeAll(temptest);
+        temptest.add(new Card(Suite.Clubs, "A"));
+        temptest.add(new Card(Suite.Clubs, 2));
+        temptest.add(new Card(Suite.Clubs, 3));
+        temptest.add(new Card(Suite.Clubs, 4));
+        temptest.add(new Card(Suite.Hearts, 6));
+        play1.setHand(new Hand(new Card(Suite.Clubs, 5), new Card(Suite.Diamonds, 5)));
+        play2.setHand(new Hand(new Card(Suite.Diamonds, 7), new Card(Suite.Diamonds, 8)));
+        play3.setHand(new Hand(new Card(Suite.Hearts, 9), new Card(Suite.Hearts, 10)));
+        play1.call();
+        play2.call();
+        play3.call();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsEnd(), true);
+        Assert.assertEquals(play1.getMoney(), 5100, 0);
     }
 }

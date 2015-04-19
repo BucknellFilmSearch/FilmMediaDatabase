@@ -62,7 +62,7 @@ public class Player implements Comparator {
         this.isFold = false;
         this.callable = true;
         this.isAllin = false;
-        this.isCall = false;
+        this.isCall = true;
         this.isCheck = false;
         this.action = Action.BLANK;
         this.raiseamount = 0;
@@ -78,7 +78,7 @@ public class Player implements Comparator {
         this.isFold = false;
         this.callable = true;
         this.isAllin = false;
-        this.isCall = false;
+        this.isCall = true;
         this.isCheck = false;
         this.action = Action.BLANK;
         this.raiseamount = 0;
