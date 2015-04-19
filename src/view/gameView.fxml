@@ -64,7 +64,10 @@
                            </image>
                         </ImageView>
                      </children></Pane>
-                  <Pane prefHeight="240.0" prefWidth="426.0" />
+                  <Pane prefHeight="240.0" prefWidth="426.0">
+                     <children>
+                        <Button fx:id="btnStep" layoutX="384.0" layoutY="108.0" mnemonicParsing="false" text="Step" />
+                     </children></Pane>
                </children>
             </VBox>
             <VBox prefHeight="720.0" prefWidth="426.0">

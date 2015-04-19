@@ -9,8 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="Controller.MainPageController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainPageController">
    <children>
       <ImageView fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -91,6 +90,30 @@
                   <Insets top="450.0" />
                </StackPane.margin>
             </Text>
+         </children>
+      </StackPane>
+      <StackPane layoutX="1021.0" layoutY="59.0" prefHeight="376.0" prefWidth="200.0">
+         <children>
+            <MenuButton mnemonicParsing="false" opacity="0.0" prefHeight="68.0" prefWidth="211.0" text="Number of AI" StackPane.alignment="TOP_CENTER">
+              <items>
+                <MenuItem mnemonicParsing="false" text="1" />
+                <MenuItem mnemonicParsing="false" text="2" />
+                  <MenuItem mnemonicParsing="false" text="3" />
+                  <MenuItem mnemonicParsing="false" text="4" />
+              </items>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </MenuButton>
+            <MenuButton mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Difficulty" StackPane.alignment="TOP_CENTER">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Normal" />
+                <MenuItem mnemonicParsing="false" text="Hard" />
+              </items>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </MenuButton>
          </children>
       </StackPane>
    </children>
