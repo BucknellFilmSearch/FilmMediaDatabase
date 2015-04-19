@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import TexasModel.GameModel;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -28,9 +29,13 @@ import javafx.scene.text.Text;
 public class MainController implements Initializable {
 
     // <editor-fold defaultstate="collapsed" desc="FXML">
-
     @FXML
     private HBox bscBox;
+    private GameModel themodel;
+
+    public MainController() {
+        this.themodel = new GameModel(100);
+    }
 
     @FXML
     private ImageView tableImage;
@@ -85,13 +90,13 @@ public class MainController implements Initializable {
 
     @FXML
     private Group raiseGroup;
-    // </editor-fold> 
+    // </editor-fold>
 
     @FXML
     private void handleButtonAction(ActionEvent event) {
         if (event.getSource() == this.btnCall) {
             closeRaiseChoices();
-            System.out.println("Called");
+            this.themodel.getPlayers().get(0).call();
         } else if (event.getSource() == this.btnRaise) {
             System.out.println("Raised");
             this.raiseGroup.setOpacity(1.0);
