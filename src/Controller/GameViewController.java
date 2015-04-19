@@ -87,6 +87,7 @@ public class GameViewController implements Initializable {
     @FXML
     private void handleButtonAction(ActionEvent event) {
         if (event.getSource() == this.btnCall) {
+            closeRaiseChoices();
             System.out.println("Called");
         } else if (event.getSource() == this.btnRaise) {
             System.out.println("Raised");
@@ -94,14 +95,18 @@ public class GameViewController implements Initializable {
             this.raiseGroup.setDisable(false);
         } else if (event.getSource() == this.btnFold) {
             System.out.println("Folded");
+            closeRaiseChoices();
         } else if (event.getSource() == this.raiseCancel) {
-            this.raiseGroup.setOpacity(0.0);
-            this.raiseGroup.setDisable(true);
+            closeRaiseChoices();
         } else if (event.getSource() == this.raiseOK) {
-            this.raiseGroup.setOpacity(0.0);
-            this.raiseGroup.setDisable(true);
+            closeRaiseChoices();
         }
 
+    }
+
+    private void closeRaiseChoices() {
+        this.raiseGroup.setOpacity(0.0);
+        this.raiseGroup.setDisable(true);
     }
 
     @FXML
@@ -124,6 +129,82 @@ public class GameViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+    }
+
+    public HBox getBscBox() {
+        return bscBox;
+    }
+
+    public ImageView getTableImage() {
+        return tableImage;
+    }
+
+    public ImageView getUsrCard1() {
+        return usrCard1;
+    }
+
+    public ImageView getUsrCard2() {
+        return usrCard2;
+    }
+
+    public ImageView getCmnCard1() {
+        return cmnCard1;
+    }
+
+    public ImageView getCmnCard2() {
+        return cmnCard2;
+    }
+
+    public ImageView getCmnCard3() {
+        return cmnCard3;
+    }
+
+    public ImageView getCmnCard4() {
+        return cmnCard4;
+    }
+
+    public ImageView getCmnCard5() {
+        return cmnCard5;
+    }
+
+    public Button getBtnCall() {
+        return btnCall;
+    }
+
+    public Button getBtnRaise() {
+        return btnRaise;
+    }
+
+    public Button getBtnFold() {
+        return btnFold;
+    }
+
+    public Slider getSliderRaise() {
+        return sliderRaise;
+    }
+
+    public TextField getTextMoneyRaised() {
+        return textMoneyRaised;
+    }
+
+    public Text getTextCurMoney() {
+        return textCurMoney;
+    }
+
+    public Text getTextMoneyChange() {
+        return textMoneyChange;
+    }
+
+    public Button getRaiseCancel() {
+        return raiseCancel;
+    }
+
+    public Button getRaiseOK() {
+        return raiseOK;
+    }
+
+    public Group getRaiseGroup() {
+        return raiseGroup;
     }
 
 }
