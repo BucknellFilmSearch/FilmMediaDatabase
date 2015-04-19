@@ -19,8 +19,8 @@ public class Deck {
     // LL for fast adding/removing of cards
     private LinkedList<Card> deck = new LinkedList<>();
     // AL for fast indexing for creating deck
-    private ArrayList<Suite> suitList = new ArrayList<>();
-    private ArrayList<Integer> valueList = new ArrayList<>();
+    private static ArrayList<Suite> suitList = new ArrayList<>();
+    private static ArrayList<Integer> valueList = new ArrayList<>();
 
     /**
      * Initialized a software representation of a standard deck of 52 cards.
@@ -63,6 +63,22 @@ public class Deck {
     }
 
     /**
+     * Removed a specific card from the deck.
+     *
+     * @param card
+     * @return 1 if successful, -1 if specified card was already not in deck
+     */
+    public int removeCard(Card card) {
+        for (int index = 0; index < deck.size(); index++) {
+            if (deck.get(index).getValue() == card.getValue() && deck.get(index).getSuite() == card.getSuite()) {
+                deck.remove(index);
+                return 1;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Resets deck to default state with all 52 cards.
      */
     public void resetDeck() {
@@ -82,4 +98,13 @@ public class Deck {
     public LinkedList<Card> getDeck() {
         return deck;
     }
+
+    public static ArrayList<Suite> getSuitList() {
+        return suitList;
+    }
+
+    public static ArrayList<Integer> getValueList() {
+        return valueList;
+    }
+
 }

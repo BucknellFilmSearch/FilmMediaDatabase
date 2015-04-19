@@ -59,7 +59,12 @@ public class Card {
                 this.value = 14;
                 break;
             default:
-                throw new BadCardCreationException("Provided bad string to create card. Use J, Q, K, or A.");
+                int number = Integer.parseInt(str);
+                if (number >= 2 && number <= 14) {
+                    this.value = number;
+                } else {
+                    throw new BadCardCreationException("Provided bad string to create card. Use J, Q, K, or A, or 2-14.");
+                }
         }
     }
 

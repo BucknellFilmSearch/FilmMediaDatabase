@@ -96,7 +96,7 @@ public class HandTest {
     @Test
     public void testHighCard() {
         try {
-            System.out.println("lowCard");
+            System.out.println("highCard");
             Card card1 = new Card(Suite.Clubs, "A");
             Card card2 = new Card(Suite.Diamonds, 2);
             Card card3 = new Card(Suite.Spades, 5);
@@ -117,6 +117,7 @@ public class HandTest {
     @Test
     public void testIsRoyalFlush() {
         try {
+            System.out.println("isRoyalFlush");
             Card card1 = new Card(Suite.Clubs, "A");
             Card card2 = new Card(Suite.Clubs, "K");
             Card card3 = new Card(Suite.Clubs, "Q");
@@ -141,6 +142,7 @@ public class HandTest {
     @Test
     public void testIsStraightFlush() {
         try {
+            System.out.println("isStraightFlush");
             Card card1 = new Card(Suite.Clubs, "K");
             Card card2 = new Card(Suite.Clubs, "Q");
             Card card3 = new Card(Suite.Clubs, "J");
@@ -165,6 +167,7 @@ public class HandTest {
     @Test
     public void testIsFourOfAKind() {
         try {
+            System.out.println("isFourOfAKind");
             Card card1 = new Card(Suite.Clubs, 9);
             Card card2 = new Card(Suite.Diamonds, 10);
             Card card3 = new Card(Suite.Hearts, 10);
@@ -189,6 +192,7 @@ public class HandTest {
     @Test
     public void testIsFullHouse() {
         try {
+            System.out.println("isFullHouse");
             Card card1 = new Card(Suite.Clubs, 9);
             Card card2 = new Card(Suite.Diamonds, 9);
             Card card3 = new Card(Suite.Hearts, 10);
@@ -213,6 +217,7 @@ public class HandTest {
     @Test
     public void testIsFlush() {
         try {
+            System.out.println("isFlush");
             Card card1 = new Card(Suite.Clubs, 3);
             Card card2 = new Card(Suite.Clubs, 9);
             Card card3 = new Card(Suite.Clubs, "J");
@@ -237,6 +242,7 @@ public class HandTest {
     @Test
     public void testIsStraight() {
         try {
+            System.out.println("isStraight");
             Card card1 = new Card(Suite.Clubs, 3);
             Card card2 = new Card(Suite.Diamonds, 4);
             Card card3 = new Card(Suite.Clubs, 6);
@@ -261,6 +267,7 @@ public class HandTest {
     @Test
     public void testIsThreeOfAKind() {
         try {
+            System.out.println("isThreeOfAKind");
             Card card1 = new Card(Suite.Clubs, 3);
             Card card2 = new Card(Suite.Diamonds, 3);
             Card card3 = new Card(Suite.Clubs, 6);
@@ -285,6 +292,7 @@ public class HandTest {
     @Test
     public void testIsTwoPair() {
         try {
+            System.out.println("isTwoPair");
             Card card1 = new Card(Suite.Clubs, 3);
             Card card2 = new Card(Suite.Diamonds, 4);
             Card card3 = new Card(Suite.Clubs, 4);
@@ -309,6 +317,7 @@ public class HandTest {
     @Test
     public void testIsPair() {
         try {
+            System.out.println("isPair");
             Card card1 = new Card(Suite.Clubs, 3);
             Card card2 = new Card(Suite.Diamonds, 4);
             Card card3 = new Card(Suite.Clubs, 5);
@@ -333,6 +342,7 @@ public class HandTest {
     @Test
     public void testCompareTo() {
         try {
+            System.out.println("compareTo");
             Card card1 = new Card(Suite.Clubs, 3);
             Card card2 = new Card(Suite.Diamonds, 4);
             Card card3 = new Card(Suite.Clubs, 4);
