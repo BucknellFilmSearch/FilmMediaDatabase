@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
 /**
@@ -67,6 +68,11 @@ public class GameViewController implements Initializable {
             System.out.println("Folded");
         }
 
+    }
+
+    @FXML
+    private void bloom(MouseEvent event) {
+        //
     }
 
     /**
