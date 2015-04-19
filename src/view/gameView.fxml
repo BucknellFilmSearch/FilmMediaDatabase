@@ -13,9 +13,9 @@
    <children>
       <StackPane prefHeight="720.0" prefWidth="1280.0">
          <children>
-            <ImageView fx:id="tableImage" fitHeight="720.0" fitWidth="1280.0" opacity="0.48" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="tableImage" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../res/View/table.png" />
+                  <Image url="@../../res/View/table2.png" />
                </image>
                <viewport>
                   <Rectangle2D height="2068.0" minX="30.0" width="3676.0" />
@@ -64,19 +64,7 @@
                            </image>
                         </ImageView>
                      </children></Pane>
-                  <Pane prefHeight="240.0" prefWidth="426.0">
-                     <children>
-                        <ImageView fitHeight="119.0" fitWidth="85.0" layoutX="327.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../res/View/cards/playing-card-back.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="119.0" fitWidth="85.0" layoutX="307.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../res/View/cards/playing-card-back.png" />
-                           </image>
-                        </ImageView>
-                     </children></Pane>
+                  <Pane prefHeight="240.0" prefWidth="426.0" />
                </children>
             </VBox>
             <VBox prefHeight="720.0" prefWidth="426.0">
@@ -201,20 +189,7 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Pane prefHeight="240.0" prefWidth="426.0">
-                     <children>
-                        <ImageView fitHeight="119.0" fitWidth="85.0" layoutX="20.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../res/View/cards/playing-card-back.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="119.0" fitWidth="85.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../res/View/cards/playing-card-back.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </Pane>
+                  <Pane prefHeight="240.0" prefWidth="426.0" />
                </children>
             </VBox>
          </children></HBox>
