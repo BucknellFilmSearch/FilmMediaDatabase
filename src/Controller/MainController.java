@@ -5,9 +5,15 @@
  */
 package Controller;
 
+import TexasModel.CallMoreException;
 import TexasModel.GameModel;
+import TexasModel.GameUtil;
+import TexasModel.NoMoneyException;
+import TexasModel.SixCardHandException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.Bloom;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -28,14 +35,10 @@ import javafx.scene.text.Text;
  */
 public class MainController implements Initializable {
 
-    public MainController() {
-        this.themodel = new GameModel(100);
-    }
-
+    private GameModel themodel;
     // <editor-fold defaultstate="collapsed" desc="FXML">
     @FXML
     private HBox bscBox;
-    private GameModel themodel;
 
     @FXML
     private ImageView tableImage;
@@ -96,37 +99,55 @@ public class MainController implements Initializable {
     // </editor-fold>
 
     @FXML
-    private void handleButtonAction(ActionEvent event) {
+    private void handleButtonAction(ActionEvent event) throws NoMoneyException, SixCardHandException, CallMoreException {
         if (event.getSource() == this.btnCall) {
             closeRaiseChoices();
-            this.themodel.getPlayers().get(0).call();
+            //this.themodel.getPlayers().get(0).call();
+            this.themodel.getCurrentPlayer().call();
+            updateView();
         } else if (event.getSource() == this.btnRaise) {
             //System.out.println("Raised");
             this.raiseGroup.setOpacity(1.0);
             this.raiseGroup.setDisable(false);
+
         } else if (event.getSource() == this.btnFold) {
             //System.out.println("Folded");
-            this.themodel.getPlayers().get(0).fold();
+            this.themodel.getCurrentPlayer().fold();
+
             closeRaiseChoices();
+            updateView();
         } else if (event.getSource() == this.raiseCancel) {
             closeRaiseChoices();
+
         } else if (event.getSource() == this.raiseOK) {
-            this.themodel.getPlayers().get(0).raise(Double.parseDouble(this.textMoneyRaised.getText()));
+            this.themodel.getCurrentPlayer().raise(Double.parseDouble(this.textMoneyRaised.getText()));
             closeRaiseChoices();
+            updateView();
         }
     }
 
-    private void updateView() {
-        if (this.themodel.getCurrentPlayer() != this.themodel.getPlayers().get(0)) {
-            this.btnCall.setDisable(true);
-            this.btnFold.setDisable(true);
-            this.btnRaise.setDisable(true);
-        } else {
-            this.btnCall.setDisable(false);
-            this.btnFold.setDisable(false);
-            this.btnRaise.setDisable(false);
+    @SuppressWarnings("empty-statement")
+    private void updateView() throws NoMoneyException, SixCardHandException, CallMoreException {
+        if (this.themodel.isIsEnd()) {
+            this.getBscBox().setDisable(true);
         }
-        this.textCurMoney.setText(Double.toString(this.themodel.getPlayers().get(0).getMoney()));
+//        if (this.themodel.getCurrentPlayer() != this.themodel.getCurrentPlayer()) {
+//            this.btnCall.setDisable(true);
+//            this.btnFold.setDisable(true);
+//            this.btnRaise.setDisable(true);
+//        } else {
+//            this.btnCall.setDisable(false);
+//            this.btnFold.setDisable(false);
+//            this.btnRaise.setDisable(false);
+//        }
+        this.themodel.getPlayerChoice();
+        this.textCurMoney.setText(Double.toString(this.themodel.getCurrentPlayer().getMoney()));
+        if (this.themodel.isIsFlop()) {
+            this.cmnCard1.setImage(new Image(GameUtil.cardpic(this.themodel.getPoolcards().get(0))));
+            this.cmnCard2.setImage(new Image(GameUtil.cardpic(this.themodel.getPoolcards().get(1))));
+
+        }
+
     }
 
     private void closeRaiseChoices() {
@@ -153,7 +174,11 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        try {
+            this.themodel = new GameModel(1000);
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public HBox getBscBox() {

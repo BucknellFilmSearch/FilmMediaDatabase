@@ -106,10 +106,11 @@ public class GameModel {
         currentPlayer.setIsPlay(true);
     }
 
-    public GameModel(double moneypool) {
+    public GameModel(double moneypool) throws SixCardHandException {
         this.theDeck = new Deck();
         this.players = new ArrayList<Player>();
         this.players.add(new Player("new Player"));
+        this.players.add(new Player("new Playe1"));
         this.moneypool = moneypool;
         this.poolcards = new ArrayList<Card>();
         this.isBlind = true; //If the Game is in Blind Stage(without three card
@@ -129,6 +130,7 @@ public class GameModel {
         this.playerthisRound.addAll(playerinGame);//The Player left in this ROUND That is a player moves one by one system
         this.currentPlayer = this.playerthisRound.pop();
         currentPlayer.setIsPlay(true);
+        this.giveCards();
     }
 
     /**

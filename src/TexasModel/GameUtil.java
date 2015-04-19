@@ -13,6 +13,22 @@ import java.util.ArrayList;
  */
 public class GameUtil {
 
+    public static String cardpic(Card a) {
+        String parentDir = "./res/View/cards/";
+        parentDir += a.getValue();
+        if (a.getSuite() == Suite.Clubs) {
+            parentDir += "c";
+        } else if (a.getSuite() == Suite.Diamonds) {
+            parentDir += "d";
+        } else if (a.getSuite() == Suite.Hearts) {
+            parentDir += "h";
+        } else if (a.getSuite() == Suite.Spades) {
+            parentDir += "s";
+        }
+        parentDir += ".png";
+        return parentDir;
+    }
+
     //Without an effcient algorithm, I will hardcode 21 situation to find out the best
     //5 out of 7 21 possible hands in total
     public static Hand findTheBest(ArrayList<Card> cardlist) throws SixCardHandException {

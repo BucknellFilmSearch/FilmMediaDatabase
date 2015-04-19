@@ -5,6 +5,7 @@
  */
 package Main;
 
+import TexasModel.GameModel;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,6 +23,7 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private AnchorPane root;
+    private GameModel themodel;
 
     @Override
     public void start(Stage primaryStage) throws MalformedURLException, IOException {
