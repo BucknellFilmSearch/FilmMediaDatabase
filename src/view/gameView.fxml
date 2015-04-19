@@ -116,7 +116,7 @@
                   </HBox>
                   <HBox prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <ImageView fx:id="usrCard1" fitHeight="154.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="usrCard1" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -124,7 +124,7 @@
                               <Insets left="100.0" top="43.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -149,12 +149,12 @@
                   <StackPane prefHeight="240.0" prefWidth="426.0">
                      <children>
                         <Text fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Money" StackPane.alignment="TOP_RIGHT" />
-                        <Text fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="\$500" wrappingWidth="40.07421875" StackPane.alignment="TOP_RIGHT">
+                        <Text fx:id="textCurMoney" fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="\$500" wrappingWidth="40.07421875" StackPane.alignment="TOP_RIGHT">
                            <StackPane.margin>
                               <Insets top="20.0" />
                            </StackPane.margin>
                         </Text>
-                        <Text fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="+$20" StackPane.alignment="TOP_RIGHT">
+                        <Text fx:id="textMoneyChange" fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="+$20" StackPane.alignment="TOP_RIGHT">
                            <StackPane.margin>
                               <Insets top="40.0" />
                            </StackPane.margin>
@@ -189,7 +189,17 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Pane prefHeight="240.0" prefWidth="426.0" />
+                  <Pane prefHeight="240.0" prefWidth="426.0">
+                     <children>
+                        <Group fx:id="raiseGroup" opacity="0.0">
+                           <children>
+                              <Button fx:id="raiseOK" layoutX="213.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleButtonAction" text="OK" />
+                              <Slider fx:id="sliderRaise" layoutY="107.0" />
+                              <Button fx:id="raiseCancel" layoutX="213.0" layoutY="121.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Cancel" />
+                              <TextField fx:id="textMoneyRaised" layoutX="140.0" layoutY="101.0" prefHeight="25.0" prefWidth="65.0" text="20" />
+                           </children>
+                        </Group>
+                     </children></Pane>
                </children>
             </VBox>
          </children></HBox>

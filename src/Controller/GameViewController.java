@@ -10,10 +10,15 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.Bloom;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 /**
  * FXML Controller class
@@ -59,20 +64,58 @@ public class GameViewController implements Initializable {
     private Button btnFold;
 
     @FXML
+    private Slider sliderRaise;
+
+    @FXML
+    private TextField textMoneyRaised;
+
+    @FXML
+    private Text textCurMoney;
+
+    @FXML
+    private Text textMoneyChange;
+
+    @FXML
+    private Button raiseCancel;
+
+    @FXML
+    private Button raiseOK;
+
+    @FXML
+    private Group raiseGroup;
+
+    @FXML
     private void handleButtonAction(ActionEvent event) {
         if (event.getSource() == this.btnCall) {
             System.out.println("Called");
         } else if (event.getSource() == this.btnRaise) {
             System.out.println("Raised");
+            this.raiseGroup.setOpacity(1.0);
+            this.raiseGroup.setDisable(false);
         } else if (event.getSource() == this.btnFold) {
             System.out.println("Folded");
+        } else if (event.getSource() == this.raiseCancel) {
+            this.raiseGroup.setOpacity(0.0);
+            this.raiseGroup.setDisable(true);
+        } else if (event.getSource() == this.raiseOK) {
+            this.raiseGroup.setOpacity(0.0);
+            this.raiseGroup.setDisable(true);
         }
 
     }
 
     @FXML
-    private void bloom(MouseEvent event) {
-        //
+    private void highLightCard(MouseEvent event) {
+        Bloom bloom = new Bloom();
+        bloom.setThreshold(0.5);
+        ImageView card = (ImageView) event.getSource();
+        card.setEffect(bloom);
+    }
+
+    @FXML
+    private void clearCardEffect(MouseEvent event) {
+        ImageView card = (ImageView) event.getSource();
+        card.setEffect(null);
     }
 
     /**
