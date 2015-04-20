@@ -191,7 +191,7 @@
                         </Text>
                         <Pane prefHeight="240.0" prefWidth="426.0">
                            <children>
-                              <ImageView fitHeight="119.0" fitWidth="85.0" layoutX="20.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView disable="true" fitHeight="119.0" fitWidth="85.0" layoutX="20.0" layoutY="120.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
