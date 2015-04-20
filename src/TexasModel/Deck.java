@@ -19,8 +19,8 @@ public class Deck {
     // LL for fast adding/removing of cards
     private LinkedList<Card> deck = new LinkedList<>();
     // AL for fast indexing for creating deck
-    private static ArrayList<Suite> suitList = new ArrayList<>();
-    private static ArrayList<Integer> valueList = new ArrayList<>();
+    private ArrayList<Suite> suitList = new ArrayList<>();
+    private ArrayList<Integer> valueList = new ArrayList<>();
 
     /**
      * Initialized a software representation of a standard deck of 52 cards.
@@ -99,11 +99,11 @@ public class Deck {
         return deck;
     }
 
-    public static ArrayList<Suite> getSuitList() {
+    public ArrayList<Suite> getSuitList() {
         return suitList;
     }
 
-    public static ArrayList<Integer> getValueList() {
+    public ArrayList<Integer> getValueList() {
         return valueList;
     }
 

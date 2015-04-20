@@ -382,7 +382,11 @@ public class GameModel {
     public void fold() throws SixCardHandException, NoMoneyException {
         this.playerinGame.remove(this.currentPlayer);
         this.getCurrentPlayer().setAction(Action.BLANK);
+        if (this.playerinGame.size() == 1) {
+            checkWin();
+        }
         nextPlayer();
+
     }
 
     public void allIn() throws NoMoneyException, SixCardHandException {
