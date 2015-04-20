@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
@@ -29,24 +30,23 @@
                <children>
                   <StackPane prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <Text fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="Round Number" StackPane.alignment="TOP_LEFT" />
-                        <Text fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="12" wrappingWidth="40.07421875" StackPane.alignment="TOP_LEFT">
-                           <StackPane.margin>
-                              <Insets top="20.0" />
-                           </StackPane.margin>
-                        </Text>
                         <Pane prefHeight="240.0" prefWidth="426.0">
                            <children>
-                              <ImageView fitHeight="119.0" fitWidth="85.0" layoutX="327.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView disable="true" fitHeight="119.0" fitWidth="85.0" layoutX="327.0" layoutY="120.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fitHeight="119.0" fitWidth="85.0" layoutX="307.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView disable="true" fitHeight="119.0" fitWidth="85.0" layoutX="307.0" layoutY="120.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
                               </ImageView>
+                              <Label disable="true" layoutX="218.0" layoutY="163.0" opacity="0.0" prefHeight="34.0" prefWidth="89.0" text="Player3" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </Pane>
                      </children>
@@ -63,16 +63,35 @@
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
                         </ImageView>
+                        <Label fx:id="textPlayer2" layoutX="83.0" layoutY="45.0" prefHeight="34.0" prefWidth="89.0" text="Player2" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
                      </children></Pane>
-                  <Pane prefHeight="240.0" prefWidth="426.0">
-                     <children>
-                        <Button fx:id="btnStep" layoutX="384.0" layoutY="108.0" mnemonicParsing="false" text="Step" />
-                     </children></Pane>
+                  <Pane prefHeight="240.0" prefWidth="426.0" />
                </children>
             </VBox>
             <VBox prefHeight="720.0" prefWidth="426.0">
                <children>
-                  <Pane prefHeight="240.0" prefWidth="426.0" />
+                  <Pane prefHeight="240.0" prefWidth="426.0">
+                     <children>
+                        <Label fx:id="textPlayer3" layoutX="169.0" layoutY="86.0" prefHeight="34.0" prefWidth="89.0" text="Player3" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="119.0" fitWidth="85.0" layoutX="179.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../res/View/cards/playing-card-back.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="119.0" fitWidth="85.0" layoutX="159.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../res/View/cards/playing-card-back.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
                   <HBox prefHeight="240.0" prefWidth="426.0">
                      <children>
                         <ImageView fx:id="cmnCard1" fitHeight="119.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
@@ -119,12 +138,20 @@
                   </HBox>
                   <HBox prefHeight="240.0" prefWidth="426.0">
                      <children>
+                        <Label fx:id="textPlayer1" prefHeight="34.0" prefWidth="200.0" text="Player1" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets top="110.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
                         <ImageView fx:id="usrCard1" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
                            <HBox.margin>
-                              <Insets left="100.0" top="43.0" />
+                              <Insets top="43.0" />
                            </HBox.margin>
                         </ImageView>
                         <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
@@ -169,11 +196,16 @@
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fitHeight="119.0" fitWidth="85.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView disable="true" fitHeight="119.0" fitWidth="85.0" layoutY="120.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
                               </ImageView>
+                              <Label disable="true" layoutX="105.0" layoutY="163.0" opacity="0.0" prefHeight="34.0" prefWidth="89.0" text="Player4" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </Pane>
                      </children>
@@ -190,11 +222,35 @@
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
                         </ImageView>
+                        <Label fx:id="textPlayer4" layoutX="223.0" layoutY="45.0" prefHeight="34.0" prefWidth="89.0" text="Player4" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
                   <Pane prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <Group fx:id="raiseGroup" opacity="0.0">
+                        <HBox fx:id="cardsAfterWinning" disable="true" layoutY="43.0" opacity="0.0">
+                           <children>
+                              <ImageView fx:id="usrCard23" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../res/View/cards/playing-card-back.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="usrCard21" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../res/View/cards/playing-card-back.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="usrCard22" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../res/View/cards/playing-card-back.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                        <Group fx:id="raiseGroup" disable="true" opacity="0.0">
                            <children>
                               <Button fx:id="raiseOK" layoutX="213.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleButtonAction" text="OK" />
                               <Slider fx:id="sliderRaise" layoutY="107.0" />
