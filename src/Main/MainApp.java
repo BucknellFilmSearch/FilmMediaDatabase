@@ -5,12 +5,10 @@
  */
 package Main;
 
-import TexasModel.GameModel;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -19,12 +17,10 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-    private GameModel themodel;
-
     @Override
     public void start(Stage primaryStage) throws MalformedURLException, IOException {
-        StackPane root = new view.MultiPaneHolder();
-
+        view.MultiPaneHolder root = new view.MultiPaneHolder();
+        Controller.MainPageController.setRoot(root);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();

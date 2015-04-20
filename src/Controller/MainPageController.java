@@ -26,6 +26,8 @@ public class MainPageController implements Initializable {
     @FXML
     private AnchorPane rootPane;
 
+    private static MultiPaneHolder root;
+
     /**
      * Initializes the controller class.
      */
@@ -37,9 +39,12 @@ public class MainPageController implements Initializable {
     @FXML
     private void startGame() {
 
-        MultiPaneHolder root = (MultiPaneHolder) this.rootPane.getParent();
         root.setDisplayPane(MultiPaneHolder.GamePane.GameScreen);
-        
+
+    }
+
+    public static void setRoot(MultiPaneHolder root) {
+        MainPageController.root = root;
     }
 
 }
