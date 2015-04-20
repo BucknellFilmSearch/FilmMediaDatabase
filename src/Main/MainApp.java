@@ -13,6 +13,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -21,26 +22,31 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-    private Stage primaryStage;
-    private AnchorPane root;
     private GameModel themodel;
 
     @Override
     public void start(Stage primaryStage) throws MalformedURLException, IOException {
-        this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("Texas Hold'em");
+        StackPane root;
+        primaryStage.setTitle("Texas Hold'em");
 
         FXMLLoader loader = new FXMLLoader();
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        //For the program to run, please ues abslute path here!!!!
-        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        File xmlFile = new File("./src/view/gameView.fxml");
+        File xmlFile = new File("./src/view/MainPage.fxml");
         loader.setLocation(xmlFile.toURI().toURL());
-        root = (AnchorPane) loader.load();
+        AnchorPane mainPage = (AnchorPane) loader.load();
+
+        loader = new FXMLLoader();
+        xmlFile = new File("./src/view/gameView.fxml");
+        loader.setLocation(xmlFile.toURI().toURL());
+        AnchorPane gamePage = (AnchorPane) loader.load();
+
+        root = new StackPane();
+        root.setPrefSize(1280, 720);
+        root.getChildren().add(gamePage);
+        root.getChildren().add(mainPage);
 
         Scene scene = new Scene(root);
-        this.primaryStage.setScene(scene);
-        this.primaryStage.show();
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     /**
