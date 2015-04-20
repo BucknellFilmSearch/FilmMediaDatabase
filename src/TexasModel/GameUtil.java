@@ -5,6 +5,7 @@
  */
 package TexasModel;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  */
 public class GameUtil {
 
-    public static String cardpic(Card a) {
+    public static File cardpic(Card a) {
         String parentDir = "./res/View/cards/";
         parentDir += a.getValue();
         if (a.getSuite() == Suite.Clubs) {
@@ -26,7 +27,7 @@ public class GameUtil {
             parentDir += "s";
         }
         parentDir += ".png";
-        return parentDir;
+        return new File(parentDir);
     }
 
     //Without an effcient algorithm, I will hardcode 21 situation to find out the best

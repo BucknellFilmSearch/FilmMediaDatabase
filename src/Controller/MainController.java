@@ -10,7 +10,6 @@ import TexasModel.GameModel;
 import TexasModel.GameUtil;
 import TexasModel.NoMoneyException;
 import TexasModel.SixCardHandException;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -144,6 +143,7 @@ public class MainController implements Initializable {
 
     @SuppressWarnings("empty-statement")
     private void updateView() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
+        this.themodel.getPlayerChoice();
         if (this.themodel.isIsEnd()) {
             this.getBscBox().setDisable(true);
         }
@@ -156,13 +156,20 @@ public class MainController implements Initializable {
 //            this.btnFold.setDisable(false);
 //            this.btnRaise.setDisable(false);
 //        }
-        this.themodel.getPlayerChoice();
+        this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(0)))));
+        this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(1)))));
+
         this.textCurMoney.setText(Double.toString(this.themodel.getCurrentPlayer().getMoney()));
         if (this.themodel.isIsFlop()) {
-            File f = new File(GameUtil.cardpic(this.themodel.getPoolcards().get(0)));
-            this.cmnCard1.setImage(new Image(new FileInputStream(f)));
+            this.cmnCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(0)))));
+            this.cmnCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(1)))));
+            this.cmnCard3.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(2)))));
             //this.cmnCard2.setImage(new Image(GameUtil.cardpic(this.themodel.getPoolcards().get(1))));
 
+        } else if (this.themodel.isIsTurnhand()) {
+            this.cmnCard4.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(3)))));
+        } else if (this.themodel.isIsRiverhand()) {
+            this.cmnCard5.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(4)))));
         }
 
     }
@@ -193,7 +200,14 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             this.themodel = new GameModel(1000);
+            updateView();
         } catch (SixCardHandException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoMoneyException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CallMoreException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
