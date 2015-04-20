@@ -7,7 +7,11 @@ package Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import view.MultiPaneHolder;
 
 /**
  * FXML Controller class
@@ -16,12 +20,26 @@ import javafx.fxml.Initializable;
  */
 public class MainPageController implements Initializable {
 
+    @FXML
+    private Text startText;
+
+    @FXML
+    private AnchorPane rootPane;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
+    }
+
+    @FXML
+    private void startGame() {
+
+        MultiPaneHolder root = (MultiPaneHolder) this.rootPane.getParent();
+        root.setDisplayPane(MultiPaneHolder.GamePane.GameScreen);
+        
     }
 
 }
