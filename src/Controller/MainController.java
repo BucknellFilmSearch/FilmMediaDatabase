@@ -30,7 +30,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -193,15 +196,56 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
     
     @FXML
-    private void card1to2(MouseEvent event) throws FileNotFoundException {
-        this.switchCard();
+    private void card1to2Det(MouseEvent event) throws FileNotFoundException {
+        System.out.println("onDragDetected");
+        
+        
+        Dragboard db = this.usrCard1.startDragAndDrop(TransferMode.ANY);
+                
+        db.setDragView(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(0)))));
+        
+                
+        event.consume();
+        
+    }
+    
+    
+    
+    @FXML
+    private void card1to2Over(DragEvent event) {
+        System.out.println("onDragOver");
+        
+        event.consume();
+    }
+    
+    @FXML
+    private void card1to2Drop(DragEvent event) {
+        System.out.println("onDragDropped");
+        
+        event.consume();
+    }
+    
+    @FXML
+    private void card1to2Exit(DragEvent event) {
+        System.out.println("onDragExited");
+        
+        event.consume();
+    }
+    
+    @FXML
+    private void card1to2Done(DragEvent event) {
+        System.out.println("onDragDone");
+        
+        event.consume();
     }
 
     @FXML
-    private void highLightCard(MouseEvent event) {
+    private void highLightCard(MouseEvent event) throws FileNotFoundException {
         DropShadow ds = new DropShadow();
         ImageView card = (ImageView) event.getSource();
         card.setEffect(ds);
+        
+        this.switchCard();
     }
 
     @FXML
@@ -241,6 +285,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.sliderRaise.valueProperty().addListener(this);
         this.sliderRaise.setMin(0);
         this.sliderRaise.setBlockIncrement(1);
+        
     }
     
     public void switchCard() throws FileNotFoundException {
@@ -336,5 +381,6 @@ public class MainController implements Initializable, ChangeListener<Number> {
     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
         this.textMoneyRaised.setText(Integer.toString((int) newValue.doubleValue()));
     }
+
 
 }
