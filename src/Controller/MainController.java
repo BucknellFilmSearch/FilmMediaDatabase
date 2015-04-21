@@ -6,6 +6,7 @@
 package Controller;
 
 import TexasModel.CallMoreException;
+import TexasModel.Card;
 import TexasModel.GameModel;
 import TexasModel.GameUtil;
 import TexasModel.NoMoneyException;
@@ -190,6 +191,11 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.raiseGroup.setOpacity(0.0);
         this.raiseGroup.setDisable(true);
     }
+    
+    @FXML
+    private void card1to2(MouseEvent event) throws FileNotFoundException {
+        this.switchCard();
+    }
 
     @FXML
     private void highLightCard(MouseEvent event) {
@@ -235,6 +241,19 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.sliderRaise.valueProperty().addListener(this);
         this.sliderRaise.setMin(0);
         this.sliderRaise.setBlockIncrement(1);
+    }
+    
+    public void switchCard() throws FileNotFoundException {
+        
+        this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(1)))));
+        this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(0)))));
+        
+        Card oldcard1 = this.themodel.getCurrentPlayer().getHand().getHand().get(0);
+        Card oldcard2 = this.themodel.getCurrentPlayer().getHand().getHand().get(1);
+        
+        this.themodel.getCurrentPlayer().getHand().getHand().set(0, oldcard2);
+        this.themodel.getCurrentPlayer().getHand().getHand().set(1, oldcard1);
+
     }
 
     public HBox getBscBox() {
