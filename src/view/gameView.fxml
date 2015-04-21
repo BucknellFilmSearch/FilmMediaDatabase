@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainController">
+<AnchorPane id="AnchorPane" fx:id="basePane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainController">
    <children>
       <StackPane prefHeight="720.0" prefWidth="1280.0">
          <children>
@@ -255,7 +255,7 @@
                               <Button fx:id="raiseOK" layoutX="213.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleButtonAction" text="OK" />
                               <Slider fx:id="sliderRaise" layoutY="107.0" />
                               <Button fx:id="raiseCancel" layoutX="213.0" layoutY="121.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Cancel" />
-                              <TextField fx:id="textMoneyRaised" layoutX="140.0" layoutY="101.0" prefHeight="25.0" prefWidth="65.0" text="20" />
+                              <TextField fx:id="textMoneyRaised" layoutX="140.0" layoutY="101.0" onAction="#updateSlider" prefHeight="25.0" prefWidth="65.0" text="20" />
                            </children>
                         </Group>
                      </children></Pane>
