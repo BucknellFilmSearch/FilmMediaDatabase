@@ -23,6 +23,7 @@ import javafx.scene.layout.StackPane;
 public class MultiPaneHolder extends StackPane {
 
     private HashMap<String, Node> paneMap;
+    private Node curPane;
 
     public enum GamePane {
 
@@ -35,6 +36,7 @@ public class MultiPaneHolder extends StackPane {
         this.setPrefSize(1280, 720);
         this.paneMap = new HashMap();
         addScrn();
+        curPane = this.getPane(GamePane.StartScreen);
 
     }
 
@@ -93,6 +95,11 @@ public class MultiPaneHolder extends StackPane {
         }
         paneToDisplay.setOpacity(1.0);
         paneToDisplay.setDisable(false);
+        this.curPane = paneToDisplay;
+    }
+
+    public Node getCurPane() {
+        return curPane;
     }
 
 }

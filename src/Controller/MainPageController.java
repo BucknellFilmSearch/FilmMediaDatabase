@@ -38,7 +38,18 @@ public class MainPageController implements Initializable {
 
     @FXML
     private void startGame() {
-
+//        double opacity = 1.0;
+//        double opaChange = 0.05;
+//        long pauseSec = 100;
+//        while (opacity > 0) {
+//            root.getCurPane().setOpacity(opacity);
+//            try {
+//                Thread.sleep(pauseSec);
+//            } catch (InterruptedException ex) {
+//                Logger.getLogger(MainPageController.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            opacity -= opaChange;
+//        }
         root.setDisplayPane(MultiPaneHolder.GamePane.GameScreen);
 
     }
