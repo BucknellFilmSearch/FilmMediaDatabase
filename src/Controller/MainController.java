@@ -16,6 +16,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,10 +26,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.Bloom;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
@@ -36,10 +39,13 @@ import javafx.scene.text.Text;
  *
  * @author Zhengri Fan
  */
-public class MainController implements Initializable {
+public class MainController implements Initializable, ChangeListener<Number> {
 
     private GameModel themodel;
     // <editor-fold defaultstate="collapsed" desc="FXML">
+    @FXML
+    private AnchorPane basePane;
+
     @FXML
     private HBox bscBox;
 
@@ -135,7 +141,11 @@ public class MainController implements Initializable {
             closeRaiseChoices();
 
         } else if (event.getSource() == this.raiseOK) {
-            this.themodel.getCurrentPlayer().raise(Double.parseDouble(this.textMoneyRaised.getText()));
+            try {
+                this.themodel.getCurrentPlayer().raise(Double.parseDouble(this.textMoneyRaised.getText()));
+            } catch (NumberFormatException numberFormatException) {
+                this.textMoneyRaised.setText(Double.toString(this.sliderRaise.getMin()));
+            }
             closeRaiseChoices();
             updateView();
         }
@@ -171,7 +181,9 @@ public class MainController implements Initializable {
         } else if (this.themodel.isIsRiverhand()) {
             this.cmnCard5.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(4)))));
         }
-
+        this.sliderRaise.setMax(this.themodel.getCurrentPlayer().getMoney());
+        this.textMoneyRaised.setText(Integer.toString((int) this.sliderRaise.getValue()));
+        this.sliderRaise.setMin(this.themodel.getCallAmount() + 1);
     }
 
     private void closeRaiseChoices() {
@@ -181,16 +193,26 @@ public class MainController implements Initializable {
 
     @FXML
     private void highLightCard(MouseEvent event) {
-        Bloom bloom = new Bloom();
-        bloom.setThreshold(0.5);
+        DropShadow ds = new DropShadow();
         ImageView card = (ImageView) event.getSource();
-        card.setEffect(bloom);
+        card.setEffect(ds);
     }
 
     @FXML
     private void clearCardEffect(MouseEvent event) {
         ImageView card = (ImageView) event.getSource();
         card.setEffect(null);
+    }
+
+    @FXML
+    private void updateSlider() {
+        double usrMoneyRaise = 0;
+        try {
+            usrMoneyRaise = Double.parseDouble(this.textMoneyRaised.getText());
+        } catch (NumberFormatException numberFormatException) {
+            this.textMoneyRaised.setText(Double.toString(this.sliderRaise.getMin()));
+        }
+        this.sliderRaise.setValue(usrMoneyRaise);
     }
 
     /**
@@ -210,6 +232,9 @@ public class MainController implements Initializable {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.sliderRaise.valueProperty().addListener(this);
+        this.sliderRaise.setMin(0);
+        this.sliderRaise.setBlockIncrement(1);
     }
 
     public HBox getBscBox() {
@@ -286,6 +311,11 @@ public class MainController implements Initializable {
 
     public Group getRaiseGroup() {
         return raiseGroup;
+    }
+
+    @Override
+    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        this.textMoneyRaised.setText(Integer.toString((int) newValue.doubleValue()));
     }
 
 }
