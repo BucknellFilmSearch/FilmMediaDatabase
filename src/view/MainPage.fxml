@@ -48,16 +48,16 @@
                         <Image url="@../../res/View/1c.png" />
                      </image>
                   </ImageView>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
+                     <font>
+                        <Font size="35.0" />
+                     </font>
+                     <StackPane.margin>
+                        <Insets top="390.0" />
+                     </StackPane.margin>
+                  </Text>
                </children>
             </StackPane>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
-               <font>
-                  <Font size="35.0" />
-               </font>
-               <StackPane.margin>
-                  <Insets top="390.0" />
-               </StackPane.margin>
-            </Text>
             <StackPane>
                <children>
                   <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
@@ -98,7 +98,7 @@
                   </Text>
                </children>
             </StackPane>
-            <ImageView fitHeight="268.0" fitWidth="174.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+            <ImageView fitHeight="268.0" fitWidth="173.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                <image>
                   <Image url="@../../res/View/cardbox3.jpg" />
                </image>
