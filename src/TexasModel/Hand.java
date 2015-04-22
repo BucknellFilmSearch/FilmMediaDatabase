@@ -455,6 +455,22 @@ public class Hand implements Comparable<Hand> {
         }
     }
 
+    /**
+     * Removed a specific card from the hand.
+     *
+     * @param card
+     * @return 1 if successful, -1 if specified card was already not in hand.
+     */
+    public int removeCard(Card card) {
+        for (int index = 0; index < hand.size(); index++) {
+            if (hand.get(index).getValue() == card.getValue() && hand.get(index).getSuite() == card.getSuite()) {
+                hand.remove(index);
+                return 1;
+            }
+        }
+        return -1;
+    }
+
     public ArrayList<Card> getHand() {
         return hand;
     }

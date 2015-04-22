@@ -321,8 +321,8 @@ public class HandTest {
             Card card1 = new Card(Suite.Clubs, 3);
             Card card2 = new Card(Suite.Diamonds, 4);
             Card card3 = new Card(Suite.Clubs, 5);
-            Card card4 = new Card(Suite.Spades, 3);
-            Card card5 = new Card(Suite.Hearts, 2);
+            Card card4 = new Card(Suite.Spades, 2);
+            Card card5 = new Card(Suite.Hearts, 3);
             hand.addCard(card1);
             hand.addCard(card2);
             hand.addCard(card3);
