@@ -31,24 +31,6 @@ public class AIController2 extends AIController {
         this.circumstantialRank = ai.getHand().getHandRank();
     }
 
-    public void performTurnAction() throws SixCardHandException {
-        if (model.isIsBlind()) {
-            performBlindAction();
-        } else if (model.isIsFlop()) {
-            performFlopAction();
-        } else if (model.isIsTurnhand()) {
-            performTurnhandAction();
-        } else if (model.isIsRiverhand()) {
-            performRiverhandAction();
-        } else {
-            System.out.println("Error: told AI to make decision, but it is not Blind, Flop, Turn, or River hand.");
-        }
-        // This ensures hand will redefine itself after any tests done in other methods.
-        if (ai.getHand().getHand().size() == 5) {
-            ai.getHand().defineHand();
-        }
-    }
-
     private void performBlindAction() {
         if (model.isAllCall()) {
             if (ai.getMoney() >= model.getCallAmount()) {
@@ -201,38 +183,6 @@ public class AIController2 extends AIController {
 
     private void performRiverhandAction() {
 
-    }
-
-    /**
-     * Determines if the AI controlled by this controller is a particular AI
-     * instance.
-     *
-     * @param aiInstance
-     * @return boolean - true or false. True, if the AI passed to the function
-     * is the ai controlled by this controller. False otherwise.
-     */
-    public boolean hasThisAI(AI aiInstance) {
-        if (ai.equals(aiInstance)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public AI getAi() {
-        return ai;
-    }
-
-    public void setAi(AI ai) {
-        this.ai = ai;
-    }
-
-    public int getCircumstantialRank() {
-        return circumstantialRank;
-    }
-
-    public String getMostRecentDecision() {
-        return mostRecentDecision;
     }
 
 }
