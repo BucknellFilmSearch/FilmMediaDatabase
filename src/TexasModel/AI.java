@@ -67,4 +67,12 @@ public class AI extends Player {
 //    public void riverhandAction(ArrayList<Card> commonCards) {
 //
 //    }
+    public boolean equals(AI ai) {
+        if (ai.getName().equals(this.getName())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

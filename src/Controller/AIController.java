@@ -47,7 +47,7 @@ public class AIController {
                 ai.call();
             } else {
                 // In easier versions, perhaps just go all-in.
-                ai.fold();
+                ai.allin();
             }
         } else {
             // AI has already called this amount or higher
@@ -64,7 +64,6 @@ public class AIController {
 
     public void performFlopAction() {
         // initialize at rank of current hand, since this isn't included in tests
-        int circumstantialRank = ai.getHand().getHandRank();
         boolean hasSpecialHand = false;
         // Create testDeck to simulate drawing additional common cards from.
         Deck testDeck = new Deck();
@@ -98,7 +97,13 @@ public class AIController {
             }
         }
         if (circumstantialRank > 7000) {
-
+            ai.raise(ai.getMoney() / 4);
+        } else if (circumstantialRank < 7000 && circumstantialRank > 3000 && model.isAllCall()) {
+            ai.call();
+        } else if (circumstantialRank < 7000 && circumstantialRank > 3000 && ai.isIsCall()) {
+            ai.check();
+        } else {
+            ai.fold();
         }
     }
 
