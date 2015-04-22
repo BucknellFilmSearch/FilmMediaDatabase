@@ -56,6 +56,24 @@ public class GameModelTest {
     }
 
     @Test
+    public void testFold() throws NoMoneyException, SixCardHandException, CallMoreException {
+        Player play1 = gametest.getPlayers().get(0);
+        play1.setMoney(10000);
+        Player play2 = gametest.getPlayers().get(1);
+        play2.setMoney(10000);
+        Player play3 = gametest.getPlayers().get(2);
+        play3.setMoney(10000);
+        play1.fold();
+        play2.fold();
+        play3.fold();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        gametest.getPlayerChoice();
+        Assert.assertEquals(gametest.isIsEnd(), true);
+
+    }
+
+    @Test
     public void testNextPlayer() throws Exception {
         Player instance = gametest.getCurrentPlayer();
         Assert.assertEquals(instance, play1);

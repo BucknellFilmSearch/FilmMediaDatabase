@@ -158,6 +158,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
     @SuppressWarnings("empty-statement")
     private void updateView() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
         this.themodel.getPlayerChoice();
+        this.textPlayer1.setText(this.themodel.getCurrentPlayer().getName());
         if (this.themodel.isIsEnd()) {
             this.getBscBox().setDisable(true);
         }
