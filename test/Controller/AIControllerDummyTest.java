@@ -82,9 +82,8 @@ public class AIControllerDummyTest {
                 controlOnDeck = aiControl;
             }
         }
+        // Makes a decision. Updates AI on decision.
         controlOnDeck.performTurnAction();
-        assert gameModel.isAllCall() == true;
-        assert aiOnDeck.isIsCall() == true;
         gameModel.getPlayerChoice();
     }
 
@@ -219,7 +218,7 @@ public class AIControllerDummyTest {
      */
     @Test
     public void testPerformTurnhandAction() throws NoMoneyException, SixCardHandException, CallMoreException {
-        while (gameModel.isIsTurnhand() == false) {
+        while (gameModel.isIsTurnhand() == false && gameModel.isIsEnd()) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
             AIController2 controlOnDeck = null;
             //System.out.println("The AI on deck is: " + aiOnDeck.getName());

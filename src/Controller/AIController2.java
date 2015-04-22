@@ -18,7 +18,7 @@ import java.util.ArrayList;
  *
  * @author justi_000
  */
-public class AIController2 {
+public class AIController2 extends AIController {
 
     private GameModel model;
     private AI ai;
@@ -27,8 +27,7 @@ public class AIController2 {
     private String mostRecentDecision;
 
     public AIController2(GameModel model, AI ai) {
-        this.model = model;
-        this.ai = ai;
+        super(model, ai);
         this.circumstantialRank = ai.getHand().getHandRank();
     }
 
@@ -110,6 +109,9 @@ public class AIController2 {
             }
             sevenCardList.remove(testDeck.getDeck().get(index1));
         }
+        // DECISION MAKING CONSTANTS:
+        int GREAT_MINOR_HAND_THRESHHOLD = 25000;
+        int DECENT_MINOR_HAND_THRESHHOLD = 20000;
 
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
@@ -123,13 +125,13 @@ public class AIController2 {
         } else if (ai.getHand().getHandRank() >= 18) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
             mostRecentDecision = "raise";
-        } else if (circumstantialRank > 32000) {
+        } else if (circumstantialRank > GREAT_MINOR_HAND_THRESHHOLD) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
             mostRecentDecision = "raise";
-        } else if (circumstantialRank < 32000 && circumstantialRank > 28000 && model.isAllCall()) {
+        } else if (circumstantialRank < GREAT_MINOR_HAND_THRESHHOLD && circumstantialRank > DECENT_MINOR_HAND_THRESHHOLD && model.isAllCall()) {
             ai.call();
             mostRecentDecision = "call";
-        } else if (circumstantialRank < 32000 && circumstantialRank > 28000 && ai.isIsCall()) {
+        } else if (circumstantialRank < GREAT_MINOR_HAND_THRESHHOLD && circumstantialRank > DECENT_MINOR_HAND_THRESHHOLD && ai.isIsCall()) {
             ai.check();
             mostRecentDecision = "check";
         } else {
