@@ -15,11 +15,11 @@ import TexasModel.SixCardHandException;
  */
 public class AIController {
 
-    private GameModel model;
-    private AI ai;
+    protected GameModel model;
+    protected AI ai;
     /* This value ranks the potential/value of the AI's hand. It is set by the methods of this class. */
-    private int circumstantialRank;
-    private String mostRecentDecision;
+    protected int circumstantialRank;
+    protected String mostRecentDecision;
 
     public AIController(GameModel model, AI ai) {
         this.model = model;
@@ -45,7 +45,7 @@ public class AIController {
         }
     }
 
-    private void performBlindAction() {
+    protected void performBlindAction() {
         if (model.isAllCall()) {
             if (ai.getMoney() >= model.getCallAmount()) {
                 ai.call();
@@ -69,7 +69,7 @@ public class AIController {
         }
     }
 
-    private void performFlopAction() throws SixCardHandException {
+    protected void performFlopAction() throws SixCardHandException {
         if (model.isAllCall()) {
             if (ai.getMoney() >= model.getCallAmount()) {
                 ai.call();
@@ -94,7 +94,7 @@ public class AIController {
 
     }
 
-    private void performTurnhandAction() throws SixCardHandException {
+    protected void performTurnhandAction() throws SixCardHandException {
         if (model.isAllCall()) {
             if (ai.getMoney() >= model.getCallAmount()) {
                 ai.call();
@@ -118,7 +118,7 @@ public class AIController {
         }
     }
 
-    private void performRiverhandAction() {
+    protected void performRiverhandAction() {
         if (model.isAllCall()) {
             if (ai.getMoney() >= model.getCallAmount()) {
                 ai.call();
