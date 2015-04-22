@@ -20,18 +20,12 @@ import java.util.ArrayList;
  */
 public class AIController2 extends AIController {
 
-    private GameModel model;
-    private AI ai;
-    /* This value ranks the potential/value of the AI's hand. It is set by the methods of this class. */
-    private int circumstantialRank;
-    private String mostRecentDecision;
-
     public AIController2(GameModel model, AI ai) {
         super(model, ai);
-        this.circumstantialRank = ai.getHand().getHandRank();
     }
 
-    private void performBlindAction() {
+    @Override
+    protected void performBlindAction() {
         if (model.isAllCall()) {
             if (ai.getMoney() >= model.getCallAmount()) {
                 ai.call();
@@ -55,7 +49,8 @@ public class AIController2 extends AIController {
         }
     }
 
-    private void performFlopAction() throws SixCardHandException {
+    @Override
+    protected void performFlopAction() throws SixCardHandException {
         // reset circumstantial rank
         circumstantialRank = ai.getHand().getHandRank();
         // Create testDeck to simulate drawing additional common cards from.
@@ -123,7 +118,8 @@ public class AIController2 extends AIController {
 
     }
 
-    private void performTurnhandAction() throws SixCardHandException {
+    @Override
+    protected void performTurnhandAction() throws SixCardHandException {
         // reset circumstantial rank
         circumstantialRank = ai.getHand().getHandRank();
         // Create testDeck to simulate drawing additional common cards from.
@@ -181,7 +177,8 @@ public class AIController2 extends AIController {
         }
     }
 
-    private void performRiverhandAction() {
+    @Override
+    protected void performRiverhandAction() {
 
     }
 
