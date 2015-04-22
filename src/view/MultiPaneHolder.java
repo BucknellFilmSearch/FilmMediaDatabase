@@ -8,11 +8,16 @@ package view;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 
@@ -27,7 +32,7 @@ public class MultiPaneHolder extends StackPane {
 
     public enum GamePane {
 
-        StartScreen, GameScreen;
+        StartScreen, GameScreen, SnapShotBefore, SnapShotAfter, TransitionGroup;
 
     }
 
@@ -35,12 +40,14 @@ public class MultiPaneHolder extends StackPane {
         super();
         this.setPrefSize(1280, 720);
         this.paneMap = new HashMap();
-        addScrn();
+        addImgView();
+        addGameScrn();
+        addStartScrn();
         curPane = this.getPane(GamePane.StartScreen);
 
     }
 
-    private void addScrn() {
+    private void addStartScrn() {
         FXMLLoader loader = new FXMLLoader();
         File xmlFile = new File("./src/view/MainPage.fxml");
         try {
@@ -54,11 +61,13 @@ public class MultiPaneHolder extends StackPane {
         } catch (IOException ex) {
             Logger.getLogger(MultiPaneHolder.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         this.paneMap.put("StartScreen", mainPage);
+        this.getChildren().add(mainPage);
+    }
 
-        loader = new FXMLLoader();
-        xmlFile = new File("./src/view/gameView.fxml");
+    private void addGameScrn() {
+        FXMLLoader loader = new FXMLLoader();
+        File xmlFile = new File("./src/view/gameView.fxml");
         try {
             loader.setLocation(xmlFile.toURI().toURL());
         } catch (MalformedURLException ex) {
@@ -72,12 +81,33 @@ public class MultiPaneHolder extends StackPane {
             Logger.getLogger(MultiPaneHolder.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(2);
         }
-
         this.paneMap.put("GameScreen", gamePage);
         this.getChildren().add(gamePage);
-        this.getChildren().add(mainPage);
-        gamePage.setOpacity(0.0);
+        // gamePage.setOpacity(0.0);
         gamePage.setDisable(true);
+    }
+
+    private void addImgView() {
+        ImageView imgv = new ImageView();
+        imgv.setFitHeight(720);
+        imgv.setFitWidth(1280);
+        this.paneMap.put(GamePane.SnapShotBefore.name(), imgv);
+
+//        imgv.setOpacity(0);
+        imgv.setDisable(true);
+        Group imgGrp = new Group();
+        imgGrp.getChildren().add(imgv);
+
+        imgv = new ImageView();
+        imgv.setFitHeight(720);
+        imgv.setFitWidth(1280);
+        this.paneMap.put(GamePane.SnapShotAfter.name(), imgv);
+//        this.getChildren().add(imgv);
+        imgGrp.getChildren().add(imgv);
+//        imgv.setOpacity(0);
+        imgv.setDisable(true);
+        this.getChildren().add(imgGrp);
+        this.paneMap.put(GamePane.TransitionGroup.name(), imgGrp);
     }
 
     public Node getPane(GamePane name) {
@@ -89,13 +119,24 @@ public class MultiPaneHolder extends StackPane {
         if (paneToDisplay == null) {
             return;
         }
+//        for (Node d : this.paneMap.values()) {
+//            d.setOpacity(0.0);
+//            d.setDisable(true);
+//        }
+//        paneToDisplay.setOpacity(1.0);
+//        paneToDisplay.setDisable(false);
+//        this.curPane = paneToDisplay;
+        //http://stackoverflow.com/questions/17761415/how-to-change-order-of-children-in-javafx
+        ObservableList<Node> allPane = FXCollections.observableArrayList(this.getChildren());
+        int paneIdx = allPane.indexOf(paneToDisplay);
+        int curPaneIdx = allPane.indexOf(this.getCurPane());
         for (Node d : this.paneMap.values()) {
-            d.setOpacity(0.0);
             d.setDisable(true);
         }
-        paneToDisplay.setOpacity(1.0);
         paneToDisplay.setDisable(false);
-        this.curPane = paneToDisplay;
+        Collections.swap(allPane, curPaneIdx, paneIdx);
+        this.getChildren().setAll(allPane);
+
     }
 
     public Node getCurPane() {
