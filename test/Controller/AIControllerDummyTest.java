@@ -156,7 +156,7 @@ public class AIControllerDummyTest {
      */
     @Test
     public void testPerformFlopAction() throws NoMoneyException, SixCardHandException, CallMoreException, BadCardCreationException {
-        while (gameModel.isIsFlop() == false) {
+        while (gameModel.isIsFlop() == false && gameModel.isIsEnd() == false) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
             AIController2 controlOnDeck = null;
             //System.out.println("The AI on deck is: " + aiOnDeck.getName());
