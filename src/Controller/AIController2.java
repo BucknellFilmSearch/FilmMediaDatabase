@@ -87,8 +87,8 @@ public class AIController2 extends AIController {
             sevenCardList.remove(testDeck.getDeck().get(index1));
         }
         // DECISION MAKING CONSTANTS:
-        int GREAT_MINOR_HAND_THRESHHOLD = 25000;
-        int DECENT_MINOR_HAND_THRESHHOLD = 20000;
+        int GREAT_MINOR_HAND_THRESHHOLD = 18000;
+        int DECENT_MINOR_HAND_THRESHHOLD = 16000;
 
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
@@ -105,10 +105,10 @@ public class AIController2 extends AIController {
         } else if (circumstantialRank > GREAT_MINOR_HAND_THRESHHOLD) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
             mostRecentDecision = "raise";
-        } else if (circumstantialRank < GREAT_MINOR_HAND_THRESHHOLD && circumstantialRank > DECENT_MINOR_HAND_THRESHHOLD && model.isAllCall()) {
+        } else if (circumstantialRank > DECENT_MINOR_HAND_THRESHHOLD && model.isAllCall()) {
             ai.call();
             mostRecentDecision = "call";
-        } else if (circumstantialRank < GREAT_MINOR_HAND_THRESHHOLD && circumstantialRank > DECENT_MINOR_HAND_THRESHHOLD && ai.isIsCall()) {
+        } else if (circumstantialRank > DECENT_MINOR_HAND_THRESHHOLD && ai.isIsCall()) {
             ai.check();
             mostRecentDecision = "check";
         } else {
@@ -150,6 +150,10 @@ public class AIController2 extends AIController {
             sevenCardList.remove(deckCard1);
         }
 
+        // DECISION MAKING CONSTANTS:
+        int GREAT_MINOR_HAND_THRESHHOLD = 800;
+        int DECENT_MINOR_HAND_THRESHHOLD = 750;
+
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";
@@ -162,13 +166,13 @@ public class AIController2 extends AIController {
         } else if (ai.getHand().getHandRank() >= 18) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
             mostRecentDecision = "raise";
-        } else if (circumstantialRank > 32000) {
+        } else if (circumstantialRank > GREAT_MINOR_HAND_THRESHHOLD) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
             mostRecentDecision = "raise";
-        } else if (circumstantialRank < 32000 && circumstantialRank > 28000 && model.isAllCall()) {
+        } else if (circumstantialRank > DECENT_MINOR_HAND_THRESHHOLD && model.isAllCall()) {
             ai.call();
             mostRecentDecision = "call";
-        } else if (circumstantialRank < 32000 && circumstantialRank > 28000 && ai.isIsCall()) {
+        } else if (circumstantialRank > DECENT_MINOR_HAND_THRESHHOLD && ai.isIsCall()) {
             ai.check();
             mostRecentDecision = "check";
         } else {
@@ -179,7 +183,31 @@ public class AIController2 extends AIController {
 
     @Override
     protected void performRiverhandAction() {
-
+        if (ai.getMoney() < model.getCallAmount()) {
+            ai.allin();
+            mostRecentDecision = "allin";
+        } else if (ai.getHand().getHandRank() == 23) {
+            ai.allin();
+            mostRecentDecision = "allin";
+        } else if (ai.getHand().getHandRank() >= 20) {
+            ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
+            mostRecentDecision = "raise";
+        } else if (ai.getHand().getHandRank() >= 18) {
+            ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
+            mostRecentDecision = "raise";
+        } else if (circumstantialRank > 14) {
+            ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
+            mostRecentDecision = "raise";
+        } else if (circumstantialRank < 14 && circumstantialRank > 8 && model.isAllCall()) {
+            ai.call();
+            mostRecentDecision = "call";
+        } else if (circumstantialRank < 14 && circumstantialRank > 8 && ai.isIsCall()) {
+            ai.check();
+            mostRecentDecision = "check";
+        } else {
+            ai.fold();
+            mostRecentDecision = "fold";
+        }
     }
 
 }
