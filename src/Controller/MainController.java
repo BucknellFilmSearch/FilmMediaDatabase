@@ -47,13 +47,13 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     private boolean Card1to2Drag = false;
     private boolean Card2to1Drag = false;
-    
+
     private boolean inCard1 = false;
     private boolean inCard2 = false;
-    
+
     private boolean Card1Re = false;
     private boolean Card2Re = false;
-    
+
     private GameModel themodel;
     private AIController2 aiControl0;
     private AIController2 aiControl1;
@@ -133,6 +133,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     @FXML
     private Label textPlayer4;
+
+    @FXML
+    private Button btnAllIn;
     // </editor-fold>
 
     @FXML
@@ -263,7 +266,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
         event.consume();
 
     }
-    
+
     @FXML
     private void card2to1Det(MouseEvent event) {
         //System.out.println("onDragDetected2");
@@ -272,20 +275,16 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     }
 
-    
     @FXML
     private void Card1Released(MouseEvent event) throws FileNotFoundException {
-       this.Card1Re = true;
+        this.Card1Re = true;
     }
-    
+
     @FXML
     private void Card2Released(MouseEvent event) throws FileNotFoundException {
         this.Card2Re = true;
     }
-    
 
-  
-    
     @FXML
     private void highLightCard1(MouseEvent event) throws FileNotFoundException {
         DropShadow ds = new DropShadow();
@@ -293,15 +292,15 @@ public class MainController implements Initializable, ChangeListener<Number> {
         card.setEffect(ds);
 
         this.inCard1 = true;
-        
+
         if (this.Card2to1Drag && this.inCard1 && this.Card2Re) {
             this.switchCard();
         }
-        
+
         this.Card2to1Drag = false;
         this.Card2Re = false;
     }
-    
+
     @FXML
     private void highLightCard2(MouseEvent event) throws FileNotFoundException {
         DropShadow ds = new DropShadow();
@@ -309,17 +308,16 @@ public class MainController implements Initializable, ChangeListener<Number> {
         card.setEffect(ds);
 
         this.inCard2 = true;
-        
+
         if (this.Card1to2Drag && this.inCard2 && this.Card1Re) {
             this.switchCard();
         }
-        
+
         this.Card1to2Drag = false;
         this.Card1Re = false;
-        
-        
+
     }
-    
+
     @FXML
     private void clearCardEffect(MouseEvent event) {
         ImageView card = (ImageView) event.getSource();
@@ -329,7 +327,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
     @FXML
     private void clearCardEffect1(MouseEvent event) {
         System.out.println("exit1");
-        
+
         this.inCard1 = false;
         this.Card1Re = false;
         this.Card2to1Drag = false;
@@ -337,11 +335,11 @@ public class MainController implements Initializable, ChangeListener<Number> {
         ImageView card = (ImageView) event.getSource();
         card.setEffect(null);
     }
-    
+
     @FXML
     private void clearCardEffect2(MouseEvent event) {
         System.out.println("exit2");
-        
+
         this.inCard2 = false;
         this.Card1to2Drag = false;
         this.Card1Re = false;
