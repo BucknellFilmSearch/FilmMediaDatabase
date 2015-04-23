@@ -152,7 +152,8 @@ public class AIController2 extends AIController {
 
         // DECISION MAKING CONSTANTS:
         int GREAT_MINOR_HAND_THRESHHOLD = 800;
-        int DECENT_MINOR_HAND_THRESHHOLD = 750;
+
+        int DECENT_MINOR_HAND_THRESHHOLD = 700;
 
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
