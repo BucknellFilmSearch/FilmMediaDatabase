@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -22,9 +23,14 @@
                   <Rectangle2D height="2068.0" minX="30.0" width="3676.0" />
                </viewport>
             </ImageView>
+            <Pane prefHeight="720.0" prefWidth="1058.0">
+               <children>
+                  <ToolBar layoutY="686.0" prefHeight="34.0" prefWidth="1280.0" />
+               </children>
+            </Pane>
          </children>
       </StackPane>
-      <HBox fx:id="bscBox" prefHeight="720.0" prefWidth="1280.0">
+      <HBox fx:id="bscBox" disable="true" prefHeight="720.0" prefWidth="1280.0">
          <children>
             <VBox prefHeight="720.0" prefWidth="426.0">
                <children>

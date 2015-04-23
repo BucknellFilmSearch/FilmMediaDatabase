@@ -297,7 +297,6 @@ public class MainController implements Initializable, ChangeListener<Number> {
         card.setEffect(ds);
 
         this.switchCard();
-        System.out.println("Om");
     }
 
     @FXML
