@@ -146,7 +146,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <ImageView fx:id="usrCard1" fitHeight="154.0" fitWidth="110.0" onDragDetected="#card1to2Det" onDragDone="#card1to2Done" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="usrCard1" fitHeight="154.0" fitWidth="110.0" onDragDetected="#card1to2Det" onMouseEntered="#highLightCard1" onMouseExited="#clearCardEffect1" onMouseReleased="#Card1Released" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -154,7 +154,7 @@
                               <Insets top="43.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" onDragDropped="#card1to2Drop" onDragExited="#card1to2Exit" onDragOver="#card1to2Over" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" onDragDetected="#card2to1Det" onMouseEntered="#highLightCard2" onMouseExited="#clearCardEffect2" onMouseReleased="#Card2Released" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -233,17 +233,17 @@
                      <children>
                         <HBox fx:id="cardsAfterWinning" disable="true" layoutY="43.0" opacity="0.0">
                            <children>
-                              <ImageView fx:id="usrCard23" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="usrCard23" fitHeight="154.0" fitWidth="110.0" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="usrCard21" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="usrCard21" fitHeight="154.0" fitWidth="110.0" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="usrCard22" fitHeight="154.0" fitWidth="110.0" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="usrCard22" fitHeight="154.0" fitWidth="110.0" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
