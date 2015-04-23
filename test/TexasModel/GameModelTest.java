@@ -399,6 +399,6 @@ public class GameModelTest {
         gametest.getPlayerChoice();
         gametest.getPlayerChoice();
         Assert.assertEquals(gametest.isIsEnd(), true);
-        Assert.assertEquals(play1.getMoney(), 5100, 0);
+        Assert.assertEquals(play1.getMoney(), 7180, 0);
     }
 }
