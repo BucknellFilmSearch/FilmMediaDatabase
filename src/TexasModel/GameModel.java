@@ -316,6 +316,7 @@ public class GameModel {
     public void checkWin() throws SixCardHandException {
         this.isEnd = true;
         if (this.playerinGame.size() == 1) {
+            this.playerinGame.getFirst().setIsWin(true);
             this.playerinGame.getFirst().setMoney(moneypool + this.playerinGame.
                     getFirst().getMoney());
         } else {
@@ -336,11 +337,14 @@ public class GameModel {
             if (tie > 1) {
                 for (int i = 0; i < tie; i++) {
                     temp.get(i).addMoney(moneypool / tie);
+                    temp.get(i).setIsWin(true);
                 }
             } else {
                 playerinGame.pop().addMoney(moneypool);
+                temp.get(0).setIsWin(true);
             }
         }
+
         this.moneypool = 0;
 
     }
@@ -382,6 +386,7 @@ public class GameModel {
     }
 
     public void fold() throws SixCardHandException, NoMoneyException {
+        this.currentPlayer.setActionperformed("Fold");
         this.playerinGame.remove(this.currentPlayer);
         this.getCurrentPlayer().setAction(Action.BLANK);
         if (this.playerinGame.size() == 1) {
@@ -395,6 +400,7 @@ public class GameModel {
         if (this.getCurrentPlayer().getMoney() == 0) {
             throw new NoMoneyException("You don't have money at all");
         }
+        this.currentPlayer.setActionperformed("ALLIN");
         double moneyallin = this.getCurrentPlayer().getMoney();
         this.getCurrentPlayer().setMoney(0);
         if (moneyallin > this.callAmount) {
@@ -440,6 +446,7 @@ public class GameModel {
         if (this.getCurrentPlayer().getMoney() < amount) {
             throw new NoMoneyException("You don't have enough money to raise!");
         }
+        this.currentPlayer.setActionperformed("RAISED " + amount + " $$");
         this.callAmount = amount;
         this.moneypool += amount;
         this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - amount);
@@ -463,6 +470,7 @@ public class GameModel {
             if (this.currentPlayer.isIsCall()) {
                 check();
             } else {
+                this.currentPlayer.setActionperformed("Call!");
                 this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - this.callAmount);
                 this.moneypool += this.callAmount;
                 this.getCurrentPlayer().setIsCall(true);
@@ -474,6 +482,7 @@ public class GameModel {
     }
 
     public void check() throws SixCardHandException, NoMoneyException {
+        this.currentPlayer.setActionperformed("Check");
         if (this.getCurrentPlayer().isIsCall() || this.getCurrentPlayer().isIsAllin()) {
             this.currentPlayer.setIsCheck(true);
             this.getCurrentPlayer().setAction(Action.BLANK);
