@@ -227,6 +227,7 @@ public class AIControllerDummyTest {
             gameModel.getPlayerChoice();
         }
         System.out.println("Is turnhand: " + gameModel.isIsTurnhand() + ". Game over: " + gameModel.isIsEnd());
+        System.out.println("If game is over, this test will fail, and that's okay.");
 
         assert (gameModel.isIsTurnhand() || gameModel.isIsEnd());
 
@@ -270,12 +271,25 @@ public class AIControllerDummyTest {
      * Test of performRiverhandAction method, of class AIControllerDummy.
      */
     @Test
-    public void testPerformRiverhandAction() {
-        System.out.println("performRiverhandAction");
-        AIControllerDummy instance = null;
-        instance.performRiverhandAction();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testPerformRiverhandAction() throws NoMoneyException, SixCardHandException, CallMoreException {
+        while (gameModel.isIsRiverhand() == false && gameModel.isIsEnd() == false) {
+            AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
+            AIController2 controlOnDeck = null;
+            //System.out.println("The AI on deck is: " + aiOnDeck.getName());
+            for (AIController2 aiControl : aiControlList) {
+                //System.out.println("Controller of AI" + aiControl.getAi().getName());
+                if (aiControl.hasThisAI(aiOnDeck)) {
+                    //System.out.println("Found the matching AI Controller.");
+                    controlOnDeck = aiControl;
+                }
+            }
+            controlOnDeck.performTurnAction();
+            System.out.println("Choice: " + controlOnDeck.getMostRecentDecision());
+            gameModel.getPlayerChoice();
+        }
+        System.out.println("Is riverhand: " + gameModel.isIsRiverhand() + ". Game over: " + gameModel.isIsEnd());
+
+        assert (gameModel.isIsRiverhand() || gameModel.isIsEnd());
     }
 
 }
