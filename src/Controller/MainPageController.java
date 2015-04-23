@@ -75,7 +75,6 @@ public class MainPageController implements Initializable {
             root.setDisplayPane(MultiPaneHolder.GamePane.GameScreen);
         });
         timeline.play();
-
     }
 
     public static void setRoot(MultiPaneHolder root) {

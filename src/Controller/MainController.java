@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
-import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -141,15 +140,11 @@ public class MainController implements Initializable, ChangeListener<Number> {
             step();
             updateView();
         } else if (event.getSource() == this.btnRaise) {
-            //System.out.println("Raised");
-//            this.raiseGroup.setOpacity(1.0);
-//            this.raiseGroup.setDisable(false);
-            FadeTransition ft = new FadeTransition(Duration.millis(3000), this.raiseGroup);
-            ft.setFromValue(1.0);
-            ft.setToValue(0.1);
-            ft.setCycleCount(Timeline.INDEFINITE);
-            ft.setAutoReverse(true);
+            FadeTransition ft = new FadeTransition(Duration.millis(500), this.raiseGroup);
+            ft.setFromValue(0);
+            ft.setToValue(Double.MAX_VALUE);
             ft.play();
+            this.raiseGroup.setDisable(false);
 
         } else if (event.getSource() == this.btnFold) {
             //System.out.println("Folded");
