@@ -38,6 +38,7 @@ public class GameUtil {
         temphand.addCard(cardlist.get(2));
         temphand.addCard(cardlist.get(3));
         temphand.addCard(cardlist.get(4));
+
         //0,1,2,3,5
         Hand handtoCompare = new Hand();
         handtoCompare.addCard(cardlist.get(0));
@@ -49,7 +50,9 @@ public class GameUtil {
         if (temphand.compareTo(handtoCompare) >= 0) {
             temphand = handtoCompare;
         }
+
         //0,1,3,4,5
+        handtoCompare = new Hand();
         handtoCompare.addCard(cardlist.get(0));
         handtoCompare.addCard(cardlist.get(1));
         handtoCompare.addCard(cardlist.get(3));
@@ -58,6 +61,8 @@ public class GameUtil {
         if (temphand.compareTo(handtoCompare) >= 0) {
             temphand = handtoCompare;
         }
+
+        handtoCompare = new Hand();
         handtoCompare.addCard(cardlist.get(1));
         handtoCompare.addCard(cardlist.get(2));
         handtoCompare.addCard(cardlist.get(3));
@@ -66,6 +71,8 @@ public class GameUtil {
         if (temphand.compareTo(handtoCompare) >= 0) {
             temphand = handtoCompare;
         }
+
+        handtoCompare = new Hand();
         handtoCompare.addCard(cardlist.get(0));
         handtoCompare.addCard(cardlist.get(2));
         handtoCompare.addCard(cardlist.get(3));
@@ -74,6 +81,8 @@ public class GameUtil {
         if (temphand.compareTo(handtoCompare) >= 0) {
             temphand = handtoCompare;
         }
+
+        handtoCompare = new Hand();
         handtoCompare.addCard(cardlist.get(0));
         handtoCompare.addCard(cardlist.get(1));
         handtoCompare.addCard(cardlist.get(2));
@@ -82,6 +91,7 @@ public class GameUtil {
         if (temphand.compareTo(handtoCompare) >= 0) {
             temphand = handtoCompare;
         }
+
         return temphand;
     }
 

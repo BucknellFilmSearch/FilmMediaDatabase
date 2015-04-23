@@ -440,16 +440,18 @@ public class GameModel {
 
     //TODO ISRAISE EXCEPTION
     public void raise(double amount) throws NoMoneyException, SixCardHandException, CallMoreException {
-        if (amount <= this.callAmount) {
-            throw new CallMoreException("You need to bet more!");
-        }
+//        if (amount <= this.callAmount) {
+//            throw new CallMoreException("You need to bet more!");
+//        }
         if (this.getCurrentPlayer().getMoney() < amount) {
             throw new NoMoneyException("You don't have enough money to raise!");
         }
         this.currentPlayer.setActionperformed("RAISED " + amount + " $$");
-        this.callAmount = amount;
-        this.moneypool += amount;
-        this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - amount);
+//        this.callAmount = amount;
+//        this.moneypool += amount;
+        this.callAmount = this.callAmount + amount;
+        this.moneypool = this.moneypool + this.callAmount;
+        this.getCurrentPlayer().setMoney(this.getCurrentPlayer().getMoney() - this.callAmount);
         for (Player p : playerinGame) {
             p.setIsCall(false);
         }

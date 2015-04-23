@@ -51,9 +51,9 @@ import javafx.util.Duration;
 public class MainController implements Initializable, ChangeListener<Number> {
 
     private GameModel themodel;
-    private AIController aiControl0;
-    private AIController aiControl1;
-    private AIController aiControl2;
+    private AIController2 aiControl0;
+    private AIController2 aiControl1;
+    private AIController2 aiControl2;
     // <editor-fold defaultstate="collapsed" desc="FXML">
     @FXML
     private AnchorPane basePane;
@@ -132,7 +132,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
     // </editor-fold>
 
     @FXML
-    private void handleButtonAction(ActionEvent event) throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
+    private void handleButtonAction(ActionEvent event) throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
         if (event.getSource() == this.btnCall) {
             closeRaiseChoices();
             //this.themodel.getPlayers().get(0).call();
@@ -167,7 +167,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
         }
     }
 
-    private void step() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
+    private void step() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
 
         if (!this.themodel.isIsEnd()) {
             this.themodel.getPlayerChoice();
@@ -336,9 +336,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
             playerList.add(dummyAI2);
             this.themodel = new GameModel(1000, playerList);
             this.themodel.giveCards();
-            aiControl0 = new AIController(themodel, dummyAI0);
-            aiControl1 = new AIController(themodel, dummyAI1);
-            aiControl2 = new AIController(themodel, dummyAI2);
+            aiControl0 = new AIController2(themodel, dummyAI0);
+            aiControl1 = new AIController2(themodel, dummyAI1);
+            aiControl2 = new AIController2(themodel, dummyAI2);
             updateView();
         } catch (SixCardHandException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
