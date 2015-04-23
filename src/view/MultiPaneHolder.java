@@ -32,8 +32,8 @@ public class MultiPaneHolder extends StackPane {
 
     public enum GamePane {
 
-        StartScreen, GameScreen, SnapShotBefore, SnapShotAfter, TransitionGroup;
-
+        StartScreen, GameScreen, TransitionGroup;
+//SnapShotBefore, SnapShotAfter,
     }
 
     public MultiPaneHolder() {
@@ -83,31 +83,13 @@ public class MultiPaneHolder extends StackPane {
         }
         this.paneMap.put("GameScreen", gamePage);
         this.getChildren().add(gamePage);
-        // gamePage.setOpacity(0.0);
-        gamePage.setDisable(true);
+//        gamePage.setDisable(true);
     }
 
     private void addImgView() {
-        ImageView imgv = new ImageView();
-        imgv.setFitHeight(720);
-        imgv.setFitWidth(1280);
-        this.paneMap.put(GamePane.SnapShotBefore.name(), imgv);
-
-//        imgv.setOpacity(0);
-        imgv.setDisable(true);
-        Group imgGrp = new Group();
-        imgGrp.getChildren().add(imgv);
-
-        imgv = new ImageView();
-        imgv.setFitHeight(720);
-        imgv.setFitWidth(1280);
-        this.paneMap.put(GamePane.SnapShotAfter.name(), imgv);
-//        this.getChildren().add(imgv);
-        imgGrp.getChildren().add(imgv);
-//        imgv.setOpacity(0);
-        imgv.setDisable(true);
-        this.getChildren().add(imgGrp);
+        StackPane imgGrp = new StackPane();
         this.paneMap.put(GamePane.TransitionGroup.name(), imgGrp);
+        this.getChildren().add(imgGrp);
     }
 
     public Node getPane(GamePane name) {
@@ -119,23 +101,17 @@ public class MultiPaneHolder extends StackPane {
         if (paneToDisplay == null) {
             return;
         }
-//        for (Node d : this.paneMap.values()) {
-//            d.setOpacity(0.0);
-//            d.setDisable(true);
-//        }
-//        paneToDisplay.setOpacity(1.0);
-//        paneToDisplay.setDisable(false);
-//        this.curPane = paneToDisplay;
         //http://stackoverflow.com/questions/17761415/how-to-change-order-of-children-in-javafx
         ObservableList<Node> allPane = FXCollections.observableArrayList(this.getChildren());
         int paneIdx = allPane.indexOf(paneToDisplay);
         int curPaneIdx = allPane.indexOf(this.getCurPane());
-        for (Node d : this.paneMap.values()) {
-            d.setDisable(true);
-        }
-        paneToDisplay.setDisable(false);
+//        for (Node d : this.paneMap.values()) {
+//            d.setDisable(true);
+//        }
+//        paneToDisplay.setDisable(false);
         Collections.swap(allPane, curPaneIdx, paneIdx);
         this.getChildren().setAll(allPane);
+        this.curPane = paneToDisplay;
 
     }
 
