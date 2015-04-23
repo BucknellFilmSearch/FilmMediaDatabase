@@ -15,11 +15,10 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.web.WebView;
 
 /**
  *
@@ -32,7 +31,7 @@ public class MultiPaneHolder extends StackPane {
 
     public enum GamePane {
 
-        StartScreen, GameScreen, TransitionGroup;
+        StartScreen, GameScreen, TransitionGroup, HelpView;
 //SnapShotBefore, SnapShotAfter,
     }
 
@@ -42,6 +41,9 @@ public class MultiPaneHolder extends StackPane {
         this.paneMap = new HashMap();
         addImgView();
         addGameScrn();
+        WebView Wv = new WebView();
+        this.getChildren().add(Wv);
+        this.paneMap.put(GamePane.HelpView.name(), Wv);
         addStartScrn();
         curPane = this.getPane(GamePane.StartScreen);
 

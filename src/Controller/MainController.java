@@ -21,27 +21,36 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToolBar;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import view.MultiPaneHolder;
 
 /**
  * FXML Controller class
@@ -129,6 +138,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     @FXML
     private Label textPlayer4;
+
+    @FXML
+    private ToolBar backBox;
     // </editor-fold>
 
     @FXML
@@ -366,6 +378,30 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.themodel.getCurrentPlayer().getHand().getHand().set(0, oldcard2);
         this.themodel.getCurrentPlayer().getHand().getHand().set(1, oldcard1);
 
+    }
+
+    @FXML
+    private void backToStart() {
+        MultiPaneHolder root = MainPageController.getRoot();
+        WritableImage wi = new WritableImage(1280, 720);
+        Image img1 = root.getCurPane().snapshot(new SnapshotParameters(), wi);
+        ImageView imgView1 = new ImageView(img1);
+        wi = new WritableImage(1280, 720);
+        Image img2 = root.getPane(MultiPaneHolder.GamePane.StartScreen).snapshot(new SnapshotParameters(), wi);
+        ImageView imgView2 = new ImageView(img2);
+        imgView1.setTranslateX(0);
+        imgView2.setTranslateY(0);
+        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().add(imgView2);
+        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().add(imgView1);
+        root.setDisplayPane(MultiPaneHolder.GamePane.TransitionGroup);
+        Timeline timeline = new Timeline();
+        KeyValue kv = new KeyValue(imgView1.translateYProperty(), -720, Interpolator.EASE_BOTH);
+        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+        timeline.getKeyFrames().add(kf);
+        timeline.setOnFinished(t -> {
+            root.setDisplayPane(MultiPaneHolder.GamePane.StartScreen);
+        });
+        timeline.play();
     }
 
     public HBox getBscBox() {

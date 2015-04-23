@@ -23,11 +23,6 @@
                   <Rectangle2D height="2068.0" minX="30.0" width="3676.0" />
                </viewport>
             </ImageView>
-            <Pane prefHeight="720.0" prefWidth="1058.0">
-               <children>
-                  <ToolBar layoutY="686.0" prefHeight="34.0" prefWidth="1280.0" />
-               </children>
-            </Pane>
          </children>
       </StackPane>
       <HBox fx:id="bscBox" prefHeight="720.0" prefWidth="1280.0">
@@ -268,5 +263,10 @@
                </children>
             </VBox>
          </children></HBox>
+      <Pane prefHeight="720.0" prefWidth="1058.0">
+         <children>
+            <ToolBar fx:id="backBox" layoutY="686.0" onMouseClicked="#backToStart" prefHeight="34.0" prefWidth="1280.0" />
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

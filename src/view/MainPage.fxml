@@ -48,7 +48,7 @@
                         <Image url="@../../res/View/1c.png" />
                      </image>
                   </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
+                  <Text onMouseClicked="#helpView" strokeType="OUTSIDE"  strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
