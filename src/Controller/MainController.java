@@ -130,7 +130,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
     // </editor-fold>
 
     @FXML
-    private void handleButtonAction(ActionEvent event) throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
+    private void handleButtonAction(ActionEvent event) throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
         if (event.getSource() == this.btnCall) {
             closeRaiseChoices();
             //this.themodel.getPlayers().get(0).call();
@@ -163,7 +163,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
         }
     }
 
-    private void step() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
+    private void step() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
 
         if (!this.themodel.isIsEnd()) {
             this.themodel.getPlayerChoice();
