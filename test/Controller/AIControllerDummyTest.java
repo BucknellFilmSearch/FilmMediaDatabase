@@ -10,6 +10,8 @@ import TexasModel.BadCardCreationException;
 import TexasModel.CallMoreException;
 import TexasModel.Card;
 import TexasModel.GameModel;
+import static TexasModel.GameUtil.findTheBestfromsix;
+import TexasModel.Hand;
 import TexasModel.NoMoneyException;
 import TexasModel.Player;
 import TexasModel.SixCardHandException;
@@ -166,15 +168,7 @@ public class AIControllerDummyTest {
                     controlOnDeck = aiControl;
                 }
             }
-
-            ArrayList<Card> cardList = new ArrayList<>();
-            for (Card c : gameModel.getPoolcards()) {
-                aiOnDeck.getHand().addCard(c);
-            }
             controlOnDeck.performTurnAction();
-            for (Card c : gameModel.getPoolcards()) {
-                aiOnDeck.getHand().removeCard(c);
-            }
             gameModel.getPlayerChoice();
         }
 
@@ -192,11 +186,10 @@ public class AIControllerDummyTest {
             }
         }
 
+        controlOnDeck.performTurnAction();
         for (Card c : gameModel.getPoolcards()) {
             aiOnDeck.getHand().addCard(c);
         }
-
-        controlOnDeck.performTurnAction();
         System.out.println("Hand rank is: " + controlOnDeck.getAi().getHand().getHandRank());
         System.out.println("Hand type is: " + controlOnDeck.getAi().getHand().getHandType().name());
         System.out.println("The controller scores this a: " + controlOnDeck.getCircumstantialRank());
@@ -218,7 +211,7 @@ public class AIControllerDummyTest {
      */
     @Test
     public void testPerformTurnhandAction() throws NoMoneyException, SixCardHandException, CallMoreException {
-        while (gameModel.isIsTurnhand() == false && gameModel.isIsEnd()) {
+        while (gameModel.isIsTurnhand() == false && gameModel.isIsEnd() == false) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
             AIController2 controlOnDeck = null;
             //System.out.println("The AI on deck is: " + aiOnDeck.getName());
@@ -229,19 +222,48 @@ public class AIControllerDummyTest {
                     controlOnDeck = aiControl;
                 }
             }
-
-            ArrayList<Card> cardList = new ArrayList<>();
-            for (Card c : gameModel.getPoolcards()) {
-                aiOnDeck.getHand().addCard(c);
-            }
             controlOnDeck.performTurnAction();
             System.out.println("Choice: " + controlOnDeck.getMostRecentDecision());
-            for (Card c : gameModel.getPoolcards()) {
-                aiOnDeck.getHand().removeCard(c);
-            }
             gameModel.getPlayerChoice();
         }
-        assert gameModel.isIsTurnhand();
+        System.out.println("Is turnhand: " + gameModel.isIsTurnhand() + ". Game over: " + gameModel.isIsEnd());
+
+        assert (gameModel.isIsTurnhand() || gameModel.isIsEnd());
+
+        // NOW WE ARE IN TURNHAND ROUND - WHERE IMPORTANT TESTS MUST OCCUR
+        AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
+        AIController2 controlOnDeck = null;
+        //System.out.println("The AI on deck is: " + aiOnDeck.getName());
+        for (AIController2 aiControl : aiControlList) {
+            //System.out.println("Controller of AI" + aiControl.getAi().getName());
+            if (aiControl.hasThisAI(aiOnDeck)) {
+                //System.out.println("Found the matching AI Controller.");
+                controlOnDeck = aiControl;
+            }
+        }
+
+        controlOnDeck.performTurnAction();
+        ArrayList<Card> sixCardList = new ArrayList<>();
+        for (Card c : gameModel.getPoolcards()) {
+            sixCardList.add(c);
+        }
+        for (Card c : aiOnDeck.getHand().getHand()) {
+            sixCardList.add(c);
+        }
+        Hand originalHand = aiOnDeck.getHand();
+        aiOnDeck.setHand(findTheBestfromsix(sixCardList));
+        System.out.println("Hand rank is: " + controlOnDeck.getAi().getHand().getHandRank());
+        System.out.println("Hand type is: " + controlOnDeck.getAi().getHand().getHandType().name());
+        System.out.println("The controller scores this a: " + controlOnDeck.getCircumstantialRank());
+        System.out.println("Decision made: " + controlOnDeck.getMostRecentDecision());
+
+        for (Card c : dummyAI0.getHand().getHand()) {
+            System.out.println("Suite: " + c.getSuite().name() + ", Value: " + c.getValue());
+        }
+
+        aiOnDeck.setHand(originalHand);
+
+        gameModel.getPlayerChoice();
     }
 
     /**
