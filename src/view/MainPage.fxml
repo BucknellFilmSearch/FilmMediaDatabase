@@ -16,9 +16,9 @@
             <Image url="@../../res/View/mainpage.png" />
          </image>
       </ImageView>
-      <StackPane layoutX="50.0" layoutY="28.0" prefHeight="664.0" prefWidth="153.0">
+      <Pane layoutX="50.0" layoutY="28.0">
          <children>
-            <StackPane>
+            <Pane layoutY="260.0">
                <children>
                   <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                      <image>
@@ -28,7 +28,7 @@
                         <Insets top="260.0" />
                      </StackPane.margin>
                   </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exit" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="58.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Exit" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -37,8 +37,8 @@
                      </StackPane.margin>
                   </Text>
                </children>
-            </StackPane>
-            <StackPane>
+            </Pane>
+            <Pane layoutY="200.0">
                <children>
                   <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                      <StackPane.margin>
@@ -48,7 +48,7 @@
                         <Image url="@../../res/View/1c.png" />
                      </image>
                   </ImageView>
-                  <Text onMouseClicked="#helpView" strokeType="OUTSIDE"  strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="48.0" layoutY="230.0" onMouseClicked="#helpView" strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -57,8 +57,8 @@
                      </StackPane.margin>
                   </Text>
                </children>
-            </StackPane>
-            <StackPane>
+            </Pane>
+            <Pane layoutY="140.0">
                <children>
                   <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                      <StackPane.margin>
@@ -68,7 +68,7 @@
                         <Image url="@../../res/View/1h.png" />
                      </image>
                   </ImageView>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Option" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="29.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Option" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -77,8 +77,8 @@
                      </StackPane.margin>
                   </Text>
                </children>
-            </StackPane>
-            <StackPane>
+            </Pane>
+            <Pane layoutY="75.0">
                <children>
                   <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                      <StackPane.margin>
@@ -88,7 +88,7 @@
                         <Image url="@../../res/View/1s.png" />
                      </image>
                   </ImageView>
-                  <Text fx:id="textStart" onMouseClicked="#startGame" strokeType="OUTSIDE" strokeWidth="0.0" text="Start" StackPane.alignment="TOP_CENTER">
+                  <Text fx:id="textStart" layoutX="48.0" layoutY="230.0" onMouseClicked="#startGame" strokeType="OUTSIDE" strokeWidth="0.0" text="Start" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -97,8 +97,8 @@
                      </StackPane.margin>
                   </Text>
                </children>
-            </StackPane>
-            <ImageView fitHeight="268.0" fitWidth="173.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+            </Pane>
+            <ImageView fitHeight="268.0" fitWidth="173.0" layoutX="1.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                <image>
                   <Image url="@../../res/View/cardbox3.jpg" />
                </image>
@@ -107,7 +107,7 @@
                </StackPane.margin>
             </ImageView>
          </children>
-      </StackPane>
+      </Pane>
       <StackPane layoutX="1021.0" layoutY="59.0" prefHeight="376.0" prefWidth="200.0">
          <children>
             <MenuButton mnemonicParsing="false" opacity="0.0" prefHeight="68.0" prefWidth="211.0" text="Number of AI" StackPane.alignment="TOP_CENTER">
