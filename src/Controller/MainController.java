@@ -142,6 +142,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
     @FXML
     private void handleButtonAction(ActionEvent event) throws SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
         try {
+//            if(event.getSource() == this.){
+//
+//            }
             if (event.getSource() == this.btnAllIn) {
                 closeRaiseChoices();
                 this.themodel.getCurrentPlayer().allin();
@@ -228,10 +231,12 @@ public class MainController implements Initializable, ChangeListener<Number> {
             this.btnCall.setDisable(true);
             this.btnFold.setDisable(true);
             this.btnRaise.setDisable(true);
+            this.btnAllIn.setDisable(true);
         } else {
             this.btnCall.setDisable(false);
             this.btnFold.setDisable(false);
             this.btnRaise.setDisable(false);
+            this.btnAllIn.setDisable(false);
         }
         this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
         this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
@@ -253,15 +258,16 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.sliderRaise.setMin(this.themodel.getCallAmount() + 1);
 
         if (this.themodel.isIsEnd()) {
+            if (this.themodel.getPlayers().get(0).getHand().getHand().size() == 5) {
+                this.cardsAfterWinning.setDisable(false);
+                this.cardsAfterWinning.setOpacity(1.0);
+                this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
+                this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
+                ((ImageView) this.cardsAfterWinning.getChildren().get(0)).setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(2)))));
+                ((ImageView) this.cardsAfterWinning.getChildren().get(1)).setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(3)))));
+                ((ImageView) this.cardsAfterWinning.getChildren().get(2)).setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(4)))));
 
-            this.cardsAfterWinning.setDisable(false);
-            this.cardsAfterWinning.setOpacity(1.0);
-            this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
-            this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
-
-            ((ImageView) this.cardsAfterWinning.getChildren().get(0)).setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(2)))));
-            ((ImageView) this.cardsAfterWinning.getChildren().get(1)).setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(3)))));
-            ((ImageView) this.cardsAfterWinning.getChildren().get(2)).setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(4)))));
+            }
             if (themodel.getPlayers().get(0).isIsWin()) {
                 this.textPlayer1.setText("Win");
             }
@@ -275,6 +281,33 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 this.textPlayer4.setText("Win");
             }
         }
+    }
+
+    private void resetGame() throws SixCardHandException, NoMoneyException, CallMoreException, FileNotFoundException {
+        double money1 = this.themodel.getPlayers().get(0).getMoney();
+        double money2 = this.themodel.getPlayers().get(1).getMoney();
+        double money3 = this.themodel.getPlayers().get(2).getMoney();
+        double money4 = this.themodel.getPlayers().get(3).getMoney();
+        double pool = this.themodel.getMoneypool();
+        AI dummyAI0 = new AI("0");
+        AI dummyAI1 = new AI("1");
+        AI dummyAI2 = new AI("2");
+        ArrayList<Player> playerList = new ArrayList<>();
+        playerList.add(new Player("new Player"));
+        playerList.add(dummyAI0);
+        playerList.add(dummyAI1);
+        playerList.add(dummyAI2);
+        this.themodel = new GameModel(pool, playerList);
+        this.themodel.getPlayers().get(0).setMoney(money1);
+        this.themodel.getPlayers().get(1).setMoney(money2);
+        this.themodel.getPlayers().get(2).setMoney(money3);
+        this.themodel.getPlayers().get(3).setMoney(money4);
+        this.themodel.giveCards();
+        aiControl0 = new AIController2(themodel, dummyAI0);
+        aiControl1 = new AIController2(themodel, dummyAI1);
+        aiControl2 = new AIController2(themodel, dummyAI2);
+        updateView();
+
     }
 
     private void closeRaiseChoices() {
