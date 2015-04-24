@@ -1,7 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* *****************************************
+ * CSCI205 - Software Engineering and Design
+ * Spring 2015
+ *
+ * Name: Jiayu Huang
+ * Date: April 7, 2015
+ * Time: 5:30:00 PM
+ *
+ * Project: csci205
+ * Package: CS205Final.TexasModel
+ * File: GameUtil
+ * Description:
+ *
+ * ****************************************
  */
 package TexasModel;
 
@@ -9,11 +19,17 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
+ * A utility to do some work for the game model
  *
  * @author huangjiayu
  */
 public class GameUtil {
 
+    /**
+     * Get Picture address for the card
+     *
+     * @return File
+     */
     public static File cardpic(Card a) {
         String parentDir = "./res/View/cards/";
         parentDir += a.getValue();
@@ -30,10 +46,22 @@ public class GameUtil {
         return new File(parentDir);
     }
 
+    /**
+     * The Back side of the card picture
+     *
+     * @return
+     */
     public static File cardPicBack() {
         return new File("./res/View/cards/playing-card-back.png");
     }
 
+    /**
+     * Find the best combination of 5 from 6 cards
+     *
+     * @param cardlist
+     * @return Hand
+     * @throws SixCardHandException
+     */
     public static Hand findTheBestfromsix(ArrayList<Card> cardlist) throws SixCardHandException {
         Hand temphand = new Hand();
         //0,1,2,3,4
@@ -101,6 +129,13 @@ public class GameUtil {
 
     //Without an effcient algorithm, I will hardcode 21 situation to find out the best
     //5 out of 7 21 possible hands in total
+    /**
+     * Find the best 5 card combination out of 7
+     *
+     * @param cardlist
+     * @return Hand
+     * @throws SixCardHandException
+     */
     public static Hand findTheBest(ArrayList<Card> cardlist) throws SixCardHandException {
         //0,1,2,3,4
         Hand temphand = new Hand();

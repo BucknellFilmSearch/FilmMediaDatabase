@@ -7,7 +7,6 @@ package Controller;
 
 import TexasModel.AI;
 import TexasModel.BadCardCreationException;
-import TexasModel.CallMoreException;
 import TexasModel.Card;
 import TexasModel.GameModel;
 import static TexasModel.GameUtil.findTheBestfromsix;
@@ -73,7 +72,7 @@ public class AIControllerDummyTest {
      * Test of performTurnAction method, of class AIControllerDummy.
      */
     @Test
-    public void testPerformTurnAction() throws NoMoneyException, SixCardHandException, CallMoreException {
+    public void testPerformTurnAction() throws NoMoneyException, SixCardHandException {
         AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
         //System.out.println("The AI on deck is: " + aiOnDeck.getName());
         AIController2 controlOnDeck = null;
@@ -93,7 +92,7 @@ public class AIControllerDummyTest {
      * Test of performBlindAction method, of class AIControllerDummy.
      */
     @Test
-    public void testPerformBlindAction() throws NoMoneyException, SixCardHandException, CallMoreException {
+    public void testPerformBlindAction() throws NoMoneyException, SixCardHandException {
         AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
         //System.out.println("The AI on deck is: " + aiOnDeck.getName());
         AIController2 controlOnDeck = null;
@@ -156,7 +155,7 @@ public class AIControllerDummyTest {
      * Test of performFlopAction method, of class AIControllerDummy.
      */
     @Test
-    public void testPerformFlopAction() throws NoMoneyException, SixCardHandException, CallMoreException, BadCardCreationException {
+    public void testPerformFlopAction() throws NoMoneyException, SixCardHandException, BadCardCreationException {
         while (gameModel.isIsFlop() == false && gameModel.isIsEnd() == false) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
             AIController2 controlOnDeck = null;
@@ -210,7 +209,7 @@ public class AIControllerDummyTest {
      * Test of performTurnhandAction method, of class AIControllerDummy.
      */
     @Test
-    public void testPerformTurnhandAction() throws NoMoneyException, SixCardHandException, CallMoreException {
+    public void testPerformTurnhandAction() throws NoMoneyException, SixCardHandException {
         while (gameModel.isIsTurnhand() == false && gameModel.isIsEnd() == false) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
             AIController2 controlOnDeck = null;
@@ -271,7 +270,7 @@ public class AIControllerDummyTest {
      * Test of performRiverhandAction method, of class AIControllerDummy.
      */
     @Test
-    public void testPerformRiverhandAction() throws NoMoneyException, SixCardHandException, CallMoreException {
+    public void testPerformRiverhandAction() throws NoMoneyException, SixCardHandException {
         while (gameModel.isIsRiverhand() == false && gameModel.isIsEnd() == false) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
             AIController2 controlOnDeck = null;

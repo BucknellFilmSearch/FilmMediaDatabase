@@ -56,7 +56,7 @@ public class GameModelTest {
     }
 
     @Test
-    public void testFold() throws NoMoneyException, SixCardHandException, CallMoreException {
+    public void testFold() throws NoMoneyException, SixCardHandException {
         Player play1 = gametest.getPlayers().get(0);
         play1.setMoney(10000);
         Player play2 = gametest.getPlayers().get(1);
@@ -92,7 +92,7 @@ public class GameModelTest {
      * Test of isAllCheck method, of class GameModel.
      */
     @Test
-    public void testisAllCall() throws NoMoneyException, SixCardHandException, CallMoreException {
+    public void testisAllCall() throws NoMoneyException, SixCardHandException {
 
         Player play1 = gametest.getPlayers().get(0);
         play1.setMoney(10000);
@@ -176,7 +176,7 @@ public class GameModelTest {
      * Test of resetpool method, of class GameModel.
      */
     @Test
-    public void testReset() throws NoMoneyException, SixCardHandException, CallMoreException {
+    public void testReset() throws NoMoneyException, SixCardHandException {
         Player play1 = gametest.getPlayers().get(0);
         play1.setMoney(10000);
         Player play2 = gametest.getPlayers().get(1);
@@ -272,7 +272,7 @@ public class GameModelTest {
      * Test of checkTie method, of class GameModel.
      */
     @Test
-    public void testCheckTie() throws NoMoneyException, SixCardHandException, CallMoreException, BadCardCreationException {
+    public void testCheckTie() throws NoMoneyException, SixCardHandException, BadCardCreationException {
         play1.raise(60);
         play2.call();
         play3.call();
