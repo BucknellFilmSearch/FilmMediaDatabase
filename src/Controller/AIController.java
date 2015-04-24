@@ -22,7 +22,9 @@ public class AIController {
 
     protected GameModel model;
     protected AI ai;
-    /* This value ranks the potential/value of the AI's hand. It is set by the methods of this class. */
+    /* This value ranks the potential/value of the AI's hand. It is set by the
+     methods of this class. It is essentially a running total of potential
+     hand ranks. */
     protected int circumstantialRank;
     protected String mostRecentDecision;
 
