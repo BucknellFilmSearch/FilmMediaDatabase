@@ -64,7 +64,7 @@
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="textPlayer2" layoutX="68.0" layoutY="45.0" prefHeight="34.0" prefWidth="140.0" text="Player2" textFill="WHITE">
+                        <Label fx:id="textPlayer2" layoutX="68.0" layoutY="45.0" prefHeight="34.0" prefWidth="199.0" text="Player2" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -82,7 +82,7 @@
                <children>
                   <Pane prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <Label fx:id="textPlayer3" layoutX="157.0" layoutY="86.0" prefHeight="34.0" prefWidth="140.0" text="Player3" textFill="WHITE">
+                        <Label fx:id="textPlayer3" layoutX="157.0" layoutY="86.0" prefHeight="34.0" prefWidth="199.0" text="Player3" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -234,7 +234,7 @@
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="textPlayer4" layoutX="223.0" layoutY="45.0" prefHeight="34.0" prefWidth="140.0" text="Player4" textFill="WHITE">
+                        <Label fx:id="textPlayer4" layoutX="223.0" layoutY="45.0" prefHeight="34.0" prefWidth="199.0" text="Player4" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
