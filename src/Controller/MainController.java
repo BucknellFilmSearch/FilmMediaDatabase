@@ -39,6 +39,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -169,7 +171,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
     // </editor-fold>
 
     @FXML
-
+    /**
+     * @see http://code.makery.ch/blog/javafx-dialogs-official/
+     */
     private void handleButtonAction(ActionEvent event) throws SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
         try {
 //            if(event.getSource() == this.){
@@ -221,7 +225,11 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 updateView();
             }
         } catch (NoMoneyException a) {
-//TODO
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("You do not have enough money");
+            alert.setContentText("You need more money");
+            alert.showAndWait();
         }
     }
 

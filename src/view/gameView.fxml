@@ -196,7 +196,7 @@
                               <Insets top="20.0" />
                            </StackPane.margin>
                         </Text>
-                        <Text fx:id="textMoneyChange" fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="+$20" StackPane.alignment="TOP_RIGHT">
+                        <Text fx:id="textMoneyChange" fill="#00fff6" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="+$20" StackPane.alignment="TOP_RIGHT">
                            <StackPane.margin>
                               <Insets top="40.0" />
                            </StackPane.margin>
