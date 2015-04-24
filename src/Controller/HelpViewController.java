@@ -32,6 +32,9 @@ import view.MultiPaneHolder;
  */
 public class HelpViewController implements Initializable {
 
+    @FXML
+    private WebView wV;
+
     /**
      * Initializes the controller class.
      */
@@ -43,9 +46,6 @@ public class HelpViewController implements Initializable {
 
 //    @FXML
 //    private Button btnBack;
-    @FXML
-    private WebView wV;
-
     @FXML
     private void backToStart() {
         MultiPaneHolder root = MainPageController.getRoot();
@@ -66,8 +66,10 @@ public class HelpViewController implements Initializable {
         timeline.getKeyFrames().add(kf);
         timeline.setOnFinished(t -> {
             root.setDisplayPane(MultiPaneHolder.GamePane.StartScreen);
+            wV.getEngine().load("http://en.wikipedia.org/wiki/Texas_hold_%27em");
         });
         timeline.play();
+
     }
 
     @FXML
@@ -122,4 +124,9 @@ public class HelpViewController implements Initializable {
     private void updateView() {
 
     }
+
+    public WebView getwV() {
+        return wV;
+    }
+
 }
