@@ -154,6 +154,12 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     @FXML
     private Button btnAllIn;
+
+    @FXML
+    private Button btnNxtRound;
+
+    @FXML
+    private Button btnReset;
     // </editor-fold>
 
     @FXML
@@ -395,6 +401,19 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.Card2to1Drag = false;
         this.Card2Re = false;
     }
+//
+//    @FXML
+//    private void highLightNode(MouseEvent event) throws FileNotFoundException {
+//        System.out.println("Entered");
+////        Bloom bloom = new Bloom();
+////        bloom.setThreshold(0.5);
+//        ((Button) event.getSource()).setBackground(new Background());
+//    }
+//
+//    @FXML
+//    private void clearNodeEffect(MouseEvent event) {
+//        ((Node) event.getSource()).setEffect(null);
+//    }
 
     @FXML
     private void highLightCard2(MouseEvent event) throws FileNotFoundException {
