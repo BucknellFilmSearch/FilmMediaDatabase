@@ -34,7 +34,10 @@ public class AIController2 extends AIController {
      */
     @Override
     protected void performBlindAction() {
-        if (model.isAllCall()) {
+        if (ai.getMoney() < model.getCallAmount()) {
+            ai.fold();
+            mostRecentDecision = "fold";
+        } else if (model.isAllCall()) {
             if (ai.getMoney() >= model.getCallAmount()) {
                 ai.call();
                 mostRecentDecision = "call";
