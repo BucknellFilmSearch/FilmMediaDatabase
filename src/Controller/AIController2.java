@@ -10,6 +10,7 @@ import TexasModel.Card;
 import TexasModel.Deck;
 import TexasModel.GameModel;
 import static TexasModel.GameUtil.findTheBest;
+import static TexasModel.GameUtil.findTheBestfromsix;
 import TexasModel.Hand;
 import TexasModel.SixCardHandException;
 import java.util.ArrayList;
@@ -63,8 +64,10 @@ public class AIController2 extends AIController {
      */
     @Override
     protected void performFlopAction() throws SixCardHandException {
-        // reset circumstantial rank
-        circumstantialRank = ai.getHand().getHandRank();
+        /* Need a temporary hand so that we can have a five card hand even when
+         AI only holds two at a time until the riverhand round. */
+        Hand tempAIHand = new Hand();
+
         // Create testDeck to simulate drawing additional common cards from.
         Deck testDeck = new Deck();
         /* Remove cards that are already in AI's hand or the pool from the test
@@ -75,15 +78,20 @@ public class AIController2 extends AIController {
          the cards, and score this hand.
          */
 
+        // sevenCardList is for predicting the future (will end game w/ 7 cards)
         ArrayList<Card> sevenCardList = new ArrayList<>();
         for (Card card : ai.getHand().getHand()) {
             testDeck.removeCard(card);
             sevenCardList.add(card);
+            tempAIHand.addCard(card);
         }
         for (Card card : model.getPoolcards()) {
             testDeck.removeCard(card);
             sevenCardList.add(card);
+            tempAIHand.addCard(card);
         }
+        // reset circumstantial rank
+        circumstantialRank = tempAIHand.getHandRank();
 
         /* Now, we know that two more cards will be turned over. Test all possible
          cases for what these could be using the test deck, getting the best hand
@@ -108,13 +116,13 @@ public class AIController2 extends AIController {
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";
-        } else if (ai.getHand().getHandRank() == 23) {
+        } else if (tempAIHand.getHandRank() == 23) {
             ai.allin();
             mostRecentDecision = "allin";
-        } else if (ai.getHand().getHandRank() >= 20) {
+        } else if (tempAIHand.getHandRank() >= 20) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
             mostRecentDecision = "raise";
-        } else if (ai.getHand().getHandRank() >= 18) {
+        } else if (tempAIHand.getHandRank() >= 18) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
             mostRecentDecision = "raise";
         } else if (circumstantialRank > GREAT_MINOR_HAND_THRESHHOLD) {
@@ -140,8 +148,10 @@ public class AIController2 extends AIController {
      */
     @Override
     protected void performTurnhandAction() throws SixCardHandException {
-        // reset circumstantial rank
-        circumstantialRank = ai.getHand().getHandRank();
+        /* Need a temporary hand so that we can have a five card hand even when
+         AI only holds two at a time until the riverhand round. */
+        Hand tempAIHand = new Hand();
+
         // Create testDeck to simulate drawing additional common cards from.
         Deck testDeck = new Deck();
         /* Remove cards that are already in AI's hand or the pool from the test
@@ -162,6 +172,15 @@ public class AIController2 extends AIController {
             sevenCardList.add(card);
         }
 
+        /* in turnhand, there will only be 6 cards in the seven card list
+         at this point (one to predict). Find the best hand to be the temp
+         hand.
+         */
+        tempAIHand = findTheBestfromsix(sevenCardList);
+
+        // reset circumstantial rank
+        circumstantialRank = tempAIHand.getHandRank();
+
         /* Now, we know that one more cards will be turned over. Test all possible
          cases for what this could be using the test deck, getting the best hand
          with each addition and scoring the total.
@@ -181,13 +200,13 @@ public class AIController2 extends AIController {
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";
-        } else if (ai.getHand().getHandRank() == 23) {
+        } else if (tempAIHand.getHandRank() == 23) {
             ai.allin();
             mostRecentDecision = "allin";
-        } else if (ai.getHand().getHandRank() >= 20) {
+        } else if (tempAIHand.getHandRank() >= 20) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
             mostRecentDecision = "raise";
-        } else if (ai.getHand().getHandRank() >= 18) {
+        } else if (tempAIHand.getHandRank() >= 18) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
             mostRecentDecision = "raise";
         } else if (circumstantialRank > GREAT_MINOR_HAND_THRESHHOLD) {
