@@ -72,7 +72,7 @@
                      </children></Pane>
                   <Pane prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <Button layoutX="158.0" layoutY="197.0" mnemonicParsing="false" onAction="#backToStart" prefHeight="29.0" prefWidth="110.0" stylesheets="@../../res/View/btn.css" text="Take me back" />
+                        <Button layoutX="14.0" layoutY="197.0" mnemonicParsing="false" onAction="#backToStart" prefHeight="29.0" prefWidth="110.0" stylesheets="@../../res/View/btn.css" text="Take me back" />
                      </children></Pane>
                </children>
             </VBox>
@@ -158,7 +158,7 @@
                               <Button fx:id="btnCall" layoutX="14.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleButtonAction" stylesheets="@../../res/View/btn.css" text="Call" />
                               <Button fx:id="btnRaise" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#handleButtonAction" stylesheets="@../../res/View/btn.css" text="Raise" />
                               <Button fx:id="btnFold" layoutX="14.0" layoutY="72.0" mnemonicParsing="false" onAction="#handleButtonAction" stylesheets="@../../res/View/btn.css" text="Fold" />
-                              <Button fx:id="btnAllIn" layoutX="14.0" layoutY="106.0" mnemonicParsing="false" stylesheets="@../../res/View/btn_allin.css" text="All In!" textFill="RED">
+                              <Button fx:id="btnAllIn" layoutX="14.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleButtonAction" stylesheets="@../../res/View/btn_allin.css" text="All In!" textFill="RED">
                                  <font>
                                     <Font name="System Bold Italic" size="14.0" />
                                  </font>
@@ -243,17 +243,17 @@
                      <children>
                         <HBox fx:id="cardsAfterWinning" disable="true" layoutY="43.0" opacity="0.0">
                            <children>
-                              <ImageView fx:id="usrCard23" fitHeight="154.0" fitWidth="110.0" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../res/View/cards/playing-card-back.png" />
-                                 </image>
-                              </ImageView>
                               <ImageView fx:id="usrCard21" fitHeight="154.0" fitWidth="110.0" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
                               </ImageView>
                               <ImageView fx:id="usrCard22" fitHeight="154.0" fitWidth="110.0" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../res/View/cards/playing-card-back.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fx:id="usrCard23" fitHeight="154.0" fitWidth="110.0" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../res/View/cards/playing-card-back.png" />
                                  </image>
