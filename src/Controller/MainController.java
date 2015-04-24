@@ -37,6 +37,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javax.swing.JOptionPane;
 
 /**
  * FXML Controller class
@@ -139,36 +140,48 @@ public class MainController implements Initializable, ChangeListener<Number> {
     // </editor-fold>
 
     @FXML
-    private void handleButtonAction(ActionEvent event) throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
-        if (event.getSource() == this.btnCall) {
-            closeRaiseChoices();
-            //this.themodel.getPlayers().get(0).call();
-            this.themodel.getCurrentPlayer().call();
-            step();
-            updateView();
-        } else if (event.getSource() == this.btnRaise) {
-            //System.out.println("Raised");
-            this.raiseGroup.setOpacity(1.0);
-            this.raiseGroup.setDisable(false);
-
-        } else if (event.getSource() == this.btnFold) {
-            //System.out.println("Folded");
-            this.themodel.getCurrentPlayer().fold();
-            closeRaiseChoices();
-            step();
-            updateView();
-        } else if (event.getSource() == this.raiseCancel) {
-            closeRaiseChoices();
-
-        } else if (event.getSource() == this.raiseOK) {
-            try {
-                this.themodel.getCurrentPlayer().raise(Double.parseDouble(this.textMoneyRaised.getText()));
-            } catch (NumberFormatException numberFormatException) {
-                this.textMoneyRaised.setText(Double.toString(this.sliderRaise.getMin()));
+    private void handleButtonAction(ActionEvent event) throws SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
+        try {
+            if (event.getSource() == this.btnAllIn) {
+                closeRaiseChoices();
+                this.themodel.getCurrentPlayer().allin();
+                step();
+                updateView();
             }
-            closeRaiseChoices();
-            step();
-            updateView();
+            if (event.getSource() == this.btnCall) {
+                closeRaiseChoices();
+                //this.themodel.getPlayers().get(0).call();
+
+                this.themodel.getCurrentPlayer().call();
+                step();
+                updateView();
+            } else if (event.getSource() == this.btnRaise) {
+                //System.out.println("Raised");
+                this.raiseGroup.setOpacity(1.0);
+                this.raiseGroup.setDisable(false);
+
+            } else if (event.getSource() == this.btnFold) {
+                //System.out.println("Folded");
+                this.themodel.getCurrentPlayer().fold();
+                closeRaiseChoices();
+                step();
+                updateView();
+            } else if (event.getSource() == this.raiseCancel) {
+                closeRaiseChoices();
+
+            } else if (event.getSource() == this.raiseOK) {
+                try {
+                    this.themodel.getCurrentPlayer().raise(Double.parseDouble(this.textMoneyRaised.getText()));
+                } catch (NumberFormatException numberFormatException) {
+                    this.textMoneyRaised.setText(Double.toString(this.sliderRaise.getMin()));
+                }
+                closeRaiseChoices();
+                step();
+                updateView();
+            }
+        } catch (NoMoneyException a) {
+            JOptionPane.showMessageDialog(null, "You don't have enough money! Choose Another option", "Bad input", JOptionPane.ERROR_MESSAGE);
+            int i = 0;
         }
     }
 
@@ -201,11 +214,13 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     @SuppressWarnings("empty-statement")
     private void updateView() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
-
-        this.textPlayer1.setText(this.themodel.getPlayers().get(0).getName());
-        if (this.themodel.isIsEnd()) {
-            this.getBscBox().setDisable(true);
+        if (this.themodel.getCallAmount() > this.themodel.getPlayers().get(0).getMoney()) {
+            this.btnCall.setText("ALL-IN!");
         }
+        this.textPlayer1.setText(this.themodel.getPlayers().get(0).getName());
+//        if (this.themodel.isIsEnd()) {
+//            this.getBscBox().setDisable(true);
+//        }
         this.textPlayer2.setText(this.themodel.getPlayers().get(1).getActionperformed());
         this.textPlayer3.setText(this.themodel.getPlayers().get(2).getActionperformed());
         this.textPlayer4.setText(this.themodel.getPlayers().get(3).getActionperformed());
@@ -238,7 +253,15 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.sliderRaise.setMin(this.themodel.getCallAmount() + 1);
 
         if (this.themodel.isIsEnd()) {
-            this.cardsAfterWinning.setVisible(true);
+
+            this.cardsAfterWinning.setDisable(false);
+            this.cardsAfterWinning.setOpacity(1.0);
+            this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
+            this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
+
+            ((ImageView) this.cardsAfterWinning.getChildren().get(0)).setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(2)))));
+            ((ImageView) this.cardsAfterWinning.getChildren().get(1)).setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(3)))));
+            ((ImageView) this.cardsAfterWinning.getChildren().get(2)).setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(4)))));
             if (themodel.getPlayers().get(0).isIsWin()) {
                 this.textPlayer1.setText("Win");
             }
@@ -396,14 +419,14 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     public void switchCard() throws FileNotFoundException {
 
-        this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(1)))));
-        this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(0)))));
+        this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
+        this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
 
-        Card oldcard1 = this.themodel.getCurrentPlayer().getHand().getHand().get(0);
-        Card oldcard2 = this.themodel.getCurrentPlayer().getHand().getHand().get(1);
+        Card oldcard1 = this.themodel.getPlayers().get(0).getHand().getHand().get(0);
+        Card oldcard2 = this.themodel.getPlayers().get(0).getHand().getHand().get(1);
 
-        this.themodel.getCurrentPlayer().getHand().getHand().set(0, oldcard2);
-        this.themodel.getCurrentPlayer().getHand().getHand().set(1, oldcard1);
+        this.themodel.getPlayers().get(0).getHand().getHand().set(0, oldcard2);
+        this.themodel.getPlayers().get(0).getHand().getHand().set(1, oldcard1);
 
     }
 
