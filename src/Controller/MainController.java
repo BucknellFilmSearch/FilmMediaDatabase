@@ -257,9 +257,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     private void updateView() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
-        if (this.themodel.getCallAmount() > this.themodel.getPlayers().get(0).getMoney()) {
-            this.btnCall.setText("ALL-IN!");
-        }
+
         this.textPlayer1.setText(this.themodel.getPlayers().get(0).getName());
 //        if (this.themodel.isIsEnd()) {
 //            this.getBscBox().setDisable(true);
@@ -281,7 +279,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
         this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
 
-        this.textCurMoney.setText(Double.toString(this.themodel.getPlayers().get(0).getMoney()));
+        this.textCurMoney.setText(Integer.toString((int) this.themodel.getPlayers().get(0).getMoney()));
         if (this.themodel.isIsFlop()) {
             this.cmnCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(0)))));
             this.cmnCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(1)))));
@@ -332,11 +330,12 @@ public class MainController implements Initializable, ChangeListener<Number> {
         playerList.add(dummyAI0);
         playerList.add(dummyAI1);
         playerList.add(dummyAI2);
-        this.themodel = new GameModel(1000, playerList);
+        this.themodel = new GameModel(0, playerList);
         this.themodel.giveCards();
         aiControl0 = new AIController2(themodel, dummyAI0);
         aiControl1 = new AIController2(themodel, dummyAI1);
         aiControl2 = new AIController2(themodel, dummyAI2);
+        resetView();
         updateView();
         this.cardsAfterWinning.setOpacity(0);
 
@@ -356,11 +355,13 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     private void reround() throws SixCardHandException, NoMoneyException, CallMoreException, FileNotFoundException {
         if (this.themodel.isIsEnd()) {
+
             double money1 = this.themodel.getPlayers().get(0).getMoney();
             double money2 = this.themodel.getPlayers().get(1).getMoney();
             double money3 = this.themodel.getPlayers().get(2).getMoney();
             double money4 = this.themodel.getPlayers().get(3).getMoney();
             double pool = this.themodel.getMoneypool();
+            resetView();
             AI dummyAI0 = new AI("0");
             AI dummyAI1 = new AI("1");
             AI dummyAI2 = new AI("2");
@@ -378,6 +379,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
             aiControl0 = new AIController2(themodel, dummyAI0);
             aiControl1 = new AIController2(themodel, dummyAI1);
             aiControl2 = new AIController2(themodel, dummyAI2);
+
             updateView();
             this.cardsAfterWinning.setOpacity(0);
 
@@ -536,7 +538,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
             playerList.add(dummyAI0);
             playerList.add(dummyAI1);
             playerList.add(dummyAI2);
-            this.themodel = new GameModel(1000, playerList);
+            this.themodel = new GameModel(0, playerList);
             this.themodel.giveCards();
             aiControl0 = new AIController2(themodel, dummyAI0);
             aiControl1 = new AIController2(themodel, dummyAI1);

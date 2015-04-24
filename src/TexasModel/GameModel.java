@@ -446,7 +446,7 @@ public class GameModel {
         if (this.getCurrentPlayer().getMoney() < amount) {
             throw new NoMoneyException("You don't have enough money to raise!");
         }
-        this.currentPlayer.setActionperformed("RAISED " + amount + " $$");
+        this.currentPlayer.setActionperformed("RAISED " + (int) amount + " $$");
 //        this.callAmount = amount;
 //        this.moneypool += amount;
         this.callAmount = this.callAmount + amount;
