@@ -16,6 +16,7 @@
         <items>
             <Button mnemonicParsing="false" onAction="#backToStart" prefHeight="1.0" prefWidth="144.0" text="Back To Main Menu" />
           <Button mnemonicParsing="false" onAction="#surfBack" prefHeight="0.0" prefWidth="100.0" text="Backward" />
+            <Button mnemonicParsing="false" onAction="#surfForward" prefHeight="0.0" prefWidth="100.0" text="Forward" />
         </items>
       </ToolBar>
    </children>

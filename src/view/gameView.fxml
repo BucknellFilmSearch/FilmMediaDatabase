@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -69,7 +70,10 @@
                            </font>
                         </Label>
                      </children></Pane>
-                  <Pane prefHeight="240.0" prefWidth="426.0" />
+                  <Pane prefHeight="240.0" prefWidth="426.0">
+                     <children>
+                        <Button layoutX="158.0" layoutY="197.0" mnemonicParsing="false" onAction="#backToStart" prefHeight="29.0" prefWidth="110.0" stylesheets="@../../res/View/btn.css" text="Take me back" />
+                     </children></Pane>
                </children>
             </VBox>
             <VBox prefHeight="720.0" prefWidth="426.0">
@@ -151,10 +155,10 @@
                               <Insets bottom="60.0" top="60.0" />
                            </HBox.margin>
                            <children>
-                              <Button fx:id="btnCall" layoutX="14.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Call" />
-                              <Button fx:id="btnRaise" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Raise" />
-                              <Button fx:id="btnFold" layoutX="14.0" layoutY="72.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Fold" />
-                              <Button fx:id="btnAllIn" layoutX="14.0" layoutY="106.0" mnemonicParsing="false" text="All In!" textFill="RED">
+                              <Button fx:id="btnCall" layoutX="14.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleButtonAction" stylesheets="@../../res/View/btn.css" text="Call" />
+                              <Button fx:id="btnRaise" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#handleButtonAction" stylesheets="@../../res/View/btn.css" text="Raise" />
+                              <Button fx:id="btnFold" layoutX="14.0" layoutY="72.0" mnemonicParsing="false" onAction="#handleButtonAction" stylesheets="@../../res/View/btn.css" text="Fold" />
+                              <Button fx:id="btnAllIn" layoutX="14.0" layoutY="106.0" mnemonicParsing="false" stylesheets="@../../res/View/btn_allin.css" text="All In!" textFill="RED">
                                  <font>
                                     <Font name="System Bold Italic" size="14.0" />
                                  </font>
@@ -177,7 +181,6 @@
                               <Insets top="43.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Button layoutX="14.0" layoutY="89.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" stylesheets="@../../res/View/theme.css" text="Button" />
                      </children>
                   </Pane>
                </children></VBox>

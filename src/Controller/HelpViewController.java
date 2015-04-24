@@ -70,35 +70,23 @@ public class HelpViewController implements Initializable {
         timeline.play();
     }
 
-//    @FXML
-//    private void showBtn(MouseEvent event) {
-//        FadeTransition ft = new FadeTransition(Duration.millis(500), this.btnBack);
-//        ft.setFromValue(0);
-//        ft.setToValue(Double.MAX_VALUE);
-//        ft.play();
-//        this.btnBack.setDisable(false);
-//    }
-//
-//    @FXML
-//    private void rmBtn() {
-//        this.btnBack.setLayoutY(0);
-//        Timeline timeline = new Timeline();
-//        KeyValue kv = new KeyValue(this.btnBack.translateYProperty(), -this.btnBack.getHeight(), Interpolator.EASE_BOTH);
-//        KeyFrame kf = new KeyFrame(Duration.seconds(0.3), kv);
-//        timeline.getKeyFrames().add(kf);
-//        timeline.setOnFinished(t -> {
-//            this.btnBack.setOpacity(0);
-//            this.btnBack.setDisable(true);
-//            this.btnBack.setLayoutY(0);
-//        });
-//        timeline.play();
-//    }
     @FXML
     private void surfBack() {
         //System.out.println(this.goBack());
         this.wV.getEngine().load(this.goBack());
     }
 
+    @FXML
+    private void surfForward() {
+        //System.out.println(this.goBack());
+        this.wV.getEngine().load(this.goForward());
+    }
+
+    /**
+     * @see
+     * http://stackoverflow.com/questions/18928333/how-to-program-back-and-forward-buttons-in-javafx-with-webview-and-webengine
+     * @return
+     */
     private String goBack() {
         final WebHistory history = wV.getEngine().getHistory();
         ObservableList<WebHistory.Entry> entryList = history.getEntries();
@@ -113,6 +101,22 @@ public class HelpViewController implements Initializable {
             }
         });
         return entryList.get(currentIndex > 0 ? currentIndex - 1 : currentIndex).getUrl();
+    }
+
+    public String goForward() {
+        final WebHistory history = wV.getEngine().getHistory();
+        ObservableList<WebHistory.Entry> entryList = history.getEntries();
+        int currentIndex = history.getCurrentIndex();
+        Platform.runLater(new Runnable() {
+            public void run() {
+                try {
+                    history.go(1);
+                } catch (IndexOutOfBoundsException indexOutOfBoundsException) {
+                    history.go(0);
+                }
+            }
+        });
+        return entryList.get(currentIndex < entryList.size() - 1 ? currentIndex + 1 : currentIndex).getUrl();
     }
 
     private void updateView() {

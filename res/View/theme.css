@@ -1,16 +1,4 @@
- /* This css code comming from the following webpage:
-    http://fxexperience.com/2011/12/styling-fx-buttons-with-css/
-    With the theme of "record-sales"; */
 
-.button{
-    -fx-background-color:
-        linear-gradient(#f0ff35, #a9ff00),
-        radial-gradient(center 50% -40%, radius 200%, #b8ee36 45%, #80c800 50%);
-    -fx-background-radius: 6, 5;
-    -fx-background-insets: 0, 1;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.4) , 5, 0.0 , 0 , 1 );
-    -fx-text-fill: #395306;
-}
 /* This css code comming from the following webpage:
     http://stackoverflow.com/questions/13325097/javafx-remove-separation-between-toolbar-and-top-of-window
 */
@@ -23,6 +11,6 @@
     -fx-background-insets: 0, 1 0 1 0;
     -fx-background-radius: 0, 0 ;
     -fx-padding: 0.416667em 0.833em 0.416667em 0.833em; /* 5 10 5 10 */
-    -fx-spacing: 84em; /* 4 */
+    -fx-spacing: 0.333em; /* 4 */
     -fx-alignment: CENTER_LEFT;
 }
