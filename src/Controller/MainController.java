@@ -13,8 +13,11 @@ import TexasModel.GameUtil;
 import TexasModel.NoMoneyException;
 import TexasModel.Player;
 import TexasModel.SixCardHandException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -27,10 +30,14 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -328,6 +335,35 @@ public class MainController implements Initializable, ChangeListener<Number> {
         aiControl2 = new AIController2(themodel, dummyAI2);
         updateView();
         this.cardsAfterWinning.setOpacity(0);
+
+    }
+
+    private void resetView() {
+        MultiPaneHolder root = (MultiPaneHolder) MainPageController.getRoot();
+        ObservableList<Node> allPane = FXCollections.observableArrayList(root.getChildren());
+        Node oldPane = root.getCurPane();
+
+        FXMLLoader loader = new FXMLLoader();
+        File xmlFile = new File("./src/view/gameView.fxml");
+        try {
+            loader.setLocation(xmlFile.toURI().toURL());
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(MultiPaneHolder.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(1);
+        }
+        AnchorPane newPane = null;
+        try {
+            newPane = (AnchorPane) loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(MultiPaneHolder.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(2);
+        }
+
+        allPane.add(newPane);
+        root.getChildren().setAll(allPane);
+        root.getPaneMap().replace(MultiPaneHolder.GamePane.GameScreen.name(), newPane);
+        root.setDisplayPane(MultiPaneHolder.GamePane.GameScreen);
+        root.getChildren().remove(oldPane);
 
     }
 

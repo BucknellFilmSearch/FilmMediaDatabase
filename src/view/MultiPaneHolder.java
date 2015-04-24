@@ -100,7 +100,6 @@ public class MultiPaneHolder extends StackPane {
         }
         this.paneMap.put(GamePane.GameScreen.name(), gamePage);
         this.getChildren().add(gamePage);
-//        gamePage.setDisable(true);
     }
 
     private void addImgView() {
@@ -122,10 +121,6 @@ public class MultiPaneHolder extends StackPane {
         ObservableList<Node> allPane = FXCollections.observableArrayList(this.getChildren());
         int paneIdx = allPane.indexOf(paneToDisplay);
         int curPaneIdx = allPane.indexOf(this.getCurPane());
-//        for (Node d : this.paneMap.values()) {
-//            d.setDisable(true);
-//        }
-//        paneToDisplay.setDisable(false);
         Collections.swap(allPane, curPaneIdx, paneIdx);
         this.getChildren().setAll(allPane);
         this.curPane = paneToDisplay;
@@ -134,6 +129,10 @@ public class MultiPaneHolder extends StackPane {
 
     public Node getCurPane() {
         return curPane;
+    }
+
+    public HashMap<String, Node> getPaneMap() {
+        return paneMap;
     }
 
 }
