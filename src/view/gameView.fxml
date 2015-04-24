@@ -63,7 +63,7 @@
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="textPlayer2" layoutX="83.0" layoutY="45.0" prefHeight="34.0" prefWidth="89.0" text="Player2" textFill="WHITE">
+                        <Label fx:id="textPlayer2" layoutX="68.0" layoutY="45.0" prefHeight="34.0" prefWidth="140.0" text="Player2" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -76,7 +76,7 @@
                <children>
                   <Pane prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <Label fx:id="textPlayer3" layoutX="169.0" layoutY="86.0" prefHeight="34.0" prefWidth="89.0" text="Player3" textFill="WHITE">
+                        <Label fx:id="textPlayer3" layoutX="157.0" layoutY="86.0" prefHeight="34.0" prefWidth="140.0" text="Player3" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -136,17 +136,9 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <HBox prefHeight="240.0" prefWidth="426.0">
+                  <Pane prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <Label fx:id="textPlayer1" prefHeight="34.0" prefWidth="200.0" text="Player1" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets top="110.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <ImageView fx:id="usrCard1" fitHeight="154.0" fitWidth="110.0" onDragDetected="#card1to2Det" onMouseEntered="#highLightCard1" onMouseExited="#clearCardEffect1" onMouseReleased="#Card1Released" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" layoutX="213.0" layoutY="24.0" onDragDetected="#card2to1Det" onMouseEntered="#highLightCard2" onMouseExited="#clearCardEffect2" onMouseReleased="#Card2Released" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -154,15 +146,7 @@
                               <Insets top="43.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" onDragDetected="#card2to1Det" onMouseEntered="#highLightCard2" onMouseExited="#clearCardEffect2" onMouseReleased="#Card2Released" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../res/View/cards/playing-card-back.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets top="43.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Pane prefHeight="200.0" prefWidth="200.0">
+                        <Pane layoutX="337.0" layoutY="34.0" prefHeight="154.0" prefWidth="89.0">
                            <HBox.margin>
                               <Insets bottom="60.0" top="60.0" />
                            </HBox.margin>
@@ -170,14 +154,32 @@
                               <Button fx:id="btnCall" layoutX="14.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Call" />
                               <Button fx:id="btnRaise" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Raise" />
                               <Button fx:id="btnFold" layoutX="14.0" layoutY="72.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Fold" />
-                              <Button fx:id="btnAllIn" layoutX="14.0" layoutY="106.0" mnemonicParsing="false" text="All In!" textFill="RED">
+                              <Button fx:id="btnAllIn" layoutX="14.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleButtonAction" text="All In!" textFill="RED">
                                  <font>
                                     <Font name="System Bold Italic" size="14.0" />
                                  </font>
                               </Button>
                            </children>
                         </Pane>
-                     </children></HBox>
+                        <Label fx:id="textPlayer1" layoutX="103.0" layoutY="178.0" prefHeight="34.0" prefWidth="219.0" text="Player1" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets top="110.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <ImageView fx:id="usrCard1" fitHeight="154.0" fitWidth="110.0" layoutX="103.0" layoutY="24.0" onDragDetected="#card1to2Det" onMouseEntered="#highLightCard1" onMouseExited="#clearCardEffect1" onMouseReleased="#Card1Released" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../res/View/cards/playing-card-back.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets top="43.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Button layoutX="14.0" layoutY="89.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" stylesheets="@../../res/View/theme.css" text="Button" />
+                     </children>
+                  </Pane>
                </children></VBox>
             <VBox prefHeight="720.0" prefWidth="426.0">
                <children>
@@ -227,7 +229,7 @@
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="textPlayer4" layoutX="223.0" layoutY="45.0" prefHeight="34.0" prefWidth="89.0" text="Player4" textFill="WHITE">
+                        <Label fx:id="textPlayer4" layoutX="223.0" layoutY="45.0" prefHeight="34.0" prefWidth="140.0" text="Player4" textFill="WHITE">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -255,7 +257,7 @@
                               </ImageView>
                            </children>
                         </HBox>
-                        <Group fx:id="raiseGroup" disable="true">
+                        <Group fx:id="raiseGroup" disable="true" layoutY="-36.0" opacity="0.0">
                            <children>
                               <Button fx:id="raiseOK" layoutX="213.0" layoutY="89.0" mnemonicParsing="false" onAction="#handleButtonAction" text="OK" />
                               <Slider fx:id="sliderRaise" layoutY="107.0" />
