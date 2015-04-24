@@ -15,6 +15,10 @@ import TexasModel.SixCardHandException;
 import java.util.ArrayList;
 
 /**
+ * The controller of the AI class, which reads information from the GameModel to
+ * update the state of the AI. Uses inheritance so that controllers of multiple
+ * difficulties can be made, but will still all have the same type, which is
+ * AIController.
  *
  * @author justi_000
  */
@@ -24,6 +28,9 @@ public class AIController2 extends AIController {
         super(model, ai);
     }
 
+    /**
+     * Chooses move in Blind stage.
+     */
     @Override
     protected void performBlindAction() {
         if (model.isAllCall()) {
@@ -49,15 +56,23 @@ public class AIController2 extends AIController {
         }
     }
 
+    /**
+     * Chooses move in Flop stage.
+     *
+     * @throws SixCardHandException
+     */
     @Override
     protected void performFlopAction() throws SixCardHandException {
         // reset circumstantial rank
         circumstantialRank = ai.getHand().getHandRank();
         // Create testDeck to simulate drawing additional common cards from.
         Deck testDeck = new Deck();
-        /* Remove cards that are already in AI's hand from the test deck. We already
-         know that the AI won't be drawing these cards. No need to include them
-         in our tests.
+        /* Remove cards that are already in AI's hand or the pool from the test
+         deck. We already know that the AI won't be drawing these cards.
+         No need to include them in our tests. The code below also adds these
+         five cards to an ArrayList, so that when two more cards are simulated,
+         we can call a method to check what the best possible hand is from all
+         the cards, and score this hand.
          */
 
         ArrayList<Card> sevenCardList = new ArrayList<>();
@@ -118,15 +133,23 @@ public class AIController2 extends AIController {
 
     }
 
+    /**
+     * Chooses move in turn stage.
+     *
+     * @throws SixCardHandException
+     */
     @Override
     protected void performTurnhandAction() throws SixCardHandException {
         // reset circumstantial rank
         circumstantialRank = ai.getHand().getHandRank();
         // Create testDeck to simulate drawing additional common cards from.
         Deck testDeck = new Deck();
-        /* Remove cards that are already in AI's hand from the test deck. We already
-         know that the AI won't be drawing these cards. No need to include them
-         in our tests.
+        /* Remove cards that are already in AI's hand or the pool from the test
+         deck. We already know that the AI won't be drawing these cards.
+         No need to include them in our tests. The code below also adds these
+         five cards to an ArrayList, so that when two more cards are simulated,
+         we can call a method to check what the best possible hand is from all
+         the cards, and score this hand.
          */
 
         ArrayList<Card> sevenCardList = new ArrayList<>();
@@ -139,8 +162,8 @@ public class AIController2 extends AIController {
             sevenCardList.add(card);
         }
 
-        /* Now, we know that two more cards will be turned over. Test all possible
-         cases for what these could be using the test deck, getting the best hand
+        /* Now, we know that one more cards will be turned over. Test all possible
+         cases for what this could be using the test deck, getting the best hand
          with each addition and scoring the total.
          */
         for (Card deckCard1 : testDeck.getDeck()) {
@@ -152,7 +175,8 @@ public class AIController2 extends AIController {
 
         // DECISION MAKING CONSTANTS:
         int GREAT_MINOR_HAND_THRESHHOLD = 800;
-        int DECENT_MINOR_HAND_THRESHHOLD = 750;
+
+        int DECENT_MINOR_HAND_THRESHHOLD = 700;
 
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
@@ -181,8 +205,13 @@ public class AIController2 extends AIController {
         }
     }
 
+    /**
+     * Chooses move in river stage.
+     */
     @Override
     protected void performRiverhandAction() {
+        /* Now we know what our best hand is. Choose a move based on strength of
+         this hand. */
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";

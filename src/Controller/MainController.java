@@ -40,10 +40,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -51,12 +48,16 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import view.MultiPaneHolder;
 
-/**
- * FXML Controller class
- *
- * @author Zhengri Fan
- */
 public class MainController implements Initializable, ChangeListener<Number> {
+
+    private boolean Card1to2Drag = false;
+    private boolean Card2to1Drag = false;
+
+    private boolean inCard1 = false;
+    private boolean inCard2 = false;
+
+    private boolean Card1Re = false;
+    private boolean Card2Re = false;
 
     private GameModel themodel;
     private AIController2 aiControl0;
@@ -140,6 +141,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     @FXML
     private Button btnBack;
+
+    @FXML
+    private Button btnAllIn;
     // </editor-fold>
 
     @FXML
@@ -266,6 +270,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     @FXML
+
     private void showBtnBack() {
         this.btnBack.setDisable(false);
         this.btnBack.setOpacity(1);
@@ -277,57 +282,98 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.btnBack.setOpacity(0);
     }
 
+//    @FXML
+//    private void card1to2Det(MouseEvent event) throws FileNotFoundException {
+//        System.out.println("onDragDetected");
+//
+//        Dragboard db = this.usrCard1.startDragAndDrop(TransferMode.ANY);
+//
+//        db.setDragView(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(0)))));
     @FXML
-    private void card1to2Det(MouseEvent event) throws FileNotFoundException {
-        System.out.println("onDragDetected");
-
-        Dragboard db = this.usrCard1.startDragAndDrop(TransferMode.ANY);
-
-        db.setDragView(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(0)))));
-
+    private void card1to2Det(MouseEvent event) {
+        //System.out.println("onDragDetected1");
+        this.Card1to2Drag = true;
         event.consume();
 
     }
 
     @FXML
-    private void card1to2Over(DragEvent event) {
-        System.out.println("onDragOver");
-
+    private void card2to1Det(MouseEvent event) {
+        //System.out.println("onDragDetected2");
+        this.Card2to1Drag = true;
         event.consume();
+
     }
 
     @FXML
-    private void card1to2Drop(DragEvent event) {
-        System.out.println("onDragDropped");
-
-        event.consume();
+    private void Card1Released(MouseEvent event) throws FileNotFoundException {
+        this.Card1Re = true;
     }
 
     @FXML
-    private void card1to2Exit(DragEvent event) {
-        System.out.println("onDragExited");
-
-        event.consume();
+    private void Card2Released(MouseEvent event) throws FileNotFoundException {
+        this.Card2Re = true;
     }
 
     @FXML
-    private void card1to2Done(DragEvent event) {
-        System.out.println("onDragDone");
-
-        event.consume();
-    }
-
-    @FXML
-    private void highLightCard(MouseEvent event) throws FileNotFoundException {
+    private void highLightCard1(MouseEvent event) throws FileNotFoundException {
         DropShadow ds = new DropShadow();
         ImageView card = (ImageView) event.getSource();
         card.setEffect(ds);
 
-        this.switchCard();
+        this.inCard1 = true;
+
+        if (this.Card2to1Drag && this.inCard1 && this.Card2Re) {
+            this.switchCard();
+        }
+
+        this.Card2to1Drag = false;
+        this.Card2Re = false;
+    }
+
+    @FXML
+    private void highLightCard2(MouseEvent event) throws FileNotFoundException {
+        DropShadow ds = new DropShadow();
+        ImageView card = (ImageView) event.getSource();
+        card.setEffect(ds);
+
+        this.inCard2 = true;
+
+        if (this.Card1to2Drag && this.inCard2 && this.Card1Re) {
+            this.switchCard();
+        }
+
+        this.Card1to2Drag = false;
+        this.Card1Re = false;
+
     }
 
     @FXML
     private void clearCardEffect(MouseEvent event) {
+        ImageView card = (ImageView) event.getSource();
+        card.setEffect(null);
+    }
+
+    @FXML
+    private void clearCardEffect1(MouseEvent event) {
+        System.out.println("exit1");
+
+        this.inCard1 = false;
+        this.Card1Re = false;
+        this.Card2to1Drag = false;
+        this.Card2Re = false;
+        ImageView card = (ImageView) event.getSource();
+        card.setEffect(null);
+    }
+
+    @FXML
+    private void clearCardEffect2(MouseEvent event) {
+        System.out.println("exit2");
+
+        this.inCard2 = false;
+        this.Card1to2Drag = false;
+        this.Card1Re = false;
+        this.Card2Re = false;
         ImageView card = (ImageView) event.getSource();
         card.setEffect(null);
     }
