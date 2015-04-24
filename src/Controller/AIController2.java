@@ -55,6 +55,9 @@ public class AIController2 extends AIController {
                 if (ai.getMoney() >= model.getCallAmount()) {
                     ai.call();
                     mostRecentDecision = "call";
+                } else {
+                    ai.fold();
+                    mostRecentDecision = "fold";
                 }
             }
         }
