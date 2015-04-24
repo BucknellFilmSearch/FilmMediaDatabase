@@ -7,10 +7,24 @@ package Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import view.MultiPaneHolder;
 
 /**
@@ -36,43 +50,103 @@ public class MainPageController implements Initializable {
 
     }
 
+    /**
+     *
+     *
+     *
+     * @see
+     * http://stackoverflow.com/questions/27089627/javafx-switch-scene-with-slide-effect
+     */
     @FXML
     private void startGame() {
-//        // Create snapshots with the last state of the scenes
+
+        WritableImage wi = new WritableImage(1280, 720);
+        Image img1 = root.getCurPane().snapshot(new SnapshotParameters(), wi);
+        ImageView imgView1 = new ImageView(img1);
+        wi = new WritableImage(1280, 720);
+        Image img2 = root.getPane(MultiPaneHolder.GamePane.GameScreen).snapshot(new SnapshotParameters(), wi);
+        ImageView imgView2 = new ImageView(img2);
+        imgView1.setTranslateX(0);
+        imgView2.setTranslateY(-720);
+        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().add(imgView1);
+        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().add(imgView2);
+        root.setDisplayPane(MultiPaneHolder.GamePane.TransitionGroup);
+        Timeline timeline = new Timeline();
+        KeyValue kv = new KeyValue(imgView2.translateYProperty(), 0, Interpolator.EASE_BOTH);
+        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+        timeline.getKeyFrames().add(kf);
+        timeline.setOnFinished(t -> {
+            root.setDisplayPane(MultiPaneHolder.GamePane.GameScreen);
+        });
+        timeline.play();
+    }
+
+    @FXML
+    private void helpView() {
+        WritableImage wi = new WritableImage(1280, 720);
+        Image img1 = root.getCurPane().snapshot(new SnapshotParameters(), wi);
+        ImageView imgView1 = new ImageView(img1);
+        wi = new WritableImage(1280, 720);
+        Image img2 = root.getPane(MultiPaneHolder.GamePane.HelpView).snapshot(new SnapshotParameters(), wi);
+        ImageView imgView2 = new ImageView(img2);
+        imgView1.setTranslateX(0);
+        imgView2.setTranslateY(720);
+        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().add(imgView1);
+        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().add(imgView2);
+        root.setDisplayPane(MultiPaneHolder.GamePane.TransitionGroup);
+        Timeline timeline = new Timeline();
+        KeyValue kv = new KeyValue(imgView2.translateYProperty(), 0, Interpolator.EASE_BOTH);
+        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
+        timeline.getKeyFrames().add(kf);
+        timeline.setOnFinished(t -> {
+            root.setDisplayPane(MultiPaneHolder.GamePane.HelpView);
+        });
+        timeline.play();
+    }
+
+    @FXML
+    private void exitApp() {
+        Platform.exit();
+    }
+
+//    @FXML
+//    private void seeOption(){
 //        WritableImage wi = new WritableImage(1280, 720);
 //        Image img1 = root.getCurPane().snapshot(new SnapshotParameters(), wi);
 //        ImageView imgView1 = new ImageView(img1);
 //        wi = new WritableImage(1280, 720);
-//        Image img2 = root.getPane(MultiPaneHolder.GamePane.GameScreen).snapshot(new SnapshotParameters(), wi);
+//        Image img2 = root.getPane(MultiPaneHolder.GamePane.HelpView).snapshot(new SnapshotParameters(), wi);
 //        ImageView imgView2 = new ImageView(img2);
-//        // Create new pane with both images
 //        imgView1.setTranslateX(0);
-//        imgView2.setTranslateX(300);
-//        StackPane pane = new StackPane(imgView1, imgView2);
-//        pane.setPrefSize(300, 250);
-//        AnchorPane oldPane = (AnchorPane) root.getCurPane();
-//        // Replace root1 with new pane
-//        ((AnchorPane) root.getCurPane()).getChildren().setAll(pane);
-//        // create transtition
+//        imgView2.setTranslateY(720);
+//        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().add(imgView1);
+//        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().add(imgView2);
+//        root.setDisplayPane(MultiPaneHolder.GamePane.TransitionGroup);
 //        Timeline timeline = new Timeline();
-//        KeyValue kv = new KeyValue(imgView2.translateXProperty(), 0, Interpolator.EASE_BOTH);
+//        KeyValue kv = new KeyValue(imgView2.translateYProperty(), 0, Interpolator.EASE_BOTH);
 //        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
 //        timeline.getKeyFrames().add(kf);
 //        timeline.setOnFinished(t -> {
-//            // remove pane and restore scene 1
-//            ((AnchorPane) root.getCurPane()).getChildren().setAll(oldPane);
-//            // set scene 2
-//            //primaryStage.setScene(scene2);
-////            root.setDisplayPane(MultiPaneHolder.GamePane.GameScreen);
+//            root.setDisplayPane(MultiPaneHolder.GamePane.HelpView);
 //        });
 //        timeline.play();
-
-        root.setDisplayPane(MultiPaneHolder.GamePane.GameScreen);
-
-    }
-
+//    }
     public static void setRoot(MultiPaneHolder root) {
         MainPageController.root = root;
     }
 
+    public static MultiPaneHolder getRoot() {
+        return MainPageController.root;
+    }
+
+    @FXML
+    private void highLightNode(MouseEvent event) {
+        DropShadow ds = new DropShadow();
+        ((Node) event.getSource()).setEffect(ds);
+    }
+
+    @FXML
+    private void clearNodeEffect(MouseEvent event) {
+        ((Node) event.getSource()).setEffect(null);
+    }
 }

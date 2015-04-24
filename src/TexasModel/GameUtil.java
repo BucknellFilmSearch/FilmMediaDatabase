@@ -30,6 +30,10 @@ public class GameUtil {
         return new File(parentDir);
     }
 
+    public static File cardPicBack() {
+        return new File("./res/View/cards/playing-card-back.png");
+    }
+
     public static Hand findTheBestfromsix(ArrayList<Card> cardlist) throws SixCardHandException {
         Hand temphand = new Hand();
         //0,1,2,3,4

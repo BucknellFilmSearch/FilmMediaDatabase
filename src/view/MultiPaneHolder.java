@@ -8,9 +8,12 @@ package view;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
@@ -27,7 +30,7 @@ public class MultiPaneHolder extends StackPane {
 
     public enum GamePane {
 
-        StartScreen, GameScreen;
+        StartScreen, GameScreen, TransitionGroup, HelpView;
 
     }
 
@@ -35,12 +38,33 @@ public class MultiPaneHolder extends StackPane {
         super();
         this.setPrefSize(1280, 720);
         this.paneMap = new HashMap();
-        addScrn();
+        addImgView();
+        addGameScrn();
+        addWebScrn();
+        addStartScrn();
         curPane = this.getPane(GamePane.StartScreen);
 
     }
 
-    private void addScrn() {
+    private void addWebScrn() {
+        FXMLLoader loader = new FXMLLoader();
+        File xmlFile = new File("./src/view/HelpView.fxml");
+        try {
+            loader.setLocation(xmlFile.toURI().toURL());
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(MultiPaneHolder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        AnchorPane webPage = null;
+        try {
+            webPage = (AnchorPane) loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(MultiPaneHolder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.paneMap.put(GamePane.HelpView.name(), webPage);
+        this.getChildren().add(webPage);
+    }
+
+    private void addStartScrn() {
         FXMLLoader loader = new FXMLLoader();
         File xmlFile = new File("./src/view/MainPage.fxml");
         try {
@@ -54,11 +78,13 @@ public class MultiPaneHolder extends StackPane {
         } catch (IOException ex) {
             Logger.getLogger(MultiPaneHolder.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.paneMap.put(GamePane.StartScreen.name(), mainPage);
+        this.getChildren().add(mainPage);
+    }
 
-        this.paneMap.put("StartScreen", mainPage);
-
-        loader = new FXMLLoader();
-        xmlFile = new File("./src/view/gameView.fxml");
+    private void addGameScrn() {
+        FXMLLoader loader = new FXMLLoader();
+        File xmlFile = new File("./src/view/gameView.fxml");
         try {
             loader.setLocation(xmlFile.toURI().toURL());
         } catch (MalformedURLException ex) {
@@ -72,12 +98,14 @@ public class MultiPaneHolder extends StackPane {
             Logger.getLogger(MultiPaneHolder.class.getName()).log(Level.SEVERE, null, ex);
             System.exit(2);
         }
-
-        this.paneMap.put("GameScreen", gamePage);
+        this.paneMap.put(GamePane.GameScreen.name(), gamePage);
         this.getChildren().add(gamePage);
-        this.getChildren().add(mainPage);
-        gamePage.setOpacity(0.0);
-        gamePage.setDisable(true);
+    }
+
+    private void addImgView() {
+        StackPane imgGrp = new StackPane();
+        this.paneMap.put(GamePane.TransitionGroup.name(), imgGrp);
+        this.getChildren().add(imgGrp);
     }
 
     public Node getPane(GamePane name) {
@@ -89,17 +117,22 @@ public class MultiPaneHolder extends StackPane {
         if (paneToDisplay == null) {
             return;
         }
-        for (Node d : this.paneMap.values()) {
-            d.setOpacity(0.0);
-            d.setDisable(true);
-        }
-        paneToDisplay.setOpacity(1.0);
-        paneToDisplay.setDisable(false);
+        //http://stackoverflow.com/questions/17761415/how-to-change-order-of-children-in-javafx
+        ObservableList<Node> allPane = FXCollections.observableArrayList(this.getChildren());
+        int paneIdx = allPane.indexOf(paneToDisplay);
+        int curPaneIdx = allPane.indexOf(this.getCurPane());
+        Collections.swap(allPane, curPaneIdx, paneIdx);
+        this.getChildren().setAll(allPane);
         this.curPane = paneToDisplay;
+
     }
 
     public Node getCurPane() {
         return curPane;
+    }
+
+    public HashMap<String, Node> getPaneMap() {
+        return paneMap;
     }
 
 }
