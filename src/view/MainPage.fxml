@@ -28,7 +28,7 @@
                         <Insets top="260.0" />
                      </StackPane.margin>
                   </ImageView>
-                  <Text layoutX="58.0" layoutY="230.0" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Exit" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="58.0" layoutY="230.0" onMouseClicked="#exitApp" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Exit" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -121,7 +121,7 @@
                   <Font size="20.0" />
                </font>
             </MenuButton>
-            <MenuButton mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="Difficulty" StackPane.alignment="TOP_CENTER">
+            <MenuButton mnemonicParsing="false" opacity="0.0" prefHeight="40.0" prefWidth="200.0" text="Difficulty" StackPane.alignment="TOP_CENTER">
               <items>
                 <MenuItem mnemonicParsing="false" text="Normal" />
                 <MenuItem mnemonicParsing="false" text="Hard" />
