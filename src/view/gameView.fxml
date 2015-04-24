@@ -69,10 +69,7 @@
                            </font>
                         </Label>
                      </children></Pane>
-                  <Pane prefHeight="240.0" prefWidth="426.0">
-                     <children>
-                        <Button layoutX="241.0" layoutY="134.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="89.0" stylesheets="@../../res/View/theme.css" text="Button" />
-                     </children></Pane>
+                  <Pane prefHeight="240.0" prefWidth="426.0" />
                </children>
             </VBox>
             <VBox prefHeight="720.0" prefWidth="426.0">
@@ -180,6 +177,7 @@
                               <Insets top="43.0" />
                            </HBox.margin>
                         </ImageView>
+                        <Button layoutX="14.0" layoutY="89.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="85.0" stylesheets="@../../res/View/theme.css" text="Button" />
                      </children>
                   </Pane>
                </children></VBox>
