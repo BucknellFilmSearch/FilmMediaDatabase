@@ -137,16 +137,8 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <HBox prefHeight="240.0" prefWidth="426.0">
+                  <Pane prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <Label fx:id="textPlayer1" prefHeight="34.0" prefWidth="200.0" text="Player1" textFill="WHITE">
-                           <HBox.margin>
-                              <Insets top="110.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
                         <ImageView fx:id="usrCard1" fitHeight="154.0" fitWidth="110.0" onDragDetected="#card1to2Det" onDragDone="#card1to2Done" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
@@ -155,7 +147,7 @@
                               <Insets top="43.0" />
                            </HBox.margin>
                         </ImageView>
-                        <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" onDragDropped="#card1to2Drop" onDragExited="#card1to2Exit" onDragOver="#card1to2Over" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="usrCard2" fitHeight="154.0" fitWidth="110.0" layoutX="110.0" onDragDropped="#card1to2Drop" onDragExited="#card1to2Exit" onDragOver="#card1to2Over" onMouseEntered="#highLightCard" onMouseExited="#clearCardEffect" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
@@ -163,7 +155,15 @@
                               <Insets top="43.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Pane prefHeight="200.0" prefWidth="200.0">
+                        <Label fx:id="textPlayer1" layoutX="220.0" layoutY="67.0" prefHeight="34.0" prefWidth="200.0" text="Player1" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets top="110.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Pane layoutX="323.0" layoutY="17.0" prefHeight="200.0" prefWidth="200.0">
                            <HBox.margin>
                               <Insets bottom="60.0" top="60.0" />
                            </HBox.margin>
@@ -173,7 +173,8 @@
                               <Button fx:id="btnFold" layoutX="14.0" layoutY="72.0" mnemonicParsing="false" onAction="#handleButtonAction" text="Fold" />
                            </children>
                         </Pane>
-                     </children></HBox>
+                     </children>
+                  </Pane>
                </children></VBox>
             <VBox prefHeight="720.0" prefWidth="426.0">
                <children>
@@ -263,10 +264,6 @@
                </children>
             </VBox>
          </children></HBox>
-      <Pane prefHeight="720.0" prefWidth="1058.0">
-         <children>
-            <ToolBar fx:id="backBox" layoutY="686.0" onMouseClicked="#backToStart" prefHeight="34.0" prefWidth="1280.0" />
-         </children>
-      </Pane>
+      <Button fx:id="btnBack" disable="true" layoutY="695.0" mnemonicParsing="false" onAction="#backToStart" onMouseEntered="#showBtnBack" onMouseExited="#hideBtnBack" opacity="0.0" prefHeight="25.0" prefWidth="1280.0" stylesheets="@../../res/View/theme.css" text="Button" />
    </children>
 </AnchorPane>

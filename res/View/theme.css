@@ -1,0 +1,29 @@
+ /* This css code comming from the following webpage:
+    http://fxexperience.com/2011/12/styling-fx-buttons-with-css/
+    With the theme of "bevel-grey"; */
+
+.button{
+    -fx-background-color: 
+        linear-gradient(#f2f2f2, #d6d6d6),
+        linear-gradient(#fcfcfc 0%, #d9d9d9 20%, #d6d6d6 100%),
+        linear-gradient(#dddddd 0%, #f6f6f6 50%);
+    -fx-background-radius: 8,7,6;
+    -fx-background-insets: 0,1,2;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+/* This css code comming from the following webpage:
+    http://stackoverflow.com/questions/13325097/javafx-remove-separation-between-toolbar-and-top-of-window
+*/
+
+.tool-bar:horizontal {
+    -fx-background: derive(-fx-base,-30%);
+    -fx-background-color:
+        linear-gradient(to bottom, derive(-fx-base,-30%), derive(-fx-base,-60%)),
+        linear-gradient(to bottom, derive(-fx-base,65%) 2%, derive(-fx-base,-20%) 95%);
+    -fx-background-insets: 0, 1 0 1 0;
+    -fx-background-radius: 0, 0 ;
+    -fx-padding: 0.416667em 0.833em 0.416667em 0.833em; /* 5 10 5 10 */
+    -fx-spacing: 84em; /* 4 */
+    -fx-alignment: CENTER_LEFT;
+}

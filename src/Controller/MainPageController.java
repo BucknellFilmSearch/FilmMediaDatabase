@@ -20,7 +20,6 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebView;
 import javafx.util.Duration;
 import view.MultiPaneHolder;
 
@@ -97,7 +96,6 @@ public class MainPageController implements Initializable {
         timeline.getKeyFrames().add(kf);
         timeline.setOnFinished(t -> {
             root.setDisplayPane(MultiPaneHolder.GamePane.HelpView);
-            ((WebView) root.getPane(MultiPaneHolder.GamePane.HelpView)).getEngine().load("http://en.wikipedia.org/wiki/Texas_hold_%27em");
         });
         timeline.play();
     }

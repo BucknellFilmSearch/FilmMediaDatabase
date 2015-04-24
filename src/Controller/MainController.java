@@ -36,7 +36,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -140,7 +139,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
     private Label textPlayer4;
 
     @FXML
-    private ToolBar backBox;
+    private Button btnBack;
     // </editor-fold>
 
     @FXML
@@ -264,6 +263,18 @@ public class MainController implements Initializable, ChangeListener<Number> {
     private void closeRaiseChoices() {
         this.raiseGroup.setOpacity(0.0);
         this.raiseGroup.setDisable(true);
+    }
+
+    @FXML
+    private void showBtnBack() {
+        this.btnBack.setDisable(false);
+        this.btnBack.setOpacity(1);
+    }
+
+    @FXML
+    private void hideBtnBack() {
+        this.btnBack.setDisable(true);
+        this.btnBack.setOpacity(0);
     }
 
     @FXML
