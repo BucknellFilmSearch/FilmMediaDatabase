@@ -30,6 +30,10 @@ public class GameModel {
 
     private Deck theDeck;
     private ArrayList<Player> players;
+
+    public LinkedList<Player> getPlayerthisRound() {
+        return playerthisRound;
+    }
     private LinkedList<Player> playerinGame;
     private LinkedList<Player> playerthisRound;
     private double moneypool;

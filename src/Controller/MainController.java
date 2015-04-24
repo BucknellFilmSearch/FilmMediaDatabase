@@ -233,9 +233,19 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
         if (!this.themodel.isIsEnd()) {
             this.themodel.getPlayerChoice();
+            updateView();
             if (getAIaction()) {
-                step();
-                updateView();
+                ArrayList<Player> temp = new ArrayList<Player>();
+                temp.add(this.themodel.getCurrentPlayer());
+                temp.addAll(this.themodel.getPlayerthisRound());
+                for (int i = 0; i < temp.size(); i++) {
+                    if (temp.get(i) != this.themodel.getPlayers().get(0)) {
+                        getAIaction();
+                        this.themodel.getPlayerChoice();
+                        updateView();
+                    }
+
+                }
             }
         } else {
             updateView();
