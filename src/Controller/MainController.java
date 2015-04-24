@@ -243,7 +243,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     /**
-     * A step
+     * A step method can let the game model moving forward player by player. It
+     * will only change the model from View won't affect View. It is the stategy
+     * that we use to seperate View and Model
      *
      * @throws NoMoneyException
      * @throws SixCardHandException
@@ -251,26 +253,25 @@ public class MainController implements Initializable, ChangeListener<Number> {
      * @throws InterruptedException
      */
     private void step() throws NoMoneyException, SixCardHandException, FileNotFoundException, InterruptedException {
-
+        updateView();
         if (!this.themodel.isIsEnd()) {
             this.themodel.getPlayerChoice();
             updateView();
             if (getAIaction()) {
-                ArrayList<Player> temp = new ArrayList<Player>();
-                temp.add(this.themodel.getCurrentPlayer());
-                temp.addAll(this.themodel.getPlayerthisRound());
-                for (int i = 0; i < temp.size(); i++) {
-                    if (temp.get(i) != this.themodel.getPlayers().get(0)) {
-                        step();
-                    }
-
-                }
+                step();
+                updateView();
             }
         } else {
             updateView();
         }
     }
 
+    /**
+     * A method to make AI a decision
+     *
+     * @return a bool tells if the current player is an AI
+     * @throws SixCardHandException
+     */
     private boolean getAIaction() throws SixCardHandException {
         if (this.themodel.getCurrentPlayer() == this.themodel.getPlayers().get(1)) {
             this.aiControl0.performTurnAction();
@@ -285,15 +286,20 @@ public class MainController implements Initializable, ChangeListener<Number> {
         return false;
     }
 
+    /**
+     * Update the View, the GUI
+     *
+     * @throws NoMoneyException
+     * @throws SixCardHandException
+     * @throws FileNotFoundException
+     */
     private void updateView() throws NoMoneyException, SixCardHandException, FileNotFoundException {
-
+        // Set the name and Action Performed
         this.textPlayer1.setText(this.themodel.getPlayers().get(0).getName());
-//        if (this.themodel.isIsEnd()) {
-//            this.getBscBox().setDisable(true);
-//        }
         this.textPlayer2.setText(this.themodel.getPlayers().get(1).getActionperformed());
         this.textPlayer3.setText(this.themodel.getPlayers().get(2).getActionperformed());
         this.textPlayer4.setText(this.themodel.getPlayers().get(3).getActionperformed());
+        // Set the Avaliability of the button of players
         if (this.themodel.getCurrentPlayer() != this.themodel.getPlayers().get(0)) {
             this.btnCall.setDisable(true);
             this.btnFold.setDisable(true);
@@ -305,10 +311,12 @@ public class MainController implements Initializable, ChangeListener<Number> {
             this.btnRaise.setDisable(false);
             this.btnAllIn.setDisable(false);
         }
+        //Set the user's card image
         this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
         this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
-
+        //Set the user's money
         this.textCurMoney.setText(Integer.toString((int) this.themodel.getPlayers().get(0).getMoney()));
+        //Set Pool cards information
         if (this.themodel.isIsFlop()) {
             this.cmnCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(0)))));
             this.cmnCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(1)))));
@@ -320,10 +328,11 @@ public class MainController implements Initializable, ChangeListener<Number> {
         } else if (this.themodel.isIsRiverhand()) {
             this.cmnCard5.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(4)))));
         }
+        //Set Slider Information
         this.sliderRaise.setMax(this.themodel.getPlayers().get(0).getMoney());
         this.textMoneyRaised.setText(Integer.toString((int) this.sliderRaise.getValue()));
         this.sliderRaise.setMin(this.themodel.getCallAmount() + 1);
-
+        //When the game is end, How would that works
         if (this.themodel.isIsEnd()) {
             if (this.themodel.getPlayers().get(0).getHand().getHand().size() == 5) {
                 this.cardsAfterWinning.setDisable(false);
@@ -350,6 +359,13 @@ public class MainController implements Initializable, ChangeListener<Number> {
         }
     }
 
+    /**
+     * A method to reset the game
+     *
+     * @throws SixCardHandException
+     * @throws NoMoneyException
+     * @throws FileNotFoundException
+     */
     private void reset() throws SixCardHandException, NoMoneyException, FileNotFoundException {
         AI dummyAI0 = new AI("0");
         AI dummyAI1 = new AI("1");
@@ -370,6 +386,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     }
 
+    /**
+     * A method to reset the GUI
+     */
     private void resetView() {
         try {
             this.cmnCard1.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
@@ -382,6 +401,14 @@ public class MainController implements Initializable, ChangeListener<Number> {
         }
     }
 
+    /**
+     * a METHOD that can restart the game with same people and current money
+     * KEEP Playing util you have NOTHING!!!
+     *
+     * @throws SixCardHandException
+     * @throws NoMoneyException
+     * @throws FileNotFoundException
+     */
     private void reround() throws SixCardHandException, NoMoneyException, FileNotFoundException {
         if (this.themodel.isIsEnd()) {
 
