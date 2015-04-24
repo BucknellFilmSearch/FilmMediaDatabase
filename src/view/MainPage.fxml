@@ -16,7 +16,7 @@
             <Image url="@../../res/View/mainpage.png" />
          </image>
       </ImageView>
-      <Pane layoutX="50.0" layoutY="28.0">
+      <Pane layoutX="50.0" layoutY="50.0">
          <children>
             <Pane layoutY="260.0">
                <children>
@@ -28,7 +28,7 @@
                         <Insets top="260.0" />
                      </StackPane.margin>
                   </ImageView>
-                  <Text layoutX="58.0" layoutY="230.0" onMouseClicked="#exitApp" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Exit" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="58.0" layoutY="227.0" onMouseClicked="#exitApp" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Exit" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -48,7 +48,7 @@
                         <Image url="@../../res/View/1c.png" />
                      </image>
                   </ImageView>
-                  <Text layoutX="48.0" layoutY="230.0" onMouseClicked="#helpView" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="48.0" layoutY="227.0" onMouseClicked="#helpView" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -68,7 +68,7 @@
                         <Image url="@../../res/View/1h.png" />
                      </image>
                   </ImageView>
-                  <Text layoutX="29.0" layoutY="230.0" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Option" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="29.0" layoutY="225.0" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Option" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -80,7 +80,7 @@
             </Pane>
             <Pane layoutY="75.0">
                <children>
-                  <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                  <ImageView fitHeight="300.0" fitWidth="175.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                      <StackPane.margin>
                         <Insets top="75.0" />
                      </StackPane.margin>
