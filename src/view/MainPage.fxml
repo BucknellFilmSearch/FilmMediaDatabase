@@ -28,7 +28,7 @@
                         <Insets top="260.0" />
                      </StackPane.margin>
                   </ImageView>
-                  <Text layoutX="58.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Exit" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="58.0" layoutY="230.0" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Exit" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -48,7 +48,7 @@
                         <Image url="@../../res/View/1c.png" />
                      </image>
                   </ImageView>
-                  <Text layoutX="48.0" layoutY="230.0" onMouseClicked="#helpView" strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="48.0" layoutY="230.0" onMouseClicked="#helpView" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -68,7 +68,7 @@
                         <Image url="@../../res/View/1h.png" />
                      </image>
                   </ImageView>
-                  <Text layoutX="29.0" layoutY="230.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Option" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="29.0" layoutY="230.0" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Option" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>
@@ -88,7 +88,7 @@
                         <Image url="@../../res/View/1s.png" />
                      </image>
                   </ImageView>
-                  <Text fx:id="textStart" layoutX="48.0" layoutY="230.0" onMouseClicked="#startGame" strokeType="OUTSIDE" strokeWidth="0.0" text="Start" StackPane.alignment="TOP_CENTER">
+                  <Text fx:id="textStart" layoutX="48.0" layoutY="230.0" onMouseClicked="#startGame" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Start" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>

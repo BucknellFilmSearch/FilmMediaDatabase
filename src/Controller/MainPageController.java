@@ -13,10 +13,13 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -106,5 +109,16 @@ public class MainPageController implements Initializable {
 
     public static MultiPaneHolder getRoot() {
         return MainPageController.root;
+    }
+
+    @FXML
+    private void highLightNode(MouseEvent event) {
+        DropShadow ds = new DropShadow();
+        ((Node) event.getSource()).setEffect(ds);
+    }
+
+    @FXML
+    private void clearNodeEffect(MouseEvent event) {
+        ((Node) event.getSource()).setEffect(null);
     }
 }

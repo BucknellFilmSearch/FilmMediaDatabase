@@ -46,7 +46,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import javax.swing.JOptionPane;
 import view.MultiPaneHolder;
 
 public class MainController implements Initializable, ChangeListener<Number> {
@@ -215,8 +214,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 updateView();
             }
         } catch (NoMoneyException a) {
-            JOptionPane.showMessageDialog(null, "You don't have enough money! Choose Another option", "Bad input", JOptionPane.ERROR_MESSAGE);
-            int i = 0;
+//TODO
         }
     }
 
