@@ -1,12 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* *****************************************
+ * CSCI205 - Software Engineering and Design
+ * Spring 2015
+ *
+ * Name: Jiayu Huang, Zhengri Fan, Chengjunjie Ding
+ * Date: April 22, 2015
+ * Time: 5:30:00 PM
+ *
+ * Project: csci205
+ * Package: CS205Final.Controller
+ * File: Main Controller
+ * Description:
+ * The most importatn controller in our project, control the game logic.
+ * ****************************************
  */
 package Controller;
 
 import TexasModel.AI;
-import TexasModel.CallMoreException;
 import TexasModel.Card;
 import TexasModel.GameModel;
 import TexasModel.GameUtil;
@@ -50,6 +59,13 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import view.MultiPaneHolder;
 
+/**
+ * This class is the class that combined View & Controller initiating process.
+ * Not very strict MVC but We made them seperately on our code logic to make V &
+ * Model part not affect each other directly.
+ *
+ * @author Jiayu
+ */
 public class MainController implements Initializable, ChangeListener<Number> {
 
     private boolean Card1to2Drag = false;
@@ -166,13 +182,12 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     @FXML
     /**
+     * Handle the Button press by the users
+     *
      * @see http://code.makery.ch/blog/javafx-dialogs-official/
      */
-    private void handleButtonAction(ActionEvent event) throws SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
+    private void handleButtonAction(ActionEvent event) throws SixCardHandException, FileNotFoundException, InterruptedException {
         try {
-//            if(event.getSource() == this.){
-//
-//            }
             if (event.getSource() == this.btnNxtRound) {
                 closeRaiseChoices();
                 this.reround();
@@ -189,8 +204,6 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
             } else if (event.getSource() == this.btnCall) {
                 closeRaiseChoices();
-                //this.themodel.getPlayers().get(0).call();
-
                 this.themodel.getCurrentPlayer().call();
                 step();
                 updateView();
@@ -229,7 +242,15 @@ public class MainController implements Initializable, ChangeListener<Number> {
         }
     }
 
-    private void step() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException, InterruptedException {
+    /**
+     * A step
+     *
+     * @throws NoMoneyException
+     * @throws SixCardHandException
+     * @throws FileNotFoundException
+     * @throws InterruptedException
+     */
+    private void step() throws NoMoneyException, SixCardHandException, FileNotFoundException, InterruptedException {
 
         if (!this.themodel.isIsEnd()) {
             this.themodel.getPlayerChoice();
@@ -240,9 +261,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 temp.addAll(this.themodel.getPlayerthisRound());
                 for (int i = 0; i < temp.size(); i++) {
                     if (temp.get(i) != this.themodel.getPlayers().get(0)) {
-                        getAIaction();
-                        this.themodel.getPlayerChoice();
-                        updateView();
+                        step();
                     }
 
                 }
@@ -266,7 +285,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
         return false;
     }
 
-    private void updateView() throws NoMoneyException, SixCardHandException, CallMoreException, FileNotFoundException {
+    private void updateView() throws NoMoneyException, SixCardHandException, FileNotFoundException {
 
         this.textPlayer1.setText(this.themodel.getPlayers().get(0).getName());
 //        if (this.themodel.isIsEnd()) {
@@ -331,7 +350,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
         }
     }
 
-    private void reset() throws SixCardHandException, NoMoneyException, CallMoreException, FileNotFoundException {
+    private void reset() throws SixCardHandException, NoMoneyException, FileNotFoundException {
         AI dummyAI0 = new AI("0");
         AI dummyAI1 = new AI("1");
         AI dummyAI2 = new AI("2");
@@ -363,7 +382,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
         }
     }
 
-    private void reround() throws SixCardHandException, NoMoneyException, CallMoreException, FileNotFoundException {
+    private void reround() throws SixCardHandException, NoMoneyException, FileNotFoundException {
         if (this.themodel.isIsEnd()) {
 
             double money1 = this.themodel.getPlayers().get(0).getMoney();
@@ -557,8 +576,6 @@ public class MainController implements Initializable, ChangeListener<Number> {
         } catch (SixCardHandException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoMoneyException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CallMoreException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,7 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* *****************************************
+ * CSCI205 - Software Engineering and Design
+ * Spring 2015
+ *
+ * Name: Jiayu Huang
+ * Date: April 7, 2015
+ * Time: 5:30:00 PM
+ *
+ * Project: csci205
+ * Package: CS205Final.TexasModel
+ * File: GameModel
+ * Description:
+ * The basic game logic class for Texas Poker
+ * ****************************************
  */
 package TexasModel;
 
@@ -55,9 +65,9 @@ public class GameModel {
      */
     public GameModel(double moneypool, int numplayer) {
         this.theDeck = new Deck();
-        this.players = new ArrayList<Player>();
+        this.players = new ArrayList<>();
         this.moneypool = moneypool;
-        this.poolcards = new ArrayList<Card>();
+        this.poolcards = new ArrayList<>();
         this.isBlind = true; //If the Game is in Blind Stage(without three card
         //shown
         this.isTurnhand = false;//If the Game is in Turn Hand Stage
@@ -72,9 +82,9 @@ public class GameModel {
             this.players.add(new Player());
         }
 
-        this.playerinGame = new LinkedList<Player>();
+        this.playerinGame = new LinkedList<>();
         this.playerinGame.addAll(players);// The Player that is still in this game
-        this.playerthisRound = new LinkedList<Player>();
+        this.playerthisRound = new LinkedList<>();
         this.playerthisRound.addAll(playerinGame);//The Player left in this ROUND That is a player moves one by one system
         this.currentPlayer = this.playerthisRound.pop();
         currentPlayer.setIsPlay(true);
@@ -110,6 +120,13 @@ public class GameModel {
         currentPlayer.setIsPlay(true);
     }
 
+    /**
+     * Another Constructor of GameModel to Help the GameModelTest & For Future
+     * Use, if networking is needed
+     *
+     * @param moneypool
+     * @throws SixCardHandException
+     */
     public GameModel(double moneypool) throws SixCardHandException {
         this.theDeck = new Deck();
         this.players = new ArrayList<Player>();
@@ -151,17 +168,27 @@ public class GameModel {
     /**
      * Returns the Current Player making decision
      *
-     * @return
+     * @return Player
      */
     public Player getCurrentPlayer() {
 
         return currentPlayer;
     }
 
+    /**
+     * This is the method to return players in this game
+     *
+     * @return
+     */
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
+    /**
+     * To see if the game is in flop round
+     *
+     * @return
+     */
     public boolean isIsFlop() {
         return isFlop;
     }
@@ -173,7 +200,7 @@ public class GameModel {
      * @throws NoMoneyException
      * @throws SixCardHandException
      */
-    public void getPlayerChoice() throws NoMoneyException, SixCardHandException, CallMoreException {
+    public void getPlayerChoice() throws NoMoneyException, SixCardHandException {
         if (!this.isEnd) {
             if (this.currentPlayer.isIsAllin()) {
                 this.check();
@@ -206,7 +233,7 @@ public class GameModel {
     }
 
     /**
-     * If all of the players choose to check
+     * If all of the players already call the right amount of money
      *
      * @return
      */
@@ -279,6 +306,7 @@ public class GameModel {
 
     /**
      * A method to reset to make the game restart with the same players
+     *
      */
     public void reset() {
         this.resetpool();
@@ -304,7 +332,7 @@ public class GameModel {
     }
 
     /**
-     * To see if everything is end.
+     * To see if everything is end. That is the check win phase
      *
      * @return
      */
@@ -372,23 +400,47 @@ public class GameModel {
         return tienumber;
     }
 
-    //To do two more method about the river stage and etc. Done
+    /**
+     * Get the Deck of the Model
+     *
+     * @return
+     */
     public Deck getTheDeck() {
         return theDeck;
     }
 
+    /**
+     * Set the PoolCards in the game
+     *
+     * @param poolcards
+     */
     public void setPoolcards(ArrayList<Card> poolcards) {
         this.poolcards = poolcards;
     }
 
+    /**
+     * Set the money pool
+     *
+     * @param moneypool
+     */
     public void setMoneypool(double moneypool) {
         this.moneypool = moneypool;
     }
 
+    /**
+     *
+     * @return Double moneypool
+     */
     public double getMoneypool() {
         return moneypool;
     }
 
+    /**
+     * Let the current player fold.
+     *
+     * @throws SixCardHandException
+     * @throws NoMoneyException
+     */
     public void fold() throws SixCardHandException, NoMoneyException {
         this.currentPlayer.setActionperformed("Fold");
         this.playerinGame.remove(this.currentPlayer);
@@ -400,6 +452,12 @@ public class GameModel {
 
     }
 
+    /**
+     * Let the current player all in
+     *
+     * @throws NoMoneyException
+     * @throws SixCardHandException
+     */
     public void allIn() throws NoMoneyException, SixCardHandException {
         if (this.getCurrentPlayer().getMoney() == 0) {
             throw new NoMoneyException("You don't have money at all");
@@ -422,28 +480,59 @@ public class GameModel {
 
     }
 
+    /**
+     * Check if the Game is in Blind phase
+     *
+     * @return
+     */
     public boolean isIsBlind() {
         return isBlind;
     }
 
+    /**
+     * Check if the Game is in Turn phase
+     *
+     * @return
+     */
     public boolean isIsTurnhand() {
         return isTurnhand;
     }
 
+    /**
+     * Check if the Game is in River Hand phase
+     *
+     * @return
+     */
     public boolean isIsRiverhand() {
         return isRiverhand;
     }
 
+    /**
+     * Return the pool cards in the game
+     *
+     * @return
+     */
     public ArrayList<Card> getPoolcards() {
         return poolcards;
     }
 
+    /**
+     * Return the called amount(bet amount)
+     *
+     * @return
+     */
     public double getCallAmount() {
         return callAmount;
     }
 
-    //TODO ISRAISE EXCEPTION
-    public void raise(double amount) throws NoMoneyException, SixCardHandException, CallMoreException {
+    /**
+     * Make the Current Player Raise Money
+     *
+     * @param amount
+     * @throws NoMoneyException
+     * @throws SixCardHandException
+     */
+    public void raise(double amount) throws NoMoneyException, SixCardHandException {
 //        if (amount <= this.callAmount) {
 //            throw new CallMoreException("You need to bet more!");
 //        }
@@ -467,6 +556,12 @@ public class GameModel {
         nextPlayer();
     }
 
+    /**
+     * Make the current player call
+     *
+     * @throws NoMoneyException
+     * @throws SixCardHandException
+     */
     public void call() throws NoMoneyException, SixCardHandException {
         if (this.callAmount == 0) {
             this.check();
@@ -487,6 +582,12 @@ public class GameModel {
         }
     }
 
+    /**
+     * Make the current player check
+     *
+     * @throws SixCardHandException
+     * @throws NoMoneyException
+     */
     public void check() throws SixCardHandException, NoMoneyException {
         this.currentPlayer.setActionperformed("Check");
         if (this.getCurrentPlayer().isIsCall() || this.getCurrentPlayer().isIsAllin()) {

@@ -1,7 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* *****************************************
+ * CSCI205 - Software Engineering and Design
+ * Spring 2015
+ *
+ * Name: Jiayu Huang
+ * Date: April 7, 2015
+ * Time: 5:30:00 PM
+ *
+ * Project: csci205
+ * Package: CS205Final.TexasModel
+ * File: Player
+ * Description:
+ * The Player class for this game
+ * ****************************************
  */
 package TexasModel;
 
