@@ -185,7 +185,7 @@ public class AIController {
             consecutiveRaises = 0;
         } else if (ai.getHand().getHandRank() >= 20) {
             if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
-                ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
+                ai.raise(Math.round((ai.getMoney() - model.getCallAmount()) / 2));
                 mostRecentDecision = "raise";
                 consecutiveRaises += 1;
             } else {
@@ -193,7 +193,7 @@ public class AIController {
             }
         } else if (ai.getHand().getHandRank() >= 18) {
             if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
-                ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
+                ai.raise(Math.round((ai.getMoney() - model.getCallAmount()) / 3));
                 mostRecentDecision = "raise";
                 consecutiveRaises += 1;
             } else {
@@ -201,7 +201,7 @@ public class AIController {
             }
         } else if (circumstantialRank > FLOP_GREAT_MINOR_HAND_THRESHHOLD) {
             if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
-                ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
+                ai.raise(Math.round((ai.getMoney() - model.getCallAmount()) / 8));
                 mostRecentDecision = "raise";
                 consecutiveRaises += 1;
             } else {
@@ -264,7 +264,7 @@ public class AIController {
             consecutiveRaises = 0;
         } else if (ai.getHand().getHandRank() >= 20) {
             if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
-                ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
+                ai.raise(Math.round((ai.getMoney() - model.getCallAmount()) / 2));
                 mostRecentDecision = "raise";
                 consecutiveRaises += 1;
             } else {
@@ -272,7 +272,7 @@ public class AIController {
             }
         } else if (ai.getHand().getHandRank() >= 18) {
             if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
-                ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
+                ai.raise(Math.round((ai.getMoney() - model.getCallAmount()) / 3));
                 mostRecentDecision = "raise";
                 consecutiveRaises += 1;
             } else {
@@ -280,7 +280,7 @@ public class AIController {
             }
         } else if (circumstantialRank > TURN_GREAT_MINOR_HAND_THRESHHOLD) {
             if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
-                ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
+                ai.raise(Math.round((ai.getMoney() - model.getCallAmount()) / 8));
                 mostRecentDecision = "raise";
                 consecutiveRaises += 1;
             } else {
@@ -312,7 +312,7 @@ public class AIController {
             consecutiveRaises = 0;
         } else if (ai.getHand().getHandRank() >= 20) {
             if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
-                ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
+                ai.raise(Math.round((ai.getMoney() - model.getCallAmount()) / 2));
                 mostRecentDecision = "raise";
                 consecutiveRaises += 1;
             } else {
@@ -320,7 +320,7 @@ public class AIController {
             }
         } else if (ai.getHand().getHandRank() >= 18) {
             if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
-                ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
+                ai.raise(Math.round((ai.getMoney() - model.getCallAmount()) / 3));
                 mostRecentDecision = "raise";
                 consecutiveRaises += 1;
             } else {
@@ -328,7 +328,7 @@ public class AIController {
             }
         } else if (circumstantialRank > 14) {
             if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
-                ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
+                ai.raise(Math.round((ai.getMoney() - model.getCallAmount()) / 8));
                 mostRecentDecision = "raise";
                 consecutiveRaises += 1;
             } else {
