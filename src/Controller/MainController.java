@@ -82,6 +82,8 @@ public class MainController implements Initializable, ChangeListener<Number> {
     private AIController2 aiControl0;
     private AIController2 aiControl1;
     private AIController2 aiControl2;
+
+    //FXML component declaration
     // <editor-fold defaultstate="collapsed" desc="FXML">
     @FXML
     private AnchorPane basePane;
@@ -180,11 +182,45 @@ public class MainController implements Initializable, ChangeListener<Number> {
     private Button btnReset;
     // </editor-fold>
 
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        try {
+            AI dummyAI0 = new AI("0");
+            AI dummyAI1 = new AI("1");
+            AI dummyAI2 = new AI("2");
+            ArrayList<Player> playerList = new ArrayList<>();
+            playerList.add(new Player("new Player"));
+            playerList.add(dummyAI0);
+            playerList.add(dummyAI1);
+            playerList.add(dummyAI2);
+            this.themodel = new GameModel(0, playerList);
+            this.themodel.giveCards();
+            aiControl0 = new AIController2(themodel, dummyAI0);
+            aiControl1 = new AIController2(themodel, dummyAI1);
+            aiControl2 = new AIController2(themodel, dummyAI2);
+            updateView();
+        } catch (SixCardHandException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoMoneyException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.sliderRaise.valueProperty().addListener(this);
+        this.sliderRaise.setMin(0);
+        this.sliderRaise.setBlockIncrement(1);
+
+    }
+
     @FXML
     /**
      * Handle the Button press by the users
      *
-     * @see http://code.makery.ch/blog/javafx-dialogs-official/
+     * @see
+     * <a href="url">http://code.makery.ch/blog/javafx-dialogs-official/</a>
      */
     private void handleButtonAction(ActionEvent event) throws SixCardHandException, FileNotFoundException, InterruptedException {
         try {
@@ -448,26 +484,6 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     @FXML
-
-    private void showBtnBack() {
-        this.btnBack.setDisable(false);
-        this.btnBack.setOpacity(1);
-    }
-
-    @FXML
-    private void hideBtnBack() {
-        this.btnBack.setDisable(true);
-        this.btnBack.setOpacity(0);
-    }
-
-//    @FXML
-//    private void card1to2Det(MouseEvent event) throws FileNotFoundException {
-//        System.out.println("onDragDetected");
-//
-//        Dragboard db = this.usrCard1.startDragAndDrop(TransferMode.ANY);
-//
-//        db.setDragView(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getCurrentPlayer().getHand().getHand().get(0)))));
-    @FXML
     private void card1to2Det(MouseEvent event) {
         //System.out.println("onDragDetected1");
         this.Card1to2Drag = true;
@@ -508,19 +524,6 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.Card2to1Drag = false;
         this.Card2Re = false;
     }
-//
-//    @FXML
-//    private void highLightNode(MouseEvent event) throws FileNotFoundException {
-//        System.out.println("Entered");
-////        Bloom bloom = new Bloom();
-////        bloom.setThreshold(0.5);
-//        ((Button) event.getSource()).setBackground(new Background());
-//    }
-//
-//    @FXML
-//    private void clearNodeEffect(MouseEvent event) {
-//        ((Node) event.getSource()).setEffect(null);
-//    }
 
     @FXML
     private void highLightCard2(MouseEvent event) throws FileNotFoundException {
@@ -539,6 +542,11 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     }
 
+    /**
+     * Clear the card effect when the mouse is no longer in the card view.
+     *
+     * @param event
+     */
     @FXML
     private void clearCardEffect(MouseEvent event) {
         ImageView card = (ImageView) event.getSource();
@@ -569,6 +577,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
         card.setEffect(null);
     }
 
+    /**
+     * Update the slider when the user give some input to the textbox
+     */
     @FXML
     private void updateSlider() {
         double usrMoneyRaise = 0;
@@ -578,39 +589,6 @@ public class MainController implements Initializable, ChangeListener<Number> {
             this.textMoneyRaised.setText(Double.toString(this.sliderRaise.getMin()));
         }
         this.sliderRaise.setValue(usrMoneyRaise);
-    }
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        try {
-            AI dummyAI0 = new AI("0");
-            AI dummyAI1 = new AI("1");
-            AI dummyAI2 = new AI("2");
-            ArrayList<Player> playerList = new ArrayList<>();
-            playerList.add(new Player("new Player"));
-            playerList.add(dummyAI0);
-            playerList.add(dummyAI1);
-            playerList.add(dummyAI2);
-            this.themodel = new GameModel(0, playerList);
-            this.themodel.giveCards();
-            aiControl0 = new AIController2(themodel, dummyAI0);
-            aiControl1 = new AIController2(themodel, dummyAI1);
-            aiControl2 = new AIController2(themodel, dummyAI2);
-            updateView();
-        } catch (SixCardHandException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoMoneyException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.sliderRaise.valueProperty().addListener(this);
-        this.sliderRaise.setMin(0);
-        this.sliderRaise.setBlockIncrement(1);
-
     }
 
     public void switchCard() throws FileNotFoundException {
@@ -626,6 +604,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     }
 
+    /**
+     * Calls when the user needs to go back to the main page.
+     */
     @FXML
     private void backToStart() {
         MultiPaneHolder root = MainPageController.getRoot();
@@ -650,6 +631,21 @@ public class MainController implements Initializable, ChangeListener<Number> {
         timeline.play();
     }
 
+    /**
+     * The overwrite mathod to implement the ChangeListener<Number> interface,
+     * which is mainly used to handle user input when the slider changes
+     *
+     * @param observable
+     * @param oldValue
+     * @param newValue
+     */
+    @Override
+    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+        this.textMoneyRaised.setText(Integer.toString((int) newValue.doubleValue()));
+    }
+
+    //Getters
+    // <editor-fold defaultstate="collapsed" desc="Getters">
     public HBox getBscBox() {
         return bscBox;
     }
@@ -725,10 +721,6 @@ public class MainController implements Initializable, ChangeListener<Number> {
     public Group getRaiseGroup() {
         return raiseGroup;
     }
-
-    @Override
-    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        this.textMoneyRaised.setText(Integer.toString((int) newValue.doubleValue()));
-    }
+    // </editor-fold>
 
 }

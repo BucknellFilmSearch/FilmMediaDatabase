@@ -22,7 +22,7 @@
                <children>
                   <ImageView fitHeight="300.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                      <image>
-                        <Image url="@../../res/View/1d.png" />
+                        <Image url="@../../res/View/cards/1d.png" />
                      </image>
                      <StackPane.margin>
                         <Insets top="260.0" />
@@ -45,7 +45,7 @@
                         <Insets top="200.0" />
                      </StackPane.margin>
                      <image>
-                        <Image url="@../../res/View/1c.png" />
+                        <Image url="@../../res/View/cards/1c.png" />
                      </image>
                   </ImageView>
                   <Text layoutX="48.0" layoutY="227.0" onMouseClicked="#helpView" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Help" StackPane.alignment="TOP_CENTER">
@@ -65,7 +65,7 @@
                         <Insets top="140.0" />
                      </StackPane.margin>
                      <image>
-                        <Image url="@../../res/View/1h.png" />
+                        <Image url="@../../res/View/cards/1h.png" />
                      </image>
                   </ImageView>
                   <Text layoutX="29.0" layoutY="225.0" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Option" StackPane.alignment="TOP_CENTER">
@@ -85,7 +85,7 @@
                         <Insets top="75.0" />
                      </StackPane.margin>
                      <image>
-                        <Image url="@../../res/View/1s.png" />
+                        <Image url="@../../res/View/cards/1s.png" />
                      </image>
                   </ImageView>
                   <Text fx:id="textStart" layoutX="48.0" layoutY="230.0" onMouseClicked="#startGame" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Start" StackPane.alignment="TOP_CENTER">

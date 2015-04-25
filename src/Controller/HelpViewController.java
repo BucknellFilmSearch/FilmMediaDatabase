@@ -41,11 +41,11 @@ public class HelpViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         wV.getEngine().load("http://en.wikipedia.org/wiki/Texas_hold_%27em");
-        updateView();
     }
 
-//    @FXML
-//    private Button btnBack;
+    /**
+     * Called when the user want to go back the main page.
+     */
     @FXML
     private void backToStart() {
         MultiPaneHolder root = MainPageController.getRoot();
@@ -72,12 +72,20 @@ public class HelpViewController implements Initializable {
 
     }
 
+    /**
+     * Called when the user clicked the "backward" button and sure back the
+     * pervious page.
+     */
     @FXML
     private void surfBack() {
         //System.out.println(this.goBack());
         this.wV.getEngine().load(this.goBack());
     }
 
+    /**
+     * Called when the user clicked the "forward" button and sure back the
+     * pervious page.
+     */
     @FXML
     private void surfForward() {
         //System.out.println(this.goBack());
@@ -85,8 +93,10 @@ public class HelpViewController implements Initializable {
     }
 
     /**
+     * Return the url of the user's perviously viewed page
+     *
      * @see
-     * http://stackoverflow.com/questions/18928333/how-to-program-back-and-forward-buttons-in-javafx-with-webview-and-webengine
+     * <a href="url">http://stackoverflow.com/questions/18928333/how-to-program-back-and-forward-buttons-in-javafx-with-webview-and-webengine</a>
      * @return
      */
     private String goBack() {
@@ -98,13 +108,20 @@ public class HelpViewController implements Initializable {
                 try {
                     history.go(-1);
                 } catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-                    wV.getEngine().load("http://en.wikipedia.org/wiki/Texas_hold_%27em");
+                    history.go(0);
                 }
             }
         });
         return entryList.get(currentIndex > 0 ? currentIndex - 1 : currentIndex).getUrl();
     }
 
+    /**
+     * Return the url of the the page that the user just go back from.
+     *
+     * @see
+     * <a href="url">http://stackoverflow.com/questions/18928333/how-to-program-back-and-forward-buttons-in-javafx-with-webview-and-webengine</a>
+     * @return
+     */
     public String goForward() {
         final WebHistory history = wV.getEngine().getHistory();
         ObservableList<WebHistory.Entry> entryList = history.getEntries();
@@ -119,14 +136,6 @@ public class HelpViewController implements Initializable {
             }
         });
         return entryList.get(currentIndex < entryList.size() - 1 ? currentIndex + 1 : currentIndex).getUrl();
-    }
-
-    private void updateView() {
-
-    }
-
-    public WebView getwV() {
-        return wV;
     }
 
 }

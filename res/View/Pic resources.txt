@@ -1,0 +1,9 @@
+This file contains the references to all the picture we used in our program.
+
+table2.png:
+The table picture is came from the following website:
+	http://www.49live.com/club49/
+	and modified by photoshop
+
+mainpage.png:
+	http://nevseoboi.com.ua/oboi-wallpapers/abstrakciya/9732-40-wonderful-colorful-abstract-art-premium-hd.html
