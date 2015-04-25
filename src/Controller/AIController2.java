@@ -15,7 +15,7 @@ import TexasModel.SixCardHandException;
 import java.util.ArrayList;
 
 /**
- * A less tight-handed poker player.
+ * Will create a less tight-handed AI.
  *
  * @author justi_000
  */
