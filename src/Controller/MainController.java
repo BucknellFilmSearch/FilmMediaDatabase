@@ -499,11 +499,12 @@ public class MainController implements Initializable, ChangeListener<Number> {
     private void resetView() {
         try {
             FileInputStream back = new FileInputStream(GameUtil.cardPicBack());
-            this.cmnCard1.setImage(new Image(back));
-            this.cmnCard2.setImage(new Image(back));
-            this.cmnCard3.setImage(new Image(back));
-            this.cmnCard4.setImage(new Image(back));
-            this.cmnCard5.setImage(new Image(back));
+            Image backPic = new Image(back);
+            this.cmnCard1.setImage(backPic);
+            this.cmnCard2.setImage(backPic);
+            this.cmnCard3.setImage(backPic);
+            this.cmnCard4.setImage(backPic);
+            this.cmnCard5.setImage(backPic);
             try {
                 back.close();
             } catch (IOException ex) {
