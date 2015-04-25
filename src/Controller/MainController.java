@@ -249,6 +249,8 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 closeRaiseChoices();
                 this.reset();
                 this.resetView();
+                nextRoundSoundPlayer.reset();
+                nextRoundSoundPlayer.playSound();
             } else if (event.getSource() == this.btnAllIn) {
                 closeRaiseChoices();
                 this.themodel.getCurrentPlayer().allin();
@@ -261,13 +263,14 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 this.themodel.getCurrentPlayer().call();
                 step();
                 updateView();
+                chipSoundPlayer.reset();
+                chipSoundPlayer.playSound();
             } else if (event.getSource() == this.btnRaise) {
                 FadeTransition ft = new FadeTransition(Duration.millis(500), this.raiseGroup);
                 ft.setFromValue(0);
                 ft.setToValue(Double.MAX_VALUE);
                 ft.play();
                 this.raiseGroup.setDisable(false);
-
             } else if (event.getSource() == this.btnFold) {
                 //System.out.println("Folded");
                 this.themodel.getCurrentPlayer().fold();
