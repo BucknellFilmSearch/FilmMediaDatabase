@@ -79,9 +79,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     private GameModel themodel;
 
-    private AIController2 aiControl0;
-    private AIController2 aiControl1;
-    private AIController2 aiControl2;
+    private AIController aiControl0;
+    private AIController aiControl1;
+    private AIController aiControl2;
 
     //FXML component declaration
     // <editor-fold defaultstate="collapsed" desc="FXML">
@@ -198,9 +198,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
             playerList.add(dummyAI2);
             this.themodel = new GameModel(0, playerList);
             this.themodel.giveCards();
-            aiControl0 = new AIController2(themodel, dummyAI0);
-            aiControl1 = new AIController2(themodel, dummyAI1);
-            aiControl2 = new AIController2(themodel, dummyAI2);
+            aiControl0 = new AIController(themodel, dummyAI0);
+            aiControl1 = new AIController(themodel, dummyAI1);
+            aiControl2 = new AIController(themodel, dummyAI2);
             updateView();
         } catch (SixCardHandException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
@@ -413,9 +413,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
         playerList.add(dummyAI2);
         this.themodel = new GameModel(0, playerList);
         this.themodel.giveCards();
-        aiControl0 = new AIController2(themodel, dummyAI0);
-        aiControl1 = new AIController2(themodel, dummyAI1);
-        aiControl2 = new AIController2(themodel, dummyAI2);
+        aiControl0 = new AIController(themodel, dummyAI0);
+        aiControl1 = new AIController(themodel, dummyAI1);
+        aiControl2 = new AIController(themodel, dummyAI2);
         resetView();
         updateView();
         this.cardsAfterWinning.setOpacity(0);
@@ -468,9 +468,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
             this.themodel.getPlayers().get(2).setMoney(money3);
             this.themodel.getPlayers().get(3).setMoney(money4);
             this.themodel.giveCards();
-            aiControl0 = new AIController2(themodel, dummyAI0);
-            aiControl1 = new AIController2(themodel, dummyAI1);
-            aiControl2 = new AIController2(themodel, dummyAI2);
+            aiControl0 = new AIController(themodel, dummyAI0);
+            aiControl1 = new AIController(themodel, dummyAI1);
+            aiControl2 = new AIController(themodel, dummyAI2);
 
             updateView();
             this.cardsAfterWinning.setOpacity(0);

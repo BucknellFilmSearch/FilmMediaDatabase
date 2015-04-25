@@ -1,9 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Controller;
+/* *****************************************
+ * CSCI205 - Software Engineering and Design
+ * Spring 2015
+ *
+ * Name: Justin Eyster
+ * Date:
+ *
+ * Project: csci205_FinalProject
+ * Package: Controller.AIControllerDummyTest
+ * File: AIControllerDummyTest
+ * Description:
+ *
+ * ****************************************
+ */package Controller;
 
 import TexasModel.AI;
 import TexasModel.BadCardCreationException;
@@ -31,11 +39,11 @@ public class AIControllerDummyTest {
     public AI dummyAI3;
     public ArrayList<Player> playerList;
     public GameModel gameModel;
-    public AIController2 aiControl0;
-    public AIController2 aiControl1;
-    public AIController2 aiControl2;
-    public AIController2 aiControl3;
-    public ArrayList<AIController2> aiControlList;
+    public AIController aiControl0;
+    public AIController aiControl1;
+    public AIController aiControl2;
+    public AIController aiControl3;
+    public ArrayList<AIController> aiControlList;
 
     public AIControllerDummyTest() {
     }
@@ -53,10 +61,10 @@ public class AIControllerDummyTest {
         playerList.add(dummyAI3);
         gameModel = new GameModel(1600.0, playerList);
         gameModel.giveCards();
-        aiControl0 = new AIController2(gameModel, dummyAI0);
-        aiControl1 = new AIController2(gameModel, dummyAI1);
-        aiControl2 = new AIController2(gameModel, dummyAI2);
-        aiControl3 = new AIController2(gameModel, dummyAI3);
+        aiControl0 = new AIController(gameModel, dummyAI0);
+        aiControl1 = new AIController(gameModel, dummyAI1);
+        aiControl2 = new AIController(gameModel, dummyAI2);
+        aiControl3 = new AIController(gameModel, dummyAI3);
         aiControlList = new ArrayList<>();
         aiControlList.add(aiControl0);
         aiControlList.add(aiControl1);
@@ -75,8 +83,8 @@ public class AIControllerDummyTest {
     public void testPerformTurnAction() throws NoMoneyException, SixCardHandException {
         AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
         //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-        AIController2 controlOnDeck = null;
-        for (AIController2 aiControl : aiControlList) {
+        AIController controlOnDeck = null;
+        for (AIController aiControl : aiControlList) {
             //System.out.println("Controller of AI" + aiControl.getAi().getName());
             if (aiControl.hasThisAI(aiOnDeck)) {
                 //System.out.println("Found the matching AI Controller.");
@@ -95,8 +103,8 @@ public class AIControllerDummyTest {
     public void testPerformBlindAction() throws NoMoneyException, SixCardHandException {
         AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
         //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-        AIController2 controlOnDeck = null;
-        for (AIController2 aiControl : aiControlList) {
+        AIController controlOnDeck = null;
+        for (AIController aiControl : aiControlList) {
             //System.out.println("Controller of AI" + aiControl.getAi().getName());
             if (aiControl.hasThisAI(aiOnDeck)) {
                 //System.out.println("Found the matching AI Controller.");
@@ -110,7 +118,7 @@ public class AIControllerDummyTest {
 
         aiOnDeck = (AI) gameModel.getCurrentPlayer();
         //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-        for (AIController2 aiControl : aiControlList) {
+        for (AIController aiControl : aiControlList) {
             //System.out.println("Controller of AI" + aiControl.getAi().getName());
             if (aiControl.hasThisAI(aiOnDeck)) {
                 //System.out.println("Found the matching AI Controller.");
@@ -124,7 +132,7 @@ public class AIControllerDummyTest {
 
         aiOnDeck = (AI) gameModel.getCurrentPlayer();
         //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-        for (AIController2 aiControl : aiControlList) {
+        for (AIController aiControl : aiControlList) {
             //System.out.println("Controller of AI" + aiControl.getAi().getName());
             if (aiControl.hasThisAI(aiOnDeck)) {
                 //System.out.println("Found the matching AI Controller.");
@@ -138,7 +146,7 @@ public class AIControllerDummyTest {
 
         aiOnDeck = (AI) gameModel.getCurrentPlayer();
         //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-        for (AIController2 aiControl : aiControlList) {
+        for (AIController aiControl : aiControlList) {
             //System.out.println("Controller of AI" + aiControl.getAi().getName());
             if (aiControl.hasThisAI(aiOnDeck)) {
                 //System.out.println("Found the matching AI Controller.");
@@ -158,9 +166,9 @@ public class AIControllerDummyTest {
     public void testPerformFlopAction() throws NoMoneyException, SixCardHandException, BadCardCreationException {
         while (gameModel.isIsFlop() == false && gameModel.isIsEnd() == false) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
-            AIController2 controlOnDeck = null;
+            AIController controlOnDeck = null;
             //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-            for (AIController2 aiControl : aiControlList) {
+            for (AIController aiControl : aiControlList) {
                 //System.out.println("Controller of AI" + aiControl.getAi().getName());
                 if (aiControl.hasThisAI(aiOnDeck)) {
                     //System.out.println("Found the matching AI Controller.");
@@ -175,9 +183,9 @@ public class AIControllerDummyTest {
 
         // NOW WE ARE IN FLOP ROUND - WHERE IMPORTANT TESTS MUST OCCUR
         AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
-        AIController2 controlOnDeck = null;
+        AIController controlOnDeck = null;
         //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-        for (AIController2 aiControl : aiControlList) {
+        for (AIController aiControl : aiControlList) {
             //System.out.println("Controller of AI" + aiControl.getAi().getName());
             if (aiControl.hasThisAI(aiOnDeck)) {
                 //System.out.println("Found the matching AI Controller.");
@@ -212,9 +220,9 @@ public class AIControllerDummyTest {
     public void testPerformTurnhandAction() throws NoMoneyException, SixCardHandException {
         while (gameModel.isIsTurnhand() == false && gameModel.isIsEnd() == false) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
-            AIController2 controlOnDeck = null;
+            AIController controlOnDeck = null;
             //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-            for (AIController2 aiControl : aiControlList) {
+            for (AIController aiControl : aiControlList) {
                 //System.out.println("Controller of AI" + aiControl.getAi().getName());
                 if (aiControl.hasThisAI(aiOnDeck)) {
                     //System.out.println("Found the matching AI Controller.");
@@ -231,9 +239,9 @@ public class AIControllerDummyTest {
 
         // NOW WE ARE IN TURNHAND ROUND - WHERE IMPORTANT TESTS MUST OCCUR
         AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
-        AIController2 controlOnDeck = null;
+        AIController controlOnDeck = null;
         //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-        for (AIController2 aiControl : aiControlList) {
+        for (AIController aiControl : aiControlList) {
             //System.out.println("Controller of AI" + aiControl.getAi().getName());
             if (aiControl.hasThisAI(aiOnDeck)) {
                 //System.out.println("Found the matching AI Controller.");
@@ -269,12 +277,12 @@ public class AIControllerDummyTest {
      * Test of performRiverhandAction method, of class AIControllerDummy.
      */
     @Test
-    public void testPerformRiverhandAction() throws NoMoneyException, SixCardHandException, CallMoreException {
+    public void testPerformRiverhandAction() throws NoMoneyException, SixCardHandException {
         while (gameModel.isIsRiverhand() == false && gameModel.isIsEnd() == false) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
-            AIController2 controlOnDeck = null;
+            AIController controlOnDeck = null;
             //System.out.println("The AI on deck is: " + aiOnDeck.getName());
-            for (AIController2 aiControl : aiControlList) {
+            for (AIController aiControl : aiControlList) {
                 //System.out.println("Controller of AI" + aiControl.getAi().getName());
                 if (aiControl.hasThisAI(aiOnDeck)) {
                     //System.out.println("Found the matching AI Controller.");
