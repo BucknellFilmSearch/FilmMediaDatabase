@@ -95,6 +95,11 @@ public class AIController {
         }
     }
 
+    /**
+     * Forwards decision making process to appropriate method.
+     *
+     * @throws SixCardHandException
+     */
     public void performTurnAction() throws SixCardHandException {
         if (model.isIsBlind()) {
             performBlindAction();
@@ -113,6 +118,9 @@ public class AIController {
         }
     }
 
+    /**
+     * Performs AI blind action, pretty much just always calls.
+     */
     protected void performBlindAction() {
         if (ai.getMoney() < model.getCallAmount()) {
             ai.fold();
@@ -139,6 +147,12 @@ public class AIController {
         }
     }
 
+    /**
+     * Performs AI flop action by testing possible scenarios of two other cards
+     * that could be turned over.
+     *
+     * @throws SixCardHandException
+     */
     protected void performFlopAction() throws SixCardHandException {
         /* Create a tempprary hand so that we can manipulate a five card hand
          that includes the pool cards, even though the AI technically only holds two.
@@ -151,6 +165,9 @@ public class AIController {
          in our tests.
          */
 
+        /* Add pool cards to sevenCardList and the temp AI hand for simulations.
+         Remove cards from testDeck.
+         */
         ArrayList<Card> sevenCardList = new ArrayList<>();
         for (Card card : ai.getHand().getHand()) {
             testDeck.removeCard(card);
@@ -227,6 +244,12 @@ public class AIController {
 
     }
 
+    /**
+     * Performs AI turn hand action by testing the possible scenarios of the one
+     * extra card that could be turned over.
+     *
+     * @throws SixCardHandException
+     */
     protected void performTurnhandAction() throws SixCardHandException {
         /* Create a tempprary hand so that we can manipulate a five card hand
          that includes the pool cards, even though the AI technically only holds two.
@@ -308,6 +331,12 @@ public class AIController {
         }
     }
 
+    /**
+     * Performs AI riverhand action by looking at AI's best hand and seeing how
+     * strong it is.
+     *
+     * @throws SixCardHandException
+     */
     protected void performRiverhandAction() throws SixCardHandException {
         /* Create a tempprary hand so that we can manipulate a five card hand
          that includes the pool cards, even though the AI technically only holds two.
