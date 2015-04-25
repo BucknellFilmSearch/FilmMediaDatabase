@@ -29,8 +29,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -218,11 +216,23 @@ public class MainController implements Initializable, ChangeListener<Number> {
             aiControl2 = new AIController(themodel, dummyAI2);
             updateView();
         } catch (SixCardHandException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("You have SixCard!");
+            alert.setContentText("You have SixCard!");
+            alert.showAndWait();
         } catch (NoMoneyException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("You do not have enough money");
+            alert.setContentText("You need more money");
+            alert.showAndWait();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("IO Error");
+            alert.setContentText("File Not Found");
+            alert.showAndWait();
         }
         this.sliderRaise.valueProperty().addListener(this);
         this.sliderRaise.setMin(0);
@@ -357,68 +367,102 @@ public class MainController implements Initializable, ChangeListener<Number> {
      * @throws FileNotFoundException
      */
     private void updateView() throws NoMoneyException, SixCardHandException, FileNotFoundException {
-        // Set the name and Action Performed
-        this.textPlayer1.setText(this.themodel.getPlayers().get(0).getName());
-        this.textPlayer2.setText(this.themodel.getPlayers().get(1).getActionperformed());
-        this.textPlayer3.setText(this.themodel.getPlayers().get(2).getActionperformed());
-        this.textPlayer4.setText(this.themodel.getPlayers().get(3).getActionperformed());
-        // Set the Avaliability of the button of players
-        if (this.themodel.getCurrentPlayer() != this.themodel.getPlayers().get(0)) {
-            this.btnCall.setDisable(true);
-            this.btnFold.setDisable(true);
-            this.btnRaise.setDisable(true);
-            this.btnAllIn.setDisable(true);
-        } else {
-            this.btnCall.setDisable(false);
-            this.btnFold.setDisable(false);
-            this.btnRaise.setDisable(false);
-            this.btnAllIn.setDisable(false);
-        }
-        //Set the user's card image
-        this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
-        this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
-        //Set the user's money
-        this.textCurMoney.setText(Integer.toString((int) this.themodel.getPlayers().get(0).getMoney()));
-        //Set Pool cards information
-        if (this.themodel.isIsFlop()) {
-            this.cmnCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(0)))));
-            this.cmnCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(1)))));
-            this.cmnCard3.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(2)))));
-            //this.cmnCard2.setImage(new Image(GameUtil.cardpic(this.themodel.getPoolcards().get(1))));
+        try {
+            // Set the name and Action Performed
+            this.textPlayer1.setText(this.themodel.getPlayers().get(0).getName());
+            this.textPlayer2.setText(this.themodel.getPlayers().get(1).getActionperformed());
+            this.textPlayer3.setText(this.themodel.getPlayers().get(2).getActionperformed());
+            this.textPlayer4.setText(this.themodel.getPlayers().get(3).getActionperformed());
+            // Set the Avaliability of the button of players
+            if (this.themodel.getCurrentPlayer() != this.themodel.getPlayers().get(0)) {
+                this.btnCall.setDisable(true);
+                this.btnFold.setDisable(true);
+                this.btnRaise.setDisable(true);
+                this.btnAllIn.setDisable(true);
+            } else {
+                this.btnCall.setDisable(false);
+                this.btnFold.setDisable(false);
+                this.btnRaise.setDisable(false);
+                this.btnAllIn.setDisable(false);
+            }
+            //Set the user's card image
+            FileInputStream userCardPic1 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)));
+            FileInputStream userCardPic2 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)));
 
-        } else if (this.themodel.isIsTurnhand()) {
-            this.cmnCard4.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(3)))));
-        } else if (this.themodel.isIsRiverhand()) {
-            this.cmnCard5.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(4)))));
-        }
-        //Set Slider Information
-        this.sliderRaise.setMax(this.themodel.getPlayers().get(0).getMoney());
-        this.textMoneyRaised.setText(Integer.toString((int) this.sliderRaise.getValue()));
-        this.sliderRaise.setMin(this.themodel.getCallAmount() + 1);
-        //When the game is end, How would that works
-        if (this.themodel.isIsEnd()) {
-            if (this.themodel.getPlayers().get(0).getHand().getHand().size() == 5) {
-                this.cardsAfterWinning.setDisable(false);
-                this.cardsAfterWinning.setOpacity(1.0);
+            this.usrCard1.setImage(new Image(userCardPic1));
+            this.usrCard2.setImage(new Image(userCardPic2));
+            userCardPic1.close();
+            userCardPic2.close();
+            //Set the user's money
+            this.textCurMoney.setText(Integer.toString((int) this.themodel.getPlayers().get(0).getMoney()));
+            //Set Pool cards information
+            if (this.themodel.isIsFlop()) {
+                FileInputStream cmnCardPic1 = new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(0)));
+                FileInputStream cmnCardPic2 = new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(1)));
+                FileInputStream cmnCardPic3 = new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(2)));
+                this.cmnCard1.setImage(new Image(cmnCardPic1));
+                this.cmnCard2.setImage(new Image(cmnCardPic2));
+                this.cmnCard3.setImage(new Image(cmnCardPic3));
+                cmnCardPic1.close();
+                cmnCardPic2.close();
+                cmnCardPic3.close();
 
-                this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
-                this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
-                this.usrCard21.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(2)))));
-                this.usrCard22.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(3)))));
-                this.usrCard23.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(4)))));
+                //this.cmnCard2.setImage(new Image(GameUtil.cardpic(this.themodel.getPoolcards().get(1))));
+            } else if (this.themodel.isIsTurnhand()) {
+                FileInputStream cmnCardPic4 = new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(3)));
+
+                this.cmnCard4.setImage(new Image(cmnCardPic4));
+                cmnCardPic4.close();
+            } else if (this.themodel.isIsRiverhand()) {
+                FileInputStream cmnCardPic5 = new FileInputStream(GameUtil.cardpic(this.themodel.getPoolcards().get(4)));
+                this.cmnCard5.setImage(new Image(cmnCardPic5));
+                cmnCardPic5.close();
             }
-            if (themodel.getPlayers().get(0).isIsWin()) {
-                this.textPlayer1.setText("Win");
+            //Set Slider Information
+            this.sliderRaise.setMax(this.themodel.getPlayers().get(0).getMoney());
+            this.textMoneyRaised.setText(Integer.toString((int) this.sliderRaise.getValue()));
+            this.sliderRaise.setMin(this.themodel.getCallAmount() + 1);
+            //When the game is end, How would that works
+            if (this.themodel.isIsEnd()) {
+                if (this.themodel.getPlayers().get(0).getHand().getHand().size() == 5) {
+                    this.cardsAfterWinning.setDisable(false);
+                    this.cardsAfterWinning.setOpacity(1.0);
+                    userCardPic1 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)));
+                    userCardPic2 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)));
+                    FileInputStream usrCardpic21 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(2)));
+                    FileInputStream usrCardpic22 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(3)));
+                    FileInputStream usrCardpic23 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(4)));
+
+                    this.usrCard1.setImage(new Image(userCardPic1));
+                    this.usrCard2.setImage(new Image(userCardPic2));
+                    this.usrCard21.setImage(new Image(usrCardpic21));
+                    this.usrCard22.setImage(new Image(usrCardpic22));
+                    this.usrCard23.setImage(new Image(usrCardpic23));
+                    userCardPic1.close();
+                    userCardPic2.close();
+                    usrCardpic21.close();
+                    usrCardpic22.close();
+                    usrCardpic23.close();
+                }
+                if (themodel.getPlayers().get(0).isIsWin()) {
+                    this.textPlayer1.setText("Win");
+                }
+                if (themodel.getPlayers().get(1).isIsWin()) {
+                    this.textPlayer2.setText("Win");
+                }
+                if (themodel.getPlayers().get(2).isIsWin()) {
+                    this.textPlayer3.setText("Win");
+                }
+                if (themodel.getPlayers().get(3).isIsWin()) {
+                    this.textPlayer4.setText("Win");
+                }
             }
-            if (themodel.getPlayers().get(1).isIsWin()) {
-                this.textPlayer2.setText("Win");
-            }
-            if (themodel.getPlayers().get(2).isIsWin()) {
-                this.textPlayer3.setText("Win");
-            }
-            if (themodel.getPlayers().get(3).isIsWin()) {
-                this.textPlayer4.setText("Win");
-            }
+        } catch (IOException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("Sorry We have a IO Exception");
+            alert.setContentText("Pls rerun the program");
+            alert.showAndWait();
         }
     }
 
@@ -454,13 +498,29 @@ public class MainController implements Initializable, ChangeListener<Number> {
      */
     private void resetView() {
         try {
-            this.cmnCard1.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
-            this.cmnCard2.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
-            this.cmnCard3.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
-            this.cmnCard4.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
-            this.cmnCard5.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
+            FileInputStream back = new FileInputStream(GameUtil.cardPicBack());
+            Image backPic = new Image(back);
+            this.cmnCard1.setImage(backPic);
+            this.cmnCard2.setImage(backPic);
+            this.cmnCard3.setImage(backPic);
+            this.cmnCard4.setImage(backPic);
+            this.cmnCard5.setImage(backPic);
+            try {
+                back.close();
+            } catch (IOException ex) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText("IO Exception");
+                alert.setContentText("Sorry, we have an IO Exception");
+                alert.showAndWait();
+
+            }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("File Not Found Exception");
+            alert.setContentText("Sorry, You might need to reinstall the program");
+            alert.showAndWait();
         }
     }
 
@@ -619,15 +679,27 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     public void switchCard() throws FileNotFoundException {
+        try {
+            FileInputStream urPic1 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)));
+            FileInputStream urPic2 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)));
 
-        this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
-        this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
+            this.usrCard1.setImage(new Image(urPic1));
+            this.usrCard2.setImage(new Image(urPic2));
 
-        Card oldcard1 = this.themodel.getPlayers().get(0).getHand().getHand().get(0);
-        Card oldcard2 = this.themodel.getPlayers().get(0).getHand().getHand().get(1);
+            urPic1.close();
+            urPic2.close();
+            Card oldcard1 = this.themodel.getPlayers().get(0).getHand().getHand().get(0);
+            Card oldcard2 = this.themodel.getPlayers().get(0).getHand().getHand().get(1);
 
-        this.themodel.getPlayers().get(0).getHand().getHand().set(0, oldcard2);
-        this.themodel.getPlayers().get(0).getHand().getHand().set(1, oldcard1);
+            this.themodel.getPlayers().get(0).getHand().getHand().set(0, oldcard2);
+            this.themodel.getPlayers().get(0).getHand().getHand().set(1, oldcard1);
+        } catch (IOException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("IO Exception");
+            alert.setContentText("Sorry, we have an IO Exception");
+            alert.showAndWait();
+        }
 
     }
 

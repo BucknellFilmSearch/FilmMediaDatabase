@@ -15,6 +15,8 @@
  */
 package TexasModel;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -542,7 +544,8 @@ public class GameModel {
         if ((int) this.getCurrentPlayer().getMoney() == amount) {
             this.getCurrentPlayer().setIsAllin(true);
         }
-        this.currentPlayer.setActionperformed("RAISED " + (int) amount + " $$");
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        this.currentPlayer.setActionperformed("RAISED " + formatter.format(amount) + " $$");
 //        this.callAmount = amount;
 //        this.moneypool += amount;
         this.callAmount = this.callAmount + amount;
