@@ -63,7 +63,7 @@ public class MainPageController implements Initializable {
      */
     @FXML
     private void startGame() {
-
+        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().clear();
         WritableImage wi = new WritableImage(1280, 720);
         Image img1 = root.getCurPane().snapshot(new SnapshotParameters(), wi);
         ImageView imgView1 = new ImageView(img1);
@@ -90,6 +90,7 @@ public class MainPageController implements Initializable {
      */
     @FXML
     private void helpView() {
+        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().clear();
         WritableImage wi = new WritableImage(1280, 720);
         Image img1 = root.getCurPane().snapshot(new SnapshotParameters(), wi);
         ImageView imgView1 = new ImageView(img1);

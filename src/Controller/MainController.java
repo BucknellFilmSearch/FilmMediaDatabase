@@ -610,6 +610,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
     @FXML
     private void backToStart() {
         MultiPaneHolder root = MainPageController.getRoot();
+        ((StackPane) root.getPane(MultiPaneHolder.GamePane.TransitionGroup)).getChildren().clear();
         WritableImage wi = new WritableImage(1280, 720);
         Image img1 = root.getCurPane().snapshot(new SnapshotParameters(), wi);
         ImageView imgView1 = new ImageView(img1);
