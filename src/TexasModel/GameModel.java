@@ -87,7 +87,6 @@ public class GameModel {
         this.playerthisRound = new LinkedList<>();
         this.playerthisRound.addAll(playerinGame);//The Player left in this ROUND That is a player moves one by one system
         this.currentPlayer = this.playerthisRound.pop();
-        currentPlayer.setIsPlay(true);
     }
 
     /**
@@ -117,7 +116,6 @@ public class GameModel {
         this.playerthisRound = new LinkedList<Player>();
         this.playerthisRound.addAll(playerinGame);//The Player left in this ROUND That is a player moves one by one system
         this.currentPlayer = this.playerthisRound.pop();
-        currentPlayer.setIsPlay(true);
     }
 
     /**
@@ -150,7 +148,6 @@ public class GameModel {
         this.playerthisRound = new LinkedList<Player>();
         this.playerthisRound.addAll(playerinGame);//The Player left in this ROUND That is a player moves one by one system
         this.currentPlayer = this.playerthisRound.pop();
-        currentPlayer.setIsPlay(true);
         this.giveCards();
     }
 
@@ -462,22 +459,25 @@ public class GameModel {
         if (this.getCurrentPlayer().getMoney() == 0) {
             throw new NoMoneyException("You don't have money at all");
         }
-        this.currentPlayer.setActionperformed("ALLIN");
-        double moneyallin = this.getCurrentPlayer().getMoney();
-        this.getCurrentPlayer().setMoney(0);
-        if (moneyallin > this.callAmount) {
-            this.callAmount = moneyallin;
-            this.getCurrentPlayer().setIsRaise(true);
-            for (Player p : playerinGame) {
-                p.setIsCall(false);
+        if (this.getCurrentPlayer().isIsAllin()) {
+            this.check();
+        } else {
+            this.currentPlayer.setActionperformed("ALLIN");
+            double moneyallin = this.getCurrentPlayer().getMoney();
+            this.getCurrentPlayer().setMoney(0);
+            if (moneyallin > this.callAmount) {
+                this.callAmount = moneyallin;
+                for (Player p : playerinGame) {
+                    p.setIsCall(false);
+                }
             }
-        }
-        this.moneypool += moneyallin;
-        this.getCurrentPlayer().setIsAllin(true);
-        this.getCurrentPlayer().setIsCall(true);
-        this.getCurrentPlayer().setAction(Action.BLANK);
-        nextPlayer();
+            this.moneypool += moneyallin;
+            this.getCurrentPlayer().setIsAllin(true);
+            this.getCurrentPlayer().setIsCall(true);
+            this.getCurrentPlayer().setAction(Action.BLANK);
+            nextPlayer();
 
+        }
     }
 
     /**
@@ -539,6 +539,9 @@ public class GameModel {
         if (this.getCurrentPlayer().getMoney() < amount) {
             throw new NoMoneyException("You don't have enough money to raise!");
         }
+        if ((int) this.getCurrentPlayer().getMoney() == amount) {
+            this.getCurrentPlayer().setIsAllin(true);
+        }
         this.currentPlayer.setActionperformed("RAISED " + (int) amount + " $$");
 //        this.callAmount = amount;
 //        this.moneypool += amount;
@@ -548,7 +551,6 @@ public class GameModel {
         for (Player p : playerinGame) {
             p.setIsCall(false);
         }
-        this.getCurrentPlayer().setIsRaise(true);
         this.currentPlayer.resetRaise();
         this.getCurrentPlayer().setIsCall(true);
         this.getCurrentPlayer().setAction(Action.BLANK);
@@ -591,7 +593,6 @@ public class GameModel {
     public void check() throws SixCardHandException, NoMoneyException {
         this.currentPlayer.setActionperformed("Check");
         if (this.getCurrentPlayer().isIsCall() || this.getCurrentPlayer().isIsAllin()) {
-            this.currentPlayer.setIsCheck(true);
             this.getCurrentPlayer().setAction(Action.BLANK);
             nextPlayer();
         } else {

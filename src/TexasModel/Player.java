@@ -31,12 +31,8 @@ public class Player implements Comparator {
 
     private String name;
     private double money; //Money Amount
-    private boolean isPlay; // If it is in he's round or not
-    private boolean isRaise; //If the player raise
-    private boolean isFold; //If the player Fold//If the Player has money to call
     private boolean isAllin; //If the player chooses to ALL IN
     private boolean isCall; //If the player called (So that he don't HAVE to call)
-    private boolean isCheck; //If the player chooses to check
     private boolean isWin;
     private Action action;
     private double raiseamount;
@@ -44,14 +40,6 @@ public class Player implements Comparator {
     private String actionperformed;
 
     //*IMPORTANT not all of the boolean is useful right now. Just creat them incase.
-    public boolean isIsRaise() {
-        return isRaise;
-    }
-
-    public boolean isIsFold() {
-        return isFold;
-    }
-
     public boolean isIsWin() {
         return isWin;
     }
@@ -68,13 +56,6 @@ public class Player implements Comparator {
         this.actionperformed = actionperformed;
     }
 
-    public void setIsFold(boolean isFold) {
-        this.isFold = isFold;
-    }
-
-    public void setIsRaise(boolean isRaise) {
-        this.isRaise = isRaise;
-    }
     private Hand hand;
 
     /**
@@ -83,13 +64,9 @@ public class Player implements Comparator {
     public Player() {
         this.name = "Player";
         this.money = 100;
-        this.isPlay = false;
         this.hand = new Hand();
-        this.isRaise = false;
-        this.isFold = false;
         this.isAllin = false;
         this.isCall = true;
-        this.isCheck = false;
         this.action = Action.BLANK;
         this.raiseamount = 0;
         this.callamount = 0;
@@ -99,13 +76,9 @@ public class Player implements Comparator {
     public Player(String name) {
         this.name = name;
         this.money = 100;
-        this.isPlay = false;
         this.hand = new Hand();
-        this.isRaise = false;
-        this.isFold = false;
         this.isAllin = false;
         this.isCall = true;
-        this.isCheck = false;
         this.action = Action.BLANK;
         this.raiseamount = 0;
         this.callamount = 0;
@@ -140,14 +113,6 @@ public class Player implements Comparator {
         this.isCall = isCall;
     }
 
-    public boolean isIsCheck() {
-        return isCheck;
-    }
-
-    public void setIsCheck(boolean isCheck) {
-        this.isCheck = isCheck;
-    }
-
     public boolean isIsAllin() {
         return isAllin;
     }
@@ -178,10 +143,6 @@ public class Player implements Comparator {
         return this.money;
     }
 
-    public boolean isIsPlay() {
-        return this.isPlay;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -192,10 +153,6 @@ public class Player implements Comparator {
 
     public void addMoney(double add) {
         this.money += add;
-    }
-
-    public void setIsPlay(boolean isPlay) {
-        this.isPlay = isPlay;
     }
 
     @Override
@@ -237,13 +194,9 @@ public class Player implements Comparator {
     public void reset() {
         double money = this.getMoney();
         String name = this.getName();
-        this.isPlay = false;
         this.hand = new Hand();
-        this.isRaise = false;
-        this.isFold = false;
         this.isAllin = false;
         this.isCall = false;
-        this.isCheck = false;
         this.action = Action.BLANK;
         this.raiseamount = 0;
         this.callamount = 0;
