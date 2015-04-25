@@ -376,7 +376,7 @@ public class AIController {
             } else {
                 ai.call();
             }
-        } else if (tempAIHand.getHandRank() >= 14) {
+        } else if (tempAIHand.getHandRank() >= 11) {
             ai.call();
             mostRecentDecision = "call";
             consecutiveRaises = 0;
