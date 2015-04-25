@@ -1,17 +1,17 @@
 /* *****************************************
-* CSCI205 - Software Engineering and Design
-* Spring 2015
-*
-* Name: Justin Eyster
-* Date: 
-*
-* Project: csci205_FinalProject
-* Package: TexasModel.AI
-* File: AI
-* Description:
-*
-* ****************************************
-*/package TexasModel;
+ * CSCI205 - Software Engineering and Design
+ * Spring 2015
+ *
+ * Name: Justin Eyster
+ * Date:
+ *
+ * Project: csci205_FinalProject
+ * Package: TexasModel.AI
+ * File: AI
+ * Description:
+ *
+ * ****************************************
+ */package TexasModel;
 
 /**
  *
@@ -43,6 +43,16 @@ public class AI extends Player {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void allin() {
+        if (this.getMoney() >= 1) {
+            super.allin();
+        } else {
+            this.setAction(Action.FOLD);
+        }
+
     }
 
 }
