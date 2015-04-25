@@ -1,9 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package TexasModel;
+/* *****************************************
+* CSCI205 - Software Engineering and Design
+* Spring 2015
+*
+* Name: Justin Eyster
+* Date: Can't convert the date to string, because it is not known which parts of the date variable are in use. Use ?date, ?time or ?datetime built-in, or ?string.<format> or ?string(format) built-in with this date.
+* Time: Can't convert the date to string, because it is not known which parts of the date variable are in use. Use ?date, ?time or ?datetime built-in, or ?string.<format> or ?string(format) built-in with this date.
+*
+* Project: csci205_FinalProject
+* Package: TexasModel.HandType
+* File: HandType
+* Description:
+*
+* ****************************************
+*/package TexasModel;
 
 /**
  * Enum for describing a hand type.

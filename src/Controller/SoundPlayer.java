@@ -1,19 +1,18 @@
 /* *****************************************
- * CSCI205 - Software Engineering and Design
- * Spring 2015
- *
- * Name: Justin Eyster
- * Date: Mar 7, 2015
- * Time: 5:30:00 PM
- *
- * Project: csci205
- * Package: hw01
- * File: SoundPlayer
- * Description:
- *
- * ****************************************
- */
-package Controller;
+* CSCI205 - Software Engineering and Design
+* Spring 2015
+*
+* Name: Justin Eyster
+* Date: Can't convert the date to string, because it is not known which parts of the date variable are in use. Use ?date, ?time or ?datetime built-in, or ?string.<format> or ?string(format) built-in with this date.
+* Time: Can't convert the date to string, because it is not known which parts of the date variable are in use. Use ?date, ?time or ?datetime built-in, or ?string.<format> or ?string(format) built-in with this date.
+*
+* Project: csci205_FinalProject
+* Package: Controller.SoundPlayer
+* File: SoundPlayer
+* Description:
+*
+* ****************************************
+*/package Controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -1,43 +1,42 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Controller;
+/* *****************************************
+ * CSCI205 - Software Engineering and Design
+ * Spring 2015
+ *
+ * Name: Justin Eyster
+ * Date: Can't convert the date to string, because it is not known which parts of the date variable are in use. Use ?date, ?time or ?datetime built-in, or ?string.<format> or ?string(format) built-in with this date.
+ * Time: Can't convert the date to string, because it is not known which parts of the date variable are in use. Use ?date, ?time or ?datetime built-in, or ?string.<format> or ?string(format) built-in with this date.
+ *
+ * Project: csci205_FinalProject
+ * Package: Controller.AIController3
+ * File: AIController3
+ * Description:
+ *
+ * ****************************************
+ */package Controller;
 
 import TexasModel.AI;
 import TexasModel.Card;
 import TexasModel.Deck;
 import TexasModel.GameModel;
 import static TexasModel.GameUtil.findTheBest;
-import static TexasModel.GameUtil.findTheBestfromsix;
 import TexasModel.Hand;
 import TexasModel.SixCardHandException;
 import java.util.ArrayList;
 
 /**
- * The controller of the AI class, which reads information from the GameModel to
- * update the state of the AI. Uses inheritance so that controllers of multiple
- * difficulties can be made, but will still all have the same type, which is
- * AIController.
+ * Will create a very tight-handed AI.
  *
  * @author justi_000
  */
-public class AIController2 extends AIControllerParent {
+public class AIController3 extends AIControllerParent {
 
-    public AIController2(GameModel model, AI ai) {
+    public AIController3(GameModel model, AI ai) {
         super(model, ai);
     }
 
-    /**
-     * Chooses move in Blind stage.
-     */
     @Override
     protected void performBlindAction() {
-        if (ai.getMoney() < model.getCallAmount()) {
-            ai.fold();
-            mostRecentDecision = "fold";
-        } else if (model.isAllCall()) {
+        if (model.isAllCall()) {
             if (ai.getMoney() >= model.getCallAmount()) {
                 ai.call();
                 mostRecentDecision = "call";
@@ -55,49 +54,31 @@ public class AIController2 extends AIControllerParent {
                 if (ai.getMoney() >= model.getCallAmount()) {
                     ai.call();
                     mostRecentDecision = "call";
-                } else {
-                    ai.fold();
-                    mostRecentDecision = "fold";
                 }
             }
         }
     }
 
-    /**
-     * Chooses move in Flop stage.
-     *
-     * @throws SixCardHandException
-     */
     @Override
     protected void performFlopAction() throws SixCardHandException {
-        /* Need a temporary hand so that we can have a five card hand even when
-         AI only holds two at a time until the riverhand round. */
-        Hand tempAIHand = new Hand();
-
+        // reset circumstantial rank
+        circumstantialRank = ai.getHand().getHandRank();
         // Create testDeck to simulate drawing additional common cards from.
         Deck testDeck = new Deck();
-        /* Remove cards that are already in AI's hand or the pool from the test
-         deck. We already know that the AI won't be drawing these cards.
-         No need to include them in our tests. The code below also adds these
-         five cards to an ArrayList, so that when two more cards are simulated,
-         we can call a method to check what the best possible hand is from all
-         the cards, and score this hand.
+        /* Remove cards that are already in AI's hand from the test deck. We already
+         know that the AI won't be drawing these cards. No need to include them
+         in our tests.
          */
 
-        // sevenCardList is for predicting the future (will end game w/ 7 cards)
         ArrayList<Card> sevenCardList = new ArrayList<>();
         for (Card card : ai.getHand().getHand()) {
             testDeck.removeCard(card);
             sevenCardList.add(card);
-            tempAIHand.addCard(card);
         }
         for (Card card : model.getPoolcards()) {
             testDeck.removeCard(card);
             sevenCardList.add(card);
-            tempAIHand.addCard(card);
         }
-        // reset circumstantial rank
-        circumstantialRank = tempAIHand.getHandRank();
 
         /* Now, we know that two more cards will be turned over. Test all possible
          cases for what these could be using the test deck, getting the best hand
@@ -116,19 +97,19 @@ public class AIController2 extends AIControllerParent {
             sevenCardList.remove(testDeck.getDeck().get(index1));
         }
         // DECISION MAKING CONSTANTS:
-        int GREAT_MINOR_HAND_THRESHHOLD = 17900;
-        int DECENT_MINOR_HAND_THRESHHOLD = 16000;
+        int GREAT_MINOR_HAND_THRESHHOLD = 18000;
+        int DECENT_MINOR_HAND_THRESHHOLD = 16200;
 
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";
-        } else if (tempAIHand.getHandRank() == 23) {
+        } else if (ai.getHand().getHandRank() == 23) {
             ai.allin();
             mostRecentDecision = "allin";
-        } else if (tempAIHand.getHandRank() >= 20) {
+        } else if (ai.getHand().getHandRank() >= 20) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
             mostRecentDecision = "raise";
-        } else if (tempAIHand.getHandRank() >= 18) {
+        } else if (ai.getHand().getHandRank() >= 18) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
             mostRecentDecision = "raise";
         } else if (circumstantialRank > GREAT_MINOR_HAND_THRESHHOLD) {
@@ -147,25 +128,15 @@ public class AIController2 extends AIControllerParent {
 
     }
 
-    /**
-     * Chooses move in turn stage.
-     *
-     * @throws SixCardHandException
-     */
     @Override
     protected void performTurnhandAction() throws SixCardHandException {
-        /* Need a temporary hand so that we can have a five card hand even when
-         AI only holds two at a time until the riverhand round. */
-        Hand tempAIHand = new Hand();
-
+        // reset circumstantial rank
+        circumstantialRank = ai.getHand().getHandRank();
         // Create testDeck to simulate drawing additional common cards from.
         Deck testDeck = new Deck();
-        /* Remove cards that are already in AI's hand or the pool from the test
-         deck. We already know that the AI won't be drawing these cards.
-         No need to include them in our tests. The code below also adds these
-         five cards to an ArrayList, so that when two more cards are simulated,
-         we can call a method to check what the best possible hand is from all
-         the cards, and score this hand.
+        /* Remove cards that are already in AI's hand from the test deck. We already
+         know that the AI won't be drawing these cards. No need to include them
+         in our tests.
          */
 
         ArrayList<Card> sevenCardList = new ArrayList<>();
@@ -178,17 +149,8 @@ public class AIController2 extends AIControllerParent {
             sevenCardList.add(card);
         }
 
-        /* in turnhand, there will only be 6 cards in the seven card list
-         at this point (one to predict). Find the best hand to be the temp
-         hand.
-         */
-        tempAIHand = findTheBestfromsix(sevenCardList);
-
-        // reset circumstantial rank
-        circumstantialRank = tempAIHand.getHandRank();
-
-        /* Now, we know that one more cards will be turned over. Test all possible
-         cases for what this could be using the test deck, getting the best hand
+        /* Now, we know that two more cards will be turned over. Test all possible
+         cases for what these could be using the test deck, getting the best hand
          with each addition and scoring the total.
          */
         for (Card deckCard1 : testDeck.getDeck()) {
@@ -199,20 +161,20 @@ public class AIController2 extends AIControllerParent {
         }
 
         // DECISION MAKING CONSTANTS:
-        int GREAT_MINOR_HAND_THRESHHOLD = 750;
+        int GREAT_MINOR_HAND_THRESHHOLD = 766;
 
-        int DECENT_MINOR_HAND_THRESHHOLD = 690;
+        int DECENT_MINOR_HAND_THRESHHOLD = 700;
 
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";
-        } else if (tempAIHand.getHandRank() == 23) {
+        } else if (ai.getHand().getHandRank() == 23) {
             ai.allin();
             mostRecentDecision = "allin";
-        } else if (tempAIHand.getHandRank() >= 20) {
+        } else if (ai.getHand().getHandRank() >= 20) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
             mostRecentDecision = "raise";
-        } else if (tempAIHand.getHandRank() >= 18) {
+        } else if (ai.getHand().getHandRank() >= 18) {
             ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
             mostRecentDecision = "raise";
         } else if (circumstantialRank > GREAT_MINOR_HAND_THRESHHOLD) {
@@ -230,13 +192,8 @@ public class AIController2 extends AIControllerParent {
         }
     }
 
-    /**
-     * Chooses move in river stage.
-     */
     @Override
     protected void performRiverhandAction() {
-        /* Now we know what our best hand is. Choose a move based on strength of
-         this hand. */
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";

@@ -195,7 +195,7 @@ public class AIControllerDummyTest {
         System.out.println("Decision made: " + controlOnDeck.getMostRecentDecision());
 
         for (Card c : dummyAI0.getHand().getHand()) {
-            System.out.println("Suite: " + c.getSuite().name() + ", Value: " + c.getValue());
+            System.out.println("Flop hand card - Suite: " + c.getSuite().name() + ", Value: " + c.getValue());
         }
 
         for (Card c : gameModel.getPoolcards()) {
@@ -222,7 +222,6 @@ public class AIControllerDummyTest {
                 }
             }
             controlOnDeck.performTurnAction();
-            System.out.println("Choice: " + controlOnDeck.getMostRecentDecision());
             gameModel.getPlayerChoice();
         }
         System.out.println("Is turnhand: " + gameModel.isIsTurnhand() + ". Game over: " + gameModel.isIsEnd());
@@ -258,7 +257,7 @@ public class AIControllerDummyTest {
         System.out.println("Decision made: " + controlOnDeck.getMostRecentDecision());
 
         for (Card c : dummyAI0.getHand().getHand()) {
-            System.out.println("Suite: " + c.getSuite().name() + ", Value: " + c.getValue());
+            System.out.println("Turn hand card - Suite: " + c.getSuite().name() + ", Value: " + c.getValue());
         }
 
         aiOnDeck.setHand(originalHand);
@@ -270,7 +269,7 @@ public class AIControllerDummyTest {
      * Test of performRiverhandAction method, of class AIControllerDummy.
      */
     @Test
-    public void testPerformRiverhandAction() throws NoMoneyException, SixCardHandException {
+    public void testPerformRiverhandAction() throws NoMoneyException, SixCardHandException, CallMoreException {
         while (gameModel.isIsRiverhand() == false && gameModel.isIsEnd() == false) {
             AI aiOnDeck = (AI) gameModel.getCurrentPlayer();
             AIController2 controlOnDeck = null;
@@ -283,7 +282,6 @@ public class AIControllerDummyTest {
                 }
             }
             controlOnDeck.performTurnAction();
-            System.out.println("Choice: " + controlOnDeck.getMostRecentDecision());
             gameModel.getPlayerChoice();
         }
         System.out.println("Is riverhand: " + gameModel.isIsRiverhand() + ". Game over: " + gameModel.isIsEnd());
