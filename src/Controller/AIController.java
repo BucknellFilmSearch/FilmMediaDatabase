@@ -43,9 +43,15 @@ public class AIController {
 
     private AIType aiType;
 
+    /* tracks consecutive raises in a phase so it doesn't get ridiculous,
+     also serves to mask fact that AI may have a great hand.
+     */
+    private int consecutiveRaises = 0;
+    private int MAX_CONSECUTIVE_RAISES = 2;
+
     // DECISION MAKING CONSTANTS:
     private int FLOP_GREAT_MINOR_HAND_THRESHHOLD = 18000;
-    private int FLOP_DECENT_MINOR_HAND_THRESHHOLD = 16200;
+    private int FLOP_DECENT_MINOR_HAND_THRESHHOLD = 16000;
     private int TURN_GREAT_MINOR_HAND_THRESHHOLD = 766;
     private int TURN_DECENT_MINOR_HAND_THRESHHOLD = 700;
 
@@ -77,12 +83,12 @@ public class AIController {
         this.aiType = aiType;
         if (aiType == AIType.LOOSE_HANDED) {
             this.FLOP_GREAT_MINOR_HAND_THRESHHOLD = 17800;
-            this.FLOP_DECENT_MINOR_HAND_THRESHHOLD = 16000;
+            this.FLOP_DECENT_MINOR_HAND_THRESHHOLD = 15800;
             this.TURN_GREAT_MINOR_HAND_THRESHHOLD = 750;
             this.TURN_DECENT_MINOR_HAND_THRESHHOLD = 688;
         } else if (aiType == AIType.TIGHT_HANDED) {
             this.FLOP_GREAT_MINOR_HAND_THRESHHOLD = 18200;
-            this.FLOP_DECENT_MINOR_HAND_THRESHHOLD = 16400;
+            this.FLOP_DECENT_MINOR_HAND_THRESHHOLD = 16200;
             this.TURN_GREAT_MINOR_HAND_THRESHHOLD = 782;
             this.TURN_DECENT_MINOR_HAND_THRESHHOLD = 716;
         }
@@ -172,27 +178,47 @@ public class AIController {
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";
+            consecutiveRaises = 0;
         } else if (ai.getHand().getHandRank() == 23) {
             ai.allin();
             mostRecentDecision = "allin";
+            consecutiveRaises = 0;
         } else if (ai.getHand().getHandRank() >= 20) {
-            ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
-            mostRecentDecision = "raise";
+            if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
+                ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
+                mostRecentDecision = "raise";
+                consecutiveRaises += 1;
+            } else {
+                ai.call();
+            }
         } else if (ai.getHand().getHandRank() >= 18) {
-            ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
-            mostRecentDecision = "raise";
+            if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
+                ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
+                mostRecentDecision = "raise";
+                consecutiveRaises += 1;
+            } else {
+                ai.call();
+            }
         } else if (circumstantialRank > FLOP_GREAT_MINOR_HAND_THRESHHOLD) {
-            ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
-            mostRecentDecision = "raise";
+            if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
+                ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
+                mostRecentDecision = "raise";
+                consecutiveRaises += 1;
+            } else {
+                ai.call();
+            }
         } else if (circumstantialRank > FLOP_DECENT_MINOR_HAND_THRESHHOLD && model.isAllCall()) {
             ai.call();
             mostRecentDecision = "call";
+            consecutiveRaises = 0;
         } else if (circumstantialRank > FLOP_DECENT_MINOR_HAND_THRESHHOLD && ai.isIsCall()) {
             ai.check();
             mostRecentDecision = "check";
+            consecutiveRaises = 0;
         } else {
             ai.fold();
             mostRecentDecision = "fold";
+            consecutiveRaises = 0;
         }
 
     }
@@ -231,27 +257,47 @@ public class AIController {
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";
+            consecutiveRaises = 0;
         } else if (ai.getHand().getHandRank() == 23) {
             ai.allin();
             mostRecentDecision = "allin";
+            consecutiveRaises = 0;
         } else if (ai.getHand().getHandRank() >= 20) {
-            ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
-            mostRecentDecision = "raise";
+            if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
+                ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
+                mostRecentDecision = "raise";
+                consecutiveRaises += 1;
+            } else {
+                ai.call();
+            }
         } else if (ai.getHand().getHandRank() >= 18) {
-            ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
-            mostRecentDecision = "raise";
+            if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
+                ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
+                mostRecentDecision = "raise";
+                consecutiveRaises += 1;
+            } else {
+                ai.call();
+            }
         } else if (circumstantialRank > TURN_GREAT_MINOR_HAND_THRESHHOLD) {
-            ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
-            mostRecentDecision = "raise";
+            if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
+                ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
+                mostRecentDecision = "raise";
+                consecutiveRaises += 1;
+            } else {
+                ai.call();
+            }
         } else if (circumstantialRank > TURN_DECENT_MINOR_HAND_THRESHHOLD && model.isAllCall()) {
             ai.call();
             mostRecentDecision = "call";
+            consecutiveRaises = 0;
         } else if (circumstantialRank > TURN_DECENT_MINOR_HAND_THRESHHOLD && ai.isIsCall()) {
             ai.check();
             mostRecentDecision = "check";
+            consecutiveRaises = 0;
         } else {
             ai.fold();
             mostRecentDecision = "fold";
+            consecutiveRaises = 0;
         }
     }
 
@@ -259,27 +305,47 @@ public class AIController {
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";
+            consecutiveRaises = 0;
         } else if (ai.getHand().getHandRank() == 23) {
             ai.allin();
             mostRecentDecision = "allin";
+            consecutiveRaises = 0;
         } else if (ai.getHand().getHandRank() >= 20) {
-            ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
-            mostRecentDecision = "raise";
+            if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
+                ai.raise((ai.getMoney() - model.getCallAmount()) / 2);
+                mostRecentDecision = "raise";
+                consecutiveRaises += 1;
+            } else {
+                ai.call();
+            }
         } else if (ai.getHand().getHandRank() >= 18) {
-            ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
-            mostRecentDecision = "raise";
+            if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
+                ai.raise((ai.getMoney() - model.getCallAmount()) / 3);
+                mostRecentDecision = "raise";
+                consecutiveRaises += 1;
+            } else {
+                ai.call();
+            }
         } else if (circumstantialRank > 14) {
-            ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
-            mostRecentDecision = "raise";
+            if (consecutiveRaises < MAX_CONSECUTIVE_RAISES) {
+                ai.raise((ai.getMoney() - model.getCallAmount()) / 8);
+                mostRecentDecision = "raise";
+                consecutiveRaises += 1;
+            } else {
+                ai.call();
+            }
         } else if (circumstantialRank < 14 && circumstantialRank > 8 && model.isAllCall()) {
             ai.call();
             mostRecentDecision = "call";
+            consecutiveRaises = 0;
         } else if (circumstantialRank < 14 && circumstantialRank > 8 && ai.isIsCall()) {
             ai.check();
             mostRecentDecision = "check";
+            consecutiveRaises = 0;
         } else {
             ai.fold();
             mostRecentDecision = "fold";
+            consecutiveRaises = 0;
         }
     }
 
