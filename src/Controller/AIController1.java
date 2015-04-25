@@ -1,9 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Controller;
+/* *****************************************
+ * CSCI205 - Software Engineering and Design
+ * Spring 2015
+ *
+ * Name: Justin Eyster
+ * Date: Can't convert the date to string, because it is not known which parts of the date variable are in use. Use ?date, ?time or ?datetime built-in, or ?string.<format> or ?string(format) built-in with this date.
+ * Time: Can't convert the date to string, because it is not known which parts of the date variable are in use. Use ?date, ?time or ?datetime built-in, or ?string.<format> or ?string(format) built-in with this date.
+ *
+ * Project: csci205_FinalProject
+ * Package: Controller.AIController1
+ * File: AIController1
+ * Description:
+ *
+ * ****************************************
+ */package Controller;
 
 import TexasModel.AI;
 import TexasModel.Card;
@@ -15,13 +24,13 @@ import TexasModel.SixCardHandException;
 import java.util.ArrayList;
 
 /**
- * A less tight-handed poker player.
+ * A tight-handed poker player.
  *
  * @author justi_000
  */
-public class AIController2 extends AIControllerParent {
+public class AIController1 extends AIControllerParent {
 
-    public AIController2(GameModel model, AI ai) {
+    public AIController1(GameModel model, AI ai) {
         super(model, ai);
     }
 
@@ -88,8 +97,8 @@ public class AIController2 extends AIControllerParent {
             sevenCardList.remove(testDeck.getDeck().get(index1));
         }
         // DECISION MAKING CONSTANTS:
-        int GREAT_MINOR_HAND_THRESHHOLD = 17900;
-        int DECENT_MINOR_HAND_THRESHHOLD = 16000;
+        int GREAT_MINOR_HAND_THRESHHOLD = 18000;
+        int DECENT_MINOR_HAND_THRESHHOLD = 16200;
 
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
@@ -152,9 +161,9 @@ public class AIController2 extends AIControllerParent {
         }
 
         // DECISION MAKING CONSTANTS:
-        int GREAT_MINOR_HAND_THRESHHOLD = 750;
+        int GREAT_MINOR_HAND_THRESHHOLD = 766;
 
-        int DECENT_MINOR_HAND_THRESHHOLD = 690;
+        int DECENT_MINOR_HAND_THRESHHOLD = 700;
 
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();

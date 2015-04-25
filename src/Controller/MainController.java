@@ -49,9 +49,9 @@ import javafx.scene.text.Text;
 public class MainController implements Initializable, ChangeListener<Number> {
 
     private GameModel themodel;
-    private AIController aiControl0;
-    private AIController aiControl1;
-    private AIController aiControl2;
+    private AIControllerParent aiControl0;
+    private AIControllerParent aiControl1;
+    private AIControllerParent aiControl2;
     // <editor-fold defaultstate="collapsed" desc="FXML">
     @FXML
     private AnchorPane basePane;
@@ -332,9 +332,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
             playerList.add(dummyAI2);
             this.themodel = new GameModel(1000, playerList);
             this.themodel.giveCards();
-            aiControl0 = new AIController(themodel, dummyAI0);
-            aiControl1 = new AIController(themodel, dummyAI1);
-            aiControl2 = new AIController(themodel, dummyAI2);
+            aiControl0 = new AIControllerParent(themodel, dummyAI0);
+            aiControl1 = new AIControllerParent(themodel, dummyAI1);
+            aiControl2 = new AIControllerParent(themodel, dummyAI2);
             updateView();
         } catch (SixCardHandException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
