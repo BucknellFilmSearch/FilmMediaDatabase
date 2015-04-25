@@ -22,8 +22,10 @@ import TexasModel.GameUtil;
 import TexasModel.NoMoneyException;
 import TexasModel.Player;
 import TexasModel.SixCardHandException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -82,6 +84,19 @@ public class MainController implements Initializable, ChangeListener<Number> {
     private AIController aiControl0;
     private AIController aiControl1;
     private AIController aiControl2;
+
+    // SEE http://opengameart.org/content/54-casino-sound-effects-cards-dice-chips
+    URL cardFanURL = getClass().getResource("cardFan1.wav");
+    private File cardDealSound = new File(cardFanURL.getPath());
+    private SoundPlayer nextRoundSoundPlayer = new SoundPlayer(cardDealSound);
+
+    URL chipLayURL = getClass().getResource("chipLay1.wav");
+    private File chipSound = new File(chipLayURL.getPath());
+    private SoundPlayer chipSoundPlayer = new SoundPlayer(chipSound);
+
+    URL cardPlaceURL = getClass().getResource("cardPlace4.wav");
+    private File foldSound = new File(cardPlaceURL.getPath());
+    private SoundPlayer foldSoundPlayer = new SoundPlayer(foldSound);
 
     //FXML component declaration
     // <editor-fold defaultstate="collapsed" desc="FXML">
@@ -222,12 +237,14 @@ public class MainController implements Initializable, ChangeListener<Number> {
      * @see
      * <a href="url">http://code.makery.ch/blog/javafx-dialogs-official/</a>
      */
-    private void handleButtonAction(ActionEvent event) throws SixCardHandException, FileNotFoundException, InterruptedException {
+    private void handleButtonAction(ActionEvent event) throws SixCardHandException, FileNotFoundException, InterruptedException, IOException {
         try {
             if (event.getSource() == this.btnNxtRound) {
                 closeRaiseChoices();
                 this.reround();
                 this.resetView();
+                nextRoundSoundPlayer.reset();
+                nextRoundSoundPlayer.playSound();
             } else if (event.getSource() == this.btnReset) {
                 closeRaiseChoices();
                 this.reset();
@@ -237,7 +254,8 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 this.themodel.getCurrentPlayer().allin();
                 step();
                 updateView();
-
+                chipSoundPlayer.reset();
+                chipSoundPlayer.playSound();
             } else if (event.getSource() == this.btnCall) {
                 closeRaiseChoices();
                 this.themodel.getCurrentPlayer().call();
@@ -256,6 +274,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 closeRaiseChoices();
                 step();
                 updateView();
+                foldSoundPlayer.reset();
+                foldSoundPlayer.playSound();
+
             } else if (event.getSource() == this.raiseCancel) {
                 closeRaiseChoices();
 
@@ -268,6 +289,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 closeRaiseChoices();
                 step();
                 updateView();
+                chipSoundPlayer.reset();
+                chipSoundPlayer.playSound();
+
             }
         } catch (NoMoneyException a) {
             Alert alert = new Alert(AlertType.ERROR);
