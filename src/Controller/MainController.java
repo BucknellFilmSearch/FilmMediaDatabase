@@ -29,8 +29,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -500,13 +498,28 @@ public class MainController implements Initializable, ChangeListener<Number> {
      */
     private void resetView() {
         try {
-            this.cmnCard1.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
-            this.cmnCard2.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
-            this.cmnCard3.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
-            this.cmnCard4.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
-            this.cmnCard5.setImage(new Image(new FileInputStream(GameUtil.cardPicBack())));
+            FileInputStream back = new FileInputStream(GameUtil.cardPicBack());
+            this.cmnCard1.setImage(new Image(back));
+            this.cmnCard2.setImage(new Image(back));
+            this.cmnCard3.setImage(new Image(back));
+            this.cmnCard4.setImage(new Image(back));
+            this.cmnCard5.setImage(new Image(back));
+            try {
+                back.close();
+            } catch (IOException ex) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText("IO Exception");
+                alert.setContentText("Sorry, we have an IO Exception");
+                alert.showAndWait();
+
+            }
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("File Not Found Exception");
+            alert.setContentText("Sorry, You might need to reinstall the program");
+            alert.showAndWait();
         }
     }
 
@@ -665,15 +678,27 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     public void switchCard() throws FileNotFoundException {
+        try {
+            FileInputStream urPic1 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)));
+            FileInputStream urPic2 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)));
 
-        this.usrCard1.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)))));
-        this.usrCard2.setImage(new Image(new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)))));
+            this.usrCard1.setImage(new Image(urPic1));
+            this.usrCard2.setImage(new Image(urPic2));
 
-        Card oldcard1 = this.themodel.getPlayers().get(0).getHand().getHand().get(0);
-        Card oldcard2 = this.themodel.getPlayers().get(0).getHand().getHand().get(1);
+            urPic1.close();
+            urPic2.close();
+            Card oldcard1 = this.themodel.getPlayers().get(0).getHand().getHand().get(0);
+            Card oldcard2 = this.themodel.getPlayers().get(0).getHand().getHand().get(1);
 
-        this.themodel.getPlayers().get(0).getHand().getHand().set(0, oldcard2);
-        this.themodel.getPlayers().get(0).getHand().getHand().set(1, oldcard1);
+            this.themodel.getPlayers().get(0).getHand().getHand().set(0, oldcard2);
+            this.themodel.getPlayers().get(0).getHand().getHand().set(1, oldcard1);
+        } catch (IOException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("IO Exception");
+            alert.setContentText("Sorry, we have an IO Exception");
+            alert.showAndWait();
+        }
 
     }
 
