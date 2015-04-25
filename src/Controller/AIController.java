@@ -28,7 +28,8 @@ import java.util.ArrayList;
  * difficulties can be made, but will still all have the same type, which is
  * AIController.
  *
- * This AI bets moderately. Is moderately tight handed.
+ * This AI bets moderately by default, unless a different type is selected using
+ * my AIType enum as a parameter.
  *
  * @author justi_000
  */
@@ -48,6 +49,27 @@ public class AIController {
     private int TURN_GREAT_MINOR_HAND_THRESHHOLD = 766;
     private int TURN_DECENT_MINOR_HAND_THRESHHOLD = 700;
 
+    /**
+     * Creates an AI that bets moderately, by default.
+     *
+     * @param model
+     * @param ai
+     */
+    public AIController(GameModel model, AI ai) {
+        this.model = model;
+        this.ai = ai;
+        this.circumstantialRank = ai.getHand().getHandRank();
+        this.aiType = AIType.MODERATE;
+    }
+
+    /**
+     * Allows the specification of an aiType, which affects its betting
+     * behavior.
+     *
+     * @param model
+     * @param ai
+     * @param aitype
+     */
     public AIController(GameModel model, AI ai, AIType aitype) {
         this.model = model;
         this.ai = ai;
@@ -64,13 +86,6 @@ public class AIController {
             this.TURN_GREAT_MINOR_HAND_THRESHHOLD = 782;
             this.TURN_DECENT_MINOR_HAND_THRESHHOLD = 716;
         }
-    }
-
-    public AIController(GameModel model, AI ai) {
-        this.model = model;
-        this.ai = ai;
-        this.circumstantialRank = ai.getHand().getHandRank();
-        this.aiType = AIType.MODERATE;
     }
 
     public void performTurnAction() throws SixCardHandException {
