@@ -252,7 +252,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
             if (event.getSource() == this.btnNxtRound) {
                 closeRaiseChoices();
                 this.reround();
-                this.resetView();
+
                 nextRoundSoundPlayer.reset();
                 nextRoundSoundPlayer.playSound();
             } else if (event.getSource() == this.btnReset) {
