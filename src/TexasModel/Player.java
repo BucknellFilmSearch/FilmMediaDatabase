@@ -63,6 +63,9 @@ public class Player implements Comparator {
      * @return
      */
     public String getActionperformed() {
+        if (this.money == 0 && this.isAllin == false && this.isCall == false) {
+            this.actionperformed = "Out";
+        }
         return actionperformed;
     }
 
