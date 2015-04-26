@@ -1,6 +1,7 @@
-/nbproject/private/
+/nbproject/
 /build/
 /dist/
 *.xml
 manifest.mf
 *.properties
+FileOrganizationScheme.xcf
