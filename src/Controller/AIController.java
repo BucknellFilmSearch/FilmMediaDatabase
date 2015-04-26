@@ -204,6 +204,11 @@ public class AIController {
             ai.allin();
             mostRecentDecision = "allin";
             consecutiveRaises = 0;
+        } else if (ai.getMoney() < 1) {
+            ai.fold();
+            ai.setMoney(0);
+            mostRecentDecision = "fold";
+            consecutiveRaises = 0;
         } else if (tempAIHand.getHandRank() == 23) {
             ai.allin();
             mostRecentDecision = "allin";
@@ -292,6 +297,11 @@ public class AIController {
             ai.allin();
             mostRecentDecision = "allin";
             consecutiveRaises = 0;
+        } else if (ai.getMoney() < 1) {
+            ai.fold();
+            ai.setMoney(0);
+            mostRecentDecision = "fold";
+            consecutiveRaises = 0;
         } else if (tempAIHand.getHandRank() == 23) {
             ai.allin();
             mostRecentDecision = "allin";
@@ -355,6 +365,11 @@ public class AIController {
         if (ai.getMoney() < model.getCallAmount()) {
             ai.allin();
             mostRecentDecision = "allin";
+            consecutiveRaises = 0;
+        } else if (ai.getMoney() < 1) {
+            ai.fold();
+            ai.setMoney(0);
+            mostRecentDecision = "fold";
             consecutiveRaises = 0;
         } else if (tempAIHand.getHandRank() == 23) {
             ai.allin();
