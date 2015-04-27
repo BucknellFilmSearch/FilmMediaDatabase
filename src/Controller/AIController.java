@@ -123,27 +123,11 @@ public class AIController {
      */
     protected void performBlindAction() {
         if (ai.getMoney() < model.getCallAmount()) {
-            ai.fold();
-        } else if (model.isAllCall()) {
-            if (ai.getMoney() >= model.getCallAmount()) {
-                ai.call();
-                mostRecentDecision = "call";
-            } else {
-                ai.allin();
-                mostRecentDecision = "allin";
-            }
+            ai.allin();
+            mostRecentDecision = "allin";
         } else {
-            // AI has already called this amount or higher
-            if (ai.isIsCall()) {
-                ai.check();
-                mostRecentDecision = "check";
-            } else {
-                // For calls and raises, have to check if they have enough.
-                if (ai.getMoney() >= model.getCallAmount()) {
-                    ai.call();
-                    mostRecentDecision = "call";
-                }
-            }
+            ai.call();
+            mostRecentDecision = "call";
         }
     }
 
