@@ -570,9 +570,12 @@ public class GameModel {
     public void call() throws NoMoneyException, SixCardHandException {
         if (this.callAmount == 0) {
             this.check();
+        } else if (this.currentPlayer.getMoney() == this.callAmount) {
+            this.allIn();
         } else if (this.getCurrentPlayer().getMoney() < this.callAmount) {
             throw new NoMoneyException("You don't have enough money to call!");
         } else {
+
             if (this.currentPlayer.isIsCall()) {
                 check();
             } else {
