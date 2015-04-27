@@ -735,30 +735,36 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     /**
+     * switch card
      * 
      * @throws FileNotFoundException 
      */
-    public void switchCard() throws FileNotFoundException {
-        try {
-            FileInputStream urPic1 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)));
-            FileInputStream urPic2 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(1)));
-
-            this.usrCard1.setImage(new Image(urPic1));
-            this.usrCard2.setImage(new Image(urPic2));
-
-            urPic1.close();
-            urPic2.close();
-            
+    public void switchCard() {
+        try {          
             Card oldcard1 = this.themodel.getPlayers().get(0).getHand().getHand().get(0);
             Card oldcard2 = this.themodel.getPlayers().get(0).getHand().getHand().get(1);
 
             this.themodel.getPlayers().get(0).getHand().getHand().set(0, oldcard2);
             this.themodel.getPlayers().get(0).getHand().getHand().set(1, oldcard1);
+            
+            updateView();
         } catch (IOException ex) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error Dialog");
             alert.setHeaderText("IO Exception");
             alert.setContentText("Sorry, we have an IO Exception");
+            alert.showAndWait();
+        } catch (SixCardHandException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("You have SixCard!");
+            alert.setContentText("You have SixCard!");
+            alert.showAndWait();
+        } catch (NoMoneyException ex) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setHeaderText("You do not have enough money");
+            alert.setContentText("You need more money");
             alert.showAndWait();
         }
 
