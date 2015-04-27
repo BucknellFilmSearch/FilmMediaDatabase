@@ -153,7 +153,16 @@ public class MainController implements Initializable, ChangeListener<Number> {
     private TextField textMoneyRaised;
 
     @FXML
-    private Text textCurMoney;
+    private Label textCurMoney;
+
+    @FXML
+    private Label textP2money;
+
+    @FXML
+    private Label textP3money;
+
+    @FXML
+    private Label textP4money;
 
     @FXML
     private Text textMoneyChange;
@@ -802,7 +811,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
         return textMoneyRaised;
     }
 
-    public Text getTextCurMoney() {
+    public Label getTextCurMoney() {
         return textCurMoney;
     }
 
