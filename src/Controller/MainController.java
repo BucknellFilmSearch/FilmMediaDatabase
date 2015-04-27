@@ -290,6 +290,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
                 ft.setToValue(Double.MAX_VALUE);
                 ft.play();
                 this.raiseGroup.setDisable(false);
+                updateView();
             } else if (event.getSource() == this.btnFold) {
                 //System.out.println("Folded");
                 this.themodel.getCurrentPlayer().fold();
@@ -301,7 +302,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
             } else if (event.getSource() == this.raiseCancel) {
                 closeRaiseChoices();
-
+                updateView();
             } else if (event.getSource() == this.raiseOK) {
                 try {
                     this.themodel.getCurrentPlayer().raise(Double.parseDouble(this.textMoneyRaised.getText()));
@@ -473,6 +474,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
             alert.setContentText("Pls rerun the program");
             alert.showAndWait();
         }
+        this.textP2money.setText(String.format("%.0f", this.themodel.getPlayers().get(1).getMoney()));
+        this.textP3money.setText(String.format("%.0f", this.themodel.getPlayers().get(2).getMoney()));
+        this.textP4money.setText(String.format("%.0f", this.themodel.getPlayers().get(3).getMoney()));
     }
 
     /**

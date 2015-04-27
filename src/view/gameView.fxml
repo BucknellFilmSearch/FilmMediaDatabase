@@ -107,7 +107,7 @@
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
                         </ImageView>
-                        <Label layoutX="275.0" layoutY="167.0" prefHeight="25.0" prefWidth="85.0" text="500" textFill="WHITE">
+                        <Label fx:id="textP3money" layoutX="275.0" layoutY="167.0" prefHeight="25.0" prefWidth="85.0" text="500" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -248,7 +248,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Label layoutX="234.0" layoutY="184.0" prefHeight="25.0" prefWidth="85.0" text="500" textFill="WHITE">
+                        <Label fx:id="textP4money" layoutX="234.0" layoutY="184.0" prefHeight="25.0" prefWidth="85.0" text="500" textFill="WHITE">
                            <font>
                               <Font size="18.0" />
                            </font>
