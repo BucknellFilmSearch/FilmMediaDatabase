@@ -69,6 +69,16 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
+                        <Label fx:id="textP2money" layoutX="79.0" layoutY="184.0" prefHeight="25.0" prefWidth="85.0" text="500" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="68.0" layoutY="184.0" prefHeight="25.0" prefWidth="9.0" text="\$" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
                      </children></Pane>
                   <Pane prefHeight="240.0" prefWidth="426.0">
                      <children>
@@ -97,6 +107,16 @@
                               <Image url="@../../res/View/cards/playing-card-back.png" />
                            </image>
                         </ImageView>
+                        <Label fx:id="textP3money" layoutX="275.0" layoutY="167.0" prefHeight="25.0" prefWidth="85.0" text="500" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="264.0" layoutY="167.0" prefHeight="25.0" prefWidth="9.0" text="\$" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
                      </children></Pane>
                   <HBox prefHeight="240.0" prefWidth="426.0">
                      <children>
@@ -190,17 +210,6 @@
                <children>
                   <StackPane prefHeight="240.0" prefWidth="426.0">
                      <children>
-                        <Text fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Money" StackPane.alignment="TOP_RIGHT" />
-                        <Text fx:id="textCurMoney" fill="#00fff6" strokeType="OUTSIDE" strokeWidth="0.0" text="\$500" wrappingWidth="40.07421875" StackPane.alignment="TOP_RIGHT">
-                           <StackPane.margin>
-                              <Insets top="20.0" />
-                           </StackPane.margin>
-                        </Text>
-                        <Text fx:id="textMoneyChange" fill="#00fff6" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" text="+$20" StackPane.alignment="TOP_RIGHT">
-                           <StackPane.margin>
-                              <Insets top="40.0" />
-                           </StackPane.margin>
-                        </Text>
                         <Pane prefHeight="240.0" prefWidth="426.0">
                            <children>
                               <ImageView disable="true" fitHeight="119.0" fitWidth="85.0" layoutX="20.0" layoutY="120.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
@@ -239,6 +248,16 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
+                        <Label fx:id="textP4money" layoutX="234.0" layoutY="184.0" prefHeight="25.0" prefWidth="85.0" text="500" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="223.0" layoutY="184.0" prefHeight="25.0" prefWidth="9.0" text="\$" textFill="WHITE">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
                   <Pane prefHeight="240.0" prefWidth="426.0">
@@ -270,6 +289,16 @@
                               <TextField fx:id="textMoneyRaised" layoutX="140.0" layoutY="101.0" onAction="#updateSlider" prefHeight="25.0" prefWidth="65.0" text="20" />
                            </children>
                         </Group>
+                        <Label fx:id="textCurMoney" layoutX="147.0" layoutY="14.0" prefHeight="25.0" prefWidth="119.0" text="500" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="14.0" layoutY="14.0" prefHeight="34.0" prefWidth="133.0" text="You have: $" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
                      </children></Pane>
                </children>
             </VBox>
