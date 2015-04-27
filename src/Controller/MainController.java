@@ -578,11 +578,19 @@ public class MainController implements Initializable, ChangeListener<Number> {
         }
     }
 
+    /**
+     * This method set the raise button unavailable
+     */
     private void closeRaiseChoices() {
         this.raiseGroup.setOpacity(0.0);
         this.raiseGroup.setDisable(true);
     }
 
+    /**
+     * Detect the start of the drag-and-drop gesture from card 1 to 2
+     * 
+     * @param event 
+     */
     @FXML
     private void card1to2Det(MouseEvent event) {
         //System.out.println("onDragDetected1");
@@ -591,6 +599,11 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     }
 
+    /**
+     * Detect the start of the drag-and-drop gesture from card 2 to 1
+     * 
+     * @param event 
+     */
     @FXML
     private void card2to1Det(MouseEvent event) {
         //System.out.println("onDragDetected2");
@@ -599,16 +612,33 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     }
 
+    /**
+     * check whether the Card 1 released
+     * @param event
+     * @throws FileNotFoundException 
+     */
     @FXML
     private void Card1Released(MouseEvent event) throws FileNotFoundException {
         this.Card1Re = true;
     }
 
+    /**
+     * check whether the Card 2 released
+     * @param event
+     * @throws FileNotFoundException 
+     */
     @FXML
     private void Card2Released(MouseEvent event) throws FileNotFoundException {
         this.Card2Re = true;
     }
 
+    /**
+     * Add the visual effect of the card 1
+     * implement the drag-and-drop feature
+     * 
+     * @param event
+     * @throws FileNotFoundException 
+     */
     @FXML
     private void highLightCard1(MouseEvent event) throws FileNotFoundException {
         DropShadow ds = new DropShadow();
@@ -625,6 +655,13 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.Card2Re = false;
     }
 
+    /**
+     * Add the visual effect of the card 2
+     * implement the drag-and-drop feature
+     * 
+     * @param event
+     * @throws FileNotFoundException 
+     */
     @FXML
     private void highLightCard2(MouseEvent event) throws FileNotFoundException {
         DropShadow ds = new DropShadow();
@@ -653,9 +690,12 @@ public class MainController implements Initializable, ChangeListener<Number> {
         card.setEffect(null);
     }
 
+    /**
+     * clear and reset all necessary flags used for the drag-and-drop feature 
+     * @param event 
+     */
     @FXML
     private void clearCardEffect1(MouseEvent event) {
-        System.out.println("exit1");
 
         this.inCard1 = false;
         this.Card1Re = false;
@@ -665,9 +705,12 @@ public class MainController implements Initializable, ChangeListener<Number> {
         card.setEffect(null);
     }
 
+    /**
+     * clear and reset all necessary flags used for the drag-and-drop feature
+     * @param event 
+     */
     @FXML
     private void clearCardEffect2(MouseEvent event) {
-        System.out.println("exit2");
 
         this.inCard2 = false;
         this.Card1to2Drag = false;
@@ -691,6 +734,10 @@ public class MainController implements Initializable, ChangeListener<Number> {
         this.sliderRaise.setValue(usrMoneyRaise);
     }
 
+    /**
+     * 
+     * @throws FileNotFoundException 
+     */
     public void switchCard() throws FileNotFoundException {
         try {
             FileInputStream urPic1 = new FileInputStream(GameUtil.cardpic(this.themodel.getPlayers().get(0).getHand().getHand().get(0)));
@@ -701,6 +748,7 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
             urPic1.close();
             urPic2.close();
+            
             Card oldcard1 = this.themodel.getPlayers().get(0).getHand().getHand().get(0);
             Card oldcard2 = this.themodel.getPlayers().get(0).getHand().getHand().get(1);
 
