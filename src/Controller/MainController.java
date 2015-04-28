@@ -10,7 +10,7 @@
  * Package: CS205Final.Controller
  * File: Main Controller
  * Description:
- * The most importatn controller in our project, control the game logic.
+ * The most important controller in our project, control the game logic.
  * ****************************************
  */
 package Controller;
@@ -588,8 +588,8 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     /**
      * Detect the start of the drag-and-drop gesture from card 1 to 2
-     * 
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void card1to2Det(MouseEvent event) {
@@ -601,8 +601,8 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     /**
      * Detect the start of the drag-and-drop gesture from card 2 to 1
-     * 
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void card2to1Det(MouseEvent event) {
@@ -614,8 +614,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     /**
      * check whether the Card 1 released
+     *
      * @param event
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException
      */
     @FXML
     private void Card1Released(MouseEvent event) throws FileNotFoundException {
@@ -624,8 +625,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     /**
      * check whether the Card 2 released
+     *
      * @param event
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException
      */
     @FXML
     private void Card2Released(MouseEvent event) throws FileNotFoundException {
@@ -633,11 +635,10 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     /**
-     * Add the visual effect of the card 1
-     * implement the drag-and-drop feature
-     * 
+     * Add the visual effect of the card 1 implement the drag-and-drop feature
+     *
      * @param event
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException
      */
     @FXML
     private void highLightCard1(MouseEvent event) throws FileNotFoundException {
@@ -656,11 +657,10 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     /**
-     * Add the visual effect of the card 2
-     * implement the drag-and-drop feature
-     * 
+     * Add the visual effect of the card 2 implement the drag-and-drop feature
+     *
      * @param event
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException
      */
     @FXML
     private void highLightCard2(MouseEvent event) throws FileNotFoundException {
@@ -691,8 +691,9 @@ public class MainController implements Initializable, ChangeListener<Number> {
     }
 
     /**
-     * clear and reset all necessary flags used for the drag-and-drop feature 
-     * @param event 
+     * clear and reset all necessary flags used for the drag-and-drop feature
+     *
+     * @param event
      */
     @FXML
     private void clearCardEffect1(MouseEvent event) {
@@ -707,7 +708,8 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     /**
      * clear and reset all necessary flags used for the drag-and-drop feature
-     * @param event 
+     *
+     * @param event
      */
     @FXML
     private void clearCardEffect2(MouseEvent event) {
@@ -736,17 +738,17 @@ public class MainController implements Initializable, ChangeListener<Number> {
 
     /**
      * switch card
-     * 
-     * @throws FileNotFoundException 
+     *
+     * @throws FileNotFoundException
      */
     public void switchCard() {
-        try {          
+        try {
             Card oldcard1 = this.themodel.getPlayers().get(0).getHand().getHand().get(0);
             Card oldcard2 = this.themodel.getPlayers().get(0).getHand().getHand().get(1);
 
             this.themodel.getPlayers().get(0).getHand().getHand().set(0, oldcard2);
             this.themodel.getPlayers().get(0).getHand().getHand().set(1, oldcard1);
-            
+
             updateView();
         } catch (IOException ex) {
             Alert alert = new Alert(AlertType.ERROR);
