@@ -147,7 +147,7 @@ public class MainPageController implements Initializable {
     private void credit() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Credit");
-        alert.setHeaderText("This Texas Hole'em is made by:");
+        alert.setHeaderText("About this Texas Hold'em");
         alert.setContentText("This game was build by:\n\tJustin Eyster\t\tBucknell '17\n\tJiayu Huang\t\tBucknell '17\n\tChengjunjie Ding\tBucknell '17\n\tZhengri Fan\t\tBucknell '17\n");
         alert.showAndWait();
     }
