@@ -68,7 +68,7 @@
                         <Image url="@../../res/View/cards/1h.png" />
                      </image>
                   </ImageView>
-                  <Text layoutX="29.0" layoutY="225.0" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="Option" StackPane.alignment="TOP_CENTER">
+                  <Text layoutX="40.0" layoutY="225.0" onMouseClicked="#credit" onMouseEntered="#highLightNode" onMouseExited="#clearNodeEffect" strokeType="OUTSIDE" strokeWidth="0.0" text="About" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font size="35.0" />
                      </font>

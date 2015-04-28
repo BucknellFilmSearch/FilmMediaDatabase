@@ -26,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Alert;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -140,6 +141,15 @@ public class MainPageController implements Initializable {
     private void highLightNode(MouseEvent event) {
         DropShadow ds = new DropShadow();
         ((Node) event.getSource()).setEffect(ds);
+    }
+
+    @FXML
+    private void credit() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Credit");
+        alert.setHeaderText("This Texas Hole'em is made from:");
+        alert.setContentText("This game was build by:\n\tJustin Eyster\t\tBucknell '17\n\tJiayu Huang\t\tBucknell '17\n\tChengjunjie Ding\tBucknell '17\n\tZhengri Fan\t\tBucknell '17\n");
+        alert.showAndWait();
     }
 
     /**
