@@ -1,0 +1,13 @@
+Project by Professor John Hunter and Mr. Justin Eyster at Bucknell University, 
+Lewisburg, Pennsylvania, USA.
+
+Project undertaken in 2015.
+
+All source code written by Justin Eyster.
+
+When complete, this program will provide functionality to search keywords or
+phrases within a database of movie closed captions and subtitles. This program
+will return lines containing instances of the specified keyword/phrase, along 
+with metadata information about the movies containing the keyword/phrase.
+
+For academic & educational purposes.
