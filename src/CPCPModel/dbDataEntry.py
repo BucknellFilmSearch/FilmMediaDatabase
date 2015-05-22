@@ -159,5 +159,32 @@ class dbDataEntry():
             StartTimeStamp      VARCHAR, \
             EndTimeStamp        VARCHAR, \
             LineText            VARCHAR)")
+            
+    def fillMediaTextTable(self, oclcId):
+        """ Method to fill a movie/tv show's text table from the text file.
+        Text files should be named OCLC_ID_NUMBER.txt """
+        
+        with open(oclcId+".txt",'rb') as file:
+            
+            while True:
+                
+                LineNumber = file.readline()
+                if not LineNumber: break
+                
+                TimeStampLine = file.readline()
+                StartTimeStamp = TimeStampLine[0,13]
+                EndTimeStamp = TimeStampLine[18,30]
+                
+                LineText = file.readline()
+                
+                moreTextOrBlankLine = file.readline()
+                while moreTextOrBlankLine != "":
+                    LineText += moreTextOrBlankLine
+                    
+                with self.connection:
+                    
+                    cursor = self.connection.cursor()
+                    cursor.execute("INSERT INTO " + oclcId + " VALUES (?,?,?,?)",\
+                    (LineNumber,StartTimeStamp,EndTimeStamp,LineText))
     
 dataEntry = dbDataEntry()
