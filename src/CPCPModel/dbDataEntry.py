@@ -52,4 +52,16 @@ class dbDataEntry():
     def enterTVShow(self):
         pass
     
+    def createMovieLinesTable(self, oclcId):
+        """ This method creates a table to store the text of an individual movie. """
+        
+        with self.connection:
+            
+            cursor = self.connection.cursor()
+            cursor.execute("DROP TABLE IF EXISTS " + oclcId)
+            cursor.execute("CREATE TABLE " + oclcId + " ( \
+            LineNumber          VARCHAR            PRIMARY KEY, \
+            StartTimeStamp      VARCHAR, \
+            EndTimeStamp        VARCHAR)")
+    
 dataEntry = dbDataEntry()

@@ -5,13 +5,29 @@ import sqlite3 as lite
 import sys
 
 class dbInitializer():
+    """ A class which, when initialized, will initialize the main project database
+    in an empty condition. If the database already exists (and it will, more often than not)
+    the program asks the user if they want to re-initialize the database. 
+    Doing so erases the database and sets up the database in a clean, 
+    data-less condition. USE CAUTION OR THIS COULD CAUSE DATA LOSS! """
     
     def __init__(self):
-        self.connection = lite.connect('cpcp.db')
-        self.createMoviesTable()
-        self.createTVShowsTable()
+        while True:
+            # safeguard to prevent erasing important data
+            choice = input("Are you sure you want to re-initialize the database? \
+            If the database already exists, this will erase all entries currently \
+            in the database. Enter 9 to erase and reset the database. Enter 1 to cancel.")
+            if choice == "9":
+                self.connection = lite.connect('cpcp.db')
+                self.createMoviesTable()
+                self.createTVShowsTable()
+            elif choice == "1":
+                sys.exit()
+            else:
+                print("Invalid choice. Try again.")
     
     def createMoviesTable(self):
+        """ This method creates the MOVIES table in the database. """
         
         with self.connection:
             
@@ -31,10 +47,10 @@ class dbInitializer():
             Genre3              VARCHAR, \
             MPAARating          VARCHAR, \
             RuntimeInMinutes    VARCHAR, \
-            CCorSUB             VARCHAR )\
-            ")
+            CCorSUB             VARCHAR )")
             
     def createTVShowsTable(self):
+        """ This method creates the TVSHOWS table in the database. """
         
         with self.connection:
             
@@ -57,7 +73,6 @@ class dbInitializer():
             Genre3              VARCHAR, \
             TVRating            VARCHAR, \
             RuntimeInMinutes    VARCHAR, \
-            CCorSUB             VARCHAR )\
-            ")
+            CCorSUB             VARCHAR )")
         
 initializer = dbInitializer()
