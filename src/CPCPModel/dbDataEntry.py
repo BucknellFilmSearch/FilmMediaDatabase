@@ -38,25 +38,50 @@ class dbDataEntry():
         Director = input("Director: ")
         MovieReleaseYear = input("Movie release year: ")
         DVDReleaseYear = input("DVD release year: ")
-        Country1 = input("Country 1: ")
+        Country1 = input("Country 1 (Use official 3 digit country codes.): ")
         Country2 = input("Country 2 (if applicable): ")
         Country3 = input("Country 3 (if applicable): ")
-        Genre1 = input("Genre 1: ")
+        Genre1 = input("Genre 1 (from imdb): ")
         Genre2 = input("Genre 2 (if applicable): ")
         Genre3 = input("Genre 3 (if applicable): ")
-        MPAARating = input("MPAA rating: ")
-        RuntimeInMinutes = input("Run time (in minutes): ")
-        CCorSub = input("CC or Sub: ")
+        MPAARating = input("MPAA rating (or enter 'Unrated'): ")
+        RuntimeInMinutes = input("Run time (in whole minutes): ")
+        CCorSub = input("'CC' or 'Sub': ")
         
-        with self.connection:
-            
-            cursor = self.connection.cursor()
-            cursor.execute("INSERT INTO MOVIES VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (OCLC_ID, Title, Director, MovieReleaseYear, DVDReleaseYear, Country1, Country2, \
-            Country3, Genre1, Genre2, Genre3, MPAARating, RuntimeInMinutes, CCorSub))
-            
-        # create the table to hold this movie's text
-        self.createMediaTextTable(OCLC_ID)
+        print("\nCarefully verify that the following information is correct: ")
+        print("OCLC number: " + OCLC_ID)
+        print("Movie title: " + Title)
+        print("Movie director: " + Director)
+        print("Movie release year: " + MovieReleaseYear)
+        print("DVD release year: " + DVDReleaseYear)
+        print("Country 1 (3 digit code): " + Country1)
+        print("Country 2: " + Country2)
+        print("Country 3: " + Country3)
+        print("Genre 1: " + Genre1)
+        print("Genre 2: " + Genre2)
+        print("Genre 3: " + Genre3)
+        print("MPAA Rating: " + MPAARating)
+        print("Run time in minutes: " + RuntimeInMinutes)
+        print("'CC' file or 'Sub' file: " + CCorSub)
+        
+        while True:
+            verification = input("Enter 1 if all the information above is correct, or 0 to reenter data: ")
+
+            if verification == 1:
+                with self.connection:
+
+                    cursor = self.connection.cursor()
+                    cursor.execute("INSERT INTO MOVIES VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+                    (OCLC_ID, Title, Director, MovieReleaseYear, DVDReleaseYear, Country1, Country2, \
+                    Country3, Genre1, Genre2, Genre3, MPAARating, RuntimeInMinutes, CCorSub))
+
+                # create the table to hold this movie's text
+                self.createMediaTextTable(OCLC_ID)
+                break
+            elif verification == 0:
+                self.enterMovie()
+            else:
+                print("Invalid entry. Try again.")
     
     def enterTVShow(self):
         OCLC_ID = input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): ")
@@ -77,16 +102,45 @@ class dbDataEntry():
         RuntimeInMinutes = input("Run time (in minutes): ")
         CCorSub = input("CC or Sub: ")
         
-        with self.connection:
-            
-            cursor = self.connection.cursor()
-            cursor.execute("INSERT INTO MOVIES VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (OCLC_ID, ShowTitle, EpisodeTitle, SeasonNumber, EpisodeNumber, \
-            Director, EpisodeReleaseYear, DVDReleaseYear, Country1, Country2, \
-            Country3, Genre1, Genre2, Genre3, TVRating, RuntimeInMinutes, CCorSub))
-            
-        # create the table to hold this tv show's text
-        self.createMediaTextTable(OCLC_ID)
+        print("\nCarefully verify that the following information is correct: ")
+        print("OCLC number: " + OCLC_ID)
+        print("Show title: " + ShowTitle)
+        print("Episode title: " + EpisodeTitle)
+        print("Season number: " + SeasonNumber)
+        print("Episode number: " + EpisodeNumber)
+        print("Show/episode director: " + Director)
+        print("Episode release year: " + EpisodeReleaseYear)
+        print("DVD release year: " + DVDReleaseYear)
+        print("Country 1 (3 digit code): " + Country1)
+        print("Country 2: " + Country2)
+        print("Country 3: " + Country3)
+        print("Genre 1: " + Genre1)
+        print("Genre 2: " + Genre2)
+        print("Genre 3: " + Genre3)
+        print("TV Rating: " + TVRating)
+        print("Run time in minutes: " + RuntimeInMinutes)
+        print("'CC' file or 'Sub' file: " + CCorSub)
+        
+        while True:
+            verification = input("Enter 1 if all the information above is correct, or 0 to reenter data: ")
+
+            if verification == 1:
+        
+                with self.connection:
+
+                    cursor = self.connection.cursor()
+                    cursor.execute("INSERT INTO MOVIES VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+                    (OCLC_ID, ShowTitle, EpisodeTitle, SeasonNumber, EpisodeNumber, \
+                    Director, EpisodeReleaseYear, DVDReleaseYear, Country1, Country2, \
+                    Country3, Genre1, Genre2, Genre3, TVRating, RuntimeInMinutes, CCorSub))
+
+                # create the table to hold this tv show's text
+                self.createMediaTextTable(OCLC_ID)
+                break
+            elif verification == 0:
+                self.enterTVShow()
+            else:
+                print("Invalid entry. Try again.")
     
     def createMediaTextTable(self, oclcId):
         """ This method creates a table to store the text of an individual movie

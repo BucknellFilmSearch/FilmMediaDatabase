@@ -34,7 +34,7 @@ class dbInitializer():
             cursor = self.connection.cursor()
             cursor.execute("DROP TABLE IF EXISTS MOVIES")
             cursor.execute("CREATE TABLE MOVIES (\
-            OCLC_ID             CHAR (8)            PRIMARY KEY, \
+            OCLC_ID             VARCHAR            PRIMARY KEY, \
             Title               VARCHAR, \
             Director            VARCHAR, \
             MovieReleaseYear    CHAR (4), \
@@ -57,7 +57,7 @@ class dbInitializer():
             cursor = self.connection.cursor()
             cursor.execute("DROP TABLE IF EXISTS TVSHOWS")
             cursor.execute("CREATE TABLE TVSHOWS (\
-            OCLC_ID             CHAR (8)            PRIMARY KEY, \
+            OCLC_ID             VARCHAR            PRIMARY KEY, \
             ShowTitle           VARCHAR, \
             EpisodeTitle        VARCHAR, \
             SeasonNumber        VARCHAR, \
