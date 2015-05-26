@@ -182,26 +182,52 @@ class dbDataEntry():
         Text files should be named OCLC_ID_NUMBER.txt """
         
         with open(tableName[1:]+".txt",'rb') as file:
+            nextLineNumber = "1"
+            lineText = ""
+            firstRun = True
+            for line in file:
+                
+                if line == nextLineNumber:
+                    if firstRun == False:
+                        with self.connection:
+                            cursor = self.connection.cursor()
+                            cursor.execute("INSERT INTO " + tableName + " VALUES (?,?,?,?)",\
+                            (currentLineNumber,startTimeStamp,endTimeStamp,lineText))
+                    currentLineNumber = line
+                    nextLineNumber = str(int(nextLineNumber) + 1)
+                    lineText = ""
+                    firstRun = False
+                elif line[2] == ":" and line[5] == ":" and line[8] == "," \
+                    and line[19] == ":" and line[22] == ":" and line[25] == ",":
+                    timeStampLine = line
+                    startTimeStamp = line[0:12]
+                    endTimeStamp = line[17:29]
+                else:
+                    lineText += line
+                    
             
-            while True:
-                
-                LineNumber = file.readline()
-                if not LineNumber: break
-                
-                TimeStampLine = file.readline()
-                StartTimeStamp = TimeStampLine[0:13]
-                EndTimeStamp = TimeStampLine[18:30]
-                
-                LineText = file.readline()
-                
-                moreTextOrBlankLine = file.readline()
-                while moreTextOrBlankLine != "":
-                    LineText += moreTextOrBlankLine
-                    
-                with self.connection:
-                    
-                    cursor = self.connection.cursor()
-                    cursor.execute("INSERT INTO " + tableName + " VALUES (?,?,?,?)",\
-                    (LineNumber,StartTimeStamp,EndTimeStamp,LineText))
+#            LineNumber = file.readline()
+#            
+#            while True:
+#                
+#                if not LineNumber: break
+#                
+#                TimeStampLine = file.readline()
+#                StartTimeStamp = TimeStampLine[0:13]
+#                EndTimeStamp = TimeStampLine[18:30]
+#                
+#                LineText = file.readline()
+#                
+#                moreTextOrNextLine = file.readline()
+#                while moreTextOrNextLine != str(int(LineNumber) + 1):
+#                    LineText += moreTextOrNextLine
+#                    
+#                with self.connection:
+#                    
+#                    cursor = self.connection.cursor()
+#                    cursor.execute("INSERT INTO " + tableName + " VALUES (?,?,?,?)",\
+#                    (LineNumber,StartTimeStamp,EndTimeStamp,LineText))
+#                    
+#                LineNumber = moreTextOrNextLine
     
 dataEntry = dbDataEntry()
