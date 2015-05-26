@@ -10,7 +10,7 @@ import sys
 
 class dbDataEntry():
     """ Class built for the purpose of data entry. This class will allow a
-    member of our team to enter the metadata for movies in our database.
+    member of our team to enter the metadata for movies into our database.
     When complete, it will also automatically fill the tables which store
     the CC/subtitle text. """
     
@@ -38,9 +38,16 @@ class dbDataEntry():
         Director = input("Director: ")
         MovieReleaseYear = input("Movie release year: ")
         DVDReleaseYear = input("DVD release year: ")
-        Country1 = input("Country 1 (Use official 3 digit country codes.): ")
-        Country2 = input("Country 2 (if applicable): ")
-        Country3 = input("Country 3 (if applicable): ")
+        while True:
+            Country1 = input("Country 1 (3 digit UN code): ")
+            Country2 = input("Country 2 (if applicable): ")
+            Country3 = input("Country 3 (if applicable): ")
+            if len(Country1) == 3 and len(Country2) == 3 and len(Country3) == 3:
+                break
+            else:
+                print("Your 'Country' entries were not 3 digits each. Please \
+                use the United Nation's official 3 digit country \
+                codes when specifying countries.")
         Genre1 = input("Genre 1 (from imdb): ")
         Genre2 = input("Genre 2 (if applicable): ")
         Genre3 = input("Genre 3 (if applicable): ")
@@ -54,7 +61,7 @@ class dbDataEntry():
         print("Movie director: " + Director)
         print("Movie release year: " + MovieReleaseYear)
         print("DVD release year: " + DVDReleaseYear)
-        print("Country 1 (3 digit code): " + Country1)
+        print("Country 1: " + Country1)
         print("Country 2: " + Country2)
         print("Country 3: " + Country3)
         print("Genre 1: " + Genre1)
@@ -67,7 +74,7 @@ class dbDataEntry():
         while True:
             verification = input("Enter 1 if all the information above is correct, or 0 to reenter data: ")
 
-            if verification == 1:
+            if verification == "1":
                 with self.connection:
 
                     cursor = self.connection.cursor()
@@ -76,9 +83,9 @@ class dbDataEntry():
                     Country3, Genre1, Genre2, Genre3, MPAARating, RuntimeInMinutes, CCorSub))
 
                 # create the table to hold this movie's text
-                self.createMediaTextTable(OCLC_ID)
+                self.createMediaTextTable(OCLC_ID, CCorSub)
                 break
-            elif verification == 0:
+            elif verification == "0":
                 self.enterMovie()
             else:
                 print("Invalid entry. Try again.")
@@ -92,9 +99,16 @@ class dbDataEntry():
         Director = input("Director: ")
         EpisodeReleaseYear = input("Episode release year: ")
         DVDReleaseYear = input("DVD release year: ")
-        Country1 = input("Country 1: ")
-        Country2 = input("Country 2 (if applicable): ")
-        Country3 = input("Country 3 (if applicable): ")
+        while True:
+            Country1 = input("Country 1 (3 digit UN code): ")
+            Country2 = input("Country 2 (if applicable): ")
+            Country3 = input("Country 3 (if applicable): ")
+            if len(Country1) == 3 and len(Country2) == 3 and len(Country3) == 3:
+                break
+            else:
+                print("Your 'Country' entries were not 3 digits each. Please \
+                use the United Nation's official 3 digit country \
+                codes when specifying countries.")
         Genre1 = input("Genre 1: ")
         Genre2 = input("Genre 2 (if applicable): ")
         Genre3 = input("Genre 3 (if applicable): ")
@@ -111,7 +125,7 @@ class dbDataEntry():
         print("Show/episode director: " + Director)
         print("Episode release year: " + EpisodeReleaseYear)
         print("DVD release year: " + DVDReleaseYear)
-        print("Country 1 (3 digit code): " + Country1)
+        print("Country 1: " + Country1)
         print("Country 2: " + Country2)
         print("Country 3: " + Country3)
         print("Genre 1: " + Genre1)
@@ -124,7 +138,7 @@ class dbDataEntry():
         while True:
             verification = input("Enter 1 if all the information above is correct, or 0 to reenter data: ")
 
-            if verification == 1:
+            if verification == "1":
         
                 with self.connection:
 
@@ -135,14 +149,14 @@ class dbDataEntry():
                     Country3, Genre1, Genre2, Genre3, TVRating, RuntimeInMinutes, CCorSub))
 
                 # create the table to hold this tv show's text
-                self.createMediaTextTable(OCLC_ID)
+                self.createMediaTextTable(OCLC_ID, CCorSub)
                 break
-            elif verification == 0:
+            elif verification == "0":
                 self.enterTVShow()
             else:
                 print("Invalid entry. Try again.")
     
-    def createMediaTextTable(self, oclcId):
+    def createMediaTextTable(self, oclcId, CCorSub):
         """ This method creates a table to store the text of an individual movie
         or TV Show, given the oclc number of the DVD. """
         
@@ -153,18 +167,21 @@ class dbDataEntry():
             # below may leave the program vulnerable to SQL injection.
             # Look for better way of doing this, for sake of online version.
             # (This may not be a concern since it's in the database setup phase)
-            cursor.execute("DROP TABLE IF EXISTS " + oclcId)
-            cursor.execute("CREATE TABLE " + oclcId + " ( \
+            tableName = CCorSub[0] + oclcId
+            cursor.execute("DROP TABLE IF EXISTS " + tableName)
+            cursor.execute("CREATE TABLE " + tableName + " ( \
             LineNumber          VARCHAR            PRIMARY KEY, \
             StartTimeStamp      VARCHAR, \
             EndTimeStamp        VARCHAR, \
             LineText            VARCHAR)")
             
-    def fillMediaTextTable(self, oclcId):
+        self.fillMediaTextTable(tableName)
+            
+    def fillMediaTextTable(self, tableName):
         """ Method to fill a movie/tv show's text table from the text file.
         Text files should be named OCLC_ID_NUMBER.txt """
         
-        with open(oclcId+".txt",'rb') as file:
+        with open(tableName[1:]+".txt",'rb') as file:
             
             while True:
                 
@@ -172,8 +189,8 @@ class dbDataEntry():
                 if not LineNumber: break
                 
                 TimeStampLine = file.readline()
-                StartTimeStamp = TimeStampLine[0,13]
-                EndTimeStamp = TimeStampLine[18,30]
+                StartTimeStamp = TimeStampLine[0:13]
+                EndTimeStamp = TimeStampLine[18:30]
                 
                 LineText = file.readline()
                 
@@ -184,7 +201,7 @@ class dbDataEntry():
                 with self.connection:
                     
                     cursor = self.connection.cursor()
-                    cursor.execute("INSERT INTO " + oclcId + " VALUES (?,?,?,?)",\
+                    cursor.execute("INSERT INTO " + tableName + " VALUES (?,?,?,?)",\
                     (LineNumber,StartTimeStamp,EndTimeStamp,LineText))
     
 dataEntry = dbDataEntry()

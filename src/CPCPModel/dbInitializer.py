@@ -14,13 +14,14 @@ class dbInitializer():
     def __init__(self):
         while True:
             # safeguard to prevent erasing important data
-            choice = input("Are you sure you want to re-initialize the database? \
-            If the database already exists, this will erase all entries currently \
-            in the database. Enter 9 to erase and reset the database. Enter 1 to cancel.")
+            choice = input("Are you sure you want to re-initialize the database?" 
+            + " If the database already exists, this will erase all entries currently"
+            + " in the database. Enter 9 to erase and reset the database. Enter 1 to cancel: ")
             if choice == "9":
                 self.connection = lite.connect('cpcp.db')
                 self.createMoviesTable()
                 self.createTVShowsTable()
+                break
             elif choice == "1":
                 sys.exit()
             else:
