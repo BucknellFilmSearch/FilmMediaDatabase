@@ -181,28 +181,35 @@ class dbDataEntry():
         """ Method to fill a movie/tv show's text table from the text file.
         Text files should be named OCLC_ID_NUMBER.txt """
         
-        with open(tableName[1:]+".txt",'rb') as file:
+        with open(tableName[1:]+".txt",'r') as file:
+            currentLineNumber = "1"
             nextLineNumber = "1"
+            startTimeStamp = ""
+            endTimeStamp = ""
             lineText = ""
             firstRun = True
+            
             for line in file:
                 
-                if line == nextLineNumber:
+                if line[0:len(nextLineNumber)] == nextLineNumber:
+                    print("Found line " + nextLineNumber)
                     if firstRun == False:
                         with self.connection:
                             cursor = self.connection.cursor()
                             cursor.execute("INSERT INTO " + tableName + " VALUES (?,?,?,?)",\
                             (currentLineNumber,startTimeStamp,endTimeStamp,lineText))
-                    currentLineNumber = line
+                    currentLineNumber = nextLineNumber
                     nextLineNumber = str(int(nextLineNumber) + 1)
                     lineText = ""
                     firstRun = False
-                elif line[2] == ":" and line[5] == ":" and line[8] == "," \
-                    and line[19] == ":" and line[22] == ":" and line[25] == ",":
-                    timeStampLine = line
-                    startTimeStamp = line[0:12]
-                    endTimeStamp = line[17:29]
+                elif len(line) >= 9 and line[2] == ":" and line[5] == ":" and line[8] == ",":
+#                    and line[19] == ":" and line[22] == ":" and line[25] == ",":
+                        print("Found timestamp line #" + currentLineNumber)
+                        timeStampLine = line
+                        startTimeStamp = timeStampLine[0:12]
+                        endTimeStamp = timeStampLine[17:29]
                 else:
+                    print(line)
                     lineText += line
                     
             
