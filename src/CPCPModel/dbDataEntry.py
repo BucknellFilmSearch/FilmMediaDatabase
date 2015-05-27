@@ -169,7 +169,7 @@ class dbDataEntry():
             # (This may not be a concern since it's in the database setup phase)
             tableName = CCorSub[0] + oclcId
             cursor.execute("DROP TABLE IF EXISTS " + tableName)
-            cursor.execute("CREATE TABLE " + tableName + " ( \
+            cursor.execute("CREATE VIRTUAL TABLE " + tableName + " USING fts4( \
             LineNumber          VARCHAR            PRIMARY KEY, \
             StartTimeStamp      VARCHAR, \
             EndTimeStamp        VARCHAR, \
@@ -196,7 +196,8 @@ class dbDataEntry():
                     if firstRun == False:
                         with self.connection:
                             cursor = self.connection.cursor()
-                            cursor.execute("INSERT INTO " + tableName + " VALUES (?,?,?,?)",\
+                            cursor.execute("INSERT INTO " + tableName + " \
+                            (LineNumber, StartTimeStamp, EndTimeStamp, LineText) VALUES (?,?,?,?)",\
                             (currentLineNumber,startTimeStamp,endTimeStamp,lineText))
                     currentLineNumber = nextLineNumber
                     nextLineNumber = str(int(nextLineNumber) + 1)
@@ -211,30 +212,5 @@ class dbDataEntry():
                 else:
                     print(line)
                     lineText += line
-                    
-            
-#            LineNumber = file.readline()
-#            
-#            while True:
-#                
-#                if not LineNumber: break
-#                
-#                TimeStampLine = file.readline()
-#                StartTimeStamp = TimeStampLine[0:13]
-#                EndTimeStamp = TimeStampLine[18:30]
-#                
-#                LineText = file.readline()
-#                
-#                moreTextOrNextLine = file.readline()
-#                while moreTextOrNextLine != str(int(LineNumber) + 1):
-#                    LineText += moreTextOrNextLine
-#                    
-#                with self.connection:
-#                    
-#                    cursor = self.connection.cursor()
-#                    cursor.execute("INSERT INTO " + tableName + " VALUES (?,?,?,?)",\
-#                    (LineNumber,StartTimeStamp,EndTimeStamp,LineText))
-#                    
-#                LineNumber = moreTextOrNextLine
     
 dataEntry = dbDataEntry()
