@@ -92,6 +92,12 @@ class dbInitializer():
             LineNumber          VARCHAR            PRIMARY KEY, \
             StartTimeStamp      VARCHAR, \
             EndTimeStamp        VARCHAR, \
-            LineText            VARCHAR)")
+            LineText            VARCHAR, \
+            CONSTRAINT OCLC_ID_MOVIEFK FOREIGN KEY (OCLC_ID) \
+                REFERENCES MOVIES(OCLC_ID) \
+                ON DELETE CASCADE \
+            CONSTRAINT OCLC_ID_TVFK FOREIGN KEY (OCLC_ID) \
+                REFERENCES TVSHOWS(OCLC_ID) \
+                ON DELETE CASCADE)")
         
 initializer = dbInitializer()

@@ -42,7 +42,8 @@ class dbDataEntry():
             Country1 = input("Country 1 (3 digit UN code): ")
             Country2 = input("Country 2 (if applicable): ")
             Country3 = input("Country 3 (if applicable): ")
-            if len(Country1) == 3 and len(Country2) == 3 and len(Country3) == 3:
+            if len(Country1) == 3 and (len(Country2) == 3 or len(Country2) == 0) \
+            and (len(Country3) == 3 or len(Country3) == 0):
                 break
             else:
                 print("Your 'Country' entries were not 3 digits each. Please \
@@ -103,7 +104,8 @@ class dbDataEntry():
             Country1 = input("Country 1 (3 digit UN code): ")
             Country2 = input("Country 2 (if applicable): ")
             Country3 = input("Country 3 (if applicable): ")
-            if len(Country1) == 3 and len(Country2) == 3 and len(Country3) == 3:
+            if len(Country1) == 3 and (len(Country2) == 3 or len(Country2) == 0) \
+            and (len(Country3) == 3 or len(Country3) == 0):
                 break
             else:
                 print("Your 'Country' entries were not 3 digits each. Please \
@@ -177,7 +179,7 @@ class dbDataEntry():
                             cursor = self.connection.cursor()
                             cursor.execute("INSERT INTO ALLTEXT \
                             (OCLC_ID, LineNumber, StartTimeStamp, EndTimeStamp, LineText) VALUES (?,?,?,?,?)",\
-                            (oclcId, currentLineNumber,startTimeStamp,endTimeStamp,lineText))
+                            (oclcId,currentLineNumber,startTimeStamp,endTimeStamp,lineText))
                     currentLineNumber = nextLineNumber
                     nextLineNumber = str(int(nextLineNumber) + 1)
                     lineText = ""
