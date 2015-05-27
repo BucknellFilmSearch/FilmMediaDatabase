@@ -21,6 +21,7 @@ class dbInitializer():
                 self.connection = lite.connect('cpcp.db')
                 self.createMoviesTable()
                 self.createTVShowsTable()
+                self.createAllTextTable()
                 break
             elif choice == "1":
                 sys.exit()
@@ -75,5 +76,22 @@ class dbInitializer():
             TVRating            VARCHAR, \
             RuntimeInMinutes    VARCHAR, \
             CCorSUB             VARCHAR )")
+            
+    def createAllTextTable(self):
+        """ This method creates a table to store the text of ALL the movies
+        and TV Shows, implementing the fts4 sqlite module for maximum
+        search efficiency."""
+        
+        with self.connection:
+            
+            cursor = self.connection.cursor()
+
+            cursor.execute("DROP TABLE IF EXISTS ALLTEXT")
+            cursor.execute("CREATE VIRTUAL TABLE ALLTEXT USING fts4( \
+            OCLC_ID             VARCHAR, \
+            LineNumber          VARCHAR            PRIMARY KEY, \
+            StartTimeStamp      VARCHAR, \
+            EndTimeStamp        VARCHAR, \
+            LineText            VARCHAR)")
         
 initializer = dbInitializer()

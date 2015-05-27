@@ -82,8 +82,8 @@ class dbDataEntry():
                     (OCLC_ID, Title, Director, MovieReleaseYear, DVDReleaseYear, Country1, Country2, \
                     Country3, Genre1, Genre2, Genre3, MPAARating, RuntimeInMinutes, CCorSub))
 
-                # create the table to hold this movie's text
-                self.createMediaTextTable(OCLC_ID, CCorSub)
+                # fill the text table from file
+                self.fillMediaTextTable(OCLC_ID)
                 break
             elif verification == "0":
                 self.enterMovie()
@@ -148,40 +148,19 @@ class dbDataEntry():
                     Director, EpisodeReleaseYear, DVDReleaseYear, Country1, Country2, \
                     Country3, Genre1, Genre2, Genre3, TVRating, RuntimeInMinutes, CCorSub))
 
-                # create the table to hold this tv show's text
-                self.createMediaTextTable(OCLC_ID, CCorSub)
+                # fill the text table from file
+                self.fillMediaTextTable(OCLC_ID)
                 break
             elif verification == "0":
                 self.enterTVShow()
             else:
                 print("Invalid entry. Try again.")
-    
-    def createMediaTextTable(self, oclcId, CCorSub):
-        """ This method creates a table to store the text of an individual movie
-        or TV Show, given the oclc number of the DVD. """
-        
-        with self.connection:
             
-            cursor = self.connection.cursor()
-            # NOTE: concatenating the table name onto the SQL command in the manner
-            # below may leave the program vulnerable to SQL injection.
-            # Look for better way of doing this, for sake of online version.
-            # (This may not be a concern since it's in the database setup phase)
-            tableName = CCorSub[0] + oclcId
-            cursor.execute("DROP TABLE IF EXISTS " + tableName)
-            cursor.execute("CREATE VIRTUAL TABLE " + tableName + " USING fts4( \
-            LineNumber          VARCHAR            PRIMARY KEY, \
-            StartTimeStamp      VARCHAR, \
-            EndTimeStamp        VARCHAR, \
-            LineText            VARCHAR)")
-            
-        self.fillMediaTextTable(tableName)
-            
-    def fillMediaTextTable(self, tableName):
+    def fillMediaTextTable(self, oclcId):
         """ Method to fill a movie/tv show's text table from the text file.
         Text files should be named OCLC_ID_NUMBER.txt """
         
-        with open(tableName[1:]+".txt",'r') as file:
+        with open(oclcId+".txt",'r') as file:
             currentLineNumber = "1"
             nextLineNumber = "1"
             startTimeStamp = ""
@@ -196,9 +175,9 @@ class dbDataEntry():
                     if firstRun == False:
                         with self.connection:
                             cursor = self.connection.cursor()
-                            cursor.execute("INSERT INTO " + tableName + " \
-                            (LineNumber, StartTimeStamp, EndTimeStamp, LineText) VALUES (?,?,?,?)",\
-                            (currentLineNumber,startTimeStamp,endTimeStamp,lineText))
+                            cursor.execute("INSERT INTO ALLTEXT \
+                            (OCLC_ID, LineNumber, StartTimeStamp, EndTimeStamp, LineText) VALUES (?,?,?,?,?)",\
+                            (oclcId, currentLineNumber,startTimeStamp,endTimeStamp,lineText))
                     currentLineNumber = nextLineNumber
                     nextLineNumber = str(int(nextLineNumber) + 1)
                     lineText = ""
