@@ -33,63 +33,65 @@ class dbDataEntry():
                 print("Invalid entry. Try again.")
 
     def enterMovie(self):
-        OCLC_ID = input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): ")
-        Title = input("Movie title: ")
-        Director = input("Director: ")
-        MovieReleaseYear = input("Movie release year: ")
-        DVDReleaseYear = input("DVD release year: ")
         while True:
-            Country1 = input("Country 1 (3 digit UN code): ")
-            Country2 = input("Country 2 (if applicable): ")
-            Country3 = input("Country 3 (if applicable): ")
-            if len(Country1) == 3 and (len(Country2) == 3 or len(Country2) == 0) \
-            and (len(Country3) == 3 or len(Country3) == 0):
-                break
-            else:
-                print("Your 'Country' entries were not 3 digits each. Please \
-                use the United Nation's official 3 digit country \
-                codes when specifying countries.")
-        Genre1 = input("Genre 1 (from imdb): ")
-        Genre2 = input("Genre 2 (if applicable): ")
-        Genre3 = input("Genre 3 (if applicable): ")
-        MPAARating = input("MPAA rating (or enter 'Unrated'): ")
-        RuntimeInMinutes = input("Run time (in whole minutes): ")
-        CCorSub = input("'CC' or 'Sub': ")
-        
-        print("\nCarefully verify that the following information is correct: ")
-        print("OCLC number: " + OCLC_ID)
-        print("Movie title: " + Title)
-        print("Movie director: " + Director)
-        print("Movie release year: " + MovieReleaseYear)
-        print("DVD release year: " + DVDReleaseYear)
-        print("Country 1: " + Country1)
-        print("Country 2: " + Country2)
-        print("Country 3: " + Country3)
-        print("Genre 1: " + Genre1)
-        print("Genre 2: " + Genre2)
-        print("Genre 3: " + Genre3)
-        print("MPAA Rating: " + MPAARating)
-        print("Run time in minutes: " + RuntimeInMinutes)
-        print("'CC' file or 'Sub' file: " + CCorSub)
-        
-        while True:
-            verification = input("Enter 1 if all the information above is correct, or 0 to reenter data: ")
+            OCLC_ID = input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): ")
+            Title = input("Movie title: ")
+            Director = input("Director: ")
+            MovieReleaseYear = input("Movie release year: ")
+            DVDReleaseYear = input("DVD release year: ")
+            while True:
+                Country1 = input("Country 1 (3 digit UN code): ")
+                Country2 = input("Country 2 (if applicable): ")
+                Country3 = input("Country 3 (if applicable): ")
+                if len(Country1) == 3 and (len(Country2) == 3 or len(Country2) == 0) \
+                and (len(Country3) == 3 or len(Country3) == 0):
+                    break
+                else:
+                    print("Your 'Country' entries were not 3 digits each. Please \
+                    use the United Nation's official 3 digit country \
+                    codes when specifying countries.")
+            Genre1 = input("Genre 1 (from imdb): ")
+            Genre2 = input("Genre 2 (if applicable): ")
+            Genre3 = input("Genre 3 (if applicable): ")
+            MPAARating = input("MPAA rating (or enter 'Unrated'): ")
+            RuntimeInMinutes = input("Run time (in whole minutes): ")
+            CCorSub = input("'CC' or 'Sub': ")
 
-            if verification == "1":
-                with self.connection:
+            print("\nCarefully verify that the following information is correct: ")
+            print("OCLC number: " + OCLC_ID)
+            print("Movie title: " + Title)
+            print("Movie director: " + Director)
+            print("Movie release year: " + MovieReleaseYear)
+            print("DVD release year: " + DVDReleaseYear)
+            print("Country 1: " + Country1)
+            print("Country 2: " + Country2)
+            print("Country 3: " + Country3)
+            print("Genre 1: " + Genre1)
+            print("Genre 2: " + Genre2)
+            print("Genre 3: " + Genre3)
+            print("MPAA Rating: " + MPAARating)
+            print("Run time in minutes: " + RuntimeInMinutes)
+            print("'CC' file or 'Sub' file: " + CCorSub)
 
-                    cursor = self.connection.cursor()
-                    cursor.execute("INSERT INTO MOVIES VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-                    (OCLC_ID, Title, Director, MovieReleaseYear, DVDReleaseYear, Country1, Country2, \
-                    Country3, Genre1, Genre2, Genre3, MPAARating, RuntimeInMinutes, CCorSub))
+            while True:
+                verification = input("Enter 1 if all the information above is correct, or 0 to reenter data: ")
 
-                # fill the text table from file
-                self.fillMediaTextTable(OCLC_ID)
-                break
-            elif verification == "0":
-                self.enterMovie()
-            else:
-                print("Invalid entry. Try again.")
+                if verification == "1":
+                    with self.connection:
+
+                        cursor = self.connection.cursor()
+                        cursor.execute("INSERT INTO MOVIES VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+                        (OCLC_ID, Title, Director, MovieReleaseYear, DVDReleaseYear, Country1, Country2, \
+                        Country3, Genre1, Genre2, Genre3, MPAARating, RuntimeInMinutes, CCorSub))
+
+                    # fill the text table from file
+                    self.fillMediaTextTable(OCLC_ID)
+                    break
+                elif verification == "0":
+                    self.enterMovie()
+                    pass
+                else:
+                    print("Invalid entry. Try again.")
     
     def enterTVShow(self):
         OCLC_ID = input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): ")
@@ -155,6 +157,7 @@ class dbDataEntry():
                 break
             elif verification == "0":
                 self.enterTVShow()
+                break
             else:
                 print("Invalid entry. Try again.")
             
