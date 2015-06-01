@@ -24,6 +24,15 @@ def searchResults(keywordOrPhrase):
         data = cursor.fetchall()
         return data
     
+def totalMovies():
+    """ Returns total number of movies in the database. """
+    connection = lite.connect('cpcp.db')
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM MOVIES")
+        data = cursor.fetchall()
+        return data[0][0]
+    
 def occurrencesByTimeStamps(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:
@@ -247,4 +256,5 @@ def percentageOfOccurrenceByGenre(keywordOrPhrase, genre):
         percentage = 0.0
     return [(genre, percentage)]
 
-print(percentageOfOccurrenceByGenre("cell phone", "Thriller"))
+print(totalMovies())
+print(percentageOfOccurrenceByReleaseYear("cell phone"))
