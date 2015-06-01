@@ -22,10 +22,9 @@ def searchResults(keywordOrPhrase):
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
         + keywordOrPhrase + "'")
         data = cursor.fetchall()
-        print(data)
         return data
 
-def cumulativeOccurrencesAcrossReleaseYears(keywordOrPhrase):
+def cumulativeOccurrencesByReleaseYear(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
@@ -33,10 +32,9 @@ def cumulativeOccurrencesAcrossReleaseYears(keywordOrPhrase):
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
         + keywordOrPhrase + "'" + " GROUP BY MovieReleaseYear")
         data = cursor.fetchall()
-        print(data)
         return data
     
-def occurrencesAcrossReleaseYears(keywordOrPhrase):
+def occurrencesByReleaseYear(keywordOrPhrase):
     """ Same as above but counts each movie only once. """
     connection = lite.connect('cpcp.db')
     with connection:
@@ -45,10 +43,9 @@ def occurrencesAcrossReleaseYears(keywordOrPhrase):
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
         + keywordOrPhrase + "'" + " GROUP BY MovieReleaseYear")
         data = cursor.fetchall()
-        print(data)
         return data
         
-def occurrencesAcrossTimeStamps(keywordOrPhrase):
+def occurrencesByTimeStamps(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
@@ -56,7 +53,6 @@ def occurrencesAcrossTimeStamps(keywordOrPhrase):
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
         + keywordOrPhrase + "'" + " GROUP BY StartTimeStamp")
         data = cursor.fetchall()
-        print(data)
         return data
     
 def cumulativeOccurrencesByMPAARating(keywordOrPhrase):
@@ -67,8 +63,62 @@ def cumulativeOccurrencesByMPAARating(keywordOrPhrase):
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
         + keywordOrPhrase + "'" + " GROUP BY MPAARating")
         data = cursor.fetchall()
-        print(data)
         return data
     
-occurrencesAcrossReleaseYears("cell phone")
-searchResults("cell phone")
+def cumulativeOccurrencesByGenre1(keywordOrPhrase):
+    connection = lite.connect('cpcp.db')
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT MOVIES.Genre1, COUNT(*) FROM MOVIES, ALLTEXT \
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
+        + keywordOrPhrase + "'" + " GROUP BY Genre1")
+        data = cursor.fetchall()
+        return data
+    
+def cumulativeOccurrencesByGenre2(keywordOrPhrase):
+    connection = lite.connect('cpcp.db')
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT MOVIES.Genre2, COUNT(*) FROM MOVIES, ALLTEXT \
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
+        + keywordOrPhrase + "'" + " GROUP BY Genre2")
+        data = cursor.fetchall()
+        return data
+    
+def cumulativeOccurrencesByGenre3(keywordOrPhrase):
+    connection = lite.connect('cpcp.db')
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT MOVIES.Genre3, COUNT(*) FROM MOVIES, ALLTEXT \
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
+        + keywordOrPhrase + "'" + " GROUP BY Genre3")
+        data = cursor.fetchall()
+        return data
+    
+def cumulativeOccurrencesByGenre(keywordOrPhrase, genre):
+    """ Function to return the total occurrences of a keyword/phrase in movies
+    of a specified genre. Less efficient than searching metadata categories
+    that only have one column. Has to query the database three times instead
+    of once, and then sum the results.
+    """
+    genre1Counts = cumulativeOccurrencesByGenre1(keywordOrPhrase)
+    genre2Counts = cumulativeOccurrencesByGenre2(keywordOrPhrase)
+    genre3Counts = cumulativeOccurrencesByGenre3(keywordOrPhrase)
+    totalOccurrencesInGenre = 0
+    # count occurrences of keyword in genre1, matching specified genre
+    for count1 in genre1Counts:
+        if count1[0] == genre:
+            totalOccurrencesInGenre += count1[1]
+    # count occurrences of keyword in genre2, matching specified genre
+    for count2 in genre2Counts:
+        if count2[0] == genre:
+            totalOccurrencesInGenre += count2[1]
+    # count occurrences of keyword in genre3, matching specified genre
+    for count3 in genre3Counts:
+        if count3[0] == genre:
+            totalOccurrencesInGenre += count3[1]
+    
+    return totalOccurrencesInGenre
+
+    
+print(cumulativeOccurrencesByGenre("cell phone", "Thriller"))
