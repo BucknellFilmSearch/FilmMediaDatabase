@@ -255,6 +255,3 @@ def percentageOfOccurrenceByGenre(keywordOrPhrase, genre):
     else:
         percentage = 0.0
     return [(genre, percentage)]
-
-print(totalMovies())
-print(percentageOfOccurrenceByReleaseYear("cell phone"))
