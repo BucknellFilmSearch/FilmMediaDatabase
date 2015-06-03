@@ -29,7 +29,10 @@ def searchForMovie():
         for section in result:
             finalResults += " -- " + section
         finalResults += "</p><p>"
-    return finalResults
+    if results:
+        return template(finalResults)
+    else:
+        return "Your Keyword/Phrase does not occur in the database."
 #    c = db.execute('SELECT MOVIES.Title FROM MOVIES WHERE MOVIES.OCLC_ID = ?', (OCLC_ID,))
 #    row = c.fetchone()
 #    return template('Movie Title: {{Title}}', Title = row[0])
