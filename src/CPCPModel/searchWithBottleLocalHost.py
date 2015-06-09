@@ -38,14 +38,16 @@ class App():
             if keywordOrPhrase[i] == "_":
                 keywordOrPhrase = keywordOrPhrase[0:i] + " " + keywordOrPhrase[i+1:]
 
-        page = ""
+        resultsPage = ""
         resultsPerPage = 20
         navigation = fillPaginationHTMLFile(keywordOrPhrase, pageNumber, len(results), resultsPerPage)
         for i in range((pageNumber-1)*resultsPerPage, pageNumber*resultsPerPage):
             if len(results) > i:
-                page += fillSearchResultsHTMLFile(results[i][0],results[i][1],results[i][2],results[i][3],results[i][4],results[i][5])
+                resultsPage += fillSearchResultsHTMLFile(results[i][0],results[i][1],results[i][2],results[i][3],results[i][4],results[i][5])
         if results:
-            finalResult = navigation + page + navigation
+            numResultsMessage = "<p>Showing " + str(len(results)) + " results, " + str(resultsPerPage) + " per page.</p>" + \
+                                "<p>Click on a result to open the work's full script.</p>"
+            finalResult = navigation + numResultsMessage + resultsPage + navigation
             return template(finalResult)
         else:
             return "Your Keyword/Phrase does not occur in the database."

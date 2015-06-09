@@ -8,8 +8,9 @@ __date__ = "$May 29, 2015 9:26:40 AM$"
 import sqlite3 as lite
 import sys
 
-# TODO: Fix SQL injection vulnerabilities
+# TODO: Fix all SQL injection vulnerabilities
 
+# not vulnerable to injection
 def searchResults(keywordOrPhrase):
     """ This returns the search results for a keyword or phrase, and includes
     title, time stamps, and the matched text. I will say, however, that the data
@@ -19,10 +20,10 @@ def searchResults(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT MOVIES.OCLC_ID, ALLTEXT.LineNumber, MOVIES.Title, ALLTEXT.StartTimeStamp, \
+        command = "SELECT MOVIES.OCLC_ID, ALLTEXT.LineNumber, MOVIES.Title, ALLTEXT.StartTimeStamp, \
         ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
-        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
-        + keywordOrPhrase + "'")
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? ORDER BY MOVIES.Title"
+        cursor.execute(command, (keywordOrPhrase,))
         data = cursor.fetchall()
         return data
     
@@ -34,7 +35,7 @@ def totalMovies():
         cursor.execute("SELECT COUNT(*) FROM MOVIES")
         data = cursor.fetchall()
         return data[0][0]
-    
+
 def occurrencesByTimeStamps(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:
@@ -54,7 +55,7 @@ def cumulativeOccurrencesByReleaseYear(keywordOrPhrase):
         + keywordOrPhrase + "'" + " GROUP BY MovieReleaseYear")
         data = cursor.fetchall()
         return data
-    
+
 def occurrencesByReleaseYear(keywordOrPhrase):
     """ Same as above but counts each movie only once. Useful for returning
     percentage of movies containing keyword in certain year. """
@@ -76,7 +77,7 @@ def totalMoviesOfSpecifiedYear(year):
         WHERE MOVIES.MovieReleaseYear = " + year)
         data = cursor.fetchall()
         return data[0][0]
-    
+
 def percentageOfOccurrenceByReleaseYear(keywordOrPhrase):
     """ Returns the percentages of movies containing the keyword/phrase for each
     movie release year that occurs in the database. """
@@ -85,7 +86,7 @@ def percentageOfOccurrenceByReleaseYear(keywordOrPhrase):
     for count in counts:
         listOfPercentages += [(count[0], 100 * count[1] / totalMoviesOfSpecifiedYear(count[0]))]
     return listOfPercentages
-    
+
 def cumulativeOccurrencesByMPAARating(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:
@@ -95,7 +96,7 @@ def cumulativeOccurrencesByMPAARating(keywordOrPhrase):
         + keywordOrPhrase + "'" + " GROUP BY MPAARating")
         data = cursor.fetchall()
         return data
-    
+
 def occurrencesByMPAARating(keywordOrPhrase):
     """ Same as above but counts each movie only once. Useful for returning
     percentage of movies containing keyword of certain rating. """
