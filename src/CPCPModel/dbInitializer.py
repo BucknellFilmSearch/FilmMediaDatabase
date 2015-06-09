@@ -1,4 +1,4 @@
-__author__ = "justi_000"
+__author__ = "Justin Eyster"
 __date__ = "$May 12, 2015 9:47:20 AM$"
 
 import sqlite3 as lite

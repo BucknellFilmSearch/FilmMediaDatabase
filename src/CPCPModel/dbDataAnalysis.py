@@ -2,7 +2,7 @@
 # To change this template file, choose Tools | Templates
 # and open the template in the editor.
 
-__author__ = "justi_000"
+__author__ = "Justin Eyster"
 __date__ = "$May 29, 2015 9:26:40 AM$"
 
 import sqlite3 as lite

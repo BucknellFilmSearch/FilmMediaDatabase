@@ -2,7 +2,7 @@
 # To change this template file, choose Tools | Templates
 # and open the template in the editor.
 
-__author__ = "justi_000"
+__author__ = "Justin Eyster"
 __date__ = "$Jun 2, 2015 2:43:11 PM$"
 
 from bottle import route, run, install, template, request, get, post, static_file

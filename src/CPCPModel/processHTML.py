@@ -4,7 +4,7 @@
 
 import os
 
-__author__ = "justi_000"
+__author__ = "Justin Eyster"
 __date__ = "$Jun 5, 2015 9:35:43 AM$"
 
 def fileToStr(fileName): 
