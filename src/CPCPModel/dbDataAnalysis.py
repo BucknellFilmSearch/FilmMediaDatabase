@@ -8,6 +8,8 @@ __date__ = "$May 29, 2015 9:26:40 AM$"
 import sqlite3 as lite
 import sys
 
+# TODO: Fix SQL injection vulnerabilities
+
 def searchResults(keywordOrPhrase):
     """ This returns the search results for a keyword or phrase, and includes
     title, time stamps, and the matched text. I will say, however, that the data
@@ -17,7 +19,7 @@ def searchResults(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT MOVIES.Title, ALLTEXT.StartTimeStamp, \
+        cursor.execute("SELECT MOVIES.OCLC_ID, ALLTEXT.LineNumber, MOVIES.Title, ALLTEXT.StartTimeStamp, \
         ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
         + keywordOrPhrase + "'")

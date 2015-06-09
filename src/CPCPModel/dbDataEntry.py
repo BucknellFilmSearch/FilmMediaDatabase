@@ -164,7 +164,7 @@ class dbDataEntry():
         """ Method to fill a movie/tv show's text table from the text file.
         Text files should be named OCLC_ID_NUMBER.txt """
         
-        with open(oclcId+".txt",'r') as file:
+        with open("static/textFiles/" + oclcId+ ".txt",'r') as file:
             currentLineNumber = "1"
             nextLineNumber = "1"
             startTimeStamp = ""
