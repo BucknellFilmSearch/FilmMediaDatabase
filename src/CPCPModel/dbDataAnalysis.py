@@ -12,18 +12,38 @@ import sys
 
 # not vulnerable to injection
 def searchResults(keywordOrPhrase):
-    """ This returns the search results for a keyword or phrase, and includes
-    title, time stamps, and the matched text. I will say, however, that the data
-    looks far better in table form than it does in the format that this function 
-    produces. 
+    """
+    This returns the search results for a keyword or phrase, and includes the oclc id, movie title, line number of
+    the occurrence, time stamps, and the matched text.
+    :param keywordOrPhrase: the keyword or phrase to search.
+    :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
-        command = "SELECT MOVIES.OCLC_ID, ALLTEXT.LineNumber, MOVIES.Title, ALLTEXT.StartTimeStamp, \
+        command = "SELECT MOVIES.OCLC_ID, MOVIES.Title, ALLTEXT.LineNumber, ALLTEXT.StartTimeStamp, \
         ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? ORDER BY MOVIES.Title"
         cursor.execute(command, (keywordOrPhrase,))
+        data = cursor.fetchall()
+        return data
+
+# not vulnerable to injection
+def searchResultsByGenre(keywordOrPhrase,genre):
+    """
+    This returns the search results for a keyword or phrase, and includes the oclc id, movie title, line number of
+    the occurrence, time stamps, and the matched text.
+    :param keywordOrPhrase: the keyword or phrase to search.
+    :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
+    """
+    connection = lite.connect('cpcp.db')
+    with connection:
+        cursor = connection.cursor()
+        command = "SELECT MOVIES.OCLC_ID, MOVIES.Title, ALLTEXT.LineNumber, ALLTEXT.StartTimeStamp, \
+        ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? AND (MOVIES.Genre1 = ? OR \
+        MOVIES.Genre2 = ? OR MOVIES.Genre3 = ?) ORDER BY MOVIES.Title"
+        cursor.execute(command, (keywordOrPhrase,genre,genre,genre))
         data = cursor.fetchall()
         return data
     

@@ -14,12 +14,15 @@ def fileToStr(fileName):
     file.close() 
     return contents
 
-def fillSearchResultsHTMLFile(oclcId, lineNumber, movieTitle, startTimeStamp, endTimeStamp, lineText):
+def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText):
     textFile = "/static/textFiles/" + oclcId + ".txt"
     imageSource = "/static/imageFiles/" + oclcId + ".gif"
     return fileToStr('templates/searchResultsTemplate.html').format(**locals())
 
-def fillPaginationHTMLFile(keywordOrPhrase, currentPageNum, numResults, resultsPerPage):
+def fillAdditionalLinesHTMLFile(lineNumber, startTimeStamp, endTimeStamp, lineText):
+    return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
+
+def fillNavigationBarHTMLFile(keywordOrPhrase, currentPageNum, numResults, resultsPerPage):
     """
     Creates the HTML code for the pagination nav bar.
     :param keywordOrPhrase: the keyword/phrase searched by user
@@ -120,4 +123,4 @@ def fillPaginationHTMLFile(keywordOrPhrase, currentPageNum, numResults, resultsP
         linkPrev = '#'
 
     # return the string of HTML code for the nav bar
-    return fileToStr('templates/paginationTemplate.html').format(**locals())
+    return fileToStr('templates/navigationBarTemplate.html').format(**locals())
