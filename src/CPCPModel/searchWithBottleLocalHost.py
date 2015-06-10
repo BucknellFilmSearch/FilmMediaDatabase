@@ -6,7 +6,7 @@ __author__ = "Justin Eyster"
 __date__ = "$Jun 2, 2015 2:43:11 PM$"
 
 from datetime import datetime
-from bottle import route, run, install, template, request, get, post, static_file
+from bottle import route, run, install, template, request, get, post, static_file, redirect
 from bottle_sqlite import SQLitePlugin
 from dbDataAnalysis import search, totalMovies
 from processHTML import fillSearchResultsHTMLFile, fileToStr, fillNavigationBarHTMLFile, fillAdditionalLinesHTMLFile
@@ -54,8 +54,9 @@ class App():
             earliestReleaseYear = self.defaultEarliestReleaseYear
         if latestReleaseYear == "":
             latestReleaseYear = datetime.now().year
-        # return the generated page to the user
-        return self.generateResultsPage(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,1)
+        # forward the user to the results page
+        redirectUrl = '/moviesearch/'+keywordOrPhrase+'/'+genre+'/'+str(earliestReleaseYear)+'/'+str(latestReleaseYear)+'/'+'1'
+        redirect(redirectUrl)
 
     def generateResultsPage(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,pageNumber):
         """
