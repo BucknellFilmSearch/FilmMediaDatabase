@@ -6,9 +6,34 @@ __author__ = "Justin Eyster"
 __date__ = "$May 29, 2015 9:26:40 AM$"
 
 import sqlite3 as lite
-import sys
+from datetime import datetime
 
 # TODO: Fix all SQL injection vulnerabilities
+
+# not vulnerable to injection
+def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEarliestReleaseYear):
+    currentYear = datetime.now().year
+    # no params specified
+    if genre == "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
+        results = searchResults(keywordOrPhrase)
+    # if genre specified, no release year params specified
+    elif genre != "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
+        results = searchResultsByGenre(keywordOrPhrase,genre)
+    # if genre specified, and one or both release year params specified
+    elif genre != "All" and (earliestReleaseYear!=defaultEarliestReleaseYear or latestReleaseYear!=currentYear):
+        if earliestReleaseYear=="":
+            earliestReleaseYear = defaultEarliestReleaseYear
+        if latestReleaseYear=="":
+            latestReleaseYear = str(datetime.now().year)
+        results = searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear)
+    # if genre not specified, and one or both release year params specified
+    elif genre == "All" and (earliestReleaseYear!=defaultEarliestReleaseYear or latestReleaseYear!=currentYear):
+        if earliestReleaseYear=="":
+            earliestReleaseYear = defaultEarliestReleaseYear
+        if latestReleaseYear=="":
+            latestReleaseYear = str(datetime.now().year)
+        results = searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestReleaseYear)
+    return results
 
 # not vulnerable to injection
 def searchResults(keywordOrPhrase):
@@ -26,7 +51,7 @@ def searchResults(keywordOrPhrase):
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? ORDER BY MOVIES.Title"
         cursor.execute(command, (keywordOrPhrase,))
         data = cursor.fetchall()
-        return data
+    return data
 
 # not vulnerable to injection
 def searchResultsByGenre(keywordOrPhrase,genre):
@@ -45,7 +70,45 @@ def searchResultsByGenre(keywordOrPhrase,genre):
         MOVIES.Genre2 = ? OR MOVIES.Genre3 = ?) ORDER BY MOVIES.Title"
         cursor.execute(command, (keywordOrPhrase,genre,genre,genre))
         data = cursor.fetchall()
-        return data
+    return data
+
+# not vulnerable to injection
+def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
+    """
+    This returns the search results for a keyword or phrase, and includes the oclc id, movie title, line number of
+    the occurrence, time stamps, and the matched text.
+    :param keywordOrPhrase: the keyword or phrase to search.
+    :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
+    """
+    connection = lite.connect('cpcp.db')
+    with connection:
+        cursor = connection.cursor()
+        command = "SELECT MOVIES.OCLC_ID, MOVIES.Title, ALLTEXT.LineNumber, ALLTEXT.StartTimeStamp, \
+        ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? AND (MOVIES.Genre1 = ? OR \
+        MOVIES.Genre2 = ? OR MOVIES.Genre3 = ?) AND MOVIES.MovieReleaseYear BETWEEN ? AND ? ORDER BY MOVIES.Title"
+        cursor.execute(command, (keywordOrPhrase,genre,genre,genre,earliestReleaseYear,latestReleaseYear))
+        data = cursor.fetchall()
+    return data
+
+# not vulnerable to injection
+def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestReleaseYear):
+    """
+    This returns the search results for a keyword or phrase, and includes the oclc id, movie title, line number of
+    the occurrence, time stamps, and the matched text.
+    :param keywordOrPhrase: the keyword or phrase to search.
+    :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
+    """
+    connection = lite.connect('cpcp.db')
+    with connection:
+        cursor = connection.cursor()
+        command = "SELECT MOVIES.OCLC_ID, MOVIES.Title, ALLTEXT.LineNumber, ALLTEXT.StartTimeStamp, \
+        ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? AND (MOVIES.MovieReleaseYear \
+        BETWEEN ? AND ?) ORDER BY MOVIES.Title"
+        cursor.execute(command, (keywordOrPhrase,earliestReleaseYear,latestReleaseYear))
+        data = cursor.fetchall()
+    return data
     
 def totalMovies():
     """ Returns total number of movies in the database. """
@@ -54,7 +117,7 @@ def totalMovies():
         cursor = connection.cursor()
         cursor.execute("SELECT COUNT(*) FROM MOVIES")
         data = cursor.fetchall()
-        return data[0][0]
+    return data[0][0]
 
 def occurrencesByTimeStamps(keywordOrPhrase):
     connection = lite.connect('cpcp.db')

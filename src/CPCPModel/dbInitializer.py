@@ -36,11 +36,11 @@ class dbInitializer():
             cursor = self.connection.cursor()
             cursor.execute("DROP TABLE IF EXISTS MOVIES")
             cursor.execute("CREATE TABLE MOVIES (\
-            OCLC_ID             VARCHAR            PRIMARY KEY, \
+            OCLC_ID             INTEGER            PRIMARY KEY, \
             Title               VARCHAR, \
             Director            VARCHAR, \
-            MovieReleaseYear    CHAR (4), \
-            DVDReleaseYear      CHAR (4), \
+            MovieReleaseYear    INTEGER, \
+            DVDReleaseYear      INTEGER, \
             Country1            CHAR (3), \
             Country2            CHAR (3), \
             Country3            CHAR (3), \
@@ -48,7 +48,7 @@ class dbInitializer():
             Genre2              VARCHAR, \
             Genre3              VARCHAR, \
             MPAARating          VARCHAR, \
-            RuntimeInMinutes    VARCHAR, \
+            RuntimeInMinutes    INTEGER, \
             CCorSUB             VARCHAR )")
             
     def createTVShowsTable(self):
@@ -59,14 +59,14 @@ class dbInitializer():
             cursor = self.connection.cursor()
             cursor.execute("DROP TABLE IF EXISTS TVSHOWS")
             cursor.execute("CREATE TABLE TVSHOWS (\
-            OCLC_ID             VARCHAR            PRIMARY KEY, \
+            OCLC_ID             INTEGER            PRIMARY KEY, \
             ShowTitle           VARCHAR, \
             EpisodeTitle        VARCHAR, \
-            SeasonNumber        VARCHAR, \
-            EpisodeNumber       VARCHAR, \
+            SeasonNumber        INTEGER, \
+            EpisodeNumber       INTEGER, \
             Director            VARCHAR, \
-            EpisodeReleaseYear  CHAR (4), \
-            DVDReleaseYear      CHAR (4), \
+            EpisodeReleaseYear  INTEGER, \
+            DVDReleaseYear      INTEGER, \
             Country1            CHAR (3), \
             Country2            CHAR (3), \
             Country3            CHAR (3), \
@@ -74,7 +74,7 @@ class dbInitializer():
             Genre2              VARCHAR, \
             Genre3              VARCHAR, \
             TVRating            VARCHAR, \
-            RuntimeInMinutes    VARCHAR, \
+            RuntimeInMinutes    INTEGER, \
             CCorSUB             VARCHAR )")
             
     def createAllTextTable(self):
@@ -88,8 +88,8 @@ class dbInitializer():
 
             cursor.execute("DROP TABLE IF EXISTS ALLTEXT")
             cursor.execute("CREATE VIRTUAL TABLE ALLTEXT USING fts4( \
-            OCLC_ID             VARCHAR, \
-            LineNumber          VARCHAR            PRIMARY KEY, \
+            OCLC_ID             INTEGER, \
+            LineNumber          INTEGER            PRIMARY KEY, \
             StartTimeStamp      VARCHAR, \
             EndTimeStamp        VARCHAR, \
             LineText            VARCHAR, \

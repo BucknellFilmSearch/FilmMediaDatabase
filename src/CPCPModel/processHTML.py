@@ -15,14 +15,15 @@ def fileToStr(fileName):
     return contents
 
 def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText):
-    textFile = "/static/textFiles/" + oclcId + ".txt"
-    imageSource = "/static/imageFiles/" + oclcId + ".gif"
+    textFile = "/static/textFiles/" + str(oclcId) + ".txt"
+    imageSource = "/static/imageFiles/" + str(oclcId) + ".gif"
     return fileToStr('templates/searchResultsTemplate.html').format(**locals())
 
 def fillAdditionalLinesHTMLFile(lineNumber, startTimeStamp, endTimeStamp, lineText):
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
 
-def fillNavigationBarHTMLFile(keywordOrPhrase, currentPageNum, numResults, resultsPerPage):
+def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, currentPageNum,
+                              numResults, resultsPerPage):
     """
     Creates the HTML code for the pagination nav bar.
     :param keywordOrPhrase: the keyword/phrase searched by user
@@ -88,37 +89,38 @@ def fillNavigationBarHTMLFile(keywordOrPhrase, currentPageNum, numResults, resul
         else:
             pageNum5 = 'N/A'
 
+    beginningOfNavUrls = '/moviesearch/'+keywordOrPhrase+'/'+genre+'/'+str(earliestReleaseYear)+'/'+str(latestReleaseYear)+'/'
     # when you click on the first number on the nav bar, it will go to either page 1 of results or the prev page
-    link1 = '/moviesearch/' + keywordOrPhrase + '/' + str(pageNum1)
+    link1 = beginningOfNavUrls + str(pageNum1)
     # for the second number on the nav bar, and third, and so on, decide if there are enough results to link
     # it to anything. If not, use '#' which jumps to top of current page.
     if currentPageNum == 1 and numResults > resultsPerPage:
-        link2 = '/moviesearch/' + keywordOrPhrase + '/' + str(pageNum2)
+        link2 = beginningOfNavUrls + str(pageNum2)
     else:
         link2 = '#'
     if (currentPageNum == 1 and numResults > (resultsPerPage * 2)) or (currentPageNum != 1 and numResults > currentPageNum * resultsPerPage):
-        link3 = '/moviesearch/' + keywordOrPhrase + '/' + str(pageNum3)
+        link3 = beginningOfNavUrls + str(pageNum3)
     else:
         link3 = '#'
     if (currentPageNum == 1 and numResults > (resultsPerPage * 3)) or (currentPageNum != 1 and numResults > (currentPageNum + 1) * resultsPerPage):
-        link4 = '/moviesearch/' + keywordOrPhrase + '/' + str(pageNum4)
+        link4 = beginningOfNavUrls + str(pageNum4)
     else:
         link4 = '#'
     if (currentPageNum == 1 and numResults > (resultsPerPage * 4)) or (currentPageNum != 1 and numResults > (currentPageNum + 2) * resultsPerPage):
-        link5 = '/moviesearch/' + keywordOrPhrase + '/' + str(pageNum5)
+        link5 = beginningOfNavUrls + str(pageNum5)
     else:
         link5 = '#'
 
     # if there are enough results to have a next page, link the next button to the next page, else use '#'
     # which jumpts to top of current page
     if numResults > currentPageNum * resultsPerPage:
-        linkNext = '/moviesearch/' + keywordOrPhrase + '/' + str(currentPageNum + 1)
+        linkNext = beginningOfNavUrls + str(currentPageNum + 1)
     else:
         linkNext = '#'
     # if not on first page, the previous button should link to the previous page. If not use '#' which jumps to top
     # of current page
     if currentPageNum > 1:
-        linkPrev = '/moviesearch/' + keywordOrPhrase + '/' + str(currentPageNum - 1)
+        linkPrev = beginningOfNavUrls + str(currentPageNum - 1)
     else:
         linkPrev = '#'
 

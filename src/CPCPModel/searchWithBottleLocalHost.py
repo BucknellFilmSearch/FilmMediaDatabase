@@ -5,9 +5,10 @@
 __author__ = "Justin Eyster"
 __date__ = "$Jun 2, 2015 2:43:11 PM$"
 
+from datetime import datetime
 from bottle import route, run, install, template, request, get, post, static_file
 from bottle_sqlite import SQLitePlugin
-from dbDataAnalysis import searchResults, totalMovies, searchResultsByGenre
+from dbDataAnalysis import search, totalMovies
 from processHTML import fillSearchResultsHTMLFile, fileToStr, fillNavigationBarHTMLFile, fillAdditionalLinesHTMLFile
 
 install(SQLitePlugin(dbfile='cpcp.db'))
@@ -19,17 +20,21 @@ class App():
         Provides location to store results so that all functions can access it after retrieving once.
         Also the master location for resultsPerPage. This is the only place where you should have to adjust this.
         Also stores the current keyword/phrase being searched.
+        Also stores default earliest release year. Right now we're only including movies released after 2000.
         """
         self.results = []
         self.keywordOrPhraseSearched = ""
         self.resultsPerPage = 25
+        self.defaultEarliestReleaseYear = 2000
 
     def getUserSearchFromLandingPage(self):
         """
         Displays and gets the user's search through use of an html form in the inputPageTemplate.
         :return: the HTML code string for the landing page, with a search box.
         """
+        currentYear = str(datetime.now().year)
         numMovies = totalMovies()
+        defaultEarliestReleaseYear = self.defaultEarliestReleaseYear
         return fileToStr('templates/inputPageTemplate.html').format(**locals())
 
     def searchFromLandingPage(self):
@@ -38,16 +43,21 @@ class App():
         generateResultsPages.
         :return: the generated results pages, using the function generateResultsPages.
         """
+        # get search phrase
         keywordOrPhrase = request.forms.get('keywordOrPhrase')
+        # get genre params
         genre = request.forms.get('genre')
-        if genre == "All":
-            self.results = searchResults(keywordOrPhrase)
-        elif genre != "All":
-            self.results = searchResultsByGenre(keywordOrPhrase,genre)
-        self.keywordOrPhraseSearched = keywordOrPhrase
-        return self.generateResultsPage(keywordOrPhrase, 1)
+        # get release year params
+        earliestReleaseYear = request.forms.get('earliestReleaseYear')
+        latestReleaseYear = request.forms.get('latestReleaseYear')
+        if earliestReleaseYear == "":
+            earliestReleaseYear = self.defaultEarliestReleaseYear
+        if latestReleaseYear == "":
+            latestReleaseYear = datetime.now().year
+        # return the generated page to the user
+        return self.generateResultsPage(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,1)
 
-    def generateResultsPage(self, keywordOrPhrase, pageNumber):
+    def generateResultsPage(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,pageNumber):
         """
         If the search hasn't been done yet, perform search with keyword. Either way, generate the specified page of
         results.
@@ -61,32 +71,33 @@ class App():
             if keywordOrPhrase[i] == "_":
                 keywordOrPhrase = keywordOrPhrase[0:i] + " " + keywordOrPhrase[i+1:]
 
-        # if results already exist for the keyword/phrase, use them. If not, run the search with the new keyword.
-        if len(self.results) > 0 and self.keywordOrPhraseSearched == keywordOrPhrase:
-            results = self.results
-        else:
-            results = searchResults(keywordOrPhrase)
+        # perform search
+        results = search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,self.defaultEarliestReleaseYear)
+        # store results, if not none
+        if not (results is None):
             self.results = results
-            self.keywordOrPhraseSearched = keywordOrPhrase
+        # store keyword that was searched
+        self.keywordOrPhraseSearched = keywordOrPhrase
 
         # initialize resultsPage variable
         resultsPage = ""
         # Later, place the following HTML code at the end of the results. (then put the nav bar after this.)
         resultsCap =   "</a></div></body></html>"
         # generate HTML code for the nav bar using the function below
-        navBar = fillNavigationBarHTMLFile(keywordOrPhrase, pageNumber, len(results), self.resultsPerPage)
+        navBar = fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, pageNumber,
+                                           len(self.results), self.resultsPerPage)
         # variable to track oclc id of previous movie, to know if we need to start a new result or add to previous
         prevMovieOclcId = ""
         # iterate through results, use fillSearchResultsHTMLFile to generate HTML code for the results page
         for i in range((pageNumber-1)*self.resultsPerPage, pageNumber*self.resultsPerPage):
             # if there are enough results for one more on the page...
-            if len(results) > i:
-                movieOclcId = results[i][0]
-                movieTitle = results[i][1]
-                movieLineNumber = results[i][2]
-                movieStartTimeStamp = results[i][3]
-                movieEndTimeStamp = results[i][4]
-                movieLineText = results[i][5]
+            if len(self.results) > i:
+                movieOclcId = self.results[i][0]
+                movieTitle = self.results[i][1]
+                movieLineNumber = self.results[i][2]
+                movieStartTimeStamp = self.results[i][3]
+                movieEndTimeStamp = self.results[i][4]
+                movieLineText = self.results[i][5]
                 # if line is from a new movie...
                 if prevMovieOclcId != movieOclcId:
                     # cap the previous movie, use function below to generate HTML code for next movie's results
@@ -96,7 +107,7 @@ class App():
                     resultsPage += fillAdditionalLinesHTMLFile(movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
                 prevMovieOclcId = movieOclcId
         # as long as there are results...
-        if results:
+        if len(self.results)>0:
             # message at top of page
             numResultsMessage = "<p>Showing " + str(len(results)) + " results, " + str(self.resultsPerPage) + " per page.</p>" + \
                                 "<p>Click on a result to open the work's full script.</p>"
@@ -106,7 +117,7 @@ class App():
             return template(finalResult)
         # if there are no results, say so
         else:
-            return "Your Keyword/Phrase does not occur in the database."
+            return "Your Keyword/Phrase does not occur in the database (with specified parameters)."
 
     def static(self, path):
         """
@@ -120,7 +131,8 @@ appInstance = App()
 # route the proper URL's to the proper methods in the class
 get('/moviesearch')(appInstance.getUserSearchFromLandingPage)
 post('/moviesearch')(appInstance.searchFromLandingPage)
-route('/moviesearch/<keywordOrPhrase>/<pageNumber:int>')(appInstance.generateResultsPage)
+route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>/<pageNumber:int>')\
+    (appInstance.generateResultsPage)
 route('/static/:path#.+#', name='static')(appInstance.static)
 # run the server
 run(host='localhost', port=8080, debug=True)(appInstance)
