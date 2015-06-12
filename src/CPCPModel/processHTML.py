@@ -26,10 +26,10 @@ def fillAdditionalLinesHTMLFile(lineNumber, startTimeStamp, endTimeStamp, lineTe
 def fillGraphHTMLFile(keywordOrPhrase, plotType):
     if plotType == "percentageByReleaseYear":
         data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase)
-    twoDimensArrayOfVals = []
-    for item in data:
-        twoDimensArrayOfVals.append([item[0],item[1]])
-    return fileToStr('templates/graphTemplate.html').format(**locals())
+        twoDimensArrayOfVals = []
+        for item in data:
+            twoDimensArrayOfVals.append([item[0],item[1]])
+        return fileToStr('templates/percentageAcrossReleaseYearGraphTemplate.html').format(**locals())
 
 
 def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, currentPageNum,

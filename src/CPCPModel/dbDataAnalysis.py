@@ -175,7 +175,6 @@ def percentageOfOccurrenceByReleaseYear(keywordOrPhrase):
     listOfPercentages = []
     for count in counts:
         listOfPercentages += [(count[0], 100 * count[1] / totalMoviesOfSpecifiedYear(count[0]))]
-    print(listOfPercentages)
     return listOfPercentages
 
 def cumulativeOccurrencesByMPAARating(keywordOrPhrase):

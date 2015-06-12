@@ -19,8 +19,8 @@
             {{
             lines:{{show:false}},
             points:{{show:true}},
-            xaxis:{{tickDecimals:0}},
-            yaxis:{{min:0,max:100,tickDecimals:0}}
+            xaxis:{{tickDecimals:0,color:'#fff',tickColor:'#fff',font:'#fff'}},
+            yaxis:{{min:0,max:100,tickDecimals:0,color:'#fff',tickColor:'#fff',font:'#fff'}}
             }});
 
             // Add the Flot version string to the footer
@@ -34,11 +34,13 @@
 </head>
 <body>
 
+    <br>
 	<div id="content">
 
-		<div class="inner cover">
+		<div><p class="inner cover">
             <p class="lead">
-			    <div id="placeholder" style="width:600px;height:300px"></div>
+                <div id="header"><h4 style="color:white">Percentage Of Movies Containing Your Search Term (By Release Year)</h4></div>
+			    <div id="placeholder" style="width:650px;height:300px"></div>
             </p>
         </div>
 

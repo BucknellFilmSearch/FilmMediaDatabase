@@ -116,9 +116,9 @@ class App():
         # as long as there are results...
         if len(self.results)>0:
             # message at top of page
-            numResultsMessage = "<p><a href='/moviesearch'>Back to search page.</a></p>" + \
-                                "<p>Showing " + str(len(results)) + " results, " + str(self.resultsPerPage) + " per page.</p>" + \
-                                "<p>Click on a result to open the work's full script.</p>"
+            numResultsMessage = "<p class=message-text><a href='/moviesearch'>Back to search page.</a></p>" + \
+                                "<p class=message-text>Showing " + str(len(results)) + " results, " + str(self.resultsPerPage) + " per page.</p>" + \
+                                "<p class=message-text>Click on a result to open the work's full script.</p>"
 
             # put together all the pieces into one final string of HTML code, with the results for the page and the
             # nav bar
@@ -129,7 +129,7 @@ class App():
             # generate HTML code for the nav bar using the function below
             navBar = fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear,
                                                pageNumber, len(self.results), self.resultsPerPage)
-            graph = ""#fillGraphHTMLFile(keywordOrPhrase, "percentageByReleaseYear")
+            graph = fillGraphHTMLFile(keywordOrPhrase, "percentageByReleaseYear")
             return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
         # if there are no results, say so
         else:
