@@ -1,0 +1,48 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Flot Examples: Basic Usage</title>
+	<link href="/static/css/cover.css" rel="stylesheet" type="text/css">
+	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/static/js/excanvas.min.js"></script><![endif]-->
+	<script language="javascript" type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
+	<script src="/static/js/jquery.flot.min.js"></script>
+	<script type="text/javascript">
+
+    (function($){{
+        $(function(){{
+
+            d1 = {twoDimensArrayOfVals};
+
+            $.plot("#placeholder", [d1],
+            {{
+            lines:{{show:false}},
+            points:{{show:true}},
+            xaxis:{{tickDecimals:0}},
+            yaxis:{{min:0,max:100,tickDecimals:0}}
+            }});
+
+            // Add the Flot version string to the footer
+
+            $("#footer").prepend("Flot " + $.plot.version + " &ndash; ");
+
+	    }});
+	}})(jQuery);
+
+	</script>
+</head>
+<body>
+
+	<div id="content">
+
+		<div class="inner cover">
+            <p class="lead">
+			    <div id="placeholder" style="width:600px;height:300px"></div>
+            </p>
+        </div>
+
+	</div>
+
+</body>
+</html>

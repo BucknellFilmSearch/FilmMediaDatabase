@@ -10,6 +10,7 @@ from bottle import route, run, install, template, request, get, post, static_fil
 from bottle_sqlite import SQLitePlugin
 from dbDataAnalysis import search, totalMovies
 from processHTML import fillSearchResultsHTMLFile, fileToStr, fillNavigationBarHTMLFile, fillAdditionalLinesHTMLFile
+from processHTML import fillGraphHTMLFile
 
 install(SQLitePlugin(dbfile='cpcp.db'))
 
@@ -35,7 +36,12 @@ class App():
         currentYear = str(datetime.now().year)
         numMovies = totalMovies()
         defaultEarliestReleaseYear = self.defaultEarliestReleaseYear
-        return fileToStr('templates/inputPageTemplate.html').format(**locals())
+        pageContent = fileToStr('templates/inputPageTemplate.html').format(**locals())
+        homeActive = "class='active'"
+        homeLink = "#"
+        navBar = ""
+        graph = ""
+        return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
 
     def searchFromLandingPage(self):
         """
@@ -45,6 +51,8 @@ class App():
         """
         # get search phrase
         keywordOrPhrase = request.forms.get('keywordOrPhrase')
+        if len(keywordOrPhrase) == 0:
+            return "Please specify a keyword or phrase before clicking 'search.'"
         # get genre params
         genre = request.forms.get('genre')
         # get release year params
@@ -67,7 +75,8 @@ class App():
         :return: the HTML code for the entire page of results.
         """
 
-        # convert underscores to spaces (underscores are used in the URL in place of spaces, need to convert back)
+        # convert underscores to spaces
+        # (underscores are sometimes used in the URL in place of spaces, need to convert back)
         for i in range(len(keywordOrPhrase)):
             if keywordOrPhrase[i] == "_":
                 keywordOrPhrase = keywordOrPhrase[0:i] + " " + keywordOrPhrase[i+1:]
@@ -83,10 +92,7 @@ class App():
         # initialize resultsPage variable
         resultsPage = ""
         # Later, place the following HTML code at the end of the results. (then put the nav bar after this.)
-        resultsCap =   "</a></div></body></html>"
-        # generate HTML code for the nav bar using the function below
-        navBar = fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, pageNumber,
-                                           len(self.results), self.resultsPerPage)
+        resultsCap = "</a></div></body></html>"
         # variable to track oclc id of previous movie, to know if we need to start a new result or add to previous
         prevMovieOclcId = ""
         # iterate through results, use fillSearchResultsHTMLFile to generate HTML code for the results page
@@ -110,12 +116,21 @@ class App():
         # as long as there are results...
         if len(self.results)>0:
             # message at top of page
-            numResultsMessage = "<p>Showing " + str(len(results)) + " results, " + str(self.resultsPerPage) + " per page.</p>" + \
+            numResultsMessage = "<p><a href='/moviesearch'>Back to search page.</a></p>" + \
+                                "<p>Showing " + str(len(results)) + " results, " + str(self.resultsPerPage) + " per page.</p>" + \
                                 "<p>Click on a result to open the work's full script.</p>"
+
             # put together all the pieces into one final string of HTML code, with the results for the page and the
             # nav bar
-            finalResult = navBar + numResultsMessage + resultsPage + resultsCap + navBar
-            return template(finalResult)
+            finalResult = numResultsMessage + resultsPage + resultsCap
+            pageContent = finalResult
+            homeActive = ""
+            homeLink = "/moviesearch"
+            # generate HTML code for the nav bar using the function below
+            navBar = fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear,
+                                               pageNumber, len(self.results), self.resultsPerPage)
+            graph = ""#fillGraphHTMLFile(keywordOrPhrase, "percentageByReleaseYear")
+            return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
         # if there are no results, say so
         else:
             return "Your Keyword/Phrase does not occur in the database (with specified parameters)."

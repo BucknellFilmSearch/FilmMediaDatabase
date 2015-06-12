@@ -129,38 +129,45 @@ def occurrencesByTimeStamps(keywordOrPhrase):
         data = cursor.fetchall()
         return data
 
+# not vulnerable to injection
 def cumulativeOccurrencesByReleaseYear(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT MOVIES.MovieReleaseYear, COUNT(*) FROM MOVIES, ALLTEXT \
-        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
-        + keywordOrPhrase + "'" + " GROUP BY MovieReleaseYear")
+        command = "SELECT MOVIES.MovieReleaseYear, COUNT(*) FROM MOVIES, ALLTEXT \
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? \
+        GROUP BY MovieReleaseYear"
+        cursor.execute(command, (keywordOrPhrase,))
         data = cursor.fetchall()
-        return data
+    return data
 
+# not vulnerable
 def occurrencesByReleaseYear(keywordOrPhrase):
     """ Same as above but counts each movie only once. Useful for returning
     percentage of movies containing keyword in certain year. """
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT MOVIES.MovieReleaseYear, COUNT(DISTINCT MOVIES.OCLC_ID) FROM MOVIES, ALLTEXT \
-        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH '" \
-        + keywordOrPhrase + "'" + " GROUP BY MovieReleaseYear")
+        command = "SELECT MOVIES.MovieReleaseYear, COUNT(DISTINCT MOVIES.OCLC_ID) FROM MOVIES, ALLTEXT \
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? \
+        GROUP BY MovieReleaseYear"
+        cursor.execute(command, (keywordOrPhrase,))
         data = cursor.fetchall()
-        return data
-    
+    return data
+
+# not vulnerable
 def totalMoviesOfSpecifiedYear(year):
     """ Helper function for percentageOfOccurrenceByReleaseYear. """
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT COUNT(DISTINCT MOVIES.OCLC_ID) FROM MOVIES \
-        WHERE MOVIES.MovieReleaseYear = " + year)
+        command = "SELECT COUNT(DISTINCT MOVIES.OCLC_ID) FROM MOVIES \
+        WHERE MOVIES.MovieReleaseYear = ?"
+        cursor.execute(command, (year,))
         data = cursor.fetchall()
-        return data[0][0]
+    return data[0][0]
 
+# not vulnerable
 def percentageOfOccurrenceByReleaseYear(keywordOrPhrase):
     """ Returns the percentages of movies containing the keyword/phrase for each
     movie release year that occurs in the database. """
@@ -168,6 +175,7 @@ def percentageOfOccurrenceByReleaseYear(keywordOrPhrase):
     listOfPercentages = []
     for count in counts:
         listOfPercentages += [(count[0], 100 * count[1] / totalMoviesOfSpecifiedYear(count[0]))]
+    print(listOfPercentages)
     return listOfPercentages
 
 def cumulativeOccurrencesByMPAARating(keywordOrPhrase):

@@ -3,6 +3,7 @@
 # and open the template in the editor.
 
 import os
+from dbDataAnalysis import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear
 
 __author__ = "Justin Eyster"
 __date__ = "$Jun 5, 2015 9:35:43 AM$"
@@ -21,6 +22,15 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
 
 def fillAdditionalLinesHTMLFile(lineNumber, startTimeStamp, endTimeStamp, lineText):
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
+
+def fillGraphHTMLFile(keywordOrPhrase, plotType):
+    if plotType == "percentageByReleaseYear":
+        data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase)
+    twoDimensArrayOfVals = []
+    for item in data:
+        twoDimensArrayOfVals.append([item[0],item[1]])
+    return fileToStr('templates/graphTemplate.html').format(**locals())
+
 
 def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, currentPageNum,
                               numResults, resultsPerPage):
@@ -41,6 +51,8 @@ def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, lates
 
     # if we're on the first page of results
     if currentPageNum == 1:
+        # don't include the jump to first button
+        linkFirst = "#"
         # highlight the 1 on the nav bar
         active1 = "class='active'"
         # don't highlight the 2
@@ -66,6 +78,9 @@ def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, lates
             pageNum5 = 'N/A'
     # if we're not on the first page of results
     else:
+        # include the jump to first button
+        linkFirst = "/moviesearch/" + keywordOrPhrase + "/" + genre + "/" + str(earliestReleaseYear) \
+                      + "/" + str(latestReleaseYear) + "/" + "1"
         # don't highlight the first number on nav bar (it is for previous page)
         active1 = ""
         # highlight the second number on the nav bar (current page)
@@ -89,27 +104,41 @@ def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, lates
         else:
             pageNum5 = 'N/A'
 
+    # set up 'Last Page' button
+    lastPage = numResults // resultsPerPage
+    if currentPageNum == lastPage:
+        linkLast = "#"
+        activeLast = "class='active'"
+    else:
+        linkLast = "/moviesearch/" + keywordOrPhrase + "/" + genre + "/" + str(earliestReleaseYear) \
+                      + "/" + str(latestReleaseYear) + "/" + str(lastPage)
+        activeLast = ""
+
     beginningOfNavUrls = '/moviesearch/'+keywordOrPhrase+'/'+genre+'/'+str(earliestReleaseYear)+'/'+str(latestReleaseYear)+'/'
     # when you click on the first number on the nav bar, it will go to either page 1 of results or the prev page
     link1 = beginningOfNavUrls + str(pageNum1)
     # for the second number on the nav bar, and third, and so on, decide if there are enough results to link
     # it to anything. If not, use '#' which jumps to top of current page.
-    if currentPageNum == 1 and numResults > resultsPerPage:
+    if pageNum2 != 'N/A':
         link2 = beginningOfNavUrls + str(pageNum2)
+        button2 = "<li "+activeOther+"><a href='"+link2+"'>"+str(pageNum2)+"</a></li>"
     else:
-        link2 = '#'
-    if (currentPageNum == 1 and numResults > (resultsPerPage * 2)) or (currentPageNum != 1 and numResults > currentPageNum * resultsPerPage):
+        button2 = ""
+    if pageNum3 != 'N/A':
         link3 = beginningOfNavUrls + str(pageNum3)
+        button3 = "<li><a href='"+link3+"'>"+str(pageNum3)+"</a></li>"
     else:
-        link3 = '#'
-    if (currentPageNum == 1 and numResults > (resultsPerPage * 3)) or (currentPageNum != 1 and numResults > (currentPageNum + 1) * resultsPerPage):
+        button3 = ""
+    if pageNum4 != 'N/A':
         link4 = beginningOfNavUrls + str(pageNum4)
+        button4 = "<li><a href='"+link4+"'>"+str(pageNum4)+"</a></li>"
     else:
-        link4 = '#'
-    if (currentPageNum == 1 and numResults > (resultsPerPage * 4)) or (currentPageNum != 1 and numResults > (currentPageNum + 2) * resultsPerPage):
+        button4 = ""
+    if pageNum5 != 'N/A':
         link5 = beginningOfNavUrls + str(pageNum5)
+        button5 = "<li><a href='"+link5+"'>"+str(pageNum5)+"</a></li>"
     else:
-        link5 = '#'
+        button5 = ""
 
     # if there are enough results to have a next page, link the next button to the next page, else use '#'
     # which jumpts to top of current page
