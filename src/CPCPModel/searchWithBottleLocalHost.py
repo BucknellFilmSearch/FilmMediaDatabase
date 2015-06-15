@@ -26,6 +26,8 @@ class App():
         self.results = []
         self.keywordOrPhraseSearched = ""
         self.resultsPerPage = 25
+        # FUTURE MANAGER OF THIS SOFTWARE LOOK BELOW!
+        # TODO: change value below to the year of the first movie in history when expanding to movies released pre-2000
         self.defaultEarliestReleaseYear = 2000
 
     def getUserSearchFromLandingPage(self):
@@ -117,7 +119,8 @@ class App():
         if len(self.results)>0:
             # message at top of page
             numResultsMessage = "<p class=message-text><a href='/moviesearch'>Back to search page.</a></p>" + \
-                                "<p class=message-text>Showing " + str(len(results)) + " results, " + str(self.resultsPerPage) + " per page.</p>" + \
+                                "<p class=message-text>Showing " + str(len(results)) + " results for '" + keywordOrPhrase +\
+                                "', " + str(self.resultsPerPage) + " per page.</p>" + \
                                 "<p class=message-text>Click on a result to open the work's full script.</p>"
 
             # put together all the pieces into one final string of HTML code, with the results for the page and the
@@ -129,7 +132,10 @@ class App():
             # generate HTML code for the nav bar using the function below
             navBar = fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear,
                                                pageNumber, len(self.results), self.resultsPerPage)
-            graph = fillGraphHTMLFile(keywordOrPhrase, "percentageByReleaseYear")
+            if pageNumber == 1:
+                graph = fillGraphHTMLFile(keywordOrPhrase, "percentageByReleaseYear")
+            else:
+                graph = ""
             return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
         # if there are no results, say so
         else:

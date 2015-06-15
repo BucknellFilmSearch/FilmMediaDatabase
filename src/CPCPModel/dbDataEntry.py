@@ -88,7 +88,7 @@ class dbDataEntry():
                 break
             elif verification == "0":
                 self.enterMovie()
-                pass
+                break
             else:
                 print("Invalid entry. Try again.")
     

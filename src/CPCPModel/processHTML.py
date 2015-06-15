@@ -106,6 +106,8 @@ def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, lates
 
     # set up 'Last Page' button
     lastPage = numResults // resultsPerPage
+    if lastPage == 0:
+        lastPage = 1
     if currentPageNum == lastPage:
         linkLast = "#"
         activeLast = "class='active'"

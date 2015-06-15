@@ -17,10 +17,10 @@
 
             $.plot("#placeholder", [d1],
             {{
-            lines:{{show:false}},
+            lines:{{show:true}},
             points:{{show:true}},
-            xaxis:{{tickDecimals:0,color:'#fff',tickColor:'#fff',font:'#fff'}},
-            yaxis:{{min:0,max:100,tickDecimals:0,color:'#fff',tickColor:'#fff',font:'#fff'}}
+            xaxis:{{tickDecimals:0,tickSize:1,color:'#fff',tickColor:'#fff',font:'#fff'}},
+            yaxis:{{min:0,max:100,tickDecimals:0,tickSize:10,color:'#fff',tickColor:'#fff',font:'#fff'}}
             }});
 
             // Add the Flot version string to the footer
