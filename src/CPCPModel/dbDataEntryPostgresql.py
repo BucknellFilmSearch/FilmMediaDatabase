@@ -205,11 +205,13 @@ def fillMediaTextTable(oclc_id):
                 # if extra precision is needed: and line[19] == ":" and line[22] == ":" and line[25] == ",":
                 print("Found timestamp line #" + currentLineNumber)
                 timeStampLine = line
+                # parse out the beginning and ending time stamp, separately
                 startTimeStamp = timeStampLine[0:12]
                 endTimeStamp = timeStampLine[17:29]
             # else, we know that what we've found must be the line text...
             else:
                 print(line)
+                # add the line to the line text
                 lineText += line
 
 # after methods are defined, go to main menu
