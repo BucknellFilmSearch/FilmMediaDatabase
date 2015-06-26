@@ -10,7 +10,8 @@ from sys import exit
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
-from dbInitializerPostgresql import MediaMetadata, MediaText
+from MediaMetadata import *
+from MediaText import *
 from postgresSettings import DATABASE
 
 # create connection to database
@@ -210,7 +211,7 @@ def fillMediaTextTable(oclc_id):
                 endTimeStamp = timeStampLine[17:29]
             # else, we know that what we've found must be the line text...
             else:
-                print(line)
+                print(line.encode('utf-8'))
                 # add the line to the line text
                 lineText += line
 
