@@ -3,7 +3,8 @@
 # and open the template in the editor.
 
 import os
-from dbDataAnalysis import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear
+from dbDataAnalysisSqlite import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search
+from datetime import datetime
 
 __author__ = "Justin Eyster"
 __date__ = "$Jun 5, 2015 9:35:43 AM$"
@@ -14,6 +15,80 @@ def fileToStr(fileName):
     contents = file.read();  
     file.close() 
     return contents
+
+def generateSearchPage(defaultEarliestReleaseYear):
+    """Generates the search page using inputPageTemplate and bootstrapThemeTemplate (html templates).
+    Parameters: defaultEarliestReleaseYear - the earliest release year represented in the database.
+    Returns: a string of html code representing the search page."""
+    # define variables for the input page template
+    numMovies = totalMovies()
+    currentYear = str(datetime.now().year)
+    # prepare page content, fill in the number of movies, and earliest and latest possible release years from above
+    pageContent = fileToStr('templates/inputPageTemplate.html').format(**locals())
+
+    # define other variables for the bootstrap template (this theme makes everything look pretty)
+    # html code to activate the 'home' link, since we're on the home page
+    homeActive = "class='active'"
+    # the link of the home button is #, which is just a jump to the top of the current page (since already on home)
+    homeLink = "#"
+    # no nav bar, because we're on the search page, not the results page
+    navBar = ""
+    # ditto for graph
+    graph = ""
+    # fill in the bootstrap template with the pageContent, and the variables above
+    return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
+
+def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, results, resultsPerPage, pageNumber):
+    # initialize resultsPage variable
+    resultsPage = ""
+    # Later, place the following HTML code at the end of the results. (then put the nav bar after this.)
+    resultsCap = "</a></div></body></html>"
+    # variable to track oclc id of previous movie, to know if we need to start a new result or add to previous
+    prevMovieOclcId = ""
+    # iterate through results, use fillSearchResultsHTMLFile to generate HTML code for the results page
+    for i in range((pageNumber-1)*resultsPerPage, pageNumber*resultsPerPage):
+        # if there are enough results for one more on the page...
+        if len(results) > i:
+            movieOclcId = results[i][0]
+            movieTitle = results[i][1]
+            movieLineNumber = results[i][2]
+            movieStartTimeStamp = results[i][3]
+            movieEndTimeStamp = results[i][4]
+            movieLineText = results[i][5]
+            # if line is from a new movie...
+            if prevMovieOclcId != movieOclcId:
+                # cap the previous movie, use function below to generate HTML code for next movie's results
+                resultsPage += resultsCap + fillSearchResultsHTMLFile(movieOclcId,movieTitle,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
+            # if line is from same movie as previous, add the additional line to the movie's results
+            elif prevMovieOclcId == movieOclcId:
+                resultsPage += fillAdditionalLinesHTMLFile(movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
+            prevMovieOclcId = movieOclcId
+    # as long as there are results...
+    if len(results)>0:
+        # message at top of page
+        numResultsMessage = "<p class=message-text><a href='/moviesearch'>Back to search page.</a></p>" + \
+                            "<p class=message-text>Showing " + str(len(results)) + " results for '" + keywordOrPhrase + \
+                            "', " + str(resultsPerPage) + " per page.</p>" + \
+                            "<p class=message-text>Click on a result to open the work's full script.</p>"
+
+        # put together all the pieces into one final string of HTML code, with the results for the page and the
+        # nav bar
+        finalResult = numResultsMessage + resultsPage + resultsCap
+        pageContent = finalResult
+        homeActive = ""
+        homeLink = "/moviesearch"
+        # generate HTML code for the nav bar using the function below
+        navBar = fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear,
+                                           pageNumber, len(results), resultsPerPage)
+        if pageNumber == 1:
+            graph = fillGraphHTMLFile(keywordOrPhrase, "percentageByReleaseYear")
+        else:
+            graph = ""
+        return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
+    # if there are no results, say so
+    else:
+        return "Your Keyword/Phrase does not occur in the database (with specified parameters)."
+
 
 def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText):
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"

@@ -15,12 +15,15 @@ def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEa
     currentYear = datetime.now().year
     # no params specified
     if genre == "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
+        print("Only keyword.")
         results = searchResults(keywordOrPhrase)
     # if genre specified, no release year params specified
     elif genre != "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
+        print("Keyword and genre.")
         results = searchResultsByGenre(keywordOrPhrase,genre)
     # if genre specified, and one or both release year params specified
     elif genre != "All" and (earliestReleaseYear!=defaultEarliestReleaseYear or latestReleaseYear!=currentYear):
+        print("Keyword, genre, release years.")
         if earliestReleaseYear=="":
             earliestReleaseYear = defaultEarliestReleaseYear
         if latestReleaseYear=="":
@@ -28,6 +31,7 @@ def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEa
         results = searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear)
     # if genre not specified, and one or both release year params specified
     elif genre == "All" and (earliestReleaseYear!=defaultEarliestReleaseYear or latestReleaseYear!=currentYear):
+        print("Keyword and release years.")
         if earliestReleaseYear=="":
             earliestReleaseYear = defaultEarliestReleaseYear
         if latestReleaseYear=="":
