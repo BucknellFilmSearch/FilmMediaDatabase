@@ -38,8 +38,8 @@ class App():
 
     def displaySearchPage(self):
         """
-        Displays search page through use of an html form in the inputPageTemplate.
-        :return: the HTML code string for the landing page, with a search box.
+        Displays the search (home) page. Uses an html form (see inputPageTemplate). Uses GET protocol.
+        :return: a string, the HTML code for the landing page, which includes a search box and metadata parameters.
         """
         return generateSearchPage(self.defaultEarliestReleaseYear)
 
@@ -48,13 +48,11 @@ class App():
         Takes the user's search term/metadata parameters from landing page, then redirects to the proper URL to generate
         the results page.
         """
-        # get search phrase from the form on the search page
+        # get search phrase and metadata parameters from the form on the search page
         keywordOrPhrase = request.forms.get('keywordOrPhrase')
         if len(keywordOrPhrase) == 0:
             return "Please specify a keyword or phrase before clicking 'search.'"
-        # get genre params from the form on the search page
         genre = request.forms.get('genre')
-        # get release year params from the form on the search page
         earliestReleaseYear = request.forms.get('earliestReleaseYear')
         latestReleaseYear = request.forms.get('latestReleaseYear')
         if earliestReleaseYear == "":
@@ -70,6 +68,9 @@ class App():
         If the search hasn't been done yet, perform search with keyword. Either way, generate the specified page of
         results.
         :param keywordOrPhrase: the keyword or phrase to search.
+        :param genre: genre to restrict the results.
+        :param earliestReleaseYear: earliest release year to include.
+        :param latestReleaseYear: latest release year to include.
         :param pageNumber: the page of results to generate.
         :return: the HTML code for the entire page of results.
         """

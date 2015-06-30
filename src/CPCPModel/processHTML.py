@@ -81,7 +81,8 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
         navBar = fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear,
                                            pageNumber, len(results), resultsPerPage)
         if pageNumber == 1:
-            graph = fillGraphHTMLFile(keywordOrPhrase, "percentageByReleaseYear")
+            graph = fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear,
+                                      "percentageByReleaseYear")
         else:
             graph = ""
         return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
@@ -98,9 +99,9 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
 def fillAdditionalLinesHTMLFile(lineNumber, startTimeStamp, endTimeStamp, lineText):
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
 
-def fillGraphHTMLFile(keywordOrPhrase, plotType):
+def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, plotType):
     if plotType == "percentageByReleaseYear":
-        data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase)
+        data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
         twoDimensArrayOfVals = []
         for item in data:
             twoDimensArrayOfVals.append([item[0],item[1]])
