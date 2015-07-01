@@ -55,10 +55,14 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
             movieStartTimeStamp = results[i][3]
             movieEndTimeStamp = results[i][4]
             movieLineText = results[i][5]
+            movieReleaseYear = results[i][6]
+            dvdReleaseYear = results[i][7]
             # if line is from a new movie...
             if prevMovieOclcId != movieOclcId:
                 # cap the previous movie, use function below to generate HTML code for next movie's results
-                resultsPage += resultsCap + fillSearchResultsHTMLFile(movieOclcId,movieTitle,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
+                resultsPage += resultsCap + fillSearchResultsHTMLFile(movieOclcId,movieTitle,movieLineNumber,
+                                                                      movieStartTimeStamp,movieEndTimeStamp,
+                                                                      movieLineText, movieReleaseYear, dvdReleaseYear)
             # if line is from same movie as previous, add the additional line to the movie's results
             elif prevMovieOclcId == movieOclcId:
                 resultsPage += fillAdditionalLinesHTMLFile(movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
@@ -91,7 +95,8 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
         return "Your Keyword/Phrase does not occur in the database (with specified parameters)."
 
 
-def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText):
+def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText, movieReleaseYear,
+                              dvdReleaseYear):
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"
     imageSource = "/static/imageFiles/" + str(oclcId) + ".gif"
     return fileToStr('templates/searchResultsTemplate.html').format(**locals())

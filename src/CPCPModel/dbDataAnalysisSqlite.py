@@ -51,10 +51,12 @@ def searchResults(keywordOrPhrase):
     with connection:
         cursor = connection.cursor()
         command = "SELECT MOVIES.OCLC_ID, MOVIES.Title, ALLTEXT.LineNumber, ALLTEXT.StartTimeStamp, \
-        ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
-        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? ORDER BY MOVIES.Title"
+        ALLTEXT.EndTimeStamp, ALLTEXT.LineText, MOVIES.MovieReleaseYear, MOVIES.DVDReleaseYear FROM MOVIES, ALLTEXT \
+        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? \
+        ORDER BY MOVIES.Title"
         cursor.execute(command, (keywordOrPhrase,))
         data = cursor.fetchall()
+    print(data)
     return data
 
 # not vulnerable to injection
@@ -152,12 +154,19 @@ def occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latest
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
-        command = "SELECT MOVIES.MovieReleaseYear, COUNT(DISTINCT MOVIES.OCLC_ID) FROM MOVIES, ALLTEXT \
-        WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? \
-        AND (MOVIES.Genre1 = ? OR MOVIES.Genre2 = ? OR MOVIES.Genre3 = ?) \
-        AND MOVIES.MovieReleaseYear BETWEEN ? AND ? \
-        GROUP BY MovieReleaseYear"
-        cursor.execute(command, (keywordOrPhrase,genre,genre,genre,earliestReleaseYear,latestReleaseYear))
+        if genre != "All":
+            command = "SELECT MOVIES.MovieReleaseYear, COUNT(DISTINCT MOVIES.OCLC_ID) FROM MOVIES, ALLTEXT \
+            WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? \
+            AND (MOVIES.Genre1 = ? OR MOVIES.Genre2 = ? OR MOVIES.Genre3 = ?) \
+            AND MOVIES.MovieReleaseYear BETWEEN ? AND ? \
+            GROUP BY MovieReleaseYear"
+            cursor.execute(command, (keywordOrPhrase,genre,genre,genre,earliestReleaseYear,latestReleaseYear))
+        else:
+            command = "SELECT MOVIES.MovieReleaseYear, COUNT(DISTINCT MOVIES.OCLC_ID) FROM MOVIES, ALLTEXT \
+            WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? \
+            AND MOVIES.MovieReleaseYear BETWEEN ? AND ? \
+            GROUP BY MovieReleaseYear"
+            cursor.execute(command, (keywordOrPhrase,earliestReleaseYear,latestReleaseYear))
         data = cursor.fetchall()
     return data
 
