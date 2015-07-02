@@ -49,7 +49,8 @@ class dbInitializer():
             Genre3              VARCHAR, \
             MPAARating          VARCHAR, \
             RuntimeInMinutes    INTEGER, \
-            CCorSUB             VARCHAR )")
+            CCorSUB             VARCHAR, \
+            KeywordCount        INTEGER)")
             
     def createTVShowsTable(self):
         """ This method creates the TVSHOWS table in the database. """
@@ -75,7 +76,8 @@ class dbInitializer():
             Genre3              VARCHAR, \
             TVRating            VARCHAR, \
             RuntimeInMinutes    INTEGER, \
-            CCorSUB             VARCHAR )")
+            CCorSUB             VARCHAR, \
+            KeywordCount        INTEGER)")
             
     def createAllTextTable(self):
         """ This method creates a table to store the text of ALL the movies

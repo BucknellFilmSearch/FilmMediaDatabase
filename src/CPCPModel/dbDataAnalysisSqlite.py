@@ -15,15 +15,12 @@ def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEa
     currentYear = datetime.now().year
     # no params specified
     if genre == "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
-        print("Only keyword.")
         results = searchResults(keywordOrPhrase)
     # if genre specified, no release year params specified
     elif genre != "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
-        print("Keyword and genre.")
         results = searchResultsByGenre(keywordOrPhrase,genre)
     # if genre specified, and one or both release year params specified
     elif genre != "All" and (earliestReleaseYear!=defaultEarliestReleaseYear or latestReleaseYear!=currentYear):
-        print("Keyword, genre, release years.")
         if earliestReleaseYear=="":
             earliestReleaseYear = defaultEarliestReleaseYear
         if latestReleaseYear=="":
@@ -31,13 +28,32 @@ def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEa
         results = searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear)
     # if genre not specified, and one or both release year params specified
     elif genre == "All" and (earliestReleaseYear!=defaultEarliestReleaseYear or latestReleaseYear!=currentYear):
-        print("Keyword and release years.")
         if earliestReleaseYear=="":
             earliestReleaseYear = defaultEarliestReleaseYear
         if latestReleaseYear=="":
             latestReleaseYear = str(datetime.now().year)
         results = searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestReleaseYear)
     return results
+
+def updateKeywordCount(listOfOclcIds):
+    connection = lite.connect('cpcp.db')
+    currentId = listOfOclcIds[0][0]
+    currentCount = 0
+    for id in listOfOclcIds:
+        oclcId = id[0]
+        if oclcId == currentId:
+            currentCount += 1
+        else:
+            with connection:
+                cursor = connection.cursor()
+                command = "UPDATE MOVIES SET KeywordCount = ? WHERE OCLC_ID = ?"
+                cursor.execute(command, (currentCount, int(currentId)))
+            currentId = oclcId
+            currentCount = 1
+    with connection:
+        cursor = connection.cursor()
+        command = "UPDATE MOVIES SET KeywordCount = ? WHERE OCLC_ID = ?"
+        cursor.execute(command, (currentCount, int(currentId)))
 
 # not vulnerable to injection
 def searchResults(keywordOrPhrase):
@@ -50,13 +66,19 @@ def searchResults(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
+
+        command = "SELECT ALLTEXT.OCLC_ID FROM ALLTEXT WHERE ALLTEXT.LineText MATCH ?"
+        cursor.execute(command, (keywordOrPhrase,))
+        data = cursor.fetchall()
+        updateKeywordCount(data)
+
         command = "SELECT MOVIES.OCLC_ID, MOVIES.Title, ALLTEXT.LineNumber, ALLTEXT.StartTimeStamp, \
         ALLTEXT.EndTimeStamp, ALLTEXT.LineText, MOVIES.MovieReleaseYear, MOVIES.DVDReleaseYear FROM MOVIES, ALLTEXT \
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? \
-        ORDER BY MOVIES.Title"
+        ORDER BY MOVIES.KeywordCount DESC, MOVIES.Title"
         cursor.execute(command, (keywordOrPhrase,))
         data = cursor.fetchall()
-    print(data)
+
     return data
 
 # not vulnerable to injection
@@ -70,12 +92,19 @@ def searchResultsByGenre(keywordOrPhrase,genre):
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
+
+        command = "SELECT ALLTEXT.OCLC_ID FROM ALLTEXT WHERE ALLTEXT.LineText MATCH ?"
+        cursor.execute(command, (keywordOrPhrase,))
+        data = cursor.fetchall()
+        updateKeywordCount(data)
+
         command = "SELECT MOVIES.OCLC_ID, MOVIES.Title, ALLTEXT.LineNumber, ALLTEXT.StartTimeStamp, \
-        ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
+        ALLTEXT.EndTimeStamp, ALLTEXT.LineText, MOVIES.MovieReleaseYear, MOVIES.DVDReleaseYear FROM MOVIES, ALLTEXT \
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? AND (MOVIES.Genre1 = ? OR \
-        MOVIES.Genre2 = ? OR MOVIES.Genre3 = ?) ORDER BY MOVIES.Title"
+        MOVIES.Genre2 = ? OR MOVIES.Genre3 = ?) ORDER BY MOVIES.KeywordCount DESC, MOVIES.Title"
         cursor.execute(command, (keywordOrPhrase,genre,genre,genre))
         data = cursor.fetchall()
+
     return data
 
 # not vulnerable to injection
@@ -89,12 +118,20 @@ def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
+
+        command = "SELECT ALLTEXT.OCLC_ID FROM ALLTEXT WHERE ALLTEXT.LineText MATCH ?"
+        cursor.execute(command, (keywordOrPhrase,))
+        data = cursor.fetchall()
+        updateKeywordCount(data)
+
         command = "SELECT MOVIES.OCLC_ID, MOVIES.Title, ALLTEXT.LineNumber, ALLTEXT.StartTimeStamp, \
-        ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
+        ALLTEXT.EndTimeStamp, ALLTEXT.LineText, MOVIES.MovieReleaseYear, MOVIES.DVDReleaseYear FROM MOVIES, ALLTEXT \
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? AND (MOVIES.Genre1 = ? OR \
-        MOVIES.Genre2 = ? OR MOVIES.Genre3 = ?) AND MOVIES.MovieReleaseYear BETWEEN ? AND ? ORDER BY MOVIES.Title"
+        MOVIES.Genre2 = ? OR MOVIES.Genre3 = ?) AND MOVIES.MovieReleaseYear BETWEEN ? AND ? ORDER BY \
+        MOVIES.KeywordCount DESC, MOVIES.Title"
         cursor.execute(command, (keywordOrPhrase,genre,genre,genre,earliestReleaseYear,latestReleaseYear))
         data = cursor.fetchall()
+
     return data
 
 # not vulnerable to injection
@@ -108,12 +145,19 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
     connection = lite.connect('cpcp.db')
     with connection:
         cursor = connection.cursor()
+
+        command = "SELECT ALLTEXT.OCLC_ID FROM ALLTEXT WHERE ALLTEXT.LineText MATCH ?"
+        cursor.execute(command, (keywordOrPhrase,))
+        data = cursor.fetchall()
+        updateKeywordCount(data)
+
         command = "SELECT MOVIES.OCLC_ID, MOVIES.Title, ALLTEXT.LineNumber, ALLTEXT.StartTimeStamp, \
-        ALLTEXT.EndTimeStamp, ALLTEXT.LineText FROM MOVIES, ALLTEXT \
+        ALLTEXT.EndTimeStamp, ALLTEXT.LineText, MOVIES.MovieReleaseYear, MOVIES.DVDReleaseYear FROM MOVIES, ALLTEXT \
         WHERE ALLTEXT.OCLC_ID = MOVIES.OCLC_ID AND ALLTEXT.LineText MATCH ? AND (MOVIES.MovieReleaseYear \
-        BETWEEN ? AND ?) ORDER BY MOVIES.Title"
+        BETWEEN ? AND ?) ORDER BY MOVIES.KeywordCount DESC, MOVIES.Title"
         cursor.execute(command, (keywordOrPhrase,earliestReleaseYear,latestReleaseYear))
         data = cursor.fetchall()
+
     return data
     
 def totalMovies():
