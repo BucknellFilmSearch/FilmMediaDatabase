@@ -38,6 +38,45 @@ def generateSearchPage(defaultEarliestReleaseYear):
     # fill in the bootstrap template with the pageContent, and the variables above
     return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
 
+def generateComparisonPage(defaultEarliestReleaseYear):
+    """Generates the comparison page using comparisonPageTemplate and bootstrapThemeTemplate (html templates).
+    Parameters: defaultEarliestReleaseYear - the earliest release year represented in the database.
+    Returns: a string of html code representing the comparison page."""
+    # define variables for the input page template
+    numMovies = totalMovies()
+    currentYear = str(datetime.now().year)
+    # prepare page content, fill in the number of movies, and earliest and latest possible release years from above
+    pageContent = fileToStr('templates/comparisonPageTemplate.html').format(**locals())
+
+    # define other variables for the bootstrap template (this theme makes everything look pretty)
+    # the home button is not active
+    homeActive = ""
+    # the link of the home button is /moviesearch, which returns to the input page (main landing page)
+    homeLink = "/moviesearch"
+    # no nav bar, because we're on a search page, not a results page
+    navBar = ""
+    # ditto for graph
+    graph = ""
+    # fill in the bootstrap template with the pageContent, and the variables above
+    return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
+
+def generateGraphOfTwoKeywords(keywordOrPhrase1, keywordOrPhrase2, genre, earliestReleaseYear, latestReleaseYear):
+    # no page content other than graph
+    pageContent = ""
+    # home button not active because not on home page
+    homeActive = ""
+    # link to home
+    homeLink = "/moviesearch"
+    # no nav bar because not on results page
+    navBar = ""
+
+    # make the graph
+    graph = fillGraphHTMLFile([keywordOrPhrase1,keywordOrPhrase2], genre, earliestReleaseYear, latestReleaseYear,
+                              "percentageByReleaseYear")
+
+    return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
+
+
 def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, results, resultsPerPage, pageNumber):
     # initialize resultsPage variable
     resultsPage = ""
@@ -105,12 +144,26 @@ def fillAdditionalLinesHTMLFile(lineNumber, startTimeStamp, endTimeStamp, lineTe
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
 
 def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, plotType):
-    if plotType == "percentageByReleaseYear":
-        data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
-        twoDimensArrayOfVals = []
-        for item in data:
-            twoDimensArrayOfVals.append([item[0],item[1]])
-        return fileToStr('templates/percentageAcrossReleaseYearGraphTemplate.html').format(**locals())
+    if type(keywordOrPhrase).__name__ == 'str':
+        if plotType == "percentageByReleaseYear":
+            data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
+            twoDimensArrayOfVals = []
+            for item in data:
+                twoDimensArrayOfVals.append([item[0],item[1]])
+            return fileToStr('templates/percentageAcrossReleaseYearGraphTemplate.html').format(**locals())
+    else:
+        keywordOrPhrase1 = keywordOrPhrase[0]
+        keywordOrPhrase2 = keywordOrPhrase[1]
+        if plotType == "percentageByReleaseYear":
+            data1 = percentageOfOccurrenceByReleaseYear(keywordOrPhrase1, genre, earliestReleaseYear, latestReleaseYear)
+            twoDimensArrayOfVals1 = []
+            for item in data1:
+                twoDimensArrayOfVals1.append([item[0],item[1]])
+            data2 = percentageOfOccurrenceByReleaseYear(keywordOrPhrase2, genre, earliestReleaseYear, latestReleaseYear)
+            twoDimensArrayOfVals2 = []
+            for item in data2:
+                twoDimensArrayOfVals2.append([item[0],item[1]])
+            return fileToStr('templates/percentageAcrossReleaseYearMultiGraphTemplate.html').format(**locals())
 
 
 def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, currentPageNum,

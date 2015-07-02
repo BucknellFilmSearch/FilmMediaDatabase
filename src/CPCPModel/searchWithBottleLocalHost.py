@@ -9,7 +9,8 @@ from datetime import datetime
 from bottle import route, run, install, template, request, get, post, static_file, redirect
 from bottle_sqlite import SQLitePlugin
 from dbDataAnalysisSqlite import search, totalMovies
-from processHTML import fillGraphHTMLFile, generateSearchPage, generateResultsPage
+from processHTML import fillGraphHTMLFile, generateSearchPage, generateResultsPage, generateComparisonPage,\
+    generateGraphOfTwoKeywords
 
 install(SQLitePlugin(dbfile='cpcp.db'))
 
@@ -103,6 +104,38 @@ class App():
         return generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, self.results,
                                    self.resultsPerPage, pageNumber)
 
+    def displayComparisonPage(self):
+        return generateComparisonPage(self.defaultEarliestReleaseYear)
+
+    def graphComparison(self):
+
+        # get graph/search parameters from search boxes
+        keywordOrPhrase1 = request.forms.get('keywordOrPhrase1')
+        if len(keywordOrPhrase1) == 0:
+            return "Please specify two keywords or phrases before clicking 'search.'"
+        keywordOrPhrase2 = request.forms.get('keywordOrPhrase2')
+        if len(keywordOrPhrase2) == 0:
+            return "Please specify two keywords or phrases before clicking 'search.'"
+        genre = request.forms.get('genre')
+        earliestReleaseYear = request.forms.get('earliestReleaseYear')
+        latestReleaseYear = request.forms.get('latestReleaseYear')
+        if earliestReleaseYear == "":
+            earliestReleaseYear = self.defaultEarliestReleaseYear
+        if latestReleaseYear == "":
+            latestReleaseYear = datetime.now().year
+
+        # convert underscores to spaces
+        # (underscores are sometimes used in the URL in place of spaces, need to convert back)
+        for i in range(len(keywordOrPhrase1)):
+            if keywordOrPhrase1[i] == "_":
+                keywordOrPhrase1 = keywordOrPhrase1[0:i] + " " + keywordOrPhrase1[i+1:]
+        for i in range(len(keywordOrPhrase2)):
+            if keywordOrPhrase2[i] == "_":
+                keywordOrPhrase2 = keywordOrPhrase2[0:i] + " " + keywordOrPhrase2[i+1:]
+
+        return generateGraphOfTwoKeywords(keywordOrPhrase1, keywordOrPhrase2, genre, earliestReleaseYear,
+                                          latestReleaseYear)
+
     def static(self, path):
         """
         Provides route to static files, such as text files.
@@ -118,6 +151,8 @@ get('/moviesearch')(appInstance.displaySearchPage)
 post('/moviesearch')(appInstance.searchFromLandingPage)
 route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>/<pageNumber:int>')\
     (appInstance.displayResultsPage)
+get('/moviesearch/compare')(appInstance.displayComparisonPage)
+post('/moviesearch/compare')(appInstance.graphComparison)
 route('/static/:path#.+#', name='static')(appInstance.static)
 # run the server
 run(host='localhost', port=8080, debug=True)(appInstance)

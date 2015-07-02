@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>The Cell Phone Cinema Project</title>
+        <meta charset="windows-1252">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div style="text-align: center;"><big><big><span
+ style="font-weight: bold;">The Cell Phone Cinema Project<br>
+<small><small>by Dr. John Hunter, Justin Eyster, and Dale Hartman<br>
+at Bucknell University<br>
+<br>
+</small></small></span></big></big>Use
+the search boxes below to compare the usage of two words/phrases within a
+database of {numMovies} movies released after the year 2000. <br> For this
+version 1.0, we chose movies with settings which allow for the
+occurrence of technology such as cell phones, to analyze the ways that
+technology has affected story telling. <br>
+<br>
+<form action="/moviesearch/compare" method="post">
+    <input name="keywordOrPhrase1" type="text" placeholder ="First keyword/phrase..." />
+    <input name="keywordOrPhrase2" type="text" placeholder ="Second keyword/phrase..." />
+    <br>
+    Limit results to a specific genre:
+    <select name="genre">
+        <option selected="selected" value="All">All Genres</option>
+        <option value="Action">Action</option>
+        <option value="Thriller">Thriller</option>
+        <option value="Comedy">Comedy</option>
+        <option value="Family">Family</option>
+        <option value="Adventure">Adventure</option>
+        <option value="Mystery">Mystery</option>
+        <option value="Romance">Romance</option>
+        <option value="Sci-Fi">Sci-Fi</option>
+        <option value="Horror">Horror</option>
+        <option value="Drama">Drama</option>
+        <option value="Biography">Biography</option>
+        <option value="Fantasy">Fantasy</option>
+        <option value="Crime">Crime</option>
+    </select>
+    <br>
+    Limit results to movies originally released between:
+    <br>
+    <input name="earliestReleaseYear" type="number" placeholder={defaultEarliestReleaseYear}
+           min={defaultEarliestReleaseYear} max={currentYear} />
+    and
+    <input name="latestReleaseYear" type="number" placeholder={currentYear}
+           min={defaultEarliestReleaseYear} max={currentYear} />
+    <br>
+    <input value="Search" type="submit" />
+</form>
+    <br>
+    <a class="hyperlink" href="/moviesearch">OR Search for One Keyword/Phrase</a>
+  </div>
+    </body>
+</html>
