@@ -5,6 +5,8 @@
 import os
 from dbDataAnalysisSqlite import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search
 from datetime import datetime
+from createScreenshot import createScreenshot
+import cv2
 
 __author__ = "Justin Eyster"
 __date__ = "$Jun 5, 2015 9:35:43 AM$"
@@ -104,7 +106,7 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
                                                                       movieLineText, movieReleaseYear, dvdReleaseYear)
             # if line is from same movie as previous, add the additional line to the movie's results
             elif prevMovieOclcId == movieOclcId:
-                resultsPage += fillAdditionalLinesHTMLFile(movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
+                resultsPage += fillAdditionalLinesHTMLFile(movieOclcId,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
             prevMovieOclcId = movieOclcId
     # as long as there are results...
     if len(results)>0:
@@ -137,10 +139,16 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
 def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText, movieReleaseYear,
                               dvdReleaseYear):
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"
-    imageSource = "/static/imageFiles/" + str(oclcId) + ".gif"
+    thumbnailSource = "/static/imageFiles/" + str(oclcId) + ".gif"
+    # create the screenshot
+    createScreenshot(startTimeStamp,endTimeStamp,oclcId,lineNumber)
+    screenshotSource = "/static/imageFiles/" + str(oclcId) + "-" + str(lineNumber) + ".bmp"
     return fileToStr('templates/searchResultsTemplate.html').format(**locals())
 
-def fillAdditionalLinesHTMLFile(lineNumber, startTimeStamp, endTimeStamp, lineText):
+def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText):
+    # create the screenshot
+    createScreenshot(startTimeStamp,endTimeStamp,oclcId,lineNumber)
+    screenshotSource = "/static/imageFiles/" + str(oclcId) + "-" + str(lineNumber) + ".bmp"
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
 
 def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, plotType):
