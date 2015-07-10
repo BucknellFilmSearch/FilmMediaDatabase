@@ -55,46 +55,12 @@ def createAllScreenshots():
 
             # get the total number of seconds from which to grab the screenshot (from right in between the two timestamps)
             secondsStart = int(start_time_stamp_to_snapshot[0:2]) * 3600 + int(start_time_stamp_to_snapshot[3:5]) * 60 + int(start_time_stamp_to_snapshot[6:8]) + \
-                           float("0." + start_time_stamp_to_snapshot[9:11])
+                float("0." + start_time_stamp_to_snapshot[9:11])
             secondsEnd = int(end_time_stamp_to_snapshot[0:2]) * 3600 + int(end_time_stamp_to_snapshot[3:5]) * 60 + int(end_time_stamp_to_snapshot[6:8]) + \
-                         float("0." + end_time_stamp_to_snapshot[9:11])
+                float("0." + end_time_stamp_to_snapshot[9:11])
             seconds = secondsStart + ((secondsEnd-secondsStart)/2)
             # get the frame number to grab
             frame_to_read = round(seconds * frames_per_second)
-
-    # current_frame = 0
-    # while(True):
-    #     current_frame += 1
-    #     ret, frame = video_capture.read()
-    #     if frame is None:
-    #         vob_file += 1
-    #         video_capture = cv2.VideoCapture('D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/videoFiles/' + \
-    #                                  str(oclcId) + '/VTS_' + str(vob_file) + '.vob')
-    #         # get the frames per second value from the video
-    #         frames_per_second = video_capture.get(cv2.CAP_PROP_FPS) / 2
-    #         # retry the frame grab
-    #         ret, frame = video_capture.read()
-    #         if frame is None:
-    #             break
-    #     # if we've found the frame we're looking for, take snapshot, load information about next line
-    #     if current_frame == frame_to_read:
-    #         cv2.imwrite('static/imageFiles/screenshots/' + str(oclcId) + '-' + str(line_number_to_snapshot) + '.png', frame)
-    #
-    #         line_to_snapshot = cursor.fetchone()
-    #         if not line_to_snapshot:
-    #             break
-    #         line_number_to_snapshot = line_to_snapshot[0]
-    #         start_time_stamp_to_snapshot = line_to_snapshot[1]
-    #         end_time_stamp_to_snapshot = line_to_snapshot[2]
-    #
-    #         # get the total number of seconds from which to grab the screenshot (from right in between the two timestamps)
-    #         secondsStart = int(start_time_stamp_to_snapshot[0:2]) * 3600 + int(start_time_stamp_to_snapshot[3:5]) * 60 + int(start_time_stamp_to_snapshot[6:8]) + \
-    #                float("0." + start_time_stamp_to_snapshot[9:11])
-    #         secondsEnd = int(end_time_stamp_to_snapshot[0:2]) * 3600 + int(end_time_stamp_to_snapshot[3:5]) * 60 + int(end_time_stamp_to_snapshot[6:8]) + \
-    #              float("0." + end_time_stamp_to_snapshot[9:11])
-    #         seconds = secondsStart + ((secondsEnd-secondsStart)/2)
-    #         # get the frame number to grab
-    #         frame_to_read = round(seconds * frames_per_second)
 
 
 def createScreenshot(startTimeStamp, endTimeStamp, oclcId, lineNumber):
