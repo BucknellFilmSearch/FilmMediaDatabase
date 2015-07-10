@@ -140,15 +140,11 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
                               dvdReleaseYear):
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"
     thumbnailSource = "/static/imageFiles/" + str(oclcId) + ".gif"
-    # create the screenshot
-    createScreenshot(startTimeStamp,endTimeStamp,oclcId,lineNumber)
-    screenshotSource = "/static/imageFiles/" + str(oclcId) + "-" + str(lineNumber) + ".bmp"
+    screenshotSource = "/static/imageFiles/screenshots/" + str(oclcId) + "-" + str(lineNumber) + ".png"
     return fileToStr('templates/searchResultsTemplate.html').format(**locals())
 
 def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText):
-    # create the screenshot
-    createScreenshot(startTimeStamp,endTimeStamp,oclcId,lineNumber)
-    screenshotSource = "/static/imageFiles/" + str(oclcId) + "-" + str(lineNumber) + ".bmp"
+    screenshotSource = "/static/imageFiles/screenshots/" + str(oclcId) + "-" + str(lineNumber) + ".png"
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
 
 def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, plotType):
