@@ -3,6 +3,7 @@ __author__ = 'justi_000'
 import numpy as np
 import cv2
 import sqlite3 as lite
+import sys
 
 def createAllScreenshots():
 
@@ -22,7 +23,7 @@ def createAllScreenshots():
 
     vob_file = 0
     video_capture = cv2.VideoCapture('D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/videoFiles/' + \
-                                     str(oclcId) + '/VTS_' + str(vob_file) + '.vob')
+                                     str(oclcId) + '/VTS_' + str(vob_file) + '.mp4')
 
     # get the frames per second value from the video
     frames_per_second = video_capture.get(cv2.CAP_PROP_FPS)
@@ -44,7 +45,7 @@ def createAllScreenshots():
             break
         # if we've found the frame we're looking for, take snapshot, load information about next line
         else:
-            cv2.imwrite('static/imageFiles/screenshots/' + str(oclcId) + '-' + str(line_number_to_snapshot) + '.png', frame)
+            cv2.imwrite('static/imageFiles/screenshots/' + str(oclcId) + '/' + str(line_number_to_snapshot) + '.png', frame)
 
             line_to_snapshot = cursor.fetchone()
             if not line_to_snapshot:
