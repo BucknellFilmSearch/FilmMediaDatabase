@@ -8,8 +8,8 @@ __date__ = "$Jun 2, 2015 2:43:11 PM$"
 from datetime import datetime
 from bottle import route, run, install, template, request, get, post, static_file, redirect
 from bottle_sqlite import SQLitePlugin
-from dbDataAnalysisSqlite import search, totalMovies
-from processHTML import fillGraphHTMLFile, generateSearchPage, generateResultsPage, generateComparisonPage,\
+from databaseQuerier import search, totalMovies
+from webpageGenerator import fillGraphHTMLFile, generateSearchPage, generateResultsPage, generateComparisonPage,\
     generateGraphOfTwoKeywords
 
 install(SQLitePlugin(dbfile='cpcp.db'))

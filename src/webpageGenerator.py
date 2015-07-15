@@ -3,9 +3,8 @@
 # and open the template in the editor.
 
 import os
-from dbDataAnalysisSqlite import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search
+from databaseQuerier import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search
 from datetime import datetime
-from createScreenshot import createScreenshot
 import cv2
 import os.path
 
