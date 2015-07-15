@@ -7,6 +7,7 @@ from dbDataAnalysisSqlite import cumulativeOccurrencesByReleaseYear, percentageO
 from datetime import datetime
 from createScreenshot import createScreenshot
 import cv2
+import os.path
 
 __author__ = "Justin Eyster"
 __date__ = "$Jun 5, 2015 9:35:43 AM$"
@@ -140,11 +141,23 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
                               dvdReleaseYear):
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"
     thumbnailSource = "/static/imageFiles/" + str(oclcId) + ".gif"
-    screenshotSource = "/static/imageFiles/screenshots/" + str(oclcId) + "-" + str(lineNumber) + ".png"
+    # generate path to screenshot
+    screenshotSource = "/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
+    # if it's a valid file, insert it into the results
+    if os.path.isfile(screenshotSource):
+        screenshotHtml = "<center><img class='thumbnail' src=" + screenshotSource + " width='720' height='480'></center>"
+    else:
+        screenshotHtml = ""
     return fileToStr('templates/searchResultsTemplate.html').format(**locals())
 
 def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText):
-    screenshotSource = "/static/imageFiles/screenshots/" + str(oclcId) + "-" + str(lineNumber) + ".png"
+    # generate file path to screenshot
+    screenshotSource = "/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
+    # if it's a valid file, insert it into the results
+    if os.path.isfile(screenshotSource):
+        screenshotHtml = "<center><img class='thumbnail' src=" + screenshotSource + " width='720' height='480'></center>"
+    else:
+        screenshotHtml = ""
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
 
 def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, plotType):

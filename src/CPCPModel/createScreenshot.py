@@ -108,4 +108,4 @@ def createScreenshot(startTimeStamp, endTimeStamp, oclcId, lineNumber):
         # write to a .bmp image
         cv2.imwrite('static/imageFiles/screenshots/' + str(oclcId) + '-' + str(lineNumber) + '.png', frame)
 
-createAllScreenshots()
+# createAllScreenshots()
