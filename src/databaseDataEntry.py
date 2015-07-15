@@ -7,6 +7,7 @@ __date__ = "$May 21, 2015 11:47:11 AM$"
 
 import sqlite3 as lite
 import sys
+from screenshotCreator import createAllScreenshots
 
 class dbDataEntry():
     """ Class built for the purpose of data entry. This class will allow a
@@ -85,6 +86,8 @@ class dbDataEntry():
 
                 # fill the text table from file
                 self.fillMediaTextTable(OCLC_ID)
+                # create the screenshots
+                createAllScreenshots(OCLC_ID)
                 break
             elif verification == "0":
                 self.enterMovie()
@@ -153,6 +156,8 @@ class dbDataEntry():
 
                 # fill the text table from file
                 self.fillMediaTextTable(OCLC_ID)
+                # create the screenshots
+                createAllScreenshots(OCLC_ID)
                 break
             elif verification == "0":
                 self.enterTVShow()

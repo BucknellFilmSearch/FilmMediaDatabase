@@ -141,7 +141,7 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"
     thumbnailSource = "/static/imageFiles/" + str(oclcId) + ".gif"
     # generate path to screenshot
-    screenshotSource = "/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
+    screenshotSource = "D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
     # if it's a valid file, insert it into the results
     if os.path.isfile(screenshotSource):
         screenshotHtml = "<center><img class='thumbnail' src=" + screenshotSource + " width='720' height='480'></center>"
@@ -151,7 +151,7 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
 
 def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText):
     # generate file path to screenshot
-    screenshotSource = "/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
+    screenshotSource = "D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
     # if it's a valid file, insert it into the results
     if os.path.isfile(screenshotSource):
         screenshotHtml = "<center><img class='thumbnail' src=" + screenshotSource + " width='720' height='480'></center>"

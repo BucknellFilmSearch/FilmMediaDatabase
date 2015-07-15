@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import sqlite3 as lite
 import sys
+from os import makedirs, path
 
 def createAllScreenshots():
 
@@ -45,7 +46,9 @@ def createAllScreenshots():
             break
         # if we've found the frame we're looking for, take snapshot, load information about next line
         else:
-            cv2.imwrite('static/imageFiles/screenshots/' + str(oclcId) + '/' + str(line_number_to_snapshot) + '.png', frame)
+            if not path.exists('D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId)):
+                makedirs('D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId))
+            cv2.imwrite('D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId) + '/' + str(line_number_to_snapshot) + '.png', frame)
 
             line_to_snapshot = cursor.fetchone()
             if not line_to_snapshot:
@@ -64,6 +67,7 @@ def createAllScreenshots():
             frame_to_read = round(seconds * frames_per_second)
 
 
+# currently not used anywhere
 def createScreenshot(startTimeStamp, endTimeStamp, oclcId, lineNumber):
     """ Saves screenshot from specified time in film.
     :param startTimeStamp: a timestamp, representing the length into the movie from which to get the screenshot.
@@ -108,4 +112,4 @@ def createScreenshot(startTimeStamp, endTimeStamp, oclcId, lineNumber):
         # write to a .bmp image
         cv2.imwrite('static/imageFiles/screenshots/' + str(oclcId) + '-' + str(lineNumber) + '.png', frame)
 
-# createAllScreenshots()
+createAllScreenshots()
