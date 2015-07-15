@@ -3,9 +3,9 @@ __date__ = "$May 12, 2015 9:47:20 AM$"
 
 from sqlalchemy import create_engine, event, DDL, Index
 from sqlalchemy.engine.url import URL
+
 from src.CPCPModel.postgresSettings import DATABASE
 from src.CPCPModel.MediaText import *
-from src.CPCPModel.MediaMetadata import *
 from src.CPCPModel.base import BASE
 
 engine = create_engine(URL(**DATABASE))
