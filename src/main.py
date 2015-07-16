@@ -143,7 +143,7 @@ class App():
         :return: the static file.
         """
         # to save storage on my computer, retrieve text files and images from hard drive
-        if path[-4:-1] == '.txt' or path[-4:-1] == '.png' or path[-4:-1] == '.gif':
+        if path[-4:len(path)] == '.txt' or path[-4:len(path)] == '.png' or path[-4:len(path)] == '.gif':
             return static_file(path, root='D:/0_The Cell Phone Cinema Project/src/CPCPModel/static')
         # other files are found under static directory in working directory
         else:

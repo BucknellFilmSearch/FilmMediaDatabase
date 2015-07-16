@@ -80,9 +80,9 @@ class dbDataEntry():
                 with self.connection:
 
                     cursor = self.connection.cursor()
-                    cursor.execute("INSERT INTO MOVIES VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+                    cursor.execute("INSERT INTO MOVIES VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
                     (OCLC_ID, Title, Director, MovieReleaseYear, DVDReleaseYear, Country1, Country2, \
-                    Country3, Genre1, Genre2, Genre3, MPAARating, RuntimeInMinutes, CCorSub))
+                    Country3, Genre1, Genre2, Genre3, MPAARating, RuntimeInMinutes, CCorSub, 0))
 
                 # fill the text table from file
                 self.fillMediaTextTable(OCLC_ID)
@@ -150,10 +150,10 @@ class dbDataEntry():
                 with self.connection:
 
                     cursor = self.connection.cursor()
-                    cursor.execute("INSERT INTO TVSHOWS VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+                    cursor.execute("INSERT INTO TVSHOWS VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
                     (OCLC_ID, ShowTitle, EpisodeTitle, SeasonNumber, EpisodeNumber, \
                     Director, EpisodeReleaseYear, DVDReleaseYear, Country1, Country2, \
-                    Country3, Genre1, Genre2, Genre3, TVRating, RuntimeInMinutes, CCorSub))
+                    Country3, Genre1, Genre2, Genre3, TVRating, RuntimeInMinutes, CCorSub, 0))
 
                 # fill the text table from file
                 self.fillMediaTextTable(OCLC_ID)
@@ -171,7 +171,7 @@ class dbDataEntry():
         """ Method to fill a movie/tv show's text table from the text file.
         Text files should be named OCLC_ID_NUMBER.txt """
         
-        with open("static/textFiles/" + oclcId+ ".txt",'r') as file:
+        with open("D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/textFiles/" + oclcId + ".txt",'r') as file:
             currentLineNumber = "1"
             nextLineNumber = "1"
             startTimeStamp = ""

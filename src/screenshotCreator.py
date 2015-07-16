@@ -6,9 +6,8 @@ import sqlite3 as lite
 import sys
 from os import makedirs, path
 
-def createAllScreenshots():
 
-    oclcId = input("OCLC number for media? ")
+def createAllScreenshots(oclcId):
 
     connection = lite.connect('cpcp.db')
     cursor = connection.cursor()
@@ -112,4 +111,5 @@ def createScreenshot(startTimeStamp, endTimeStamp, oclcId, lineNumber):
         # write to a .bmp image
         cv2.imwrite('static/imageFiles/screenshots/' + str(oclcId) + '-' + str(lineNumber) + '.png', frame)
 
-createAllScreenshots()
+# oclcId = input("OCLC number for media? ")
+# createAllScreenshots(oclcId)
