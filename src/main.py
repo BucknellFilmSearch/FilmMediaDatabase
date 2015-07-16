@@ -142,7 +142,12 @@ class App():
         :param path: the path to the static file.
         :return: the static file.
         """
-        return static_file(path, root='static')
+        # to save storage on my computer, retrieve text files and images from hard drive
+        if path[-4:-1] == '.txt' or path[-4:-1] == '.png' or path[-4:-1] == '.gif':
+            return static_file(path, root='D:/0_The Cell Phone Cinema Project/src/CPCPModel/static')
+        # other files are found under static directory in working directory
+        else:
+            return static_file(path, root='static')
 
 # initialize App
 appInstance = App()

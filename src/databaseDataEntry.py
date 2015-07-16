@@ -87,6 +87,7 @@ class dbDataEntry():
                 # fill the text table from file
                 self.fillMediaTextTable(OCLC_ID)
                 # create the screenshots
+                print("Processing screenshots...")
                 createAllScreenshots(OCLC_ID)
                 break
             elif verification == "0":
@@ -157,6 +158,7 @@ class dbDataEntry():
                 # fill the text table from file
                 self.fillMediaTextTable(OCLC_ID)
                 # create the screenshots
+                print("Processing screenshots...")
                 createAllScreenshots(OCLC_ID)
                 break
             elif verification == "0":

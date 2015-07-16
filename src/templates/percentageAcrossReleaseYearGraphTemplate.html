@@ -7,8 +7,11 @@
 	<link href="/static/css/cover.css" rel="stylesheet" type="text/css">
 	<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/static/js/excanvas.min.js"></script><![endif]-->
 	<script language="javascript" type="text/javascript" src="/static/js/jquery-1.11.3.min.js"></script>
-	<script src="/static/js/jquery.flot.min.js"></script>
-	<script type="text/javascript">
+	<script type="text/javascript" src="/static/js/jquery.flot.min.js"></script>
+	<script type="text/javascript" src="/static/js/base64.js"></script>
+    <script type="text/javascript" src="/static/js/canvas2image.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.flot.saveAsImage.js"></script>
+    <script type="text/javascript">
 
     (function($){{
         $(function(){{
@@ -40,7 +43,7 @@
 		<div><p class="inner cover">
             <p class="lead">
                 <div id="header"><h4 style="color:white">Percentage Of Movies Containing Your Search Term (By Original Release Year)</h4></div>
-			    <div id="placeholder" style="width:650px;height:300px"></div>
+			    <div id="placeholder" style="width:750px;height:300px"></div>
             </p>
         </div>
 
