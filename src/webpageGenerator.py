@@ -3,7 +3,7 @@
 # and open the template in the editor.
 
 import os
-from databaseQuerier import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search
+from databaseQuerier import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search, getContextLines, getMovieInfo
 from datetime import datetime
 import cv2
 import os.path
@@ -38,6 +38,53 @@ def generateSearchPage(defaultEarliestReleaseYear):
     # ditto for graph
     graph = ""
     # fill in the bootstrap template with the pageContent, and the variables above
+    return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
+
+def generateContextPage(oclcId,lineNumber,keywordOrPhraseSearched,genreSearched,earliestReleaseYearSearched,
+                        latestReleaseYearSearched,currentPageNumber):
+    contextLines = getContextLines(oclcId,lineNumber,20)
+    movieInfo = getMovieInfo(oclcId)
+    movieTitle = movieInfo[0][0]
+    movieReleaseYear = movieInfo[0][1]
+    dvdReleaseYear = movieInfo[0][2]
+    # initialize resultsPage variable
+    resultsPage = ""
+    # Later, place the following HTML code at the end of the results. (then put the nav bar after this.)
+    resultsCap = "</a></div></body></html>"
+    # iterate through results, use fillSearchResultsHTMLFile to generate HTML code for the results page
+    firstRun = True
+    for line in contextLines:
+        movieLineNumber = line[0]
+        movieStartTimeStamp = line[1]
+        movieEndTimeStamp = line[2]
+        movieLineText = line[3]
+        if firstRun:
+            firstRun = False
+            # cap the previous movie, use function below to generate HTML code for next movie's results
+            resultsPage += fillSearchResultsHTMLFile(oclcId,movieTitle,movieLineNumber,
+                                                                movieStartTimeStamp,movieEndTimeStamp,
+                                                                movieLineText, movieReleaseYear, dvdReleaseYear)
+        else:
+            resultsPage += fillAdditionalLinesHTMLFile(oclcId,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
+
+    # convert spaces to %20 in keyword/phrase (hyperlinks skip spaces, %20 means space)
+    for i in range(len(keywordOrPhraseSearched)):
+        if keywordOrPhraseSearched[i] == " ":
+            keywordOrPhraseSearched = keywordOrPhraseSearched[0:i] + "%20" + keywordOrPhraseSearched[i+1:]
+    # message at top of page
+    numResultsMessage = "<p class=message-text>Showing 20 lines before and after the clicked result.</p>" + \
+        "<p class=message-text><a href=/moviesearch/" + keywordOrPhraseSearched + "/" + genreSearched + "/" + \
+                        str(earliestReleaseYearSearched) + "/" + str(latestReleaseYearSearched) + "/" + str(currentPageNumber) + \
+                        " >Back to Results</a></p>"
+
+    # put together all the pieces into one final string of HTML code, with the results for the page and the
+    # nav bar
+    finalResult = numResultsMessage + resultsPage + resultsCap
+    pageContent = finalResult
+    homeActive = ""
+    homeLink = "/moviesearch"
+    navBar = ""
+    graph = ""
     return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
 
 def generateComparisonPage(defaultEarliestReleaseYear):
@@ -83,7 +130,7 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
     # initialize resultsPage variable
     resultsPage = ""
     # Later, place the following HTML code at the end of the results. (then put the nav bar after this.)
-    resultsCap = "</a></div></body></html>"
+    resultsCap = "</div></body></html>"
     # variable to track oclc id of previous movie, to know if we need to start a new result or add to previous
     prevMovieOclcId = ""
     # iterate through results, use fillSearchResultsHTMLFile to generate HTML code for the results page
@@ -114,7 +161,7 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
         numResultsMessage = "<p class=message-text><a href='/moviesearch'>Back to search page.</a></p>" + \
                             "<p class=message-text>Showing " + str(len(results)) + " results for '" + keywordOrPhrase + \
                             "', " + str(resultsPerPage) + " per page.</p>" + \
-                            "<p class=message-text>Click on a result to open the work's full script.</p>"
+                            "<p class=message-text>Click on a result to view context.</p>"
 
         # put together all the pieces into one final string of HTML code, with the results for the page and the
         # nav bar
@@ -148,6 +195,7 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
         screenshotHtml = "<center><img class='thumbnail' src=" + abrevSource + " width='720' height='480'></center>"
     else:
         screenshotHtml = ""
+    contextLink = "/moviesearch/context/" + str(oclcId) + "/" + str(lineNumber)
     return fileToStr('templates/searchResultsTemplate.html').format(**locals())
 
 def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText):
@@ -159,6 +207,7 @@ def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp
         screenshotHtml = "<center><img class='thumbnail' src=" + abrevSource + " width='720' height='480'></center>"
     else:
         screenshotHtml = ""
+    contextLink = "/moviesearch/context/" + str(oclcId) + "/" + str(lineNumber)
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
 
 def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, plotType):

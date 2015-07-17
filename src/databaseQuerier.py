@@ -169,6 +169,39 @@ def totalMovies():
         data = cursor.fetchall()
     return data[0][0]
 
+# TODO: If future SQL database type allows it, the method below should be improved to use the far more efficient "BETWEEN" clause
+# (ex: WHERE LineNumber BETWEEN firstLine AND lastLine) currently can't do this because ALLTEXT is a virtual table
+# that SQLite converted to text, so LineNumber is a string and not an integer and we can't use BETWEEN
+def getContextLines(oclcId,lineNumber,numLines):
+    """
+    :param oclcId: unique id for the media
+    :param lineNumber: line to get context of
+    :return: 25 lines before and after the given line
+    """
+    connection = lite.connect('cpcp.db')
+    firstLine = lineNumber-numLines
+    lastLine = lineNumber+numLines
+    contextLines = []
+    with connection:
+        for line in range(firstLine,lastLine):
+            cursor = connection.cursor()
+            command = "SELECT LineNumber, StartTimeStamp, EndTimeStamp, LineText FROM ALLTEXT WHERE OCLC_ID = ? AND LineNumber \
+            = ?"
+            cursor.execute(command, (str(oclcId),str(line)))
+            data = cursor.fetchall()
+            if data is not None:
+                contextLines += data
+    return contextLines
+
+def getMovieInfo(oclcId):
+    connection = lite.connect('cpcp.db')
+    with connection:
+        cursor = connection.cursor()
+        command = "SELECT Title, MovieReleaseYear, DVDReleaseYear FROM MOVIES WHERE OCLC_ID = ?"
+        cursor.execute(command, (oclcId,))
+        data = cursor.fetchall()
+    return data
+
 def occurrencesByTimeStamps(keywordOrPhrase):
     connection = lite.connect('cpcp.db')
     with connection:

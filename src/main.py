@@ -10,7 +10,7 @@ from bottle import route, run, install, template, request, get, post, static_fil
 from bottle_sqlite import SQLitePlugin
 from databaseQuerier import search, totalMovies
 from webpageGenerator import fillGraphHTMLFile, generateSearchPage, generateResultsPage, generateComparisonPage,\
-    generateGraphOfTwoKeywords
+    generateGraphOfTwoKeywords, generateContextPage
 
 install(SQLitePlugin(dbfile='cpcp.db'))
 
@@ -32,6 +32,7 @@ class App():
         self.genreSearched = ""
         self.earliestReleaseYearSearched = ""
         self.latestReleaseYearSearched = ""
+        self.currentPageNumber = 0
 
         # FUTURE MANAGER OF THIS SOFTWARE LOOK BELOW!
         # TODO: change value below to the year of the first movie in history when expanding to movies released pre-2000
@@ -64,6 +65,7 @@ class App():
         redirectUrl = '/moviesearch/'+keywordOrPhrase+'/'+genre+'/'+str(earliestReleaseYear)+'/'+str(latestReleaseYear)+'/'+'1'
         redirect(redirectUrl)
 
+
     def displayResultsPage(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,pageNumber):
         """
         If the search hasn't been done yet, perform search with keyword. Either way, generate the specified page of
@@ -75,6 +77,8 @@ class App():
         :param pageNumber: the page of results to generate.
         :return: the HTML code for the entire page of results.
         """
+
+        self.currentPageNumber = pageNumber
 
         # convert underscores to spaces
         # (underscores are sometimes used in the URL in place of spaces, need to convert back)
@@ -103,6 +107,10 @@ class App():
         # generate html page of results
         return generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, self.results,
                                    self.resultsPerPage, pageNumber)
+
+    def displayContextPage(self,oclcId,lineNumber):
+        return generateContextPage(oclcId,lineNumber,self.keywordOrPhraseSearched,self.genreSearched,
+                                   self.earliestReleaseYearSearched,self.latestReleaseYearSearched,self.currentPageNumber)
 
     def displayComparisonPage(self):
         return generateComparisonPage(self.defaultEarliestReleaseYear)
@@ -156,6 +164,7 @@ get('/moviesearch')(appInstance.displaySearchPage)
 post('/moviesearch')(appInstance.searchFromLandingPage)
 route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>/<pageNumber:int>')\
     (appInstance.displayResultsPage)
+route('/moviesearch/context/<oclcId:int>/<lineNumber:int>')(appInstance.displayContextPage)
 get('/moviesearch/compare')(appInstance.displayComparisonPage)
 post('/moviesearch/compare')(appInstance.graphComparison)
 route('/static/:path#.+#', name='static')(appInstance.static)
