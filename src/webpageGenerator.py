@@ -3,13 +3,15 @@
 # and open the template in the editor.
 
 import os
-from databaseQuerier import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search, getContextLines, getMovieInfo
+from databaseQuerier import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies,\
+    search, getContextLines, getMovieInfo
 from datetime import datetime
 import cv2
 import os.path
 
 __author__ = "Justin Eyster"
 __date__ = "$Jun 5, 2015 9:35:43 AM$"
+
 
 def fileToStr(fileName): 
     """Return a string containing the contents of the an html file."""
@@ -41,7 +43,7 @@ def generateSearchPage(defaultEarliestReleaseYear):
     return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
 
 def generateContextPage(oclcId,lineNumber,keywordOrPhraseSearched,genreSearched,earliestReleaseYearSearched,
-                        latestReleaseYearSearched,currentPageNumber):
+                        latestReleaseYearSearched,currentPageNumber,pathToMediaFiles):
     contextLines = getContextLines(oclcId,lineNumber,20)
     movieInfo = getMovieInfo(oclcId)
     movieTitle = movieInfo[0][0]
@@ -61,21 +63,22 @@ def generateContextPage(oclcId,lineNumber,keywordOrPhraseSearched,genreSearched,
         if firstRun:
             firstRun = False
             # cap the previous movie, use function below to generate HTML code for next movie's results
-            resultsPage += fillSearchResultsHTMLFile(oclcId,movieTitle,movieLineNumber,
-                                                                movieStartTimeStamp,movieEndTimeStamp,
-                                                                movieLineText, movieReleaseYear, dvdReleaseYear)
+            resultsPage += fillSearchResultsHTMLFile(oclcId,movieTitle,movieLineNumber,movieStartTimeStamp,
+                                                     movieEndTimeStamp,movieLineText, movieReleaseYear, dvdReleaseYear,
+                                                     pathToMediaFiles)
         else:
-            resultsPage += fillAdditionalLinesHTMLFile(oclcId,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
+            resultsPage += fillAdditionalLinesHTMLFile(oclcId,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,
+                                                       movieLineText,pathToMediaFiles)
 
     # convert spaces to %20 in keyword/phrase (hyperlinks skip spaces, %20 means space)
     for i in range(len(keywordOrPhraseSearched)):
         if keywordOrPhraseSearched[i] == " ":
             keywordOrPhraseSearched = keywordOrPhraseSearched[0:i] + "%20" + keywordOrPhraseSearched[i+1:]
     # message at top of page
-    numResultsMessage = "<p class=message-text>Showing 20 lines before and after the clicked result.</p>" + \
-        "<p class=message-text><a href=/moviesearch/" + keywordOrPhraseSearched + "/" + genreSearched + "/" + \
+    numResultsMessage = "<h4 class=message-text>Context</h4>" + "<p class=message-text>Showing 20 lines before and after the clicked result.</p>" + \
+                        "<p class=message-text><a href=/moviesearch/" + keywordOrPhraseSearched + "/" + genreSearched + "/" + \
                         str(earliestReleaseYearSearched) + "/" + str(latestReleaseYearSearched) + "/" + str(currentPageNumber) + \
-                        " >Back to Results</a></p>"
+                        " >Back to Search Results</a></p>"
 
     # put together all the pieces into one final string of HTML code, with the results for the page and the
     # nav bar
@@ -126,7 +129,8 @@ def generateGraphOfTwoKeywords(keywordOrPhrase1, keywordOrPhrase2, genre, earlie
     return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
 
 
-def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, results, resultsPerPage, pageNumber):
+def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, results, resultsPerPage,
+                        pageNumber, pathToMediaFiles):
     # initialize resultsPage variable
     resultsPage = ""
     # Later, place the following HTML code at the end of the results. (then put the nav bar after this.)
@@ -150,18 +154,20 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
                 # cap the previous movie, use function below to generate HTML code for next movie's results
                 resultsPage += resultsCap + fillSearchResultsHTMLFile(movieOclcId,movieTitle,movieLineNumber,
                                                                       movieStartTimeStamp,movieEndTimeStamp,
-                                                                      movieLineText, movieReleaseYear, dvdReleaseYear)
+                                                                      movieLineText, movieReleaseYear, dvdReleaseYear,
+                                                                      pathToMediaFiles)
             # if line is from same movie as previous, add the additional line to the movie's results
             elif prevMovieOclcId == movieOclcId:
-                resultsPage += fillAdditionalLinesHTMLFile(movieOclcId,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,movieLineText)
+                resultsPage += fillAdditionalLinesHTMLFile(movieOclcId,movieLineNumber,movieStartTimeStamp,
+                                                           movieEndTimeStamp,movieLineText,pathToMediaFiles)
             prevMovieOclcId = movieOclcId
     # as long as there are results...
     if len(results)>0:
         # message at top of page
-        numResultsMessage = "<p class=message-text><a href='/moviesearch'>Back to search page.</a></p>" + \
-                            "<p class=message-text>Showing " + str(len(results)) + " results for '" + keywordOrPhrase + \
+        numResultsMessage = "<p class=message-text>Showing " + str(len(results)) + " results for '" + keywordOrPhrase + \
                             "', " + str(resultsPerPage) + " per page.</p>" + \
-                            "<p class=message-text>Click on a result to view context.</p>"
+                            "<p class=message-text>Click on a result to view context.</p>" + \
+            "<p class=message-text><a href='/moviesearch'>Back to Search Page</a></p>"
 
         # put together all the pieces into one final string of HTML code, with the results for the page and the
         # nav bar
@@ -184,11 +190,11 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
 
 
 def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText, movieReleaseYear,
-                              dvdReleaseYear):
+                              dvdReleaseYear, pathToMediaFiles):
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"
     thumbnailSource = "/static/imageFiles/" + str(oclcId) + ".gif"
-    # generate path to screenshot
-    screenshotSource = "D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
+    # generate path to screen shot
+    screenshotSource = pathToMediaFiles + "/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
     abrevSource = "/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
     # if it's a valid file, insert it into the results
     if os.path.isfile(screenshotSource):
@@ -198,9 +204,9 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
     contextLink = "/moviesearch/context/" + str(oclcId) + "/" + str(lineNumber)
     return fileToStr('templates/searchResultsTemplate.html').format(**locals())
 
-def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText):
-    # generate file path to screenshot
-    screenshotSource = "D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
+def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText, pathToMediaFiles):
+    # generate file path to screen shot
+    screenshotSource = pathToMediaFiles + "/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
     abrevSource = "/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
     # if it's a valid file, insert it into the results
     if os.path.isfile(screenshotSource):

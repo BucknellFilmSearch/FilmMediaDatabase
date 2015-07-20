@@ -36,24 +36,25 @@ def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEa
     return results
 
 def updateKeywordCount(listOfOclcIds):
-    connection = lite.connect('cpcp.db')
-    currentId = listOfOclcIds[0][0]
-    currentCount = 0
-    for id in listOfOclcIds:
-        oclcId = id[0]
-        if oclcId == currentId:
-            currentCount += 1
-        else:
-            with connection:
-                cursor = connection.cursor()
-                command = "UPDATE MOVIES SET KeywordCount = ? WHERE OCLC_ID = ?"
-                cursor.execute(command, (currentCount, int(currentId)))
-            currentId = oclcId
-            currentCount = 1
-    with connection:
-        cursor = connection.cursor()
-        command = "UPDATE MOVIES SET KeywordCount = ? WHERE OCLC_ID = ?"
-        cursor.execute(command, (currentCount, int(currentId)))
+    if len(listOfOclcIds) > 0:
+        connection = lite.connect('cpcp.db')
+        currentId = listOfOclcIds[0][0]
+        currentCount = 0
+        for id in listOfOclcIds:
+            oclcId = id[0]
+            if oclcId == currentId:
+                currentCount += 1
+            else:
+                with connection:
+                    cursor = connection.cursor()
+                    command = "UPDATE MOVIES SET KeywordCount = ? WHERE OCLC_ID = ?"
+                    cursor.execute(command, (currentCount, int(currentId)))
+                currentId = oclcId
+                currentCount = 1
+        with connection:
+            cursor = connection.cursor()
+            command = "UPDATE MOVIES SET KeywordCount = ? WHERE OCLC_ID = ?"
+            cursor.execute(command, (currentCount, int(currentId)))
 
 # not vulnerable to injection
 def searchResults(keywordOrPhrase):

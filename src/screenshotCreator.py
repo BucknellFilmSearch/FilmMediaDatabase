@@ -111,5 +111,5 @@ def createScreenshot(startTimeStamp, endTimeStamp, oclcId, lineNumber):
         # write to a .bmp image
         cv2.imwrite('static/imageFiles/screenshots/' + str(oclcId) + '-' + str(lineNumber) + '.png', frame)
 
-oclcId = input("OCLC number for media? ")
-createAllScreenshots(oclcId)
+# oclcId = input("OCLC number for media? ")
+# createAllScreenshots(oclcId)

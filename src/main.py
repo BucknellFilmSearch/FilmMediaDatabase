@@ -33,6 +33,8 @@ class App():
         self.earliestReleaseYearSearched = ""
         self.latestReleaseYearSearched = ""
         self.currentPageNumber = 0
+        # JOHN: Change this to "/Volumes/HD5002/0_The Cell Phone Cinema Project/src/CPCPModel/static"
+        self.pathToMediaFiles = "D:/0_The Cell Phone Cinema Project/src/CPCPModel/static"
 
         # FUTURE MANAGER OF THIS SOFTWARE LOOK BELOW!
         # TODO: change value below to the year of the first movie in history when expanding to movies released pre-2000
@@ -106,11 +108,12 @@ class App():
         # if params (other than page number) are identical to previous search, use previous search results (implied)
         # generate html page of results
         return generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, self.results,
-                                   self.resultsPerPage, pageNumber)
+                                   self.resultsPerPage, pageNumber, self.pathToMediaFiles)
 
     def displayContextPage(self,oclcId,lineNumber):
         return generateContextPage(oclcId,lineNumber,self.keywordOrPhraseSearched,self.genreSearched,
-                                   self.earliestReleaseYearSearched,self.latestReleaseYearSearched,self.currentPageNumber)
+                                   self.earliestReleaseYearSearched,self.latestReleaseYearSearched,self.currentPageNumber,
+                                   self.pathToMediaFiles)
 
     def displayComparisonPage(self):
         return generateComparisonPage(self.defaultEarliestReleaseYear)
@@ -152,7 +155,7 @@ class App():
         """
         # to save storage on my computer, retrieve text files and images from hard drive
         if path[-4:len(path)] == '.txt' or path[-4:len(path)] == '.png' or path[-4:len(path)] == '.gif':
-            return static_file(path, root='D:/0_The Cell Phone Cinema Project/src/CPCPModel/static')
+            return static_file(path, root=self.pathToMediaFiles)
         # other files are found under static directory in working directory
         else:
             return static_file(path, root='static')
