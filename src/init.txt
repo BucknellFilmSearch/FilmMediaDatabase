@@ -1,1 +1,0 @@
-Test file used to initialize the git repository. Can be deleted at any later moment.

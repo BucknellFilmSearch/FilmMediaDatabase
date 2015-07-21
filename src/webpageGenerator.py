@@ -6,7 +6,6 @@ import os
 from databaseQuerier import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies,\
     search, getContextLines, getMovieInfo
 from datetime import datetime
-import cv2
 import os.path
 
 __author__ = "Justin Eyster"
