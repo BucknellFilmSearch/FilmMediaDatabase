@@ -7,6 +7,7 @@ from databaseQuerier import cumulativeOccurrencesByReleaseYear, percentageOfOccu
     search, getContextLines, getMovieInfo
 from datetime import datetime
 import os.path
+from math import ceil
 
 __author__ = "Justin Eyster"
 __date__ = "$Jun 5, 2015 9:35:43 AM$"
@@ -311,7 +312,7 @@ def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, lates
             pageNum5 = 'N/A'
 
     # set up 'Last Page' button
-    lastPage = numResults // resultsPerPage
+    lastPage = ceil(numResults / resultsPerPage)
     if lastPage == 0:
         lastPage = 1
     if currentPageNum == lastPage:

@@ -202,5 +202,10 @@ class dbDataEntry():
                 else:
                     print(line)
                     lineText += line
+            with self.connection:
+                cursor = self.connection.cursor()
+                cursor.execute("INSERT INTO ALLTEXT \
+                            (OCLC_ID, LineNumber, StartTimeStamp, EndTimeStamp, LineText) VALUES (?,?,?,?,?)", \
+                               (oclcId,currentLineNumber,startTimeStamp,endTimeStamp,lineText))
     
 dataEntry = dbDataEntry()
