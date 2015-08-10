@@ -1,3 +1,9 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+# enable debugging
+import cgitb
+cgitb.enable()
 from sqlalchemy import Column, Integer, ForeignKey, String, Index
 from sqlalchemy.dialects.postgresql import TSVECTOR
 from base import BASE

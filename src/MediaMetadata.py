@@ -1,3 +1,9 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+# enable debugging
+import cgitb
+cgitb.enable()
 from sqlalchemy import Column, String, Integer
 from base import BASE
 
@@ -15,8 +21,8 @@ class MediaMetadata(BASE):
     season_number = Column('season_number', Integer, nullable=True)
     episode_number = Column('episode_number', Integer, nullable=True)
     director = Column('director', String, nullable=True)
-    original_release_year = Column('original_release_year', String)
-    dvd_release_year = Column('dvd_release_year', String)
+    original_release_year = Column('original_release_year', Integer)
+    dvd_release_year = Column('dvd_release_year', Integer)
     country1 = Column('country_1', String)
     country2 = Column('country_2', String, nullable=True)
     country3 = Column('country_3', String, nullable=True)

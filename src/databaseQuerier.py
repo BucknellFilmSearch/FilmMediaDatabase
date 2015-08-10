@@ -1,6 +1,9 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+# enable debugging
+import cgitb
+cgitb.enable()
 
 __author__ = "Justin Eyster"
 __date__ = "$May 29, 2015 9:26:40 AM$"

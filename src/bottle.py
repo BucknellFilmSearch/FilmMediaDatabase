@@ -1,5 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+# enable debugging
+from __future__ import with_statement
+import cgitb
+cgitb.enable()
+
 """
 Bottle is a fast and simple micro-framework for small web applications. It
 offers request dispatching (Routes) with url parameter support, templates,
@@ -12,8 +18,6 @@ Homepage and documentation: http://bottlepy.org/
 Copyright (c) 2014, Marcel Hellkamp.
 License: MIT (see LICENSE for details)
 """
-
-from __future__ import with_statement
 
 __author__ = 'Marcel Hellkamp'
 __version__ = '0.13-dev'

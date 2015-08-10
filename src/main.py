@@ -1,18 +1,19 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+# enable debugging
+import cgitb
+cgitb.enable()
 
 __author__ = "Justin Eyster"
 __date__ = "$Jun 2, 2015 2:43:11 PM$"
 
 from datetime import datetime
 from bottle import route, run, install, template, request, get, post, static_file, redirect
-from bottle_sqlite import SQLitePlugin
-from databaseQuerier import search, totalMovies
+from databaseQuerierPostgresql import search, totalMovies
 from webpageGenerator import fillGraphHTMLFile, generateSearchPage, generateResultsPage, generateComparisonPage,\
     generateGraphOfTwoKeywords, generateContextPage
-
-install(SQLitePlugin(dbfile='cpcp.db'))
+import cgi
 
 class App():
 
@@ -163,8 +164,8 @@ class App():
 # initialize App
 appInstance = App()
 # route the proper URL's to the proper methods in the class
-get('/moviesearch')(appInstance.displaySearchPage)
-post('/moviesearch')(appInstance.searchFromLandingPage)
+get('/moviesearch/')(appInstance.displaySearchPage)
+post('/moviesearch/')(appInstance.searchFromLandingPage)
 route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>/<pageNumber:int>')\
     (appInstance.displayResultsPage)
 route('/moviesearch/context/<oclcId:int>/<lineNumber:int>')(appInstance.displayContextPage)
@@ -172,4 +173,5 @@ get('/moviesearch/compare')(appInstance.displayComparisonPage)
 post('/moviesearch/compare')(appInstance.graphComparison)
 route('/static/:path#.+#', name='static')(appInstance.static)
 # run the server
+# run(server='cgi')
 run(host='localhost', port=8080, debug=True)(appInstance)

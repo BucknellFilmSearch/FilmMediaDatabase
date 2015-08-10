@@ -1,10 +1,13 @@
-# To change this license header, choose License Headers in Project Properties.
-# To change this template file, choose Tools | Templates
-# and open the template in the editor.
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+# enable debugging
+import cgitb
+cgitb.enable()
 
 import os
-from databaseQuerier import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies,\
-    search, getContextLines, getMovieInfo
+from databaseQuerierPostgresql import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search, \
+    getContextLines, getMovieInfo
 from datetime import datetime
 import os.path
 from math import ceil
