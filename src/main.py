@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# enable debugging
+# enable debugging in web server environment
 import cgitb
 cgitb.enable()
 
@@ -13,6 +13,7 @@ from bottle import route, run, install, template, request, get, post, static_fil
 from databaseQuerierPostgresql import search, totalMovies
 from webpageGenerator import fillGraphHTMLFile, generateSearchPage, generateResultsPage, generateComparisonPage,\
     generateGraphOfTwoKeywords, generateContextPage
+# The import below says it's unused, but it is used on the web server. Don't remove it.
 import cgi
 
 class App():
@@ -21,7 +22,7 @@ class App():
         """
         Provides location to store results, so that all functions can access it after retrieving results only once.
         Also the master location for resultsPerPage. This is the only place where you should have to adjust this.
-        Also stores the current keyword/phrase being searched.
+        Also stores the current keyword/phrase being searched, and other search params.
         Also stores default earliest release year. Right now we're only including movies released after 2000.
         """
 
@@ -34,8 +35,9 @@ class App():
         self.earliestReleaseYearSearched = ""
         self.latestReleaseYearSearched = ""
         self.currentPageNumber = 0
-        # JOHN: Change this to "/Volumes/HD5002/0_The Cell Phone Cinema Project/src/CPCPModel/static"
-        self.pathToMediaFiles = "D:/0_The Cell Phone Cinema Project/src/CPCPModel/static"
+        # JOHN: Change this to "/Volumes/HD5002/0_The Cell Phone Cinema Project/src/CPCPModel/static" to use on
+        # Macbook with external hard drive.
+        self.pathToMediaFiles = "/home1/filmtvse/public_html/static"
 
         # FUTURE MANAGER OF THIS SOFTWARE LOOK BELOW!
         # TODO: change value below to the year of the first movie in history when expanding to movies released pre-2000
@@ -83,11 +85,10 @@ class App():
 
         self.currentPageNumber = pageNumber
 
-        # convert underscores to spaces
-        # (underscores are sometimes used in the URL in place of spaces, need to convert back)
+        # convert spaces to & signs: this ensures that matches are returned for all words/variations of the words
         for i in range(len(keywordOrPhrase)):
-            if keywordOrPhrase[i] == "_":
-                keywordOrPhrase = keywordOrPhrase[0:i] + " " + keywordOrPhrase[i+1:]
+            if keywordOrPhrase[i] == " ":
+                keywordOrPhrase = keywordOrPhrase[0:i] + "&" + keywordOrPhrase[i+1:]
 
         # if results aren't already for current search, perform the search
         if (keywordOrPhrase != self.keywordOrPhraseSearched or genre != self.genreSearched or
@@ -111,16 +112,33 @@ class App():
         return generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, self.results,
                                    self.resultsPerPage, pageNumber, self.pathToMediaFiles)
 
-    def displayContextPage(self,oclcId,lineNumber):
-        return generateContextPage(oclcId,lineNumber,self.keywordOrPhraseSearched,self.genreSearched,
-                                   self.earliestReleaseYearSearched,self.latestReleaseYearSearched,self.currentPageNumber,
+    def displayContextPage(self,oclcId,lineNumber,prevKeywordOrPhrase,prevGenre,prevEarliestReleaseYear,
+                           prevLatestReleaseYear,prevPageNumber):
+        """
+        :param oclcId: oclc number of movie to get context from
+        :param lineNumber: line number clicked by user
+        :return: html code for the page of context
+        """
+        # return generateContextPage(oclcId,lineNumber,self.keywordOrPhraseSearched,self.genreSearched,
+        #                            self.earliestReleaseYearSearched,self.latestReleaseYearSearched,self.currentPageNumber,
+        #                            self.pathToMediaFiles)
+
+        # switched to passing info about previous search through the URL: CGI scripts don't have persistence, can't
+        # remember previous search without passing data through URL
+        return generateContextPage(oclcId,lineNumber,prevKeywordOrPhrase,prevGenre,
+                                   prevEarliestReleaseYear,prevLatestReleaseYear,prevPageNumber,
                                    self.pathToMediaFiles)
 
     def displayComparisonPage(self):
+        """
+        :return: html code for the search page that has two search boxes, to compare two words/phrases
+        """
         return generateComparisonPage(self.defaultEarliestReleaseYear)
 
     def graphComparison(self):
-
+        """
+        :return: graph of the two words/phrases that the user entered
+        """
         # get graph/search parameters from search boxes
         keywordOrPhrase1 = request.forms.get('keywordOrPhrase1')
         if len(keywordOrPhrase1) == 0:
@@ -168,10 +186,14 @@ get('/moviesearch/')(appInstance.displaySearchPage)
 post('/moviesearch/')(appInstance.searchFromLandingPage)
 route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>/<pageNumber:int>')\
     (appInstance.displayResultsPage)
-route('/moviesearch/context/<oclcId:int>/<lineNumber:int>')(appInstance.displayContextPage)
+route('/moviesearch/context/<oclcId:int>/<lineNumber:int>/<prevKeywordOrPhrase>/<prevGenre>/<prevEarliestReleaseYear:int>/<prevLatestReleaseYear:int>/<prevPageNumber:int>')\
+    (appInstance.displayContextPage)
 get('/moviesearch/compare')(appInstance.displayComparisonPage)
 post('/moviesearch/compare')(appInstance.graphComparison)
-route('/static/:path#.+#', name='static')(appInstance.static)
+# comment out the line below for web server environment
+# route('/static/:path#.+#', name='static')(appInstance.static)
 # run the server
-# run(server='cgi')
-run(host='localhost', port=8080, debug=True)(appInstance)
+# make sure the line below isn't commented out for web server environment
+run(server='cgi')
+# comment out the line below for web server environment
+# run(host='localhost', port=8080, debug=True)(appInstance)

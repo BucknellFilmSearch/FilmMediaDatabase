@@ -10,9 +10,10 @@ from sys import exit
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
-from MediaMetadata import *
-from MediaText import *
+from MediaMetadata import MediaMetadata
+from MediaText import MediaText
 from postgresSettings import DATABASE
+from screenshotCreator import createAllScreenshots
 
 # create connection to database
 engine = create_engine(URL(**DATABASE))
@@ -33,12 +34,12 @@ def main_menu():
             print("Invalid entry. Try again.")
 
 def enter_movie():
-    oclc_id = input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): ")
+    oclc_id = int(input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): "))
     movie_or_tv_show = "Movie"
     movie_title = input("Movie title: ")
     director = input("Director: ")
-    original_release_year = input("Movie's original release year: ")
-    dvd_release_year = input("DVD release year: ")
+    original_release_year = int(input("Movie's original release year: "))
+    dvd_release_year = int(input("DVD release year: "))
     while True:
         country1 = input("Country 1 (3 digit UN code): ")
         country2 = input("Country 2 (if applicable): ")
@@ -54,15 +55,15 @@ def enter_movie():
     genre2 = input("Genre 2 (if applicable): ")
     genre3 = input("Genre 3 (if applicable): ")
     content_rating = input("MPAA rating (or enter 'Unrated'): ")
-    runtime_in_minutes = input("Run time (in whole minutes): ")
+    runtime_in_minutes = int(input("Run time (in whole minutes): "))
     cc_or_sub = input("'CC' or 'Sub': ")
 
-    print("\nCarefully verify that the following information is correct: ")
-    print("OCLC number: " + oclc_id)
+    print("\nCarefully verify that the following movie information is correct: ")
+    print("OCLC number: " + str(oclc_id))
     print("Movie title: " + movie_title)
     print("Movie director: " + director)
-    print("Movie release year: " + original_release_year)
-    print("DVD release year: " + dvd_release_year)
+    print("Movie release year: " + str(original_release_year))
+    print("DVD release year: " + str(dvd_release_year))
     print("Country 1: " + country1)
     print("Country 2: " + country2)
     print("Country 3: " + country3)
@@ -70,7 +71,7 @@ def enter_movie():
     print("Genre 2: " + genre2)
     print("Genre 3: " + genre3)
     print("MPAA Rating: " + content_rating)
-    print("Run time in minutes: " + runtime_in_minutes)
+    print("Run time in minutes: " + str(runtime_in_minutes))
     print("'CC' file or 'Sub' file: " + cc_or_sub)
 
     while True:
@@ -90,6 +91,8 @@ def enter_movie():
 
             # fill the all text table from file
             fillMediaTextTable(oclc_id)
+            print("Processing screenshots...")
+            createAllScreenshots(oclc_id)
             break
 
         elif verification == "0":
@@ -99,15 +102,15 @@ def enter_movie():
             print("Invalid entry. Try again.")
 
 def enter_tv_show():
-    oclc_id = input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): ")
+    oclc_id = int(input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): "))
     movie_or_tv_show = "TV Show"
     show_title = input("Show title: ")
     episode_title = input("Episode title: ")
-    season_number = input("Season number: ")
-    episode_number = input("Episode number: ")
+    season_number = int(input("Season number: "))
+    episode_number = int(input("Episode number: "))
     director = input("Director: ")
-    original_release_year = input("Episode's original release year: ")
-    dvd_release_year = input("DVD release year: ")
+    original_release_year = int(input("Episode's original release year: "))
+    dvd_release_year = int(input("DVD release year: "))
     while True:
         country1 = input("Country 1 (3 digit UN code): ")
         country2 = input("Country 2 (if applicable): ")
@@ -123,18 +126,18 @@ def enter_tv_show():
     genre2 = input("Genre 2 (if applicable): ")
     genre3 = input("Genre 3 (if applicable): ")
     content_rating = input("TV rating: ")
-    runtime_in_minutes = input("Run time (in minutes): ")
+    runtime_in_minutes = int(input("Run time (in minutes): "))
     cc_or_sub = input("CC or Sub: ")
 
-    print("\nCarefully verify that the following information is correct: ")
-    print("OCLC number: " + oclc_id)
+    print("\nCarefully verify that the following tv show information is correct: ")
+    print("OCLC number: " + int(oclc_id))
     print("Show title: " + show_title)
     print("Episode title: " + episode_title)
-    print("Season number: " + season_number)
-    print("Episode number: " + episode_number)
+    print("Season number: " + int(season_number))
+    print("Episode number: " + int(episode_number))
     print("Show/episode director: " + director)
-    print("Episode release year: " + original_release_year)
-    print("DVD release year: " + dvd_release_year)
+    print("Episode release year: " + int(original_release_year))
+    print("DVD release year: " + int(dvd_release_year))
     print("Country 1: " + country1)
     print("Country 2: " + country2)
     print("Country 3: " + country3)
@@ -142,7 +145,7 @@ def enter_tv_show():
     print("Genre 2: " + genre2)
     print("Genre 3: " + genre3)
     print("TV Rating: " + content_rating)
-    print("Run time in minutes: " + runtime_in_minutes)
+    print("Run time in minutes: " + int(runtime_in_minutes))
     print("'CC' file or 'Sub' file: " + cc_or_sub)
 
     while True:
@@ -163,6 +166,8 @@ def enter_tv_show():
 
             # fill the text table from file
             fillMediaTextTable(oclc_id)
+            print("Processing screenshots...")
+            createAllScreenshots(oclc_id)
             break
 
         elif verification == "0":
@@ -193,7 +198,7 @@ def fillMediaTextTable(oclc_id):
                     # add the data from the previous line to the database
                     new_line = MediaText(oclc_id=oclc_id, line_number=currentLineNumber,
                                          start_time_stamp=startTimeStamp, end_time_stamp=endTimeStamp,
-                                         line_text=lineText)
+                                         line_text=lineText.encode('utf-8'))
                     session.add(new_line)
                     session.commit()
                 # start looking for the next line, clear the line text
@@ -214,6 +219,13 @@ def fillMediaTextTable(oclc_id):
                 print(line.encode('utf-8'))
                 # add the line to the line text
                 lineText += line
+        # enter very last line
+        new_line = MediaText(oclc_id=oclc_id, line_number=currentLineNumber,
+                                         start_time_stamp=startTimeStamp, end_time_stamp=endTimeStamp,
+                                         line_text=lineText.encode('utf-8'))
+        session.add(new_line)
+        session.commit()
+
 
 # after methods are defined, go to main menu
 main_menu()

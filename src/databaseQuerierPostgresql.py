@@ -8,7 +8,7 @@ cgitb.enable()
 __author__ = "Justin Eyster"
 __date__ = "$May 29, 2015 9:26:40 AM$"
 
-from sqlalchemy import create_engine, distinct, func
+from sqlalchemy import create_engine, distinct, func, update, text
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
 from postgresSettings import DATABASE
@@ -47,21 +47,16 @@ def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEa
 def updateKeywordCount(listOfOclcIds):
     if len(listOfOclcIds) > 0:
         session = Session()
-        currentId = listOfOclcIds[0][0]
-        currentCount = 0
         for id in listOfOclcIds:
             oclcId = id[0]
-            if oclcId == currentId:
-                currentCount += 1
-            else:
-                MediaMetadata.__table__.update().\
-                    where(MediaMetadata.__table__.c.oclc_id == currentId).\
-                    values(keywordCount = currentCount)
-                currentId = oclcId
-                currentCount = 1
-        MediaMetadata.__table__.update().\
-            where(MediaMetadata.__table__.c.oclc_id == currentId).\
-            values(keywordCount = currentCount)
+            count = id[1]
+            updateStatement = update(MediaMetadata.__table__).\
+                where(MediaMetadata.oclc_id == oclcId).\
+                values(keyword_count = count)
+            session.execute(updateStatement)
+            session.commit()
+            currentId = oclcId
+            currentCount = 1
 
 # rewritten for postgresql and sqlalchemy
 def searchResults(keywordOrPhrase):
@@ -72,17 +67,20 @@ def searchResults(keywordOrPhrase):
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
     session = Session()
-    query = session.query(MediaText.oclc_id).\
-        filter(MediaText.search_vector.match(keywordOrPhrase))
+    query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
+        group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
 
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
                           MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
                           MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
-        filter(MediaText.search_vector.match(keywordOrPhrase)).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
-        order_by(MediaMetadata.keyword_count.desc())
+        order_by(MediaMetadata.keyword_count.desc()).\
+        order_by(MediaMetadata.movie_title).\
+        order_by(MediaText.line_number)
     return query.all()
 
 # rewritten for postgresql and sqlalchemy
@@ -95,7 +93,8 @@ def searchResultsByGenre(keywordOrPhrase,genre):
     """
     session = Session()
     query = session.query(MediaText.oclc_id).\
-        filter(MediaText.search_vector.match(keywordOrPhrase))
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
+        group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
 
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
@@ -103,9 +102,11 @@ def searchResultsByGenre(keywordOrPhrase,genre):
                           MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaMetadata.genre1 == genre or MediaMetadata.genre2 == genre or MediaMetadata.genre3 == genre).\
-        filter(MediaText.search_vector.match(keywordOrPhrase)).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
-        order_by(MediaMetadata.keyword_count.desc())
+        order_by(MediaMetadata.keyword_count.desc()).\
+        order_by(MediaMetadata.movie_title).\
+        order_by(MediaText.line_number)
     return query.all()
 
 # rewritten for postgresql and sqlalchemy
@@ -118,7 +119,8 @@ def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear
     """
     session = Session()
     query = session.query(MediaText.oclc_id).\
-        filter(MediaText.search_vector.match(keywordOrPhrase))
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
+        group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
 
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
@@ -127,9 +129,11 @@ def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaMetadata.genre1 == genre or MediaMetadata.genre2 == genre or MediaMetadata.genre3 == genre).\
         filter(MediaMetadata.original_release_year >= earliestReleaseYear and MediaMetadata.original_release_year <= latestReleaseYear).\
-        filter(MediaText.search_vector.match(keywordOrPhrase)).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
-        order_by(MediaMetadata.keyword_count.desc())
+        order_by(MediaMetadata.keyword_count.desc()).\
+        order_by(MediaMetadata.movie_title).\
+        order_by(MediaText.line_number)
     return query.all()
 
 # rewritten for postgresql and sqlalchemy
@@ -142,7 +146,8 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
     """
     session = Session()
     query = session.query(MediaText.oclc_id).\
-        filter(MediaText.search_vector.match(keywordOrPhrase))
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
+        group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
 
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
@@ -150,9 +155,11 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
                           MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaMetadata.original_release_year >= earliestReleaseYear and MediaMetadata.original_release_year <= latestReleaseYear).\
-        filter(MediaText.search_vector.match(keywordOrPhrase)).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
-        order_by(MediaMetadata.keyword_count.desc())
+        order_by(MediaMetadata.keyword_count.desc()).\
+        order_by(MediaMetadata.movie_title).\
+        order_by(MediaText.line_number)
     return query.all()
 
 # rewritten for postgresql and sqlalchemy
@@ -171,11 +178,11 @@ def getContextLines(oclcId,lineNumber,numLines):
     :return: 25 lines before and after the given line
     """
     session = Session()
-    query = session.query(MediaText.line_number, MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text).\
+    query = session.query(distinct(MediaText.line_number), MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text).\
         filter(MediaText.oclc_id == oclcId).\
-        filter(MediaText.line_number >= (lineNumber - numLines) and MediaText.line_number <= (lineNumber + numLines)).\
+        filter(MediaText.line_number.between((lineNumber - numLines), (lineNumber + numLines))).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
-        order_by(MediaText.line_number.asc())
+        order_by(MediaText.line_number)
     return query.all()
 
 # rewritten for postgresql and sqlalchemy
@@ -206,16 +213,16 @@ def occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latest
             filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
             filter(MediaMetadata.original_release_year.between(earliestReleaseYear, latestReleaseYear)).\
             filter(MediaMetadata.genre1 == genre or MediaMetadata.genre2 == genre or MediaMetadata.genre3 == genre).\
-            filter(MediaText.search_vector.match(keywordOrPhrase)).\
+            filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
             filter(MediaMetadata.movie_or_tv_show == "Movie").\
-            order_by(MediaMetadata.original_release_year.asc())
+            group_by(MediaMetadata.original_release_year)
     else:
         query = session.query(MediaMetadata.original_release_year, func.count(distinct(MediaText.oclc_id))).\
             filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
             filter(MediaMetadata.original_release_year.between(earliestReleaseYear, latestReleaseYear)).\
-            filter(MediaText.search_vector.match(keywordOrPhrase)).\
+            filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
             filter(MediaMetadata.movie_or_tv_show == "Movie").\
-            order_by(MediaMetadata.original_release_year.asc())
+            group_by(MediaMetadata.original_release_year)
     return query.all()
 
 # rewritten for postgresql and sqlalchemy
@@ -225,7 +232,7 @@ def totalMoviesOfSpecifiedYear(year):
     query = session.query(func.count(distinct(MediaMetadata.oclc_id))).\
         filter(MediaMetadata.original_release_year == year).\
         filter(MediaMetadata.movie_or_tv_show == "Movie")
-    return query.all()
+    return query.all()[0][0]
 
 # rewritten for postgresql and sqlalchemy
 def percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear):

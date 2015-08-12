@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-# enable debugging
+# enable debugging in web server environment
 import cgitb
 cgitb.enable()
 
@@ -9,7 +9,7 @@ import os
 from databaseQuerierPostgresql import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search, \
     getContextLines, getMovieInfo
 from datetime import datetime
-import os.path
+from os import path
 from math import ceil
 
 __author__ = "Justin Eyster"
@@ -62,16 +62,20 @@ def generateContextPage(oclcId,lineNumber,keywordOrPhraseSearched,genreSearched,
         movieLineNumber = line[0]
         movieStartTimeStamp = line[1]
         movieEndTimeStamp = line[2]
-        movieLineText = line[3]
+        movieLineText = removeNewlineSymbol(line[3])
         if firstRun:
             firstRun = False
             # cap the previous movie, use function below to generate HTML code for next movie's results
             resultsPage += fillSearchResultsHTMLFile(oclcId,movieTitle,movieLineNumber,movieStartTimeStamp,
-                                                     movieEndTimeStamp,movieLineText, movieReleaseYear, dvdReleaseYear,
-                                                     pathToMediaFiles)
+                                                     movieEndTimeStamp,movieLineText,movieReleaseYear,dvdReleaseYear,
+                                                     pathToMediaFiles,keywordOrPhraseSearched,genreSearched,
+                                                     earliestReleaseYearSearched,latestReleaseYearSearched,
+                                                     currentPageNumber)
         else:
             resultsPage += fillAdditionalLinesHTMLFile(oclcId,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,
-                                                       movieLineText,pathToMediaFiles)
+                                                       movieLineText,pathToMediaFiles,keywordOrPhraseSearched,
+                                                       genreSearched,earliestReleaseYearSearched,
+                                                       latestReleaseYearSearched,currentPageNumber)
 
     # convert spaces to %20 in keyword/phrase (hyperlinks skip spaces, %20 means space)
     for i in range(len(keywordOrPhraseSearched)):
@@ -92,6 +96,19 @@ def generateContextPage(oclcId,lineNumber,keywordOrPhraseSearched,genreSearched,
     navBar = ""
     graph = ""
     return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
+
+def removeNewlineSymbol(text):
+    """
+    :param text: text to remove the newline symbol from
+    :return: text without newline symbol
+    """
+    for i in range(len(text)):
+        if len(text) > i and text[i] == "\\":
+            if len(text) > i+1 and text[i+1] == "0":
+                if len(text) > i+2 and text[i+2] == "1":
+                    if len(text) > i+3 and text[i+3] == "2":
+                        text = text[0:i] + " " + text[i+4:]
+    return str(text)
 
 def generateComparisonPage(defaultEarliestReleaseYear):
     """Generates the comparison page using comparisonPageTemplate and bootstrapThemeTemplate (html templates).
@@ -149,20 +166,23 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
             movieLineNumber = results[i][2]
             movieStartTimeStamp = results[i][3]
             movieEndTimeStamp = results[i][4]
-            movieLineText = results[i][5]
+            movieLineText = removeNewlineSymbol(results[i][5])
             movieReleaseYear = results[i][6]
             dvdReleaseYear = results[i][7]
             # if line is from a new movie...
             if prevMovieOclcId != movieOclcId:
                 # cap the previous movie, use function below to generate HTML code for next movie's results
-                resultsPage += resultsCap + fillSearchResultsHTMLFile(movieOclcId,movieTitle,movieLineNumber,
-                                                                      movieStartTimeStamp,movieEndTimeStamp,
-                                                                      movieLineText, movieReleaseYear, dvdReleaseYear,
-                                                                      pathToMediaFiles)
+                resultsPage += resultsCap + fillSearchResultsHTMLFile(movieOclcId,movieTitle,movieLineNumber,movieStartTimeStamp,
+                                                     movieEndTimeStamp,movieLineText,movieReleaseYear,dvdReleaseYear,
+                                                     pathToMediaFiles,keywordOrPhrase,genre,
+                                                     earliestReleaseYear,latestReleaseYear,
+                                                     pageNumber)
             # if line is from same movie as previous, add the additional line to the movie's results
             elif prevMovieOclcId == movieOclcId:
-                resultsPage += fillAdditionalLinesHTMLFile(movieOclcId,movieLineNumber,movieStartTimeStamp,
-                                                           movieEndTimeStamp,movieLineText,pathToMediaFiles)
+                resultsPage += fillAdditionalLinesHTMLFile(movieOclcId,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,
+                                                       movieLineText,pathToMediaFiles,keywordOrPhrase,
+                                                       genre,earliestReleaseYear,
+                                                       latestReleaseYear,pageNumber)
             prevMovieOclcId = movieOclcId
     # as long as there are results...
     if len(results)>0:
@@ -193,7 +213,8 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
 
 
 def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText, movieReleaseYear,
-                              dvdReleaseYear, pathToMediaFiles):
+                              dvdReleaseYear, pathToMediaFiles, keywordOrPhraseSearched, genreSearched,
+                              earliestReleaseYearSearched, latestReleaseYearSearched, pageNumSearched):
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"
     thumbnailSource = "/static/imageFiles/" + str(oclcId) + ".gif"
     # generate path to screen shot
@@ -204,10 +225,14 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
         screenshotHtml = "<center><img class='thumbnail' src=" + abrevSource + " width='720' height='480'></center>"
     else:
         screenshotHtml = ""
-    contextLink = "/moviesearch/context/" + str(oclcId) + "/" + str(lineNumber)
+    contextLink = "/moviesearch/context/" + str(oclcId) + "/" + str(lineNumber) + "/" + keywordOrPhraseSearched + \
+        "/" + genreSearched + "/" + str(earliestReleaseYearSearched) + "/" + str(latestReleaseYearSearched) + "/" + \
+        str(pageNumSearched)
     return fileToStr('templates/searchResultsTemplate.html').format(**locals())
 
-def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText, pathToMediaFiles):
+def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText, pathToMediaFiles,
+                                keywordOrPhraseSearched, genreSearched, earliestReleaseYearSearched,
+                                latestReleaseYearSearched, pageNumSearched):
     # generate file path to screen shot
     screenshotSource = pathToMediaFiles + "/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
     abrevSource = "/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
@@ -216,7 +241,9 @@ def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp
         screenshotHtml = "<center><img class='thumbnail' src=" + abrevSource + " width='720' height='480'></center>"
     else:
         screenshotHtml = ""
-    contextLink = "/moviesearch/context/" + str(oclcId) + "/" + str(lineNumber)
+    contextLink = "/moviesearch/context/" + str(oclcId) + "/" + str(lineNumber) + "/" + keywordOrPhraseSearched + \
+        "/" + genreSearched + "/" + str(earliestReleaseYearSearched) + "/" + str(latestReleaseYearSearched) + "/" + \
+        str(pageNumSearched)
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
 
 def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, plotType):
@@ -225,7 +252,7 @@ def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestRelease
             data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
             twoDimensArrayOfVals = []
             for item in data:
-                twoDimensArrayOfVals.append([item[0],item[1]])
+                twoDimensArrayOfVals.append([item[0],round(item[1])])
             return fileToStr('templates/percentageAcrossReleaseYearGraphTemplate.html').format(**locals())
     else:
         keywordOrPhrase1 = keywordOrPhrase[0]
@@ -234,11 +261,11 @@ def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestRelease
             data1 = percentageOfOccurrenceByReleaseYear(keywordOrPhrase1, genre, earliestReleaseYear, latestReleaseYear)
             twoDimensArrayOfVals1 = []
             for item in data1:
-                twoDimensArrayOfVals1.append([item[0],item[1]])
+                twoDimensArrayOfVals1.append([item[0],round(item[1])])
             data2 = percentageOfOccurrenceByReleaseYear(keywordOrPhrase2, genre, earliestReleaseYear, latestReleaseYear)
             twoDimensArrayOfVals2 = []
             for item in data2:
-                twoDimensArrayOfVals2.append([item[0],item[1]])
+                twoDimensArrayOfVals2.append([item[0],round(item[1])])
             return fileToStr('templates/percentageAcrossReleaseYearMultiGraphTemplate.html').format(**locals())
 
 
@@ -315,7 +342,7 @@ def fillNavigationBarHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, lates
             pageNum5 = 'N/A'
 
     # set up 'Last Page' button
-    lastPage = ceil(numResults / resultsPerPage)
+    lastPage = int(ceil(numResults / resultsPerPage))
     if lastPage == 0:
         lastPage = 1
     if currentPageNum == lastPage:
