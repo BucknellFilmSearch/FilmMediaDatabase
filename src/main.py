@@ -59,8 +59,13 @@ class App():
         """
         # get search phrase and metadata parameters from the form on the search page.
         keywordOrPhrase = request.forms.get('keywordOrPhrase')
-        # get rid of question marks, they cause an error
+        # get rid of question marks and exclamations, they cause an error
         keywordOrPhrase = keywordOrPhrase.replace("?","")
+        keywordOrPhrase = keywordOrPhrase.replace("!","")
+        # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
+        for i in range(len(keywordOrPhrase)):
+            if keywordOrPhrase[i] == " ":
+                keywordOrPhrase = keywordOrPhrase[0:i] + "&" + keywordOrPhrase[i+1:]
         genre = request.forms.get('genre')
         earliestReleaseYear = request.forms.get('earliestReleaseYear')
         latestReleaseYear = request.forms.get('latestReleaseYear')
@@ -94,11 +99,6 @@ class App():
         # check for whitespace at end of keyword/phrase
         if keywordOrPhrase[len(keywordOrPhrase)-1] == " ":
             return "<p>Please enter your search term without a space at the end.<a href = '/moviesearch'> Back.</a></p>"
-
-        # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
-        for i in range(len(keywordOrPhrase)):
-            if keywordOrPhrase[i] == " ":
-                keywordOrPhrase = keywordOrPhrase[0:i] + "&" + keywordOrPhrase[i+1:]
 
         # if results aren't already for current search, perform the search
         if (keywordOrPhrase != self.keywordOrPhraseSearched or genre != self.genreSearched or
@@ -165,9 +165,12 @@ class App():
         if keywordOrPhrase1[len(keywordOrPhrase1)-1] == " " or keywordOrPhrase2[len(keywordOrPhrase2)-1] == " ":
             return "<p>Please enter your search terms without a space at the end.<a href = '/moviesearch/compare'> Back.</a></p>"
 
-        # get rid of question marks, they cause an error
+        # get rid of question marks and exclamation marks, they cause an error
         keywordOrPhrase1 = keywordOrPhrase1.replace("?","")
         keywordOrPhrase2 = keywordOrPhrase2.replace("?","")
+        keywordOrPhrase1 = keywordOrPhrase1.replace("!","")
+        keywordOrPhrase2 = keywordOrPhrase2.replace("!","")
+
         # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
         for i in range(len(keywordOrPhrase1)):
             if keywordOrPhrase1[i] == " ":
@@ -176,6 +179,7 @@ class App():
         for i in range(len(keywordOrPhrase2)):
             if keywordOrPhrase2[i] == " ":
                 keywordOrPhrase2 = keywordOrPhrase2[0:i] + "&" + keywordOrPhrase2[i+1:]
+
         if len(keywordOrPhrase1) == 0 or len(keywordOrPhrase2) == 0:
             return "<p>Please specify two keywords or phrases before clicking 'search.'<a href = '/moviesearch/compare'> Back.</a></p>"
         genre = request.forms.get('genre')
