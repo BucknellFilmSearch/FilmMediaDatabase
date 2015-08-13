@@ -12,7 +12,8 @@ from datetime import datetime
 from bottle import route, run, install, template, request, get, post, static_file, redirect
 from databaseQuerierPostgresql import search, totalMovies
 from webpageGenerator import fillGraphHTMLFile, generateSearchPage, generateResultsPage, generateComparisonPage,\
-    generateGraphOfTwoKeywords, generateContextPage
+    generateGraphOfTwoKeywords, generateContextPage, generateFeedbackPage
+from feedbackEmailSender import sendEmail
 # The import below says it's unused, but it is used on the web server. Don't remove it.
 import cgi
 
@@ -178,6 +179,23 @@ class App():
         return generateGraphOfTwoKeywords(keywordOrPhrase1, keywordOrPhrase2, genre, earliestReleaseYear,
                                           latestReleaseYear)
 
+    def displayFeedbackPage(self):
+        """
+        Generate and then display a feedback form to the user.
+        :returns: an html string with a feedback form.
+        """
+        return generateFeedbackPage()
+
+    def sendFeedback(self):
+        """
+        Get feedback from html form, then send feedback email.
+        """
+        feedbackText = request.forms.get('feedbackText')
+        senderEmailAddress = request.forms.get('senderEmail')
+        senderName = request.forms.get('senderName')
+        sendEmail(feedbackText, senderEmailAddress, senderName)
+        return "<p>Thank you for your feedback!<a href = '/moviesearch'> Back to search page.</a></p>"
+
     def static(self, path):
         """
         Provides route to static files, such as text files. Only needs to be routed for development server, not web
@@ -203,6 +221,9 @@ route('/moviesearch/context/<oclcId:int>/<lineNumber:int>/<prevKeywordOrPhrase>/
     (appInstance.displayContextPage)
 get('/moviesearch/compare')(appInstance.displayComparisonPage)
 post('/moviesearch/compare')(appInstance.graphComparison)
+get('/moviesearch/feedback')(appInstance.displayFeedbackPage)
+post('/moviesearch/feedback')(appInstance.sendFeedback)
+
 # comment out the line below for web server environment (not commented out for local development server)
 # route('/static/:path#.+#', name='static')(appInstance.static)
 

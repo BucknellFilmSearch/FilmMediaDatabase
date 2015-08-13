@@ -178,6 +178,24 @@ def generateGraphOfTwoKeywords(keywordOrPhrase1, keywordOrPhrase2, genre, earlie
     return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
 
 
+def generateFeedbackPage():
+    """
+    Generate the page with form to submit feedback by email to me and prof. Hunter.
+    :return: html string for the page with feedback form.
+    """
+    # page content is html form
+    pageContent = fileToStr('templates/feedbackPageTemplate.html')
+    # home button not active because not on home page
+    homeActive = ""
+    # link to home
+    homeLink = "/moviesearch"
+    # no nav bar because not on results page
+    navBar = ""
+    # no graph
+    graph = ""
+    return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
+
+
 def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, results, resultsPerPage,
                         pageNumber, pathToMediaFiles):
     """
