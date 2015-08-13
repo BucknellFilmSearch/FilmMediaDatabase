@@ -26,6 +26,8 @@ class App():
         Also stores default earliest release year. Right now we're only including movies released after 2000.
         """
 
+        # Below is where search results are stored so that, ideally,
+        # a new search isn't performed every time a page is loaded.
         self.results = []
         self.resultsPerPage = 25
 
@@ -35,8 +37,7 @@ class App():
         self.earliestReleaseYearSearched = ""
         self.latestReleaseYearSearched = ""
         self.currentPageNumber = 0
-        # JOHN: Change this to "/Volumes/HD5002/0_The Cell Phone Cinema Project/src/CPCPModel/static" to use on
-        # Macbook with external hard drive.
+        # path to media files set up to point to web server static file location
         self.pathToMediaFiles = "/home1/filmtvse/public_html/static"
 
         # FUTURE MANAGER OF THIS SOFTWARE LOOK BELOW!
@@ -52,8 +53,8 @@ class App():
 
     def searchFromLandingPage(self):
         """
-        Takes the user's search term/metadata parameters from landing page, then redirects to the proper URL to generate
-        the results page.
+        Takes the user's search term & metadata parameters from the form on the landing page, then redirects to
+        the proper URL that will generate the results page.
         """
         # get search phrase and metadata parameters from the form on the search page
         keywordOrPhrase = request.forms.get('keywordOrPhrase')
@@ -84,9 +85,10 @@ class App():
         :return: the HTML code for the entire page of results.
         """
 
+        # set page number
         self.currentPageNumber = pageNumber
 
-        # convert spaces to & signs: this ensures that matches are returned for all words/variations of the words
+        # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
         for i in range(len(keywordOrPhrase)):
             if keywordOrPhrase[i] == " ":
                 keywordOrPhrase = keywordOrPhrase[0:i] + "&" + keywordOrPhrase[i+1:]
