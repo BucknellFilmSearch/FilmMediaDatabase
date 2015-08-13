@@ -157,6 +157,17 @@ class App():
         # get graph/search parameters from search boxes
         keywordOrPhrase1 = request.forms.get('keywordOrPhrase1')
         keywordOrPhrase2 = request.forms.get('keywordOrPhrase2')
+        # get rid of question marks, they cause an error
+        keywordOrPhrase1 = keywordOrPhrase1.replace("?","")
+        keywordOrPhrase2 = keywordOrPhrase2.replace("?","")
+        # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
+        for i in range(len(keywordOrPhrase1)):
+            if keywordOrPhrase1[i] == " ":
+                keywordOrPhrase1 = keywordOrPhrase1[0:i] + "&" + keywordOrPhrase1[i+1:]
+        # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
+        for i in range(len(keywordOrPhrase2)):
+            if keywordOrPhrase2[i] == " ":
+                keywordOrPhrase2 = keywordOrPhrase2[0:i] + "&" + keywordOrPhrase2[i+1:]
         if len(keywordOrPhrase1) == 0 or len(keywordOrPhrase2) == 0:
             return "<p>Please specify two keywords or phrases before clicking 'search.'<a href = '/moviesearch/compare'> Back.</a></p>"
         genre = request.forms.get('genre')
