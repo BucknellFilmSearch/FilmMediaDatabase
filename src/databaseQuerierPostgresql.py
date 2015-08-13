@@ -21,6 +21,15 @@ engine = create_engine(URL(**DATABASE))
 Session = sessionmaker(bind=engine)
 
 def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEarliestReleaseYear):
+    """
+    Main search function. Forwards work to other methods based on the parameters that were specified/not.
+    :param keywordOrPhrase: keyword/phrase searched
+    :param genre: genre param searched
+    :param earliestReleaseYear: earliest release year searched
+    :param latestReleaseYear: latest release year searched
+    :param defaultEarliestReleaseYear: the default earliest release year (adjusted in main.py, at top of App class)
+    :return: search results, basically formatted as a list of lists
+    """
     currentYear = datetime.now().year
     # no params specified
     if genre == "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
@@ -44,10 +53,14 @@ def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEa
         results = searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestReleaseYear)
     return results
 
-def updateKeywordCount(listOfOclcIds):
-    if len(listOfOclcIds) > 0:
+def updateKeywordCount(listOfOclcIdsAndCounts):
+    """
+    Update the keyword_count column of the media_metadata table, so that we can use it to sort results by density.
+    :param listOfOclcIdsAndCounts: A list of lists. Each list has an oclc id, and then the count for that media item.
+    """
+    if len(listOfOclcIdsAndCounts) > 0:
         session = Session()
-        for id in listOfOclcIds:
+        for id in listOfOclcIdsAndCounts:
             oclcId = id[0]
             count = id[1]
             updateStatement = update(MediaMetadata.__table__).\
@@ -61,8 +74,8 @@ def updateKeywordCount(listOfOclcIds):
 # rewritten for postgresql and sqlalchemy
 def searchResults(keywordOrPhrase):
     """
-    This returns the search results for a keyword or phrase, and includes the oclc id, movie title, line number of
-    the occurrence, time stamps, and the matched text.
+    This returns the search results for a keyword or phrase. Each result includes the oclc id, movie title, line number
+    of the occurrence, time stamps, the matched text, original release year, and dvd release year.
     :param keywordOrPhrase: the keyword or phrase to search.
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
@@ -86,8 +99,10 @@ def searchResults(keywordOrPhrase):
 # rewritten for postgresql and sqlalchemy
 def searchResultsByGenre(keywordOrPhrase,genre):
     """
-    This returns the search results for a keyword or phrase, and includes the oclc id, movie title, line number of
-    the occurrence, time stamps, and the matched text.
+    This returns the search results for a keyword or phrase with genre specified. Each result includes the oclc id,
+    movie title, line number of the occurrence, time stamps, the matched text, original release year, and dvd release
+    year.
+    :param genre:
     :param keywordOrPhrase: the keyword or phrase to search.
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
@@ -112,8 +127,12 @@ def searchResultsByGenre(keywordOrPhrase,genre):
 # rewritten for postgresql and sqlalchemy
 def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
     """
-    This returns the search results for a keyword or phrase, and includes the oclc id, movie title, line number of
-    the occurrence, time stamps, and the matched text.
+    This returns the search results for a keyword or phrase with genre and release year params. Each result includes
+    the oclc id, movie title, line number of the occurrence, time stamps, the matched text, original release year,
+    and dvd release year.
+    :param genre:
+    :param earliestReleaseYear:
+    :param latestReleaseYear:
     :param keywordOrPhrase: the keyword or phrase to search.
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
@@ -139,8 +158,11 @@ def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear
 # rewritten for postgresql and sqlalchemy
 def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestReleaseYear):
     """
-    This returns the search results for a keyword or phrase, and includes the oclc id, movie title, line number of
-    the occurrence, time stamps, and the matched text.
+    This returns the search results for a keyword or phrase, with release year params specified. Each result includes
+    the oclc id, movie title, line number of the occurrence, time stamps, the matched text, original release year,
+    and dvd release year.
+    :param earliestReleaseYear:
+    :param latestReleaseYear:
     :param keywordOrPhrase: the keyword or phrase to search.
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
@@ -164,7 +186,9 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
 
 # rewritten for postgresql and sqlalchemy
 def totalMovies():
-    """ Returns total number of movies in the database. """
+    """
+    :returns: the total number of movies in the database, as an integer.
+    """
     session = Session()
     query = session.query(func.count(MediaMetadata.oclc_id)).\
         filter(MediaMetadata.movie_or_tv_show == "Movie")
@@ -173,9 +197,10 @@ def totalMovies():
 # rewritten for postgresql and sqlalchemy
 def getContextLines(oclcId,lineNumber,numLines):
     """
+    Get the lines of context. For each result, get line number, time stamps, and text.
     :param oclcId: unique id for the media
     :param lineNumber: line to get context of
-    :return: 25 lines before and after the given line
+    :return: 20 lines before and after the given line (list of lists)
     """
     session = Session()
     query = session.query(distinct(MediaText.line_number), MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text).\
@@ -187,6 +212,11 @@ def getContextLines(oclcId,lineNumber,numLines):
 
 # rewritten for postgresql and sqlalchemy
 def getMovieInfo(oclcId):
+    """
+    Get title, original release year, dvd release year for a media item.
+    :param oclcId: oclcId of media item to get info about
+    :return: list of results (list of lists)
+    """
     session = Session()
     query = session.query(MediaMetadata.movie_title, MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
         filter(MediaMetadata.oclc_id == oclcId).\
@@ -195,6 +225,11 @@ def getMovieInfo(oclcId):
 
 # rewritten for postgresql and sqlalchemy
 def cumulativeOccurrencesByReleaseYear(keywordOrPhrase):
+    """
+    Number of times a keyword occurs in a given release year, cumulatively.
+    :param keywordOrPhrase: keyword/phrase to count occurrences of
+    :return: An integer count of the cumulative occurrences of the keyword/phrase
+    """
     session = Session()
     query = session.query(MediaMetadata.original_release_year, MediaText.count()).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
@@ -205,8 +240,14 @@ def cumulativeOccurrencesByReleaseYear(keywordOrPhrase):
 
 # rewritten for postgresql and sqlalchemy
 def occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear):
-    """ Same as above but counts each movie only once. Useful for returning
-    percentage of movies containing keyword in certain year. """
+    """
+    Same as above but counts each movie only once. Useful for returning
+    percentage of movies containing keyword in certain year.
+    :param keywordOrPhrase: keyword/phrase to count occurrences of
+    :param genre:
+    :param earliestReleaseYear:
+    :param latestReleaseYear:
+    """
     session = Session()
     if genre != "All":
         query = session.query(MediaMetadata.original_release_year, func.count(distinct(MediaText.oclc_id))).\
@@ -227,7 +268,10 @@ def occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latest
 
 # rewritten for postgresql and sqlalchemy
 def totalMoviesOfSpecifiedYear(year):
-    """ Helper function for percentageOfOccurrenceByReleaseYear. """
+    """
+    Helper function for percentageOfOccurrenceByReleaseYear. Counts total num of movies from a specified year.
+    :param year: year to count movies in.
+    """
     session = Session()
     query = session.query(func.count(distinct(MediaMetadata.oclc_id))).\
         filter(MediaMetadata.original_release_year == year).\
@@ -236,8 +280,16 @@ def totalMoviesOfSpecifiedYear(year):
 
 # rewritten for postgresql and sqlalchemy
 def percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear):
-    """ Returns the percentages of movies containing the keyword/phrase for each
-    movie release year that occurs in the database. """
+    """
+    Returns the percentages of movies containing the keyword/phrase for each
+    release year that occurs in the database.
+    :param keywordOrPhrase:
+    :param genre:
+    :param earliestReleaseYear:
+    :param latestReleaseYear:
+    :returns: list of lists - each item has the release year as first item, then the percentage of movies in that year
+    that contain the search term
+    """
     counts = occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
     listOfPercentages = []
     for count in counts:

@@ -7,6 +7,9 @@ cgitb.enable()
 
 __author__ = 'Justin Eyster'
 
+# settings for the sql database, change host to localhost when putting this file on the web server
+# and change host to 50.87.248.230 when using a local development server
+
 DATABASE = {
     'drivername': 'postgresql+psycopg2',
     'host': '50.87.248.230',

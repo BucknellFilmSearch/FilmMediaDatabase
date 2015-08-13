@@ -21,7 +21,9 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 def main_menu():
-    """ Main menu for data entry. """
+    """
+    Main menu for data entry processes.
+    """
     while True:
         choice = input("Enter 0 to enter a movie into the database, 1 for a TV show, or 2 to exit: ")
         if choice == "0":
@@ -34,6 +36,9 @@ def main_menu():
             print("Invalid entry. Try again.")
 
 def enter_movie():
+    """
+    Assists user in entering a movie into the postgres database.
+    """
     oclc_id = int(input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): "))
     movie_or_tv_show = "Movie"
     movie_title = input("Movie title: ")
@@ -91,6 +96,7 @@ def enter_movie():
 
             # fill the all text table from file
             fillMediaTextTable(oclc_id)
+            # create screenshots (stored on ext HDD)
             print("Processing screenshots...")
             createAllScreenshots(oclc_id)
             break
@@ -102,6 +108,9 @@ def enter_movie():
             print("Invalid entry. Try again.")
 
 def enter_tv_show():
+    """
+    Assists user in entering a tv show into the postgres database.
+    """
     oclc_id = int(input("Enter the DVD's unique OCLC number (from Bucknell's WorldCat catalog): "))
     movie_or_tv_show = "TV Show"
     show_title = input("Show title: ")
@@ -166,6 +175,7 @@ def enter_tv_show():
 
             # fill the text table from file
             fillMediaTextTable(oclc_id)
+            # create screenshots (stored on ext HDD)
             print("Processing screenshots...")
             createAllScreenshots(oclc_id)
             break
@@ -177,8 +187,11 @@ def enter_tv_show():
             print("Invalid entry. Try again.")
 
 def fillMediaTextTable(oclc_id):
-    """ Method to fill a movie/tv show's text table from the text file.
-    Text files should be named OCLC_ID_NUMBER.txt """
+    """
+    Method to fill a movie/tv show into the text table from the text file.
+    Text files should be named OCLC_ID_NUMBER.txt, and be in the file location specified in first line of method.
+    :param oclc_id:
+    """
 
     with open("static/textFiles/" + oclc_id + ".txt", 'r') as file:
         currentLineNumber = "1"

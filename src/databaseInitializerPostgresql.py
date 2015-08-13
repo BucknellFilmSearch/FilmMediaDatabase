@@ -9,6 +9,9 @@ from MediaMetadata import MediaMetadata
 from MediaText import MediaText
 from base import BASE
 
+# this script initializes the remote postgres database using the specifications of MediaText.py and MediaMetadata.py
+# connects to the database using settings specified in postgresSettings.py
+
 engine = create_engine(URL(**DATABASE))
 base = BASE
 

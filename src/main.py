@@ -56,14 +56,16 @@ class App():
         Takes the user's search term & metadata parameters from the form on the landing page, then redirects to
         the proper URL that will generate the results page.
         """
-        # get search phrase and metadata parameters from the form on the search page
+        # get search phrase and metadata parameters from the form on the search page.
         keywordOrPhrase = request.forms.get('keywordOrPhrase')
+        # get rid of question marks, they cause an error
         keywordOrPhrase = keywordOrPhrase.replace("?","")
-        if len(keywordOrPhrase) == 0:
-            return "<p>Please specify a keyword or phrase before clicking 'search.'<a href = '/moviesearch'> Back.</a></p>"
         genre = request.forms.get('genre')
         earliestReleaseYear = request.forms.get('earliestReleaseYear')
         latestReleaseYear = request.forms.get('latestReleaseYear')
+        # if they didn't type anything before clicking search, say so, and give them a back button.
+        if len(keywordOrPhrase) == 0:
+            return "<p>Please specify a keyword or phrase before clicking 'search.'<a href = '/moviesearch'> Back.</a></p>"
         if earliestReleaseYear == "":
             earliestReleaseYear = self.defaultEarliestReleaseYear
         if latestReleaseYear == "":
@@ -75,8 +77,8 @@ class App():
 
     def displayResultsPage(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,pageNumber):
         """
-        If the search hasn't been done yet, perform search with keyword. Either way, generate the specified page of
-        results.
+        If the search hasn't been done yet, perform search with keyword. Either way, generate the page of
+        results specified by parameters received through the URL.
         :param keywordOrPhrase: the keyword or phrase to search.
         :param genre: genre to restrict the results.
         :param earliestReleaseYear: earliest release year to include.
@@ -102,7 +104,7 @@ class App():
             # store results, if not none
             if not (results is None):
                 self.results = results
-            # else if there are no results, say so
+            # else if there are no results, say so (and provide a back button)
             else:
                 return "<p>Your Keyword/Phrase does not occur in the database (with specified parameters).<a href = '/moviesearch'> Back.</a></p>"
             # store params that were searched
@@ -118,6 +120,13 @@ class App():
     def displayContextPage(self,oclcId,lineNumber,prevKeywordOrPhrase,prevGenre,prevEarliestReleaseYear,
                            prevLatestReleaseYear,prevPageNumber):
         """
+        Get the user's previous search term/params so we can create a back button. Display the context of the
+        clicked result to the user.
+        :param prevKeywordOrPhrase: searched keyword/phrase to go back to
+        :param prevGenre: searched genre tag to go back to (or All)
+        :param prevEarliestReleaseYear: searched earliest release year param to go back to
+        :param prevLatestReleaseYear: searched latest release year param to go back to
+        :param prevPageNumber: page of results to go back to
         :param oclcId: oclc number of movie to get context from
         :param lineNumber: line number clicked by user
         :return: html code for the page of context
@@ -134,12 +143,14 @@ class App():
 
     def displayComparisonPage(self):
         """
+        Display the comparison search page to user.
         :return: html code for the search page that has two search boxes, to compare two words/phrases
         """
         return generateComparisonPage(self.defaultEarliestReleaseYear)
 
     def graphComparison(self):
         """
+        Get the dual keywords entered on the comparison page.
         :return: graph of the two words/phrases that the user entered
         """
         # get graph/search parameters from search boxes
@@ -169,7 +180,8 @@ class App():
 
     def static(self, path):
         """
-        Provides route to static files, such as text files.
+        Provides route to static files, such as text files. Only needs to be routed for development server, not web
+        server environment. See routing at end of this file.
         :param path: the path to the static file.
         :return: the static file.
         """

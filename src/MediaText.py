@@ -10,6 +10,8 @@ from base import BASE
 
 __author__ = 'justi_000'
 
+# configuration for media_text table on the postgresql database
+
 class MediaText(BASE):
     """Sqlalchemy all text model"""
     __tablename__ = "media_text"

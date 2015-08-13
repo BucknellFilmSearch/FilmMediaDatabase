@@ -15,7 +15,11 @@ from MediaMetadata import MediaMetadata
 sqliteConnection = lite.connect('cpcp.db')
 postgresEngine = create_engine(URL(**DATABASE))
 
+
 def transferDatabase():
+    """
+    Transfers all data from local sqlite database to the remote postgresql database.
+    """
     with sqliteConnection:
         cursor = sqliteConnection.cursor()
         sql = "SELECT * FROM MOVIES"

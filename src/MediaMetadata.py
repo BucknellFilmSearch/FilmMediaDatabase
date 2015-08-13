@@ -9,6 +9,8 @@ from base import BASE
 
 __author__ = 'justi_000'
 
+# configuration for media_metadata table on the postgresql database
+
 class MediaMetadata(BASE):
     """Sqlalchemy media model"""
     __tablename__ = "media_metadata"

@@ -17,7 +17,10 @@ __date__ = "$Jun 5, 2015 9:35:43 AM$"
 
 
 def fileToStr(fileName): 
-    """Return a string containing the contents of the an html file."""
+    """
+    Used to convert html files into strings.
+    :param fileName: the name of the html file to convert to a string (or location).
+    """
     file = open(fileName); 
     contents = file.read();  
     file.close() 
@@ -25,8 +28,8 @@ def fileToStr(fileName):
 
 def generateSearchPage(defaultEarliestReleaseYear):
     """Generates the search page using inputPageTemplate and bootstrapThemeTemplate (html templates).
-    Parameters: defaultEarliestReleaseYear - the earliest release year represented in the database.
-    Returns: a string of html code representing the search page."""
+    :param defaultEarliestReleaseYear: the earliest release year represented in the database
+    :returns: a string of html code representing the search page."""
     # define variables for the input page template
     numMovies = totalMovies()
     currentYear = str(datetime.now().year)
@@ -47,6 +50,18 @@ def generateSearchPage(defaultEarliestReleaseYear):
 
 def generateContextPage(oclcId,lineNumber,keywordOrPhraseSearched,genreSearched,earliestReleaseYearSearched,
                         latestReleaseYearSearched,currentPageNumber,pathToMediaFiles):
+    """
+    Generates a page of context. Remembers previous page of results to go back to.
+    :param oclcId: oclc of movie to get context of
+    :param lineNumber: line number of result clicked
+    :param keywordOrPhraseSearched: keyword/phrase just searched
+    :param genreSearched: genre param just searched
+    :param earliestReleaseYearSearched: earliest release year param just searched
+    :param latestReleaseYearSearched: latest release year param just searched
+    :param currentPageNumber: page number of results that context was accessed on
+    :param pathToMediaFiles: the path to the image files needed to make screenshots
+    :return: the html code for the page of context
+    """
     contextLines = getContextLines(oclcId,lineNumber,20)
     movieInfo = getMovieInfo(oclcId)
     movieTitle = movieInfo[0][0]
@@ -62,16 +77,17 @@ def generateContextPage(oclcId,lineNumber,keywordOrPhraseSearched,genreSearched,
         movieLineNumber = line[0]
         movieStartTimeStamp = line[1]
         movieEndTimeStamp = line[2]
-        movieLineText = removeNewlineSymbol(line[3])
+        movieLineText = removeBadCharacters(line[3])
         if firstRun:
             firstRun = False
-            # cap the previous movie, use function below to generate HTML code for next movie's results
+            # use function below to generate the top piece of context results (with movie title and thumbnail)
             resultsPage += fillSearchResultsHTMLFile(oclcId,movieTitle,movieLineNumber,movieStartTimeStamp,
                                                      movieEndTimeStamp,movieLineText,movieReleaseYear,dvdReleaseYear,
                                                      pathToMediaFiles,keywordOrPhraseSearched,genreSearched,
                                                      earliestReleaseYearSearched,latestReleaseYearSearched,
                                                      currentPageNumber)
         else:
+            # this function adds additional context items to the top piece that has movie title and thumbnail
             resultsPage += fillAdditionalLinesHTMLFile(oclcId,movieLineNumber,movieStartTimeStamp,movieEndTimeStamp,
                                                        movieLineText,pathToMediaFiles,keywordOrPhraseSearched,
                                                        genreSearched,earliestReleaseYearSearched,
@@ -95,25 +111,29 @@ def generateContextPage(oclcId,lineNumber,keywordOrPhraseSearched,genreSearched,
     homeLink = "/moviesearch"
     navBar = ""
     graph = ""
+    # create page using the bootstrap template and the variables above
     return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
 
-def removeNewlineSymbol(text):
+def removeBadCharacters(text):
     """
-    :param text: text to remove the newline symbol from
-    :return: text without newline symbol
+    Removes utf-8 escaped characters that were showing up in results on the webpage.
+    :param text: text to remove the newline symbol from, and other utf-8 bullshit
+    :return: text that has been cleaned of garbage utf-8 characters
     """
     for i in range(len(text)):
         if len(text) > i and text[i] == "\\":
-            if len(text) > i+1 and text[i+1] == "0":
-                if len(text) > i+2 and text[i+2] == "1":
-                    if len(text) > i+3 and text[i+3] == "2":
+            if len(text) > i+1 and (text[i+1] == "0" or text[i+1] == "3" or text[i+1] == "2"):
+                if len(text) > i+2 and (text[i+2] == "1" or text[i+2] == "0" or text[i+2] == "6"):
+                    if len(text) > i+3 and (text[i+3] == "2"or text[i+3] == "2" or text[i+3] == "6"):
                         text = text[0:i] + " " + text[i+4:]
     return str(text)
 
 def generateComparisonPage(defaultEarliestReleaseYear):
-    """Generates the comparison page using comparisonPageTemplate and bootstrapThemeTemplate (html templates).
-    Parameters: defaultEarliestReleaseYear - the earliest release year represented in the database.
-    Returns: a string of html code representing the comparison page."""
+    """
+    Generates the comparison page using comparisonPageTemplate and bootstrapThemeTemplate (html templates).
+    :param defaultEarliestReleaseYear: the earliest release year represented in the database
+    :returns: a string of html code representing the comparison page.
+    """
     # define variables for the input page template
     numMovies = totalMovies()
     currentYear = str(datetime.now().year)
@@ -133,6 +153,15 @@ def generateComparisonPage(defaultEarliestReleaseYear):
     return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
 
 def generateGraphOfTwoKeywords(keywordOrPhrase1, keywordOrPhrase2, genre, earliestReleaseYear, latestReleaseYear):
+    """
+    Generates the page which has a graph showing the comparison of two different keywords/phrases.
+    :param keywordOrPhrase1: first keyword/phrase to graph
+    :param keywordOrPhrase2: second keyword/phrase to graph
+    :param genre: genre param (or All)
+    :param earliestReleaseYear: earliest release year param
+    :param latestReleaseYear: latest release year param
+    :return: page with graph comparing two different keywords/phrases
+    """
     # no page content other than graph
     pageContent = ""
     # home button not active because not on home page
@@ -151,6 +180,18 @@ def generateGraphOfTwoKeywords(keywordOrPhrase1, keywordOrPhrase2, genre, earlie
 
 def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, results, resultsPerPage,
                         pageNumber, pathToMediaFiles):
+    """
+    Generates a page of general search results, with screenshots.
+    :param keywordOrPhrase: keyword/phrase searched
+    :param genre: genre param searched
+    :param earliestReleaseYear: earliest release year param searched
+    :param latestReleaseYear: latest release year param searched
+    :param results: results of search
+    :param resultsPerPage: number of results to show on each page
+    :param pageNumber: page number of results to load
+    :param pathToMediaFiles: path to static files (to access screenshot files and thumbnails)
+    :return: the page of search results, with some movie information and a screenshot for each match
+    """
     # initialize resultsPage variable
     resultsPage = ""
     # Later, place the following HTML code at the end of the results. (then put the nav bar after this.)
@@ -166,7 +207,7 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
             movieLineNumber = results[i][2]
             movieStartTimeStamp = results[i][3]
             movieEndTimeStamp = results[i][4]
-            movieLineText = removeNewlineSymbol(results[i][5])
+            movieLineText = removeBadCharacters(results[i][5])
             movieReleaseYear = results[i][6]
             dvdReleaseYear = results[i][7]
             # if line is from a new movie...
@@ -215,6 +256,11 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
 def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText, movieReleaseYear,
                               dvdReleaseYear, pathToMediaFiles, keywordOrPhraseSearched, genreSearched,
                               earliestReleaseYearSearched, latestReleaseYearSearched, pageNumSearched):
+    """
+    Fill the html file for a single search result (the top part, with the movie info and thumbnail).
+    All of this method's parameters are required, and used to fill the html file.
+    :return: the html code for the first result for a single movie
+    """
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"
     thumbnailSource = "/static/imageFiles/" + str(oclcId) + ".gif"
     # generate path to screen shot
@@ -233,6 +279,11 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
 def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp, lineText, pathToMediaFiles,
                                 keywordOrPhraseSearched, genreSearched, earliestReleaseYearSearched,
                                 latestReleaseYearSearched, pageNumSearched):
+    """
+    Fill the html file for a single search result (additional lines for a movie that already has the top part created).
+    All of this method's parameters are required, and used to fill the html file.
+    :return: the html code for the additional result
+    """
     # generate file path to screen shot
     screenshotSource = pathToMediaFiles + "/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
     abrevSource = "/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
@@ -247,24 +298,42 @@ def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp
     return fileToStr('templates/additionalLinesFromSameMovieTemplate.html').format(**locals())
 
 def fillGraphHTMLFile(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, plotType):
+    """
+    Use parameters above to create a graph.
+    :param keywordOrPhrase: keyword/phrase, or list with two keywords/phrases
+    :param genre: genre param to limit graph to
+    :param earliestReleaseYear: earliest release year to limit graph to
+    :param latestReleaseYear: latest release year to limit graph to
+    :param plotType: type of graph to create
+    :return: html code for graph
+    """
+    # if we were passed a single search term, a string
     if type(keywordOrPhrase).__name__ == 'str':
+        # only one plot type created now, more to come
         if plotType == "percentageByReleaseYear":
+            # get necessary data from sql database
             data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
             twoDimensArrayOfVals = []
             for item in data:
+                # create a two dimension array of values to insert into template to be graphed
                 twoDimensArrayOfVals.append([item[0],round(item[1])])
             return fileToStr('templates/percentageAcrossReleaseYearGraphTemplate.html').format(**locals())
+    # otherwise, we were passed two search terms, two strings in a list
     else:
         keywordOrPhrase1 = keywordOrPhrase[0]
         keywordOrPhrase2 = keywordOrPhrase[1]
+        # only one plot type created now, more to come
         if plotType == "percentageByReleaseYear":
+            # get necessary data from sql database
             data1 = percentageOfOccurrenceByReleaseYear(keywordOrPhrase1, genre, earliestReleaseYear, latestReleaseYear)
             twoDimensArrayOfVals1 = []
             for item in data1:
+                # create a two dimension arrays of values to insert into template to be graphed
                 twoDimensArrayOfVals1.append([item[0],round(item[1])])
             data2 = percentageOfOccurrenceByReleaseYear(keywordOrPhrase2, genre, earliestReleaseYear, latestReleaseYear)
             twoDimensArrayOfVals2 = []
             for item in data2:
+                # create a two dimension arrays of values to insert into template to be graphed
                 twoDimensArrayOfVals2.append([item[0],round(item[1])])
             return fileToStr('templates/percentageAcrossReleaseYearMultiGraphTemplate.html').format(**locals())
 
