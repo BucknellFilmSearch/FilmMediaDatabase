@@ -13,7 +13,7 @@ def sendEmail(content, senderEmailAddress, senderName):
     sender = (u'Justin Eyster', 'justin@filmtvsearch.net')
     recipients = ['jchunter@bucknell.edu', 'jde012@bucknell.edu', 'dah054@bucknell.edu']
     subject = u'Feedback Report'
-    text_content = u'Sender Name: ' + senderName + ', Provided Email Address: ' + senderEmailAddress + ', Content: ' + \
+    text_content = u'Sender Name: ' + senderName + ', Provided Email Address: ' + senderEmailAddress + ', Feedback: ' + \
                    content
     prefered_encoding = 'iso-8859-1'
     text_encoding = 'iso-8859-1'
