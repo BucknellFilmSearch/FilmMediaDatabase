@@ -57,8 +57,9 @@ class App():
         """
         # get search phrase and metadata parameters from the form on the search page
         keywordOrPhrase = request.forms.get('keywordOrPhrase')
+        keywordOrPhrase = keywordOrPhrase.replace("?","")
         if len(keywordOrPhrase) == 0:
-            return "Please specify a keyword or phrase before clicking 'search.'"
+            return "<p>Please specify a keyword or phrase before clicking 'search.'<a href = '/moviesearch'> Back.</a></p>"
         genre = request.forms.get('genre')
         earliestReleaseYear = request.forms.get('earliestReleaseYear')
         latestReleaseYear = request.forms.get('latestReleaseYear')
@@ -101,7 +102,7 @@ class App():
                 self.results = results
             # else if there are no results, say so
             else:
-                return "Your Keyword/Phrase does not occur in the database (with specified parameters)."
+                return "<p>Your Keyword/Phrase does not occur in the database (with specified parameters).<a href = '/moviesearch'> Back.</a></p>"
             # store params that were searched
             self.keywordOrPhraseSearched = keywordOrPhrase
             self.genreSearched = genre
@@ -141,11 +142,9 @@ class App():
         """
         # get graph/search parameters from search boxes
         keywordOrPhrase1 = request.forms.get('keywordOrPhrase1')
-        if len(keywordOrPhrase1) == 0:
-            return "Please specify two keywords or phrases before clicking 'search.'"
         keywordOrPhrase2 = request.forms.get('keywordOrPhrase2')
-        if len(keywordOrPhrase2) == 0:
-            return "Please specify two keywords or phrases before clicking 'search.'"
+        if len(keywordOrPhrase1) == 0 or len(keywordOrPhrase2) == 0:
+            return "<p>Please specify two keywords or phrases before clicking 'search.'<a href = '/moviesearch/compare'> Back.</a></p>"
         genre = request.forms.get('genre')
         earliestReleaseYear = request.forms.get('earliestReleaseYear')
         latestReleaseYear = request.forms.get('latestReleaseYear')
@@ -190,10 +189,10 @@ route('/moviesearch/context/<oclcId:int>/<lineNumber:int>/<prevKeywordOrPhrase>/
     (appInstance.displayContextPage)
 get('/moviesearch/compare')(appInstance.displayComparisonPage)
 post('/moviesearch/compare')(appInstance.graphComparison)
-# comment out the line below for web server environment
+# comment out the line below for web server environment (not commented out for local development server)
 # route('/static/:path#.+#', name='static')(appInstance.static)
-# run the server
-# make sure the line below isn't commented out for web server environment
+
+# make sure the line below isn't commented out for web server environment (comment out for local development server)
 run(server='cgi')
-# comment out the line below for web server environment
+# comment out the line below for web server environment (not commented out for local development server)
 # run(host='localhost', port=8080, debug=True)(appInstance)

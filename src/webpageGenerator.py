@@ -209,7 +209,7 @@ def generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestRelea
         return fileToStr('templates/bootstrapThemeTemplate.html').format(**locals())
     # if there are no results, say so
     else:
-        return "Your Keyword/Phrase does not occur in the database (with specified parameters)."
+        return "<p>Your Keyword/Phrase does not occur in the database (with specified parameters).<a href = '/moviesearch'> Back.</a></p>"
 
 
 def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, endTimeStamp, lineText, movieReleaseYear,
