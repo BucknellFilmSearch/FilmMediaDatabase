@@ -91,6 +91,10 @@ class App():
         # set page number
         self.currentPageNumber = pageNumber
 
+        # check for whitespace at end of keyword/phrase
+        if keywordOrPhrase[len(keywordOrPhrase)-1] == " ":
+            return "<p>Please enter your search term without a space at the end.<a href = '/moviesearch'> Back.</a></p>"
+
         # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
         for i in range(len(keywordOrPhrase)):
             if keywordOrPhrase[i] == " ":
@@ -157,6 +161,10 @@ class App():
         # get graph/search parameters from search boxes
         keywordOrPhrase1 = request.forms.get('keywordOrPhrase1')
         keywordOrPhrase2 = request.forms.get('keywordOrPhrase2')
+        # check for whitespace at end of keywords
+        if keywordOrPhrase1[len(keywordOrPhrase1)-1] == " " or keywordOrPhrase2[len(keywordOrPhrase2)-1] == " ":
+            return "<p>Please enter your search terms without a space at the end.<a href = '/moviesearch/compare'> Back.</a></p>"
+
         # get rid of question marks, they cause an error
         keywordOrPhrase1 = keywordOrPhrase1.replace("?","")
         keywordOrPhrase2 = keywordOrPhrase2.replace("?","")
