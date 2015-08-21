@@ -7,7 +7,7 @@ __date__ = "$May 21, 2015 11:47:11 AM$"
 
 from sys import exit
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
 from MediaMetadata import MediaMetadata
@@ -193,15 +193,19 @@ def fillMediaTextTable(oclc_id):
     :param oclc_id:
     """
 
-    with open("static/textFiles/" + oclc_id + ".txt", 'r') as file:
+    with open("D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/textFiles/" + str(oclc_id) + ".txt", 'r') as file:
         currentLineNumber = "1"
         nextLineNumber = "1"
         startTimeStamp = ""
         endTimeStamp = ""
         lineText = ""
         firstRun = True
+        max_db_line_id = session.query(func.max(MediaText.db_line_id)).all()[0][0]
+        print(max_db_line_id)
 
         for line in file:
+
+            max_db_line_id += 1
 
             # if the next line number has been found in the file...
             if line[0:len(nextLineNumber)] == nextLineNumber:
@@ -209,7 +213,7 @@ def fillMediaTextTable(oclc_id):
                 # and it's not the very first line that we've found...
                 if firstRun == False:
                     # add the data from the previous line to the database
-                    new_line = MediaText(oclc_id=oclc_id, line_number=currentLineNumber,
+                    new_line = MediaText(db_line_id=max_db_line_id, oclc_id=oclc_id, line_number=currentLineNumber,
                                          start_time_stamp=startTimeStamp, end_time_stamp=endTimeStamp,
                                          line_text=lineText.encode('utf-8'))
                     session.add(new_line)
@@ -233,6 +237,7 @@ def fillMediaTextTable(oclc_id):
                 # add the line to the line text
                 lineText += line
         # enter very last line
+        max_db_line_id += 1
         new_line = MediaText(oclc_id=oclc_id, line_number=currentLineNumber,
                                          start_time_stamp=startTimeStamp, end_time_stamp=endTimeStamp,
                                          line_text=lineText.encode('utf-8'))
