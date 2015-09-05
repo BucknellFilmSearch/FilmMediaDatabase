@@ -222,6 +222,9 @@ class App():
         else:
             return static_file(path, root='static')
 
+    def handleSitemap(self):
+        redirect('/sitemap.xml')
+
 # initialize App
 appInstance = App()
 # route the proper URL's to the proper methods in the class
@@ -235,6 +238,7 @@ get('/moviesearch/compare')(appInstance.displayComparisonPage)
 post('/moviesearch/compare')(appInstance.graphComparison)
 get('/moviesearch/feedback')(appInstance.displayFeedbackPage)
 post('/moviesearch/feedback')(appInstance.sendFeedback)
+route('/moviesearch/sitemap.xml')(appInstance.handleSitemap)
 
 # comment out the line below for web server environment (not commented out for local development server)
 # route('/static/:path#.+#', name='static')(appInstance.static)
