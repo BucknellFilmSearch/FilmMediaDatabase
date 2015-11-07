@@ -1,5 +1,9 @@
 __author__ = 'justi_000'
 
+from sys import path
+
+path.append('C:\Python34\Lib\site-packages')
+
 import numpy as np
 import cv2
 from sqlalchemy import create_engine, distinct, func, update, text

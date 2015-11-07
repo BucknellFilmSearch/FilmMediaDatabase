@@ -294,7 +294,9 @@ def percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseY
     i = 0
     currYear = earliestReleaseYear
     while currYear <= latestReleaseYear:
-        if counts[i][0] != currYear:
+        if i >= len(counts):
+            counts.append([currYear, 0])
+        elif counts[i][0] != currYear:
             counts.insert(i, [currYear, 0])
         i+=1
         currYear+=1
