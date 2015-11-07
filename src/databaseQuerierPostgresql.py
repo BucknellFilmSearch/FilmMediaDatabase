@@ -295,15 +295,15 @@ def percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseY
     currYear = earliestReleaseYear
     while currYear <= latestReleaseYear:
         if i >= len(counts):
-            counts.append([currYear, 0])
+            counts.append((currYear, 0))
         elif counts[i][0] != currYear:
-            counts.insert(i, [currYear, 0])
+            counts.insert(i, (currYear, 0))
         i+=1
         currYear+=1
     listOfPercentages = []
     for count in counts:
         if totalMoviesOfSpecifiedYear(count[0]) == 0:
-            listOfPercentages += [count[0], 0]
+            listOfPercentages += [(count[0], 0.0)]
         else:
             listOfPercentages += [(count[0], 100 * count[1] / totalMoviesOfSpecifiedYear(count[0]))]
     return listOfPercentages
