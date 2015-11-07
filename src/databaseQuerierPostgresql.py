@@ -291,6 +291,13 @@ def percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseY
     that contain the search term
     """
     counts = occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
+    i = 0
+    currYear = earliestReleaseYear
+    while currYear <= latestReleaseYear:
+        if counts[i][0] != currYear:
+            counts.insert(i, [currYear, 0])
+        i+=1
+        currYear+=1
     listOfPercentages = []
     for count in counts:
         listOfPercentages += [(count[0], 100 * count[1] / totalMoviesOfSpecifiedYear(count[0]))]
