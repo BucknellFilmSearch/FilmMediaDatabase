@@ -107,7 +107,7 @@ def searchResultsByGenre(keywordOrPhrase,genre):
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
     session = Session()
-    query = session.query(MediaText.oclc_id).\
+    query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
         filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
@@ -137,7 +137,7 @@ def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
     session = Session()
-    query = session.query(MediaText.oclc_id).\
+    query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
         filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
@@ -147,7 +147,8 @@ def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear
                           MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaMetadata.genre1 == genre or MediaMetadata.genre2 == genre or MediaMetadata.genre3 == genre).\
-        filter(MediaMetadata.original_release_year >= earliestReleaseYear and MediaMetadata.original_release_year <= latestReleaseYear).\
+        filter(MediaMetadata.original_release_year >= earliestReleaseYear).\
+        filter(MediaMetadata.original_release_year <= latestReleaseYear).\
         filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
         order_by(MediaMetadata.keyword_count.desc()).\
@@ -167,7 +168,7 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
     session = Session()
-    query = session.query(MediaText.oclc_id).\
+    query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
         filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
@@ -176,7 +177,8 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
                           MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
                           MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
-        filter(MediaMetadata.original_release_year >= earliestReleaseYear and MediaMetadata.original_release_year <= latestReleaseYear).\
+        filter(MediaMetadata.original_release_year >= earliestReleaseYear).\
+        filter(MediaMetadata.original_release_year <= latestReleaseYear).\
         filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
         order_by(MediaMetadata.keyword_count.desc()).\
