@@ -205,10 +205,9 @@ def fillMediaTextTable(oclc_id):
 
         for line in file:
 
-            max_db_line_id += 1
-
             # if the next line number has been found in the file...
             if line[0:len(nextLineNumber)] == nextLineNumber:
+                max_db_line_id += 1
                 print("Found line #" + nextLineNumber)
                 # and it's not the very first line that we've found...
                 if firstRun == False:
@@ -238,7 +237,7 @@ def fillMediaTextTable(oclc_id):
                 lineText += line
         # enter very last line
         max_db_line_id += 1
-        new_line = MediaText(oclc_id=oclc_id, line_number=currentLineNumber,
+        new_line = MediaText(db_line_id=max_db_line_id, oclc_id=oclc_id, line_number=currentLineNumber,
                                          start_time_stamp=startTimeStamp, end_time_stamp=endTimeStamp,
                                          line_text=lineText.encode('utf-8'))
         session.add(new_line)
