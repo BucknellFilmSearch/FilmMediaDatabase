@@ -21,7 +21,9 @@ the search box below to analyze the usage of a word/phrase <br> within a
 database of {numMovies} movies released after the year 2000. <br>
 <br>
 <form action="" method="post">
-    <input name="keywordOrPhrase" type="text" placeholder ="Keyword/phrase..." />
+    <input name="keywordOrPhrase" type="text" placeholder ="Keyword/phrase..." required
+            oninvalid="this.setCustomValidity('A keyword or phrase is required')"
+            oninput="setCustomValidity('')"/>
     <br>
     Limit results to a specific genre:
     <select name="genre">

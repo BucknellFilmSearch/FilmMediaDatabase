@@ -15,7 +15,7 @@ DATABASE = {
     'host': '50.87.248.230',
     # 'host': 'localhost',
     'database': 'filmtvse_cpcp',
-    'username': 'filmtvse_eyster',
+    'username': 'filmtvse_hartman',
     'password': 'BucknellDH17837!',
     'port': '5432'
 }

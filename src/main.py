@@ -67,11 +67,13 @@ class App():
         keywordOrPhrase = keywordOrPhrase.replace("!","")
         # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
         keywordOrPhrase = keywordOrPhrase.replace(" ","&")
+        # Slashes cause an error when redirecting to the search URL.  For now, we'll interpret them the same as spaces
+        keywordOrPhrase = keywordOrPhrase.replace("/","&")
         genre = request.forms.get('genre')
         earliestReleaseYear = request.forms.get('earliestReleaseYear')
         latestReleaseYear = request.forms.get('latestReleaseYear')
         # if they didn't type anything before clicking search, say so, and give them a back button.
-        if len(keywordOrPhrase) == 0:
+        if keywordOrPhrase is None:
             return "<p>Please specify a keyword or phrase before clicking 'search.'<a href = '/moviesearch'> Back.</a></p>"
         if earliestReleaseYear == "":
             earliestReleaseYear = self.defaultEarliestReleaseYear
@@ -241,9 +243,9 @@ post('/moviesearch/feedback')(appInstance.sendFeedback)
 route('/moviesearch/sitemap.xml')(appInstance.handleSitemap)
 
 # comment out the line below for web server environment (not commented out for local development server)
-# route('/static/:path#.+#', name='static')(appInstance.static)
+route('/static/:path#.+#', name='static')(appInstance.static)
 
 # make sure the line below isn't commented out for web server environment (comment out for local development server)
-run(server='cgi')
+# run(server='cgi')
 # comment out the line below for web server environment (not commented out for local development server)
-# run(host='localhost', port=8080, debug=True)(appInstance)
+run(host='localhost', port=8080, debug=True)(appInstance)
