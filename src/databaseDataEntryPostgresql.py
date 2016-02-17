@@ -84,18 +84,18 @@ def enter_movie():
 
         if verification == "1":
 
-            # # create Media object for the new movie, add it to the session, commit it to the database
-            # new_movie = MediaMetadata(oclc_id=oclc_id, movie_or_tv_show=movie_or_tv_show, movie_title=movie_title,
-            #                           director=director, original_release_year=original_release_year,
-            #                           dvd_release_year=dvd_release_year, country1=country1, country2=country2,
-            #                           country3=country3, genre1=genre1, genre2=genre2, genre3=genre3,
-            #                           content_rating=content_rating, runtime_in_minutes=runtime_in_minutes,
-            #                           cc_or_sub=cc_or_sub)
-            # session.add(new_movie)
-            # session.commit()
-            #
-            # # fill the all text table from file
-            # fillMediaTextTable(oclc_id)
+            # create Media object for the new movie, add it to the session, commit it to the database
+            new_movie = MediaMetadata(oclc_id=oclc_id, movie_or_tv_show=movie_or_tv_show, movie_title=movie_title,
+                                      director=director, original_release_year=original_release_year,
+                                      dvd_release_year=dvd_release_year, country1=country1, country2=country2,
+                                      country3=country3, genre1=genre1, genre2=genre2, genre3=genre3,
+                                      content_rating=content_rating, runtime_in_minutes=runtime_in_minutes,
+                                      cc_or_sub=cc_or_sub)
+            session.add(new_movie)
+            session.commit()
+
+            # fill the all text table from file
+            fillMediaTextTable(oclc_id)
             # create screenshots (stored on ext HDD)
             print("Processing screenshots...")
             createAllScreenshots(oclc_id)
