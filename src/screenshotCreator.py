@@ -41,7 +41,7 @@ def createAllScreenshots(oclcId):
 
     vob_file = 0
     # create video capture object
-    video_capture = cv2.VideoCapture('E:/0_The Cell Phone Cinema Project/src/CPCPModel/static/videoFiles/Finished Movies/' + \
+    video_capture = cv2.VideoCapture('D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/videoFiles/' + \
                                      str(oclcId) + '/VTS_' + str(vob_file) + '.mp4')
 
     # get the frames per second value from the video
@@ -64,10 +64,10 @@ def createAllScreenshots(oclcId):
             break
         # if we've found the frame we're looking for, take snapshot, load information about next line
         else:
-            if not path.exists('E:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId)):
-                makedirs('E:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId))
+            if not path.exists('D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId)):
+                makedirs('D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId))
             # write screenshot to external hard drive
-            cv2.imwrite('E:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId) + '/' + str(line_number_to_snapshot) + '.png', frame)
+            cv2.imwrite('D:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId) + '/' + str(line_number_to_snapshot) + '.png', frame)
 
             # ger info about consecutive line to snapshot
             line_to_snapshot = all_query_lines[current_line]
@@ -86,5 +86,5 @@ def createAllScreenshots(oclcId):
             frame_to_read = round(seconds * frames_per_second)
 
 # comment out the lines below to use dbDataEntry, uncomment them out to create screenshots alone
-oclcId = input("OCLC number for media? ")
-createAllScreenshots(oclcId)
+# oclcId = input("OCLC number for media? ")
+# createAllScreenshots(oclcId)
