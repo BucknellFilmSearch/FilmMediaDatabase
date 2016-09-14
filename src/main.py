@@ -243,9 +243,9 @@ post('/moviesearch/feedback')(appInstance.sendFeedback)
 route('/moviesearch/sitemap.xml')(appInstance.handleSitemap)
 
 # comment out the line below for web server environment (not commented out for local development server)
-# route('/static/:path#.+#', name='static')(appInstance.static)
+route('/static/:path#.+#', name='static')(appInstance.static)
 
 # make sure the line below isn't commented out for web server environment (comment out for local development server)
-run(server='cgi')
+# run(server='cgi')
 # comment out the line below for web server environment (not commented out for local development server)
-# run(host='localhost', port=8080, debug=True)(appInstance)
+run(host='localhost', port=8080, debug=True)(appInstance)

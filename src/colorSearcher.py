@@ -4,9 +4,11 @@ __date__ = "July 21, 2016 3:38:40 PM$"
 import numpy as np
 
 class ColorSearcher:
-    def __init__(self, index):
+    def __init__(self, index, sorting):
         # store the index we are reading through
         self.index = index
+        # store boolean telling us if we should sort the results
+        self.sorting = sorting
 
     def search(self, queryFeatures):
         """
@@ -28,7 +30,8 @@ class ColorSearcher:
 
         # sort the results, so that the more relevant results
         # (smaller numbers) are at the front of the list
-        results = sorted([(v, k) for (k,v) in results.items()])
+        if self.sorting == True:
+            results = sorted([(v, k) for (k,v) in results.items()])
 
         # return the results
         return results

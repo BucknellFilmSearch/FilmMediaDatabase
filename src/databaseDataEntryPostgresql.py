@@ -193,7 +193,7 @@ def fillMediaTextTable(oclc_id):
     :param oclc_id:
     """
 
-    with open("E:/0_The Cell Phone Cinema Project/src/CPCPModel/static/textFiles/" + str(oclc_id) + ".txt", 'r') as file:
+    with open("F:/0_The Cell Phone Cinema Project/src/CPCPModel/static/textFiles/" + str(oclc_id) + ".txt", 'r') as file:
         currentLineNumber = "1"
         nextLineNumber = "1"
         startTimeStamp = ""

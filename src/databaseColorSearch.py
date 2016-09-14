@@ -5,14 +5,15 @@ from colorSearcher import ColorSearcher
 import numpy as np
 import pickle
 import cv2
+import os
 
 def main_menu():
     """
     main function of the Search process.  Gets the
     OCLC ID number from the user
     """
-    oclcID = input("Input the OCLC number of the movie whose screenshots"
-                   " you would like to search through: ")
+    oclcID = input("Input the OCLC number of the source movie"
+                   " of the search query: ")
     lineNumber = input("Enter the Line number of the image you would like"
                        " to use as a query: ")
     singleMovieColorSearch(oclcID, lineNumber)
@@ -29,14 +30,32 @@ def singleMovieColorSearch(oclcID, lineNumber):
     indexPath = path + str(oclcID) + "/index.pickle"
     index = pickle.load(open(indexPath, mode="rb"))
 
+    # Debugging line to check the contents of the image index
     # print(index.keys())
 
-    # initialize our searcher class
-    searcher = ColorSearcher(index, True)
-
-    # perform the search using the query image
+    # get the features of our query image
     queryFeatures = index[str(oclcID) + "\\" + queryFile]
-    results = searcher.search(queryFeatures)
+
+    # initialize a dictionary that will store our distance results
+    # from all films in the database
+    results = {}
+
+    # Iterate through all movie files in the screenshots folder
+    for filmID in os.listdir(path):
+        # for each movie in the database
+        # open the index file for this movie
+        indexPath = path + str(filmID) + "/index.pickle"
+        index = pickle.load(open(indexPath, mode="rb"))
+
+        # initialize our searcher class for this film
+        searcher = ColorSearcher(index, False)
+
+        # perform the search using the query image, then add to our combined results
+        print("Performing test on images from " + str(filmID))
+        results.update(searcher.search(queryFeatures))
+
+    # sort our search results to obtain the most relevant images
+    results = sorted([(v, k) for (k,v) in results.items()])
 
     # display the query image
     queryImage = cv2.imread(path + str(oclcID) + "/" + queryFile)
@@ -47,7 +66,7 @@ def singleMovieColorSearch(oclcID, lineNumber):
     montageA = np.zeros((480*2, 720*2, 3), dtype = "uint8")
     montageB = np.zeros((480*2, 720*2, 3), dtype = "uint8")
 
-    # loop over the top ten results
+    # loop over the top eight results
     for j in range(0, 8):
         # grab the result and load the image
         # The index tag for each image is oclcID\lineNum.png
