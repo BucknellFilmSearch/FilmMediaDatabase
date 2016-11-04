@@ -1,4 +1,4 @@
 /src/CPCPModel/sqlite3.exe
 env/
 *.pyc
-.idea/
+src/.idea/
