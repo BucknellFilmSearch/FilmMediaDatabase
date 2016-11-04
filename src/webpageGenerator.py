@@ -282,7 +282,7 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
     :return: the html code for the first result for a single movie
     """
     textFile = "/static/textFiles/" + str(oclcId) + ".txt"
-    thumbnailSource = "/static/imageFiles/" + str(oclcId) + ".gif"
+    thumbnailSource = ("/static/imageFiles/140x197.jpg" if DEBUG_MODE else "/static/imageFiles/" + str(oclcId) + ".gif")
     # generate path to screen shot
     screenshotSource = pathToMediaFiles + "/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
     abrevSource = "/static/imageFiles/screenshots/" + str(oclcId) + "/" + str(lineNumber) + ".png"
