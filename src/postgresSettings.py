@@ -5,6 +5,8 @@
 import cgitb
 cgitb.enable()
 
+from config import DEBUG_MODE
+
 __author__ = 'Justin Eyster'
 
 # settings for the sql database, change host to localhost when putting this file on the web server
@@ -12,10 +14,10 @@ __author__ = 'Justin Eyster'
 
 DATABASE = {
     'drivername': 'postgresql+psycopg2',
-    'host': '50.87.248.230',
+    'host': ('50.87.248.230' if DEBUG_MODE else 'localhost'),
     # 'host': 'localhost',
     'database': 'filmtvse_cpcp',
-    'username': 'filmtvse_hartman',
+    'username': 'filmtvse_nasimi',
     'password': 'BucknellDH17837!',
     'port': '5432'
 }

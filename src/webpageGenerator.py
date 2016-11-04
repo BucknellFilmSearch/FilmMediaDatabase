@@ -12,18 +12,20 @@ from datetime import datetime
 from os import path
 from math import ceil
 
+from config import DEBUG_MODE
+
 __author__ = "Justin Eyster"
 __date__ = "$Jun 5, 2015 9:35:43 AM$"
 
 
-def fileToStr(fileName): 
+def fileToStr(fileName):
     """
     Used to convert html files into strings.
     :param fileName: the name of the html file to convert to a string (or location).
     """
-    file = open(fileName); 
-    contents = file.read();  
-    file.close() 
+    file = open(fileName);
+    contents = file.read();
+    file.close()
     return contents
 
 def generateSearchPage(defaultEarliestReleaseYear):
@@ -288,7 +290,7 @@ def fillSearchResultsHTMLFile(oclcId, movieTitle, lineNumber, startTimeStamp, en
     if os.path.isfile(screenshotSource):
         screenshotHtml = "<center><img class='thumbnail' src=" + abrevSource + " width='720' height='480'></center>"
     else:
-        screenshotHtml = ""
+        screenshotHtml = "<center><img class='thumbnail' src=" + "/static/imageFiles/720x480.jpg" + " width='720' height='480'></center>"
     contextLink = "/moviesearch/context/" + str(oclcId) + "/" + str(lineNumber) + "/" + keywordOrPhraseSearched + \
         "/" + genreSearched + "/" + str(earliestReleaseYearSearched) + "/" + str(latestReleaseYearSearched) + "/" + \
         str(pageNumSearched)
@@ -309,7 +311,7 @@ def fillAdditionalLinesHTMLFile(oclcId, lineNumber, startTimeStamp, endTimeStamp
     if os.path.isfile(screenshotSource):
         screenshotHtml = "<center><img class='thumbnail' src=" + abrevSource + " width='720' height='480'></center>"
     else:
-        screenshotHtml = ""
+        screenshotHtml = "<center><img class='thumbnail' src=" + "/static/imageFiles/720x480.jpg" + " width='720' height='480'></center>"
     contextLink = "/moviesearch/context/" + str(oclcId) + "/" + str(lineNumber) + "/" + keywordOrPhraseSearched + \
         "/" + genreSearched + "/" + str(earliestReleaseYearSearched) + "/" + str(latestReleaseYearSearched) + "/" + \
         str(pageNumSearched)
