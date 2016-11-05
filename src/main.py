@@ -55,11 +55,11 @@ def remapResults(results):
     mapped = map(remapResultsHelper, results)
 
     # separate films by OclcId
-    mappedAndGrouped = {}
+    mappedAndGrouped = []
     for key, value in itertools.groupby(mapped, key=itemgetter('movieOclcId')):
-        mappedAndGrouped[key] = []
+        mappedAndGrouped.append({'movieOclcId': key, 'results': []})
         for i in value:
-            mappedAndGrouped[key].append(i)
+            mappedAndGrouped[-1]['results'].append(i)
 
     return mappedAndGrouped
 
@@ -152,6 +152,12 @@ class App():
         if (keywordOrPhrase != self.keywordOrPhraseSearched or genre != self.genreSearched or
                         earliestReleaseYear != self.earliestReleaseYearSearched or
                         latestReleaseYear != self.latestReleaseYearSearched):
+            # this can be used to quickly return JSON for development
+            if DEBUG_MODE and keywordOrPhrase == "phone":
+                with open('sampleData/phoneSampleOutput.json') as sampleData:
+                    results = json.load(sampleData)
+                    print results
+                    return {"results": results}
             results = search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,
                              self.defaultEarliestReleaseYear)
             # store results, if not none
