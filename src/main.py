@@ -57,9 +57,25 @@ def remapResults(results):
     # separate films by OclcId
     mappedAndGrouped = []
     for key, value in itertools.groupby(mapped, key=itemgetter('movieOclcId')):
-        mappedAndGrouped.append({'movieOclcId': key, 'results': []})
+        mappedAndGrouped.append(
+            {
+                'movieOclcId': key,
+                'results': []
+            }
+        )
         for i in value:
             mappedAndGrouped[-1]['results'].append(i)
+
+    # move film-specific attributes up one level
+    for film in mappedAndGrouped:
+        film['movieTitle'] = film["results"][0]["movieTitle"]
+        film['movieReleaseYear'] = film["results"][0]["movieReleaseYear"]
+        film['dvdReleaseYear'] = film["results"][0]["dvdReleaseYear"]
+        for lineData in film['results']:
+            lineData.pop('movieOclcId')
+            lineData.pop('movieTitle')
+            lineData.pop('movieReleaseYear')
+            lineData.pop('dvdReleaseYear')
 
     return mappedAndGrouped
 
