@@ -17,6 +17,53 @@ from feedbackEmailSender import sendEmail
 # The import below says it's unused, but it is used on the web server. Don't remove it.
 import cgi
 
+from config import DEBUG_MODE
+import itertools
+from operator import itemgetter
+import json
+
+# copied from websiteGenerator.py
+def removeBadCharacters(text):
+    """
+    Removes utf-8 escaped characters that were showing up in results on the webpage.
+    :param text: text to remove the newline symbol from, and other utf-8 bullshit
+    :return: text that has been cleaned of garbage utf-8 characters
+    """
+    for i in range(len(text)):
+        if len(text) > i and text[i] == "\\":
+            if len(text) > i+1 and (text[i+1] == "0" or text[i+1] == "3" or text[i+1] == "2"):
+                if len(text) > i+2 and (text[i+2] == "1" or text[i+2] == "0" or text[i+2] == "6"):
+                    if len(text) > i+3 and (text[i+3] == "2"or text[i+3] == "2" or text[i+3] == "6"):
+                        text = text[0:i] + " " + text[i+4:]
+    return str(text)
+
+# maps fields within tuple so they are named
+def remapResultsHelper(lineOfDialogue):
+    return {
+        "movieOclcId": lineOfDialogue[0],
+        "movieTitle": lineOfDialogue[1],
+        "movieLineNumber": lineOfDialogue[2],
+        "movieStartTimeStamp": lineOfDialogue[3],
+        "movieEndTimeStamp": lineOfDialogue[4],
+        "movieLineText": removeBadCharacters(lineOfDialogue[5]),
+        "movieReleaseYear": lineOfDialogue[6],
+        "dvdReleaseYear": lineOfDialogue[7]
+    }
+
+def remapResults(results):
+    # map tuples with list using helper function
+    mapped = map(remapResultsHelper, results)
+
+    # separate films by OclcId
+    mappedAndGrouped = {}
+    for key, value in itertools.groupby(mapped, key=itemgetter('movieOclcId')):
+        mappedAndGrouped[key] = []
+        for i in value:
+            mappedAndGrouped[key].append(i)
+
+    return mappedAndGrouped
+
+
 class App():
 
     def __init__(self):
@@ -30,7 +77,9 @@ class App():
         # Below is where search results are stored so that, ideally,
         # a new search isn't performed every time a page is loaded.
         self.results = []
-        self.resultsPerPage = 25
+
+        # show all results on one page in debug mode
+        self.resultsPerPage = (99999999 if DEBUG_MODE else 25)
 
         # info about previous search
         self.keywordOrPhraseSearched = ""
@@ -118,6 +167,10 @@ class App():
             self.latestReleaseYearSearched = latestReleaseYear
         # if params (other than page number) are identical to previous search, use previous search results (implied)
         # generate html page of results
+
+        remappedResults = remapResults(self.results)
+        print json.dumps(remappedResults)
+
         return generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, self.results,
                                    self.resultsPerPage, pageNumber, self.pathToMediaFiles)
 
