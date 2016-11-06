@@ -169,11 +169,17 @@ class App():
                         earliestReleaseYear != self.earliestReleaseYearSearched or
                         latestReleaseYear != self.latestReleaseYearSearched):
             # this can be used to quickly return JSON for development
-            if DEBUG_MODE and keywordOrPhrase == "phone":
-                with open('sampleData/phoneSampleOutput.json') as sampleData:
-                    results = json.load(sampleData)
-                    print results
-                    return {"results": results}
+            if DEBUG_MODE:
+                results = None
+                if keywordOrPhrase == "phone":
+                    with open('sampleData/phoneSampleOutput.json') as sampleData:
+                        results = json.load(sampleData)
+                        print results
+                else:
+                    results = search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,
+                                                 self.defaultEarliestReleaseYear)
+                    results = remapResults(results)
+                return {"results": results}
             results = search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,
                              self.defaultEarliestReleaseYear)
             # store results, if not none
@@ -302,6 +308,10 @@ class App():
     def handleSitemap(self):
         redirect('/sitemap.xml')
 
+    def getResultsTemplate(self):
+        with open("templates/searchResultsReactTemplate.html", 'r') as f:
+            return f.read()
+
 # initialize App
 appInstance = App()
 # route the proper URL's to the proper methods in the class
@@ -316,6 +326,7 @@ post('/moviesearch/compare')(appInstance.graphComparison)
 get('/moviesearch/feedback')(appInstance.displayFeedbackPage)
 post('/moviesearch/feedback')(appInstance.sendFeedback)
 route('/moviesearch/sitemap.xml')(appInstance.handleSitemap)
+get('/movies/')(appInstance.getResultsTemplate)
 
 # comment out the line below for web server environment (not commented out for local development server)
 route('/static/:path#.+#', name='static')(appInstance.static)
