@@ -4,6 +4,59 @@
 
 require(['require', 'react', 'react-dom', 'jquery'], function(require, React, ReactDOM, $) {
     var DEBUG_MODE = true;
+    var GENRES = ["Action", "Thriller", "Comedy", "Family", "Adventure", "Mystery", "Romance", "Sci-Fi", "Horror",
+        "Drama", "Biography", "Fantasy", "Crime", "War", "Animation", "History", "Musical"];
+
+    var InputForm = React.createClass({
+       render: function() {
+           return (
+               <div>
+                   <input name="keywordOrPhrase" type="text" value="phone" placeholder ="Keyword/phrase..." required
+                          oninvalid="this.setCustomValidity('A keyword or phrase is required')"
+                          oninput="setCustomValidity('')"/>
+                   <br />
+                       Limit results to a specific genre:
+                       <select name="genre">
+                           {GENRES.map(function(value, index)
+                               {return (
+                                   index == 0 ? <option selected="selected" value="All">All Genres</option> :
+                                                <option value={value}>{value}</option>
+                               )}
+                           )}
+                       </select>
+                   <br />
+                   Limit results to movies originally released between:
+                   <br />
+
+                   <input name="earliestReleaseYear" type="number" placeholder="1996" min="1996" max="2016" />
+                   and
+                   <input name="latestReleaseYear" type="number" placeholder="2016" min="1996" max="2016" />
+                   <br />
+                   <input value="Search" type="submit" />
+               </div>
+
+           )
+       },
+
+       componentDidMount: function() {
+           // create event listener
+           $("input[value='Search']").on('click', function(){
+               // TODO - use form data to actually render results input
+               ReactDOM.render(
+                   <AllFilms />,
+                   document.getElementById('filmData')
+               );
+
+               $("#inputForm").remove();
+           });
+       },
+
+       componentWillUnmount: function() {
+           // remove event listener
+           $("input[value='search']").off('click');
+       }
+
+    });
 
     var ScreenshotWithCaption = React.createClass({
        render: function() {
@@ -12,12 +65,14 @@ require(['require', 'react', 'react-dom', 'jquery'], function(require, React, Re
                 <div>
                     {this.props.screenshotsWithCaptions.results.map(function(object)
                         {
-                            return (<a href="/moviesearch/context/168630200/659/phone/All/1996/2016/2" className="list-group-item">
-                                <img className='thumbnail' style={{margin: "auto"}} src={DEBUG_MODE ? "/static/imageFiles/720x480.jpg" : "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + object.movieLineNumber + ".png"} width='720' height='480' />
-                                <p className="list-group-item-text">Line #{ object.movieLineNumber }</p>
-                                <p className="list-group-item-text">From { object.movieStartTimeStamp } to { object.movieEndTimeStamp }</p>
-                                <p className="list-group-item-text"> { object.movieLineText } </p>
-                            </a>)
+                            return (
+                                <a href="/moviesearch/context/168630200/659/phone/All/1996/2016/2" className="list-group-item">
+                                    <img className='thumbnail' style={{margin: "auto"}} src={DEBUG_MODE ? "/static/imageFiles/720x480.jpg" : "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + object.movieLineNumber + ".png"} width='720' height='480' />
+                                    <p className="list-group-item-text">Line #{ object.movieLineNumber }</p>
+                                    <p className="list-group-item-text">From { object.movieStartTimeStamp } to { object.movieEndTimeStamp }</p>
+                                    <p className="list-group-item-text"> { object.movieLineText } </p>
+                                 </a>
+                            )
                         }
                     )}
                 </div>
@@ -37,6 +92,7 @@ require(['require', 'react', 'react-dom', 'jquery'], function(require, React, Re
             )
         }
     });
+
 
     var IndividualFilmResults = React.createClass({
         render: function() {
@@ -79,9 +135,11 @@ require(['require', 'react', 'react-dom', 'jquery'], function(require, React, Re
         }
     });
 
+
+
     ReactDOM.render(
-        <AllFilms />,
-        document.getElementById('filmData')
+        <InputForm />,
+        document.getElementById('inputForm')
     );
 });
 
