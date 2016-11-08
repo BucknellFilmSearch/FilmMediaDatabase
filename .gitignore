@@ -2,3 +2,5 @@
 env/
 *.pyc
 .idea/
+src/static/js/app.js*
+src/static/js/components/*.js*
