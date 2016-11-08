@@ -17,52 +17,9 @@ import { Router, Route, hashHistory } from 'react-router'
 
 
 import { ScreenshotWithCaption } from "components/ScreenshotWithCaption";
-import { InputForm } from "components/InputForm";
-
+import { SearchContainer } from "components/SearchContainer";
 
 export let DEBUG_MODE:boolean = true;
-
-var SearchContainer = React.createClass({
-    render: function() {
-        var containerStyle = {
-            "text-align": "center",
-            "padding-top":"50px",
-            "padding-bottom":"150px"
-        };
-        var titleStyle = {
-            "font-size":"22px",
-            "font-weight": "bold"
-        };
-        var nameStyle = {
-            "font-size":"15px",
-            "font-weight": "bold"
-        };
-
-        return (
-            <div style={containerStyle} class="filmSearch">
-                <span style={titleStyle}>The Film Search Engine</span><br />
-                <span style={nameStyle}> by Dr. John Hunter, Justin Eyster, and Dale Hartman<br />
-              at Bucknell University</span><br />
-                <br />
-                Use the search box below to analyze the usage of a word/phrase <br /> within a
-                     database of 90 movies released after the year 1996. <br />
-
-                <br />
-
-                    <div id="inputForm">
-                        <InputForm/>
-                    </div>
-
-                    <br />
-                    <p><a class="hyperlink" href="/moviesearch/compare">OR Graph Two Keywords/Phrases</a></p>
-                    <br />
-                    <p>This site is a work in progress:</p>
-                    <p><a class="hyperlink" href="/moviesearch/feedback">Comments Or Suggestions? Please Contact Us</a></p>
-            </div>
-        );
-    }
-});
-
 
 var FilmMetadata = React.createClass({
     render: function() {
