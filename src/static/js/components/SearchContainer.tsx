@@ -40,6 +40,5 @@ export class SearchContainer extends React.Component<any, {}> {
                 <p><a class="hyperlink" href="/moviesearch/feedback">Comments Or Suggestions? Please Contact Us</a></p>
             </div>
         );
-    },
-
-});
+    }
+}

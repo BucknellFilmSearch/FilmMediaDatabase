@@ -15,7 +15,6 @@ import ReactDOM = require("react-dom");
 
 import { Router, Route, hashHistory } from 'react-router'
 
-
 import { ScreenshotWithCaption } from "components/ScreenshotWithCaption";
 import { SearchContainer } from "components/SearchContainer";
 

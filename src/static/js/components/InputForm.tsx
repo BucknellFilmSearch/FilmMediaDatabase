@@ -35,6 +35,5 @@ export class InputForm extends React.Component<any, {}> {
             </div>
 
         )
-    },
-
-});
+    }
+}
