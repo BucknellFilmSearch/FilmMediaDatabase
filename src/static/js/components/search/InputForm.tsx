@@ -9,7 +9,7 @@ export class InputForm extends React.Component<any, {}> {
     render() {
         return (
             <div>
-                <input name="keywordOrPhrase" type="text" value="phone" placeholder="Keyword/phrase..." required
+                <input name="keywordOrPhrase" type="text" placeholder="Keyword/phrase..." required
                        oninvalid="this.setCustomValidity('A keyword or phrase is required')"
                        oninput="setCustomValidity('')"/>
                 <br />
@@ -30,7 +30,10 @@ export class InputForm extends React.Component<any, {}> {
                 and
                 <input name="latestReleaseYear" type="number" placeholder="2016" min="1996" max="2016" />
                 <br />
-                {/*<input value="Search" type="submit" />*/}
+
+
+                {/* TODO - add onclick event that sends form data using AJAX $ajaxSubmit or similar
+                    more information: http://stackoverflow.com/questions/1960240/jquery-ajax-submit-form */}
                 <Link className="btn btn-primary" to={"/phone/All/1996/2016/1"} >Search</Link>
             </div>
 

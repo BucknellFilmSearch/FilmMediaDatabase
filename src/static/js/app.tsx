@@ -17,41 +17,12 @@ import { Router, Route, hashHistory } from 'react-router'
 
 // React component imports
 import { SearchContainer } from "./components/search/SearchContainer";
-import { IndividualFilmResults } from "./components/results/IndividualFilmResults";
+import { AllFilms } from "./components/results/AllFilms";
+
 
 // Global settings
 export let DEBUG_MODE:boolean = true;
 
-
-var AllFilms = React.createClass({
-    getInitialState: function() {
-        return {
-            films: []
-        };
-    },
-
-    componentDidMount: function(){
-        var that = this;
-        $.getJSON('http://localhost:8080/moviesearch/phone/All/1996/2016/1', function (data: FilmResultsDataWrapperI) {
-            that.setState({
-                films: data.results
-            });
-        });
-    },
-
-    render: function() {
-
-        return (
-            <div>
-                {this.state.films.map(function(object: IndividualFilmDataI)
-                    {
-                        return <IndividualFilmResults individualFilm={object} />;
-                    }
-                )}
-            </div>
-        );
-    }
-});
 
 ReactDOM.render((
     <Router history={hashHistory}>
