@@ -39,63 +39,26 @@
 
   <body>
 
-  <div style="text-align: center; padding-top:150px;padding-bottom:150px" class="filmSearch">
-      <span style="font-size:22px; font-weight: bold;">The Film Search Engine</span><br>
-          <span style="font-size:15px; font-weight: bold;"> by Dr. John Hunter, Justin Eyster, and Dale Hartman<br>
-              at Bucknell University</span><br>
-              <br>
+      <div class="site-wrapper filmResults">
+          <div class="site-wrapper-inner">
+              <div class="cover-container">
+                  <div class="masthead clearfix">
+                      <div class="inner">
+                          <h3 class="masthead-brand">The Film Search Engine</h3>
+                          <nav>
+                              <ul class="nav masthead-nav">
+                                  <li ><a href="/moviesearch">Home</a></li>
+                              </ul>
+                          </nav>
+                      </div>
+                  </div>
+              </div>
+              <div id="appContainer">
 
-
-      Use the search box below to analyze the usage of a word/phrase <br> within a
-      database of 90 movies released after the year 1996. <br>
-
-      <br>
-
-      <div id="inputForm">
-
+              </div>
+          </div>
       </div>
 
-      <br>
-      <p><a class="hyperlink" href="/moviesearch/compare">OR Graph Two Keywords/Phrases</a></p>
-      <br>
-      <p>This site is a work in progress:</p>
-      <p><a class="hyperlink" href="/moviesearch/feedback">Comments Or Suggestions? Please Contact Us</a></p>
-  </div>
-
-
-  <div class="site-wrapper filmResults">
-
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-          <div class="masthead clearfix">
-            <div class="inner">
-              <h3 class="masthead-brand">The Film Search Engine</h3>
-              <nav>
-                <ul class="nav masthead-nav">
-                  <li ><a href=/moviesearch>Home</a></li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-
-            <p class=message-text>Showing 663 results for 'phone', 25 per page.</p>
-            <p class=message-text>Click on a result to view context.</p>
-            <p class=message-text>
-                <a href='/moviesearch'>Back to Search Page</a>
-            </p>
-        </div>
-
-
-          <div id="filmData">
-
-
-          </div>
-
-      </div>
-
-    </div>
 
     <!-- Placed at the end of the document so the pages load faster -->
     <script data-main="/static/js/app" src="http://requirejs.org/docs/release/2.3.2/minified/require.js"></script>

@@ -7,11 +7,7 @@
     "jsx": "react"
   },
   "files": [
-    "./ts/require.d.ts",
-    "./ts/react.d.ts",
-    "./ts/react-dom.d.ts",
-    "./ts/Interfaces.d.ts",
-    "app.tsx",
-    "components/ScreenshotWithCaption.tsx"
+    "./ts/*",
+    "app.tsx"
   ]
 }

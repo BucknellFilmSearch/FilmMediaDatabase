@@ -1,3 +1,29 @@
 
+// interfaces for react components
+interface ScreenshotWithCaptionI {
+    screenshotsWithCaptions: IndividualFilmDataI
+}
 
-interface ScreenshotWithCaptionI { screenshotsWithCaptions: any }
+// interfaces for data
+interface FilmResultsDataWrapperI {
+    results: FilmResultsDataI
+}
+
+interface FilmResultsDataI extends Array<IndividualFilmDataI>{}
+
+interface IndividualFilmDataI {
+    movieReleaseYear: number,
+    dvdReleaseYear: number,
+    movieTitle: string,
+    movieOclcId: number,
+    results: ScreenshotWithCaptionDataListI
+}
+
+interface ScreenshotWithCaptionDataListI extends Array<ScreenshotWithCaptionDataI>{}
+
+interface ScreenshotWithCaptionDataI {
+    movieLineText: string,
+    movieStartTimeStamp: string,
+    movieEndTimeStamp: string,
+    movieLineNumber: number
+}
