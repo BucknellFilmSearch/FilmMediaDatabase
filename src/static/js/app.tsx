@@ -49,7 +49,7 @@ var InputForm = React.createClass({
                 <input name="latestReleaseYear" type="number" placeholder="2016" min="1996" max="2016" />
                 <br />
                 {/*<input value="Search" type="submit" />*/}
-                <Link to={"/phone/All/1996/2016/1"} >Search</Link>
+                <Link className="btn btn-primary" to={"/phone/All/1996/2016/1"} >Search</Link>
             </div>
 
         )
@@ -79,7 +79,7 @@ var SearchContainer = React.createClass({
     render: function() {
         var containerStyle = {
             "text-align": "center",
-            "padding-top":"150px",
+            "padding-top":"50px",
             "padding-bottom":"150px"
         };
         var titleStyle = {
