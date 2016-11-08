@@ -1,5 +1,3 @@
-/// <reference path="../ts/Interfaces.d.ts"/>
-
 import * as React from "react";
 import {DEBUG_MODE} from "../app";
 
