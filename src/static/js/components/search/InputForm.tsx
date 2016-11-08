@@ -9,15 +9,15 @@ export class InputForm extends React.Component<any, {}> {
     render() {
         return (
             <div>
-                <input name="keywordOrPhrase" type="text" value="phone" placeholder ="Keyword/phrase..." required
+                <input name="keywordOrPhrase" type="text" value="phone" placeholder="Keyword/phrase..." required
                        oninvalid="this.setCustomValidity('A keyword or phrase is required')"
                        oninput="setCustomValidity('')"/>
                 <br />
                 Limit results to a specific genre:
                 <select name="genre">
-                    {GENRES.map(function(value, index)
+                    <option selected={true} value="All">All Genres</option>
+                    {GENRES.map(function(value)
                         {return (
-                            index == 0 ? <option selected={"selected"} value="All">All Genres</option> :
                                 <option value={value}>{value}</option>
                         )}
                     )}

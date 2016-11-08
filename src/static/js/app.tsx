@@ -9,41 +9,19 @@
 /// <amd-dependency path="react-dom" />
 /// <amd-dependency path="react-router" />
 
+// Library imports
 import $ = require("jquery");
 import React = require("react");
 import ReactDOM = require("react-dom");
-
 import { Router, Route, hashHistory } from 'react-router'
 
-import { ScreenshotWithCaption } from "components/ScreenshotWithCaption";
-import { SearchContainer } from "components/SearchContainer";
+// React component imports
+import { SearchContainer } from "./components/search/SearchContainer";
+import { IndividualFilmResults } from "./components/results/IndividualFilmResults";
 
+// Global settings
 export let DEBUG_MODE:boolean = true;
 
-var FilmMetadata = React.createClass({
-    render: function() {
-        return (
-            <a href="/moviesearch/context/168630200/624/phone/All/1996/2016/2" className="list-group-item">
-                <img className="thumbnail" style={{margin: "auto"}} src={DEBUG_MODE? "/static/imageFiles/140x197.jpg" : "http://www.filmtvsearch.net/static/imageFiles/" + this.props.metadata.movieOclcId + ".gif"} width="140" height="197" />
-                <h4 className="list-group-item-heading">{ this.props.metadata.movieTitle }</h4>
-                <p className ="list-group-item-text">OCLC ID: { this.props.metadata.movieOclcId }</p>
-                <p className ="list-group-item-text"> { this.props.metadata.dvdReleaseYear } version of { this.props.metadata.movieReleaseYear } release</p>
-            </a>
-        )
-    }
-});
-
-
-var IndividualFilmResults = React.createClass({
-    render: function() {
-        return (
-            <div className="list-group">
-                <FilmMetadata metadata={this.props.individualFilm} />
-                <ScreenshotWithCaption screenshotsWithCaptions={this.props.individualFilm} />
-            </div>
-        )
-    }
-});
 
 var AllFilms = React.createClass({
     getInitialState: function() {

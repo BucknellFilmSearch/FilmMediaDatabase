@@ -3,4 +3,4 @@ env/
 *.pyc
 .idea/
 src/static/js/app.js*
-src/static/js/components/*.js*
+src/static/js/components/*/*.js*

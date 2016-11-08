@@ -4,7 +4,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 
-/// <reference path="../react/react.d.ts" />
+/// <reference path="./react.d.ts" />
 /// <reference path="./history.d.ts"/>
 
 

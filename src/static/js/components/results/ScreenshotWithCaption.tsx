@@ -1,5 +1,5 @@
 import * as React from "react";
-import {DEBUG_MODE} from "../app";
+import {DEBUG_MODE} from "../../app";
 
 export class ScreenshotWithCaption extends React.Component<ScreenshotWithCaptionI, {}> {
     constructor(props: ScreenshotWithCaptionI) {
