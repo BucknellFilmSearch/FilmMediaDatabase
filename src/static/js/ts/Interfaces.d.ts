@@ -1,0 +1,3 @@
+
+
+interface ScreenshotWithCaptionI { screenshotsWithCaptions: any }

@@ -3,15 +3,15 @@
     "module": "AMD",
     "target": "es5",
     "sourceMap": true,
+    "noImplicitAny": true,
     "jsx": "react"
   },
-  "exclude": [
-    "node_modules"
-  ],
   "files": [
-    "react.d.ts",
-    "react-dom.d.ts",
-    "config.tsx",
-    "results.tsx"
+    "./ts/require.d.ts",
+    "./ts/react.d.ts",
+    "./ts/react-dom.d.ts",
+    "./ts/Interfaces.d.ts",
+    "app.tsx",
+    "components/ScreenshotWithCaption.tsx"
   ]
 }
