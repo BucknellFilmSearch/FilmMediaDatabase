@@ -15,12 +15,8 @@ export class InputForm extends React.Component<any, {}> {
                 <br />
                 Limit results to a specific genre:
                 <select name="genre">
-                    <option selected={true} value="All">All Genres</option>
-                    {GENRES.map(function(value)
-                        {return (
-                                <option value={value}>{value}</option>
-                        )}
-                    )}
+                    <option selected value="All">All Genres</option>
+                    { GENRES.map( value => <option value={value}>{value}</option> ) }
                 </select>
                 <br />
                 Limit results to movies originally released between:
@@ -33,8 +29,11 @@ export class InputForm extends React.Component<any, {}> {
 
 
                 {/* TODO - add onclick event that sends form data using AJAX $ajaxSubmit or similar
-                    more information: http://stackoverflow.com/questions/1960240/jquery-ajax-submit-form */}
-                <Link className="btn btn-primary" to={"/phone/All/1996/2016/1"} >Search</Link>
+                    more information: http://stackoverflow.com/questions/1960240/jquery-ajax-submit-form
+                    or use react router form
+                    https://github.com/insin/react-router-form */}
+
+                <Link className="btn btn-primary" to={"/phone/All/1996/2016"} >Search</Link>
             </div>
 
         )

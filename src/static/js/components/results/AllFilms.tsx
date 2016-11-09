@@ -6,21 +6,18 @@ export class AllFilms extends React.Component<any, any> {
     constructor() {
         super();
 
-        this.state = {
-            films: []
-        };
+        this.state = null;
     }
 
     loadData() {
-        $.getJSON('http://localhost:8080/moviesearch/phone/All/1996/2016/1', function (data: FilmResultsDataWrapperI) {
+        $.getJSON('http://localhost:8080/moviesearch/phone/All/1996/2016/1',  (data: FilmResultsDataWrapperI) => {
             this.state = {
                 films: data.results
             };
 
             // TODO - move this up so that a parent component delegates rendering to a child component
             this.forceUpdate();
-        }.bind(this));
-
+        });
     }
 
     componentDidMount() {
@@ -28,13 +25,23 @@ export class AllFilms extends React.Component<any, any> {
     }
 
     render () {
-        return (
-            <div>
-                {this.state.films.map(function (object: IndividualFilmDataI) {
-                        return <IndividualFilmResults individualFilm={object}/>;
-                    }
-                )}
-            </div>
-        );
+        if (this.state) {
+            return (
+                <div>
+                    {this.state.films.map(function (object: IndividualFilmDataI) {
+                            return <IndividualFilmResults individualFilm={object}/>;
+                        }
+                    )}
+                </div>
+            );
+        }
+        else {
+            return (
+                <div>
+                    <h2>Loading...</h2>
+                </div>
+            )
+        }
+
     }
 }

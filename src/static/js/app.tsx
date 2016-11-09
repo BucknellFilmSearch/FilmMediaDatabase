@@ -13,7 +13,7 @@
 import $ = require("jquery");
 import React = require("react");
 import ReactDOM = require("react-dom");
-import { Router, Route, hashHistory } from 'react-router'
+import { Router, Route, hashHistory, IndexRoute } from 'react-router'
 
 // React component imports
 import { SearchContainer } from "./components/search/SearchContainer";
@@ -24,14 +24,13 @@ import { AllFilms } from "./components/results/AllFilms";
 export let DEBUG_MODE:boolean = true;
 
 
+// http://stackoverflow.com/questions/32846337/how-to-fetch-the-new-data-in-response-to-react-router-change-with-redux
+// https://github.com/reactjs/redux/issues/227
 ReactDOM.render((
     <Router history={hashHistory}>
-        <Route path="/" component={SearchContainer}>
-            {/*<Route path="users" component={Users}>*/}
-                {/*<Route path="/user/:userId" component={User}/>*/}
-            {/*</Route>*/}
-            {/*<Route path="*" component={NoMatch}/>*/}
+        <Route path="/">
+            <IndexRoute component={SearchContainer}/>
+            <Route path=":term/:genre/:startYear/:endYear" component={AllFilms} />
         </Route>
-        <Route path="/phone/All/1996/2016/1" component={AllFilms} />
     </Router>
 ), document.getElementById('appContainer'));
