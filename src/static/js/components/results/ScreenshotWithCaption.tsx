@@ -10,7 +10,6 @@ export class ScreenshotWithCaption extends React.Component<any, {}> {
 
     render() {
         var movieOclcId = this.props.screenshotsWithCaptions.movieOclcId;
-        console.log(this.props);
 
         return (
             <div>

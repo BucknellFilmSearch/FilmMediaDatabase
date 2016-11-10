@@ -161,7 +161,7 @@ class App():
         redirect(redirectUrl)
 
 
-    def displayResultsPage(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,pageNumber):
+    def displayResultsPage(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
         """
         If the search hasn't been done yet, perform search with keyword. Either way, generate the page of
         results specified by parameters received through the URL.
@@ -169,12 +169,8 @@ class App():
         :param genre: genre to restrict the results.
         :param earliestReleaseYear: earliest release year to include.
         :param latestReleaseYear: latest release year to include.
-        :param pageNumber: the page of results to generate.
         :return: the HTML code for the entire page of results.
         """
-
-        # set page number
-        self.currentPageNumber = pageNumber
 
         # if results aren't already for current search, perform the search
         if (keywordOrPhrase != self.keywordOrPhraseSearched or genre != self.genreSearched or
@@ -328,7 +324,7 @@ appInstance = App()
 # route the proper URL's to the proper methods in the class
 get('/moviesearch/')(appInstance.displaySearchPage)
 post('/moviesearch/')(appInstance.searchFromLandingPage)
-route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>/<pageNumber:int>')\
+route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>')\
     (appInstance.displayResultsPage)
 route('/moviesearch/context/<oclcId:int>/<lineNumber:int>')\
     (appInstance.displayContextPage)

@@ -10,7 +10,7 @@ export class AllFilms extends React.Component<any, any> {
     }
 
     loadData(pathname: string) {
-        $.getJSON('http://localhost:8080/moviesearch' + pathname + '/1',  (data: FilmResultsDataWrapperI) => {
+        $.getJSON('http://localhost:8080/moviesearch' + pathname,  (data: FilmResultsDataWrapperI) => {
             this.state = {
                 films: data.results
             };
