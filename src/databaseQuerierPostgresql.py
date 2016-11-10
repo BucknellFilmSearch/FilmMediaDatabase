@@ -15,6 +15,7 @@ from postgresSettings import DATABASE
 from datetime import datetime
 from MediaText import MediaText
 from MediaMetadata import MediaMetadata
+from config import DEBUG_MODE
 
 # create connection to database
 engine = create_engine(URL(**DATABASE))
@@ -80,10 +81,13 @@ def searchResults(keywordOrPhrase):
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
     session = Session()
-    query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
-        group_by(MediaText.oclc_id)
-    updateKeywordCount(query.all())
+
+    if not DEBUG_MODE:
+        query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))). \
+            filter(or_(text("media_text.search_vector @@ to_tsquery('english','" + keywordOrPhrase + "')"),
+                       text("media_text.search_vector @@ to_tsquery('english','012" + keywordOrPhrase + "')"))). \
+            group_by(MediaText.oclc_id)
+        updateKeywordCount(query.all())
 
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
                           MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
