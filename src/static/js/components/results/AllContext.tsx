@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import {ScreenshotWithCaption} from "./ScreenshotWithCaption";
+import {IndividualFilmResults} from "./IndividualFilmResults";
 
 export class AllContext extends React.Component<any, any> {
     constructor() {
@@ -37,10 +38,17 @@ export class AllContext extends React.Component<any, any> {
         if (this.state) {
             var dataToPass = {
                 results: this.state.context,
-                movieOclcId: this.props.routeParams.oclc
+                movieOclcId: this.props.routeParams.oclc,
+                movieReleaseYear: 2020,
+                dvdReleaseYear: 2020,
+                movieTitle: "x",
             };
 
-            return <ScreenshotWithCaption screenshotsWithCaptions={dataToPass} fromContext={true} />;
+            return (
+                <div className="list-group">
+                    <IndividualFilmResults individualFilm={dataToPass} fromContext={true} />
+                </div>
+            );
         }
         else {
             return (
