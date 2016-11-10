@@ -18,6 +18,7 @@ import { Router, Route, hashHistory, IndexRoute } from 'react-router'
 // React component imports
 import { SearchContainer } from "./components/search/SearchContainer";
 import { AllFilms } from "./components/results/AllFilms";
+import { AllContext } from "./components/results/AllContext";
 
 
 // Global settings
@@ -31,6 +32,7 @@ ReactDOM.render((
         <Route path="/">
             <IndexRoute component={SearchContainer}/>
             <Route path=":term/:genre/:startYear/:endYear" component={AllFilms} />
+            <Route path="context/:oclc/:line" component={AllContext} />
         </Route>
     </Router>
 ), document.getElementById('appContainer'));

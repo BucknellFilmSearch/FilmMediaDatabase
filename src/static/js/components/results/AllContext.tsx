@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { IndividualFilmResults } from "./IndividualFilmResults";
+import {ScreenshotWithCaption} from "./ScreenshotWithCaption";
 
-export class AllFilms extends React.Component<any, any> {
+export class AllContext extends React.Component<any, any> {
     constructor() {
         super();
 
@@ -10,9 +10,9 @@ export class AllFilms extends React.Component<any, any> {
     }
 
     loadData(pathname: string) {
-        $.getJSON('http://localhost:8080/moviesearch' + pathname + '/1',  (data: FilmResultsDataWrapperI) => {
+        $.getJSON('http://localhost:8080/moviesearch' + pathname,  (data: any) => {
             this.state = {
-                films: data.results
+                context: data.results
             };
 
             // TODO - move this up so that a parent component delegates rendering to a child component
@@ -25,7 +25,7 @@ export class AllFilms extends React.Component<any, any> {
     }
 
 
-       // TODO - implement this method in case new search terms are submitted and this component needs to rerendered
+    // TODO - implement this method in case new search terms are submitted and this component needs to rerendered
     componentWillReceiveProps(nextProps: any) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
             this.loadData(nextProps.props.location.pathname);
@@ -35,19 +35,17 @@ export class AllFilms extends React.Component<any, any> {
 
     render () {
         if (this.state) {
-            return (
-                <div>
-                    {this.state.films.map(function (object: IndividualFilmDataI) {
-                            return <IndividualFilmResults individualFilm={object}/>;
-                        }
-                    )}
-                </div>
-            );
+            var dataToPass = {
+                results: this.state.context,
+                movieOclcId: this.props.routeParams.oclc
+            };
+
+            return <ScreenshotWithCaption screenshotsWithCaptions={dataToPass} fromContext={true} />;
         }
         else {
             return (
                 <div>
-                    <h2>Loading Relevant Films...</h2>
+                    <h2>Loading Context...</h2>
                 </div>
             )
         }

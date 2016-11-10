@@ -10,7 +10,7 @@ __date__ = "$Jun 2, 2015 2:43:11 PM$"
 
 from datetime import datetime
 from bottle import route, run, install, template, request, get, post, static_file, redirect
-from databaseQuerierPostgresql import search, totalMovies
+from databaseQuerierPostgresql import search, totalMovies, getContextLines
 from webpageGenerator import fillGraphHTMLFile, generateSearchPage, generateResultsPage, generateComparisonPage,\
     generateGraphOfTwoKeywords, generateContextPage, generateFeedbackPage
 from feedbackEmailSender import sendEmail
@@ -50,6 +50,14 @@ def remapResultsHelper(lineOfDialogue):
         "dvdReleaseYear": lineOfDialogue[7]
     }
 
+def remapContextResultsHelper(lineOfDialogue):
+    return {
+        "movieLineNumber": lineOfDialogue[0],
+        "movieStartTimeStamp": lineOfDialogue[1],
+        "movieEndTimeStamp": lineOfDialogue[2],
+        "movieLineText": removeBadCharacters(lineOfDialogue[3])
+    }
+
 def remapResults(results):
     # map tuples with list using helper function
     mapped = map(remapResultsHelper, results)
@@ -78,6 +86,10 @@ def remapResults(results):
             lineData.pop('dvdReleaseYear')
 
     return mappedAndGrouped
+
+def remapContextResults(results):
+    # map tuples with list using helper function
+    return map(remapContextResultsHelper, results)
 
 
 class App():
@@ -168,42 +180,36 @@ class App():
         if (keywordOrPhrase != self.keywordOrPhraseSearched or genre != self.genreSearched or
                         earliestReleaseYear != self.earliestReleaseYearSearched or
                         latestReleaseYear != self.latestReleaseYearSearched):
-            # this can be used to quickly return JSON for development
-            if DEBUG_MODE:
-                results = None
-                if keywordOrPhrase == "phone":
-                    with open('sampleData/phoneSampleOutput.json') as sampleData:
-                        results = json.load(sampleData)
-                        print results
-                else:
-                    results = search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,
-                                                 self.defaultEarliestReleaseYear)
-                    results = remapResults(results)
-                return {"results": results}
-            results = search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,
-                             self.defaultEarliestReleaseYear)
-            # store results, if not none
-            if not (results is None):
-                self.results = results
-            # else if there are no results, say so (and provide a back button)
-            else:
-                return "<p>Your Keyword/Phrase does not occur in the database (with specified parameters).<a href = '/moviesearch'> Back.</a></p>"
+
             # store params that were searched
             self.keywordOrPhraseSearched = keywordOrPhrase
             self.genreSearched = genre
             self.earliestReleaseYearSearched = earliestReleaseYear
             self.latestReleaseYearSearched = latestReleaseYear
+
+            results = None
+
+            # this can be used to quickly return JSON for development
+            if DEBUG_MODE and keywordOrPhrase == "phone":
+                with open('sampleData/phoneSampleOutput.json') as sampleData:
+                    results = json.load(sampleData)
+            else:
+                results = search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,
+                                             self.defaultEarliestReleaseYear)
+                results = remapResults(results)
+
+            # store results, if not none
+            if not (results is None):
+                self.results = results
+
+            return {"results": results}
+
         # if params (other than page number) are identical to previous search, use previous search results (implied)
         # generate html page of results
+        else:
+            return {"results": self.results}
 
-        remappedResults = remapResults(self.results)
-        print json.dumps(remappedResults)
-
-        return generateResultsPage(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear, self.results,
-                                   self.resultsPerPage, pageNumber, self.pathToMediaFiles)
-
-    def displayContextPage(self,oclcId,lineNumber,prevKeywordOrPhrase,prevGenre,prevEarliestReleaseYear,
-                           prevLatestReleaseYear,prevPageNumber):
+    def displayContextPage(self,oclcId,lineNumber):
         """
         Get the user's previous search term/params so we can create a back button. Display the context of the
         clicked result to the user.
@@ -222,6 +228,11 @@ class App():
 
         # switched to passing info about previous search through the URL: CGI scripts don't have persistence, can't
         # remember previous search without passing data through URL
+        contextLines = getContextLines(oclcId, lineNumber, 20)
+
+        results = remapContextResults(contextLines)
+        print results
+        return {"results": results}
         return generateContextPage(oclcId,lineNumber,prevKeywordOrPhrase,prevGenre,
                                    prevEarliestReleaseYear,prevLatestReleaseYear,prevPageNumber,
                                    self.pathToMediaFiles)
@@ -319,7 +330,7 @@ get('/moviesearch/')(appInstance.displaySearchPage)
 post('/moviesearch/')(appInstance.searchFromLandingPage)
 route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>/<pageNumber:int>')\
     (appInstance.displayResultsPage)
-route('/moviesearch/context/<oclcId:int>/<lineNumber:int>/<prevKeywordOrPhrase>/<prevGenre>/<prevEarliestReleaseYear:int>/<prevLatestReleaseYear:int>/<prevPageNumber:int>')\
+route('/moviesearch/context/<oclcId:int>/<lineNumber:int>')\
     (appInstance.displayContextPage)
 get('/moviesearch/compare')(appInstance.displayComparisonPage)
 post('/moviesearch/compare')(appInstance.graphComparison)
