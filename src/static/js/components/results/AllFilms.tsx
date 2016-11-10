@@ -6,11 +6,12 @@ export class AllFilms extends React.Component<any, any> {
     constructor() {
         super();
 
+        console.log(this);
         this.state = null;
     }
 
-    loadData() {
-        $.getJSON('http://localhost:8080/moviesearch/phone/All/1996/2016/1',  (data: FilmResultsDataWrapperI) => {
+    loadData(pathname: string) {
+        $.getJSON('http://localhost:8080/moviesearch' + pathname + '/1',  (data: FilmResultsDataWrapperI) => {
             this.state = {
                 films: data.results
             };
@@ -21,8 +22,17 @@ export class AllFilms extends React.Component<any, any> {
     }
 
     componentDidMount() {
-        this.loadData();
+        this.loadData(this.props.location.pathname);
     }
+
+
+       // TODO - implement this method in case new search terms are submitted and this component needs to rerendered
+    componentWillReceiveProps(nextProps: any) {
+        if (this.props.location.pathname !== nextProps.location.location.pathname) {
+            this.loadData(nextProps.props.location.pathname);
+        }
+    }
+
 
     render () {
         if (this.state) {

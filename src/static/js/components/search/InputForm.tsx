@@ -1,20 +1,56 @@
 import * as React from "react";
 
-import { Link } from 'react-router'
+import { Link, hashHistory } from 'react-router'
+
+import $ = require("jquery");
 
 let GENRES = ["Action", "Thriller", "Comedy", "Family", "Adventure", "Mystery", "Romance", "Sci-Fi", "Horror",
     "Drama", "Biography", "Fantasy", "Crime", "War", "Animation", "History", "Musical"];
 
-export class InputForm extends React.Component<any, {}> {
+let EARLIEST_RELEASE_YEAR = "1996";
+let LATEST_RELEASE_YEAR = "2016";
+
+export class InputForm extends React.Component<any, any> {
+
+    constructor(props:any) {
+        super(props);
+
+        this.handleFormSubmission = this.handleFormSubmission.bind(this);
+    }
+
+    /**
+     * Retrieve form data and push the new URL to the router
+     * @param event Used to prevent default form submission behavior
+     */
+    handleFormSubmission(event:any) {
+
+        // stop default form submission behavior
+        event.preventDefault();
+
+        // get the form data
+        var keywordOrPhrase = this.refs.keywordOrPhrase.value;
+        var genre = this.refs.genre.value;
+        var earliestReleaseYear = this.refs.earliestReleaseYear.value || EARLIEST_RELEASE_YEAR;
+        var latestReleaseYear = this.refs.latestReleaseYear.value || LATEST_RELEASE_YEAR;
+
+        // TODO - sanitize url
+
+        // update the URL
+        var newPath = `/${keywordOrPhrase}/${genre}/${earliestReleaseYear}/${latestReleaseYear}`;
+        hashHistory.push(newPath);
+    }
+
+
     render() {
         return (
-            <div>
-                <input name="keywordOrPhrase" type="text" placeholder="Keyword/phrase..." required
+            <form id="searchCriteria" onSubmit={this.handleFormSubmission}>
+                <input onChange={ (e) => this.setState({ keywordOrPhrase: e.target.value }) }
+                       ref="keywordOrPhrase" type="text" placeholder="Keyword/phrase..." required
                        oninvalid="this.setCustomValidity('A keyword or phrase is required')"
                        oninput="setCustomValidity('')"/>
                 <br />
                 Limit results to a specific genre:
-                <select name="genre">
+                <select ref="genre">
                     <option selected value="All">All Genres</option>
                     { GENRES.map( value => <option value={value}>{value}</option> ) }
                 </select>
@@ -22,19 +58,24 @@ export class InputForm extends React.Component<any, {}> {
                 Limit results to movies originally released between:
                 <br />
 
-                <input name="earliestReleaseYear" type="number" placeholder="1996" min="1996" max="2016" />
+                <input ref="earliestReleaseYear" type="number" placeholder={EARLIEST_RELEASE_YEAR} min={EARLIEST_RELEASE_YEAR} max={LATEST_RELEASE_YEAR} />
                 and
-                <input name="latestReleaseYear" type="number" placeholder="2016" min="1996" max="2016" />
+                <input ref="latestReleaseYear" type="number" placeholder={LATEST_RELEASE_YEAR} min={EARLIEST_RELEASE_YEAR} max={LATEST_RELEASE_YEAR} />
                 <br />
 
 
-                {/* TODO - add onclick event that sends form data using AJAX $ajaxSubmit or similar
+                {/*
+                    TODO - add onclick event that sends form data using AJAX $ajaxSubmit or similar
                     more information: http://stackoverflow.com/questions/1960240/jquery-ajax-submit-form
                     or use react router form
-                    https://github.com/insin/react-router-form */}
+                    https://github.com/insin/react-router-form
+                    http://stackoverflow.com/questions/31079158/how-to-handle-post-request-in-isomorphic-react-react-router-application
+                    https://github.com/ReactTraining/react-router/blob/c3cd9675bd8a31368f87da74ac588981cbd6eae7/examples/auth-flow/app.js
+                    https://facebook.github.io/react/docs/refs-and-the-dom.html
+                 */}
 
-                <Link className="btn btn-primary" to={"/phone/All/1996/2016"} >Search</Link>
-            </div>
+                <input type="submit" className="btn btn-primary" to={"/phone/All/1996/2016"} value="Search" />
+            </form>
 
         )
     }
