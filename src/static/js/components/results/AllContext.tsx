@@ -1,6 +1,5 @@
 import * as React from "react";
 
-import {ScreenshotWithCaption} from "./ScreenshotWithCaption";
 import {IndividualFilmResults} from "./IndividualFilmResults";
 
 export class AllContext extends React.Component<any, any> {
