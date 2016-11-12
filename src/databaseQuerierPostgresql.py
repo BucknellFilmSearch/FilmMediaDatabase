@@ -209,7 +209,8 @@ def getContextLines(oclcId,lineNumber,numLines):
     :return: 20 lines before and after the given line (list of lists)
     """
     session = Session()
-    query = session.query(distinct(MediaText.line_number), MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text).\
+    query = session.query(distinct(MediaText.line_number), MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text, MediaText.oclc_id, MediaMetadata.movie_title). \
+        join(MediaMetadata, MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaText.oclc_id == oclcId).\
         filter(MediaText.line_number.between((lineNumber - numLines), (lineNumber + numLines))).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
