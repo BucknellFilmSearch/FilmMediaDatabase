@@ -50,14 +50,6 @@ def remapResultsHelper(lineOfDialogue):
         "dvdReleaseYear": lineOfDialogue[7]
     }
 
-def remapContextResultsHelper(lineOfDialogue):
-    return {
-        "movieLineNumber": lineOfDialogue[0],
-        "movieStartTimeStamp": lineOfDialogue[1],
-        "movieEndTimeStamp": lineOfDialogue[2],
-        "movieLineText": removeBadCharacters(lineOfDialogue[3])
-    }
-
 def remapResults(results):
     # map tuples with list using helper function
     mapped = map(remapResultsHelper, results)
@@ -86,11 +78,6 @@ def remapResults(results):
             lineData.pop('dvdReleaseYear')
 
     return mappedAndGrouped
-
-def remapContextResults(results):
-    # map tuples with list using helper function
-    return map(remapContextResultsHelper, results)
-
 
 class App():
 
@@ -226,7 +213,7 @@ class App():
         # remember previous search without passing data through URL
         contextLines = getContextLines(oclcId, lineNumber, 20)
 
-        results = remapContextResults(contextLines)
+        results = remapResults(contextLines)
         print results
         return {"results": results}
         return generateContextPage(oclcId,lineNumber,prevKeywordOrPhrase,prevGenre,
