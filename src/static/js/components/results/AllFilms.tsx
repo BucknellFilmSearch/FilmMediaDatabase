@@ -11,12 +11,9 @@ export class AllFilms extends React.Component<any, any> {
 
     loadData(pathname: string) {
         $.getJSON('http://localhost:8080/moviesearch' + pathname,  (data: FilmResultsDataWrapperI) => {
-            this.state = {
+            this.setState({
                 films: data.results
-            };
-
-            // TODO - move this up so that a parent component delegates rendering to a child component
-            this.forceUpdate();
+            });
         });
     }
 

@@ -4,3 +4,4 @@ env/
 .idea/
 src/static/js/app.js*
 src/static/js/components/*/*.js*
+src/postgresSettings.py

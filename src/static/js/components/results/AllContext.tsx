@@ -2,7 +2,7 @@ import * as React from "react";
 
 import {IndividualFilmResults} from "./IndividualFilmResults";
 
-export class AllContext extends React.Component<any, any> {
+export class AllContext extends React.Component<any,any> {
     constructor() {
         super();
 
@@ -10,14 +10,12 @@ export class AllContext extends React.Component<any, any> {
     }
 
     loadData(pathname: string) {
-        $.getJSON('http://localhost:8080/moviesearch' + pathname,  (data: any) => {
-            this.state = {
+        $.getJSON('http://localhost:8080/moviesearch' + pathname,  (data: IndividualFilmDataI) => {
+            this.setState({
                 // get only the first element because only one film is returned for context
                 context: data.results[0]
-            };
+            });
             console.log(this.state.context);
-            // TODO - move this up so that a parent component delegates rendering to a child component
-            this.forceUpdate();
         });
     }
 
