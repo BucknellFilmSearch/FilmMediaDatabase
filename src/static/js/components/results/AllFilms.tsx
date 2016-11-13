@@ -48,6 +48,5 @@ export class AllFilms extends React.Component<any, any> {
                 </div>
             )
         }
-
     }
 }
