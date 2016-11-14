@@ -4,6 +4,7 @@
 /// <reference path="ts/jquery.d.ts" />
 /// <reference path="ts/Interfaces.d.ts" />
 /// <reference path="ts/react-router.d.ts" />
+/// <reference path="ts/jquery.flot.d.ts" />
 /// <amd-dependency path="jquery" />
 /// <amd-dependency path="react" />
 /// <amd-dependency path="react-dom" />

@@ -257,6 +257,7 @@ def occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latest
     :param earliestReleaseYear:
     :param latestReleaseYear:
     """
+    print "starting query"
     session = Session()
     if genre != "All":
         query = session.query(MediaMetadata.original_release_year, func.count(distinct(MediaText.oclc_id))).\
@@ -273,6 +274,7 @@ def occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latest
             filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
             filter(MediaMetadata.movie_or_tv_show == "Movie").\
             group_by(MediaMetadata.original_release_year)
+    print "ending query"
     return query.all()
 
 # rewritten for postgresql and sqlalchemy

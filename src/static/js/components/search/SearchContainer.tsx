@@ -4,24 +4,10 @@ import { InputForm } from "./InputForm";
 
 export class SearchContainer extends React.Component<any, {}> {
     render() {
-        var containerStyle = {
-            "text-align": "center",
-            "padding-top":"50px",
-            "padding-bottom":"150px"
-        };
-        var titleStyle = {
-            "font-size":"22px",
-            "font-weight": "bold"
-        };
-        var nameStyle = {
-            "font-size":"15px",
-            "font-weight": "bold"
-        };
-
         return (
-            <div style={containerStyle} class="filmSearch">
-                <span style={titleStyle}>The Film Search Engine</span><br />
-                <span style={nameStyle}> by Dr. John Hunter, Justin Eyster, and Dale Hartman<br />
+            <div id="mainSearchCover" class="filmSearch">
+                <span id="mainTitle">The Film Search Engine</span><br />
+                <span id="names"> by Dr. John Hunter, Justin Eyster, and Dale Hartman<br />
                   at Bucknell University</span><br />
                 <br />
                 Use the search box below to analyze the usage of a word/phrase <br /> within a

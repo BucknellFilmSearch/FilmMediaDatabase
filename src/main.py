@@ -3,6 +3,7 @@
 
 # enable debugging in web server environment
 import cgitb
+from webpageGenerator import percentageOfOccurrenceByReleaseYear
 cgitb.enable()
 
 __author__ = "Justin Eyster"
@@ -147,6 +148,15 @@ class App():
         redirectUrl = '/moviesearch/'+keywordOrPhrase+'/'+genre+'/'+str(earliestReleaseYear)+'/'+str(latestReleaseYear)+'/'+'1'
         redirect(redirectUrl)
 
+    def displayGraph(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
+        print "starting db query"
+        data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
+        print "ending db query"
+        twoDimensArrayOfVals = []
+        for item in data:
+            # create a two dimension array of values to insert into template to be graphed
+            twoDimensArrayOfVals.append([item[0], round(item[1])])
+        return {"results": twoDimensArrayOfVals}
 
     def displayResultsPage(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
         """
@@ -313,8 +323,11 @@ get('/moviesearch/')(appInstance.displaySearchPage)
 post('/moviesearch/')(appInstance.searchFromLandingPage)
 route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>')\
     (appInstance.displayResultsPage)
+route('/moviesearchgraph/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>')\
+    (appInstance.displayGraph)
 route('/moviesearch/context/<oclcId:int>/<lineNumber:int>')\
     (appInstance.displayContextPage)
+route()
 get('/moviesearch/compare')(appInstance.displayComparisonPage)
 post('/moviesearch/compare')(appInstance.graphComparison)
 get('/moviesearch/feedback')(appInstance.displayFeedbackPage)

@@ -17,7 +17,7 @@ DATABASE = {
     'host': ('50.87.248.230' if DEBUG_MODE else 'localhost'),
     # 'host': 'localhost',
     'database': 'filmtvse_cpcp',
-    'username': 'filmtvse_nasimi',
+    'username': 'filmtvse_radsliff',
     'password': 'BucknellDH17837!',
     'port': '5432'
 }

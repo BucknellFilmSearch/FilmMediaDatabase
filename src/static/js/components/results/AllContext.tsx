@@ -10,7 +10,7 @@ export class AllContext extends React.Component<any,any> {
     }
 
     loadData(pathname: string) {
-        $.getJSON('http://localhost:8080/moviesearch' + pathname,  (data: IndividualFilmDataI) => {
+        $.getJSON('http://localhost:8080/moviesearchgraph' + pathname,  (data: IndividualFilmDataI) => {
             this.setState({
                 // get only the first element because only one film is returned for context
                 context: data.results[0]

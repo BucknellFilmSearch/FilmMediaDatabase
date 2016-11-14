@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { IndividualFilmResults } from "./IndividualFilmResults";
 
+import {Graph} from "../graphs/Graph";
+
 export class AllFilms extends React.Component<any, any> {
     constructor() {
         super();
@@ -34,6 +36,7 @@ export class AllFilms extends React.Component<any, any> {
         if (this.state) {
             return (
                 <div>
+                    <Graph/>
                     {this.state.films.map(function (object: IndividualFilmDataI) {
                             return <IndividualFilmResults individualFilm={object}/>;
                         }
