@@ -149,9 +149,7 @@ class App():
         redirect(redirectUrl)
 
     def displayGraph(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
-        print "starting db query"
         data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
-        print "ending db query"
         twoDimensArrayOfVals = []
         for item in data:
             # create a two dimension array of values to insert into template to be graphed

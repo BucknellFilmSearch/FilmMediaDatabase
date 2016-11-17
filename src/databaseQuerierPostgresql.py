@@ -257,7 +257,6 @@ def occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latest
     :param earliestReleaseYear:
     :param latestReleaseYear:
     """
-    print "starting query"
     session = Session()
     if genre != "All":
         query = session.query(MediaMetadata.original_release_year, func.count(distinct(MediaText.oclc_id))).\
@@ -274,7 +273,6 @@ def occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latest
             filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
             filter(MediaMetadata.movie_or_tv_show == "Movie").\
             group_by(MediaMetadata.original_release_year)
-    print "ending query"
     return query.all()
 
 # rewritten for postgresql and sqlalchemy
@@ -290,6 +288,20 @@ def totalMoviesOfSpecifiedYear(year):
     return query.all()[0][0]
 
 # rewritten for postgresql and sqlalchemy
+def totalMoviesByYear():
+    """
+    Helper function. Counts total number of movies for each year.
+    :param year: year to count movies in.
+    """
+    session = Session()
+    query = session.query(MediaMetadata.original_release_year, func.count(distinct(MediaMetadata.oclc_id))).\
+        filter(MediaMetadata.movie_or_tv_show == "Movie").\
+        group_by(MediaMetadata.original_release_year).\
+        order_by(MediaMetadata.original_release_year.asc())
+
+    return query.all()
+
+# rewritten for postgresql and sqlalchemy
 def percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear):
     """
     Returns the percentages of movies containing the keyword/phrase for each
@@ -301,7 +313,10 @@ def percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseY
     :returns: list of lists - each item has the release year as first item, then the percentage of movies in that year
     that contain the search term
     """
+
+    # get count of search term by year
     counts = occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
+    print counts
     i = 0
     currYear = earliestReleaseYear
     while currYear <= latestReleaseYear:
@@ -312,9 +327,17 @@ def percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseY
         i+=1
         currYear+=1
     listOfPercentages = []
+
+    # get number of films for each year
+    movieCountsByYear = dict(totalMoviesByYear())
+
+    # generate list of occurences of search terms each year relative to number of films that year
     for count in counts:
-        if totalMoviesOfSpecifiedYear(count[0]) == 0:
-            listOfPercentages += [(count[0], 0.0)]
+        currentYear = count[0]
+        searchTermCount = count[1]
+        if currentYear in movieCountsByYear:
+            listOfPercentages += [(currentYear, 100 * searchTermCount / movieCountsByYear[currentYear])]
         else:
-            listOfPercentages += [(count[0], 100 * count[1] / totalMoviesOfSpecifiedYear(count[0]))]
+            listOfPercentages += [(currentYear, 0.0)]
+
     return listOfPercentages
