@@ -11,6 +11,7 @@ class ColorSearcher:
         # store boolean telling us if we should sort the results
         self.sorting = sorting
 
+    # CALL paralleSearch INSTEAD OF THIS
     def search(self, queryFeatures):
         """
         Take the descriptor of our search image and compute
@@ -32,6 +33,7 @@ class ColorSearcher:
         # return the results
         return results
 
+    # CALL THIS INSTEAD OF SEARCH
     def parallelSearch(self, queryFeatures):
 
         # create a pool of n processes to parallelize the search across
