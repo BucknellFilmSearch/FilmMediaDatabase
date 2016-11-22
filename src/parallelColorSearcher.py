@@ -34,22 +34,30 @@ class ColorSearcher:
         return results
 
     # CALL THIS INSTEAD OF SEARCH
-    def parallelSearch(self, queryFeatures, n=5):
+    def parallelSearch(self, queryFeatures, n=8):
 
         # TODO: try different values of n above and compare run time, optimize n.
-        # TODO: this should be done on the server machine, as the optimal n value
-        # TODO: will be system dependent.
+        # note: this should be done on the server machine, as the optimal n value
+        # will be system dependent.
 
-        # create a pool of n processes to parallelize the search across
-        # (n=5, to test. try different n values and compare runtime)
+        # could also try parallelizing just the search, or just the sort, neither, or both...& compare runtime
+
+        # create a pool of n processes to parallelize the search and sort across
+        # (n=8, to test. try different n values and compare runtime)
         p = Pool(n);
         # map the search function across the queryFeatures in parallel
         results = p.map(self.search, queryFeatures)
+        # if the above line causes an error, try
+        # results = p.map(self.search, (queryFeatures,))
 
+        # parallelized sort
         # sort the results, so that the more relevant results
         # (smaller numbers) are at the front of the list
         if self.sorting == True:
-            results = sorted([(v, k) for (k, v) in results.items()])
+            # map the sorting function across the processes of the pool
+            results = p.map(sorted,[(v, k) for (k, v) in results.items()])
+            # if the above line causes an error, try
+            # results = p.map(sorted,([(v,k) for (k,v) in results.items()],))
 
         # return the results
         return results
