@@ -17,13 +17,17 @@
   "dependencies": {
     "@types/flot": "0.0.28",
     "@types/jquery": "^2.0.39",
+    "@types/material-ui": "^0.16.48",
     "@types/react": "^15.0.3",
     "@types/react-dom": "^0.14.21",
     "@types/react-router": "^2.0.46",
+    "@types/react-tap-event-plugin": "0.0.30",
     "flot": "^0.8.0-alpha",
     "jquery": "^3.1.1",
+    "material-ui": "^0.16.7",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-router": "^3.0.2"
+    "react-router": "^3.0.2",
+    "react-tap-event-plugin": "^2.0.1"
   }
 }

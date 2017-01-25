@@ -1,4 +1,5 @@
 // Library imports
+import * as injectTapEventPlugin from 'react-tap-event-plugin'; // temporary dependency for material-ui
 import * as React from 'react';
 import * as ReactDOM from "react-dom";
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
@@ -12,6 +13,7 @@ import { AllContext } from "./components/results/AllContext";
 // Global settings
 export let DEBUG_MODE:boolean = true;
 
+injectTapEventPlugin();
 
 // http://stackoverflow.com/questions/32846337/how-to-fetch-the-new-data-in-response-to-react-router-change-with-redux
 // https://github.com/reactjs/redux/issues/227
