@@ -1,21 +1,28 @@
 import * as React from "react";
 import {DEBUG_MODE} from "../../app";
 
+import {GridTile} from 'material-ui/GridList';
+
 export class ScreenshotWithCaption extends React.Component<any, {}> {
 
     render() {
-        var movieOclcId = this.props.movieOclcId;
+        let movieOclcId = this.props.movieOclcId;
+        let imgSrc = DEBUG_MODE ?
+            "/static/imageFiles/720x480.jpg" :
+            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png";
 
         return (
-            <div>
-                <img className='thumbnail' style={{margin: "auto"}}
-                     src={DEBUG_MODE ? "/static/imageFiles/720x480.jpg" : "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png"}
-                     width='720' height='480'/>
-                <p className="list-group-item-text">Line #{ this.props.screenshotWithCaption.movieLineNumber }</p>
-                    <p className="list-group-item-text">From { this.props.screenshotWithCaption.movieStartTimeStamp }
-                        to { this.props.screenshotWithCaption.movieEndTimeStamp }</p>
-                <p className="list-group-item-text"> { this.props.screenshotWithCaption.movieLineText } </p>
-            </div>
+            <GridTile
+                title={`Line #${this.props.screenshotWithCaption.movieLineNumber}
+                        from ${this.props.screenshotWithCaption.movieStartTimeStamp}
+                        to ${this.props.screenshotWithCaption.movieEndTimeStamp}`
+                      }
+                subtitle={ this.props.screenshotWithCaption.movieLineText }
+                style={{'height': '180px'}}>
+
+                <img src={imgSrc} />
+
+            </GridTile>
         )
     }
 }

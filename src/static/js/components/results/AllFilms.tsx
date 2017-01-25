@@ -6,6 +6,11 @@ import { IndividualFilmResults } from "./IndividualFilmResults";
 
 import {FilmResultsDataWrapperI, IndividualFilmDataI} from "../../ts/Interfaces";
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import {deepOrange500} from 'material-ui/styles/colors';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+
 // import {Graph} from "../graphs/Graph";
 
 export class AllFilms extends React.Component<any, any> {
@@ -37,17 +42,25 @@ export class AllFilms extends React.Component<any, any> {
 
 
     render () {
+        const muiTheme = getMuiTheme({
+            palette: {
+                accent1Color: deepOrange500
+            }
+        });
+
         if (this.state) {
             return (
-                <div>
-                    {/*<Graph/>*/}
-                    {this.state.films.map(function (object: IndividualFilmDataI) {
-                            return <IndividualFilmResults
-                                key={`filmkey${object.movieOclcId}`}
-                                individualFilm={object} />;
-                        }
-                    )}
-                </div>
+                <MuiThemeProvider muiTheme={muiTheme}>
+                    <div>
+                        {/*<Graph/>*/}
+                        {this.state.films.map(function (object: IndividualFilmDataI) {
+                                return <IndividualFilmResults
+                                    key={`filmkey${object.movieOclcId}`}
+                                    individualFilm={object} />;
+                            }
+                        )}
+                    </div>
+                </MuiThemeProvider>
             );
         }
         else {
