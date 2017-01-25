@@ -1,8 +1,12 @@
 import * as React from "react";
 
+import * as $ from "jquery";
+
 import { IndividualFilmResults } from "./IndividualFilmResults";
 
-import {Graph} from "../graphs/Graph";
+import {FilmResultsDataWrapperI, IndividualFilmDataI} from "../../ts/Interfaces";
+
+// import {Graph} from "../graphs/Graph";
 
 export class AllFilms extends React.Component<any, any> {
     constructor() {
@@ -36,7 +40,7 @@ export class AllFilms extends React.Component<any, any> {
         if (this.state) {
             return (
                 <div>
-                    <Graph/>
+                    {/*<Graph/>*/}
                     {this.state.films.map(function (object: IndividualFilmDataI) {
                             return <IndividualFilmResults individualFilm={object}/>;
                         }

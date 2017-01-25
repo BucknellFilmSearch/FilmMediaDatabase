@@ -28,10 +28,10 @@ export class InputForm extends React.Component<any, any> {
         event.preventDefault();
 
         // get the form data
-        var keywordOrPhrase = this.refs.keywordOrPhrase.value;
-        var genre = this.refs.genre.value;
-        var earliestReleaseYear = this.refs.earliestReleaseYear.value || EARLIEST_RELEASE_YEAR;
-        var latestReleaseYear = this.refs.latestReleaseYear.value || LATEST_RELEASE_YEAR;
+        var keywordOrPhrase = this.refs["keywordOrPhrase"]["value"];
+        var genre = this.refs["genre"]["value"];
+        var earliestReleaseYear = this.refs["earliestReleaseYear"]["value"] || EARLIEST_RELEASE_YEAR;
+        var latestReleaseYear = this.refs["latestReleaseYear"]["value"] || LATEST_RELEASE_YEAR;
 
         // TODO - sanitize url
 
@@ -42,17 +42,16 @@ export class InputForm extends React.Component<any, any> {
 
 
     render() {
+        // TODO - make sure user types something into the search box
         return (
             <form id="searchCriteria" onSubmit={this.handleFormSubmission}>
                 <input onChange={ (e) => this.setState({ keywordOrPhrase: e.target.value }) }
-                       ref="keywordOrPhrase" type="text" placeholder="Keyword/phrase..." required
-                       oninvalid="this.setCustomValidity('A keyword or phrase is required')"
-                       oninput="setCustomValidity('')"/>
+                       ref="keywordOrPhrase" type="text" placeholder="Keyword/phrase..." required/>
                 <br />
                 Limit results to a specific genre:
-                <select ref="genre">
-                    <option selected value="All">All Genres</option>
-                    { GENRES.map( value => <option value={value}>{value}</option> ) }
+                <select defaultValue="All" ref="genre">
+                    <option value="All">All Genres</option>
+                    { GENRES.map( value => <option key={`$option${value}`} value={value}>{value}</option> ) }
                 </select>
                 <br />
                 Limit results to movies originally released between:
@@ -74,7 +73,7 @@ export class InputForm extends React.Component<any, any> {
                     https://facebook.github.io/react/docs/refs-and-the-dom.html
                  */}
 
-                <input type="submit" className="btn btn-primary" to={"/phone/All/1996/2016"} value="Search" />
+                <input type="submit" className="btn btn-primary" value="Search" />
             </form>
 
         )

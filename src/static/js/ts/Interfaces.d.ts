@@ -9,9 +9,9 @@ interface FilmResultsDataWrapperI {
     results: FilmResultsDataI
 }
 
-interface FilmResultsDataI extends Array<IndividualFilmDataI>{}
+export interface FilmResultsDataI extends Array<IndividualFilmDataI>{}
 
-interface IndividualFilmDataI {
+export interface IndividualFilmDataI {
     movieReleaseYear: number,
     dvdReleaseYear: number,
     movieTitle: string,

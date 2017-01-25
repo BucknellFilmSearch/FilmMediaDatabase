@@ -1,9 +1,6 @@
-/// <amd-dependency path="static/js/jquery.flot.min.js" />
-
 import * as React from "react";
-//import $ = require("jquery");
-// import * as $ from "jquery.flot.min.js";
-
+import * as $ from "jquery";
+// import * as
 
 export class Graph extends React.Component<any, {}> {
     componentDidMount() {

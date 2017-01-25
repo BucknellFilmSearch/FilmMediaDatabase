@@ -5,7 +5,7 @@ import { InputForm } from "./InputForm";
 export class SearchContainer extends React.Component<any, {}> {
     render() {
         return (
-            <div id="mainSearchCover" class="filmSearch">
+            <div id="mainSearchCover" className="filmSearch">
                 <span id="mainTitle">The Film Search Engine</span><br />
                 <span id="names"> by Dr. John Hunter, Justin Eyster, and Dale Hartman<br />
                   at Bucknell University</span><br />
@@ -20,10 +20,10 @@ export class SearchContainer extends React.Component<any, {}> {
                 </div>
 
                 <br />
-                <p><a class="hyperlink" href="/moviesearch/compare">OR Graph Two Keywords/Phrases</a></p>
+                <p><a className="hyperlink" href="/moviesearch/compare">OR Graph Two Keywords/Phrases</a></p>
                 <br />
                 <p>This site is a work in progress:</p>
-                <p><a class="hyperlink" href="/moviesearch/feedback">Comments Or Suggestions? Please Contact Us</a></p>
+                <p><a className="hyperlink" href="/moviesearch/feedback">Comments Or Suggestions? Please Contact Us</a></p>
             </div>
         );
     }

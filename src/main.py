@@ -12,8 +12,8 @@ __date__ = "$Jun 2, 2015 2:43:11 PM$"
 from datetime import datetime
 from bottle import route, run, install, template, request, get, post, static_file, redirect
 from databaseQuerierPostgresql import search, totalMovies, getContextLines
-from webpageGenerator import fillGraphHTMLFile, generateSearchPage, generateResultsPage, generateComparisonPage,\
-    generateGraphOfTwoKeywords, generateContextPage, generateFeedbackPage
+from webpageGenerator import generateSearchPage, generateComparisonPage,\
+    generateGraphOfTwoKeywords, generateFeedbackPage
 from feedbackEmailSender import sendEmail
 # The import below says it's unused, but it is used on the web server. Don't remove it.
 import cgi
@@ -224,9 +224,6 @@ class App():
         results = remapResults(contextLines)
         print results
         return {"results": results}
-        return generateContextPage(oclcId,lineNumber,prevKeywordOrPhrase,prevGenre,
-                                   prevEarliestReleaseYear,prevLatestReleaseYear,prevPageNumber,
-                                   self.pathToMediaFiles)
 
     def displayComparisonPage(self):
         """

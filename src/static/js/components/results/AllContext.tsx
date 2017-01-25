@@ -1,6 +1,10 @@
 import * as React from "react";
 
+import * as $ from "jquery";
+
 import {IndividualFilmResults} from "./IndividualFilmResults";
+
+import {IndividualFilmDataI} from "../../ts/Interfaces";
 
 export class AllContext extends React.Component<any,any> {
     constructor() {

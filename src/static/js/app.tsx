@@ -1,20 +1,7 @@
-/// <reference path="ts/require.d.ts"/>
-/// <reference path="ts/react.d.ts" />
-/// <reference path="ts/react-dom.d.ts" />
-/// <reference path="ts/jquery.d.ts" />
-/// <reference path="ts/Interfaces.d.ts" />
-/// <reference path="ts/react-router.d.ts" />
-/// <reference path="ts/jquery.flot.d.ts" />
-/// <amd-dependency path="jquery" />
-/// <amd-dependency path="react" />
-/// <amd-dependency path="react-dom" />
-/// <amd-dependency path="react-router" />
-
 // Library imports
-import $ = require("jquery");
-import React = require("react");
-import ReactDOM = require("react-dom");
-import { Router, Route, hashHistory, IndexRoute } from 'react-router'
+import * as React from 'react';
+import * as ReactDOM from "react-dom";
+import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 
 // React component imports
 import { SearchContainer } from "./components/search/SearchContainer";
