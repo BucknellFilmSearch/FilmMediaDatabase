@@ -106,7 +106,7 @@ var AllFilms = (function (_super) {
     AllFilms.prototype.render = function () {
         if (this.state) {
             return (React.createElement("div", null, this.state.films.map(function (object) {
-                return React.createElement(IndividualFilmResults_1.IndividualFilmResults, { individualFilm: object });
+                return React.createElement(IndividualFilmResults_1.IndividualFilmResults, { key: "filmkey" + object.movieOclcId, individualFilm: object });
             })));
         }
         else {
@@ -169,8 +169,9 @@ var IndividualFilmResults = (function (_super) {
     IndividualFilmResults.prototype.getScreenshotsWithCaption = function () {
         var _this = this;
         return this.props.individualFilm.results.map(function (object) {
-            var screenshotWithCaption = React.createElement(ScreenshotWithCaption_1.ScreenshotWithCaption, { screenshotWithCaption: object, movieOclcId: object });
-            return _this.props.fromContext ? (React.createElement("a", { className: "list-group-item" }, screenshotWithCaption)) : (React.createElement(react_router_1.Link, { to: "/context/" + _this.props.individualFilm.movieOclcId + "/" + object.movieLineNumber, className: "list-group-item" }, screenshotWithCaption));
+            var screenshotWithCaption = React.createElement(ScreenshotWithCaption_1.ScreenshotWithCaption, { key: "screenshot" + _this.props.movieOclcId + "linenumber" + object.movieLineNumber, screenshotWithCaption: object, movieOclcId: object });
+            var linkKey = "link" + _this.props.movieOclcId + "linenumber" + object.movieLineNumber;
+            return _this.props.fromContext ? (React.createElement("a", { key: linkKey, className: "list-group-item" }, screenshotWithCaption)) : (React.createElement(react_router_1.Link, { key: linkKey, to: "/context/" + _this.props.individualFilm.movieOclcId + "/" + object.movieLineNumber, className: "list-group-item" }, screenshotWithCaption));
         });
     };
     IndividualFilmResults.prototype.render = function () {

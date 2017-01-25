@@ -9,14 +9,18 @@ export class IndividualFilmResults extends React.Component<any, {}> {
 
     getScreenshotsWithCaption() {
         return this.props.individualFilm.results.map((object: any) => {
-            var screenshotWithCaption = <ScreenshotWithCaption screenshotWithCaption={object} movieOclcId={object} />;
+            var screenshotWithCaption = <ScreenshotWithCaption
+                key={`screenshot${this.props.movieOclcId}linenumber${object.movieLineNumber}`}
+                screenshotWithCaption={object} movieOclcId={object}
+            />;
+            let linkKey = `link${this.props.movieOclcId}linenumber${object.movieLineNumber}`;
             return this.props.fromContext ? (
-                <a className="list-group-item">
+                <a key={linkKey} className="list-group-item">
                     {screenshotWithCaption}
                 </a>
             ) : (
-                <Link
-                    to={"/context/" + this.props.individualFilm.movieOclcId + "/" + object.movieLineNumber}
+                <Link key={linkKey}
+                      to={"/context/" + this.props.individualFilm.movieOclcId + "/" + object.movieLineNumber}
                     className="list-group-item">
                     {screenshotWithCaption}
                 </Link>

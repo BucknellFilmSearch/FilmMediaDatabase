@@ -42,7 +42,9 @@ export class AllFilms extends React.Component<any, any> {
                 <div>
                     {/*<Graph/>*/}
                     {this.state.films.map(function (object: IndividualFilmDataI) {
-                            return <IndividualFilmResults individualFilm={object}/>;
+                            return <IndividualFilmResults
+                                key={`filmkey${object.movieOclcId}`}
+                                individualFilm={object} />;
                         }
                     )}
                 </div>
