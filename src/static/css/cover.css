@@ -7,6 +7,11 @@
   right: 255px;
 }
 
+.screenshotsGridList {
+  padding-right: 255px;
+  padding-top: 60px;
+}
+
 .metadataDrawer {
   right: 0px;
   padding-left: 20px !important;

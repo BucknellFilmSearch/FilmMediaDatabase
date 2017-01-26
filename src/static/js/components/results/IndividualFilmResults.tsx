@@ -4,7 +4,7 @@ import * as React from "react";
 import { ScreenshotWithCaption } from "./ScreenshotWithCaption";
 // import { Link } from "react-router";
 import {GridList} from 'material-ui/GridList';
-
+import Subheader from 'material-ui/Subheader';
 
 export class IndividualFilmResults extends React.Component<any, {}> {
 
@@ -33,10 +33,13 @@ export class IndividualFilmResults extends React.Component<any, {}> {
     render() {
         // TODO - make this responsive using http://broucz.github.io/react-inline-grid/
         return (
-            <GridList cellHeight={180}>
-                {/*<FilmMetadata metadata={this.props.individualFilm} />*/}
-                { this.getScreenshotsWithCaption() }
-            </GridList>
+            <div className="screenshotsGridList">
+                <Subheader>{`${this.props.individualFilm.movieTitle} (${this.props.individualFilm.movieReleaseYear})`}</Subheader>
+                <GridList cellHeight={180} cols={4}>
+                    {/*<FilmMetadata metadata={this.props.individualFilm} />*/}
+                    { this.getScreenshotsWithCaption() }
+                </GridList>
+            </div>
         )
     }
 }
