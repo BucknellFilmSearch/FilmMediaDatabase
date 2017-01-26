@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { FilmMetadata } from "./FilmMetadata";
+// import { FilmMetadata } from "./FilmMetadata";
 import { ScreenshotWithCaption } from "./ScreenshotWithCaption";
-import { Link } from "react-router";
+// import { Link } from "react-router";
 import {GridList} from 'material-ui/GridList';
 
 
@@ -31,6 +31,7 @@ export class IndividualFilmResults extends React.Component<any, {}> {
     }
 
     render() {
+        // TODO - make this responsive using http://broucz.github.io/react-inline-grid/
         return (
             <GridList cellHeight={180}>
                 {/*<FilmMetadata metadata={this.props.individualFilm} />*/}

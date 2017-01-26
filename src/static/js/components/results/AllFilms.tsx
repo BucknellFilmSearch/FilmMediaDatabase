@@ -10,6 +10,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
+import {MetadataDrawer} from './MetadataDrawer';
+import ResultsAppBar from './ResultsAppBar';
+
 
 // import {Graph} from "../graphs/Graph";
 
@@ -52,6 +55,8 @@ export class AllFilms extends React.Component<any, any> {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <div>
+                        <ResultsAppBar />
+                        <MetadataDrawer/>
                         {/*<Graph/>*/}
                         {this.state.films.map(function (object: IndividualFilmDataI) {
                                 return <IndividualFilmResults

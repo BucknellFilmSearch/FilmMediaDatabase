@@ -9,7 +9,6 @@ import { SearchContainer } from "./components/search/SearchContainer";
 import { AllFilms } from "./components/results/AllFilms";
 import { AllContext } from "./components/results/AllContext";
 
-
 // Global settings
 export let DEBUG_MODE:boolean = true;
 

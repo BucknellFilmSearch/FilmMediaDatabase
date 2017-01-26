@@ -53,10 +53,9 @@ height: 300px;
 html,
 body {
   height: 100%;
-  background-color: #333;
 }
 body {
-  color: #fff;
+  /*color: #fff;*/
   text-align: center;
 }
 textarea:focus, input:focus {
