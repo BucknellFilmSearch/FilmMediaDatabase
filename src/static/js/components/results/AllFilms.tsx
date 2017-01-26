@@ -7,7 +7,7 @@ import { IndividualFilmResults } from "./IndividualFilmResults";
 import {FilmResultsDataWrapperI, IndividualFilmDataI} from "../../ts/Interfaces";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {deepOrange500} from 'material-ui/styles/colors';
+import {cyan700, pinkA200, grey100, grey200, grey300, grey400} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import {MetadataDrawer} from './MetadataDrawer';
@@ -47,7 +47,12 @@ export class AllFilms extends React.Component<any, any> {
     render () {
         const muiTheme = getMuiTheme({
             palette: {
-                accent1Color: deepOrange500
+                primary1Color: grey400,
+                primary2Color: cyan700,
+                primary3Color: pinkA200,
+                accent1Color: grey400,
+                accent2Color: grey400,
+                accent3Color: grey400
             }
         });
 

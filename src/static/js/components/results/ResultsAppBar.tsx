@@ -9,6 +9,7 @@ const ResultsAppBar = () => (
         title={<span>Search Results</span>}
         iconElementRight={<FlatButton label="Filter" />}
         iconElementLeft={<Link to={"/"}><FlatButton label="Home" /></Link>}
+        className="resultsAppBar"
     />
 );
 
