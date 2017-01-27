@@ -4,12 +4,19 @@ import {DEBUG_MODE} from "../../app";
 import {connect} from 'react-redux'
 import {GridTile} from 'material-ui/GridList';
 
+import LazyLoad from 'react-lazyload';  // tslint:disable-line:no-any variable-name
+import CircularProgress from 'material-ui/CircularProgress';
+
+
 class ScreenshotWithCaption extends React.Component<any, any> {
 
     render() {
-        let movieOclcId = this.props.movieOclcId;
-        let imgSrc = DEBUG_MODE ?
-            "/static/imageFiles/720x480.jpg" :
+        let movieOclcId = this.props.movieDetails.movieOclcId;
+        // let imgSrc = DEBUG_MODE ?
+        //     "/static/imageFiles/720x480.jpg" :
+        //     "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png";
+
+        let imgSrc =
             "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png";
 
         return (
@@ -21,9 +28,12 @@ class ScreenshotWithCaption extends React.Component<any, any> {
                 subtitle={ this.props.screenshotWithCaption.movieLineText }
                 style={{'height': '180px'}}
             >
-                <img src={imgSrc} onMouseEnter={() => this.props.onMouseEnterScreenshot()}
-                     onMouseLeave={() => this.props.onMouseLeaveScreenshot()} />
-
+                <LazyLoad height={180} placeholder={<CircularProgress />}>
+                    <img src={imgSrc} height={'180px'}
+                         onMouseEnter={() => this.props.onMouseEnterScreenshot()}
+                         onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
+                    />
+                </LazyLoad>
             </GridTile>
         )
     }

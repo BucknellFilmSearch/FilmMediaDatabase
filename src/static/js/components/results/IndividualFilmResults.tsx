@@ -6,6 +6,7 @@ import { ConnectedScreenshotWithCaption } from "./ScreenshotWithCaption";
 import {GridList} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
 
+
 export class IndividualFilmResults extends React.Component<any, {}> {
 
     getScreenshotsWithCaption() {
@@ -13,8 +14,8 @@ export class IndividualFilmResults extends React.Component<any, {}> {
             return (
                 <ConnectedScreenshotWithCaption
                 key={`screenshot${this.props.individualFilm.movieTitle}linenumber${object.movieLineNumber}`}
-                screenshotWithCaption={object} movieDetails={this.props.individualFilm}
-            />);
+                screenshotWithCaption={object} movieDetails={this.props.individualFilm}/>
+            );
             // let linkKey = `link${this.props.movieOclcId}linenumber${object.movieLineNumber}`;
             // return this.props.fromContext ? (
             //     <a key={linkKey} className="list-group-item">
