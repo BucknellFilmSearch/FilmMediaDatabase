@@ -3,7 +3,6 @@ import { InputForm } from "./InputForm";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {deepOrange500} from 'material-ui/styles/colors';
-import RaisedButton from 'material-ui/RaisedButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 export class SearchContainer extends React.Component<any, {}> {
@@ -23,8 +22,6 @@ export class SearchContainer extends React.Component<any, {}> {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div id="mainSearchCover" className="filmSearch">
-                    <RaisedButton label="Pop Out" secondary={true} onTouchTap={this.handleTap} />
-
                     <span id="mainTitle">The Film Search Engine</span><br />
                     <span id="names"> by Dr. John Hunter, Justin Eyster, and Dale Hartman<br />
                       at Bucknell University</span><br />

@@ -1,9 +1,10 @@
 import * as React from "react";
 import {DEBUG_MODE} from "../../app";
 
+import {connect} from 'react-redux'
 import {GridTile} from 'material-ui/GridList';
 
-export class ScreenshotWithCaption extends React.Component<any, {}> {
+class ScreenshotWithCaption extends React.Component<any, {}> {
 
     render() {
         let movieOclcId = this.props.movieOclcId;
@@ -19,10 +20,49 @@ export class ScreenshotWithCaption extends React.Component<any, {}> {
                       }
                 subtitle={ this.props.screenshotWithCaption.movieLineText }
                 style={{'height': '180px'}}>
-
+                onMouseEnter={() => this.props.onMouseEnterScreenshot()}
+                onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
                 <img src={imgSrc} />
 
             </GridTile>
         )
     }
+
 }
+
+const mouseEnterScreenshot = (movieOclcId, movieTitle) => {
+    return {
+        type: 'MOUSE_ENTER_SCREENSHOT',
+        movieOclcId,
+        movieTitle
+    }
+};
+
+const mouseLeaveScreenshot = () => {
+    return {
+        type: 'MOUSE_LEAVE_SCREENSHOT'
+    };
+};
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        highlight: {
+            movieOclcId: state.hoverMovieOclcId,
+            movieTitle: state.hoverMovieTitle
+        }
+    }
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch, screenshotProps) {
+    return {
+        onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieOclcId, screenshotProps.movieTitle)),
+        onMouseLeaveScreenshot: () => dispatch(mouseLeaveScreenshot()),
+    }
+}
+
+export const ConnectedScreenshotWithCaption = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ScreenshotWithCaption);

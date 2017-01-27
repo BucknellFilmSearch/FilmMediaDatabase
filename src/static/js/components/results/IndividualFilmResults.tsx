@@ -1,7 +1,7 @@
 import * as React from "react";
 
 // import { FilmMetadata } from "./FilmMetadata";
-import { ScreenshotWithCaption } from "./ScreenshotWithCaption";
+import { ConnectedScreenshotWithCaption } from "./ScreenshotWithCaption";
 // import { Link } from "react-router";
 import {GridList} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
@@ -11,7 +11,7 @@ export class IndividualFilmResults extends React.Component<any, {}> {
     getScreenshotsWithCaption() {
         return this.props.individualFilm.results.map((object: any) => {
             return (
-                <ScreenshotWithCaption
+                <ConnectedScreenshotWithCaption
                 key={`screenshot${this.props.movieOclcId}linenumber${object.movieLineNumber}`}
                 screenshotWithCaption={object} movieOclcId={object}
             />);

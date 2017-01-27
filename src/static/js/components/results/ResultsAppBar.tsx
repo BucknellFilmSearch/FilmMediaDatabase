@@ -8,7 +8,7 @@ const ResultsAppBar = () => (
     <AppBar
         title={<span>Search Results</span>}
         iconElementRight={<FlatButton label="Filter" />}
-        iconElementLeft={<Link to={"/"}><FlatButton label="Home" /></Link>}
+        iconElementLeft={<Link to={"/"}><FlatButton style={{'color': 'white'}} label="Home" /></Link>}
         className="resultsAppBar"
     />
 );

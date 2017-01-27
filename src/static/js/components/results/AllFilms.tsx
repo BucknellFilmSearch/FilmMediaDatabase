@@ -7,7 +7,7 @@ import { IndividualFilmResults } from "./IndividualFilmResults";
 import {FilmResultsDataWrapperI, IndividualFilmDataI} from "../../ts/Interfaces";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {cyan700, pinkA200, grey100, grey200, grey300, grey400} from 'material-ui/styles/colors';
+import {cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import {MetadataDrawer} from './MetadataDrawer';
@@ -47,18 +47,17 @@ export class AllFilms extends React.Component<any, any> {
     render () {
         const muiTheme = getMuiTheme({
             palette: {
-                primary1Color: grey400,
+                primary1Color: grey800,
                 primary2Color: cyan700,
                 primary3Color: pinkA200,
-                accent1Color: grey400,
-                accent2Color: grey400,
-                accent3Color: grey400
+                accent1Color: grey800,
+                accent2Color: grey800,
+                accent3Color: grey800
             }
         });
-
-        if (this.state) {
-            return (
-                <MuiThemeProvider muiTheme={muiTheme}>
+        return (
+            <MuiThemeProvider muiTheme={muiTheme}>
+                {this.state ? (
                     <div>
                         <ResultsAppBar />
                         <MetadataDrawer/>
@@ -70,15 +69,14 @@ export class AllFilms extends React.Component<any, any> {
                             }
                         )}
                     </div>
-                </MuiThemeProvider>
-            );
-        }
-        else {
-            return (
-                <div>
-                    <h2>Loading Relevant Films...</h2>
-                </div>
-            )
-        }
+                    ):
+                    (
+                    <div>
+                        <h2>Loading Relevant Films...</h2>
+                    </div>
+                    )
+                }
+            </MuiThemeProvider>
+        );
     }
 }

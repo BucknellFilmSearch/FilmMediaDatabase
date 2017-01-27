@@ -8,8 +8,9 @@
 }
 
 .screenshotsGridList {
-  padding-right: 255px;
+  padding-right: 265px;
   padding-top: 60px;
+  padding-left: 10px;
 }
 
 .metadataDrawer {
