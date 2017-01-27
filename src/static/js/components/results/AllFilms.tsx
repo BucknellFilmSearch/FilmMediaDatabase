@@ -10,7 +10,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-import {MetadataDrawer} from './MetadataDrawer';
+import {ConnectedMetadataDrawer} from './MetadataDrawer';
 import ResultsAppBar from './ResultsAppBar';
 
 
@@ -60,7 +60,7 @@ export class AllFilms extends React.Component<any, any> {
                 {this.state ? (
                     <div>
                         <ResultsAppBar />
-                        <MetadataDrawer/>
+                        <ConnectedMetadataDrawer/>
                         {/*<Graph/>*/}
                         {this.state.films.map(function (object: IndividualFilmDataI) {
                                 return <IndividualFilmResults

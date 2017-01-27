@@ -19,6 +19,10 @@
   padding-top: 64px !important;
 }
 
+.screenshotsGridList > div:nth-child(2) > div:hover {
+  cursor: pointer;
+}
+
 /* Styling for search page */
 #mainSearchCover {
   text-align: center;

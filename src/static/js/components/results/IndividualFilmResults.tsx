@@ -12,8 +12,8 @@ export class IndividualFilmResults extends React.Component<any, {}> {
         return this.props.individualFilm.results.map((object: any) => {
             return (
                 <ConnectedScreenshotWithCaption
-                key={`screenshot${this.props.movieOclcId}linenumber${object.movieLineNumber}`}
-                screenshotWithCaption={object} movieOclcId={object}
+                key={`screenshot${this.props.individualFilm.movieTitle}linenumber${object.movieLineNumber}`}
+                screenshotWithCaption={object} movieDetails={this.props.individualFilm}
             />);
             // let linkKey = `link${this.props.movieOclcId}linenumber${object.movieLineNumber}`;
             // return this.props.fromContext ? (

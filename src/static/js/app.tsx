@@ -19,12 +19,15 @@ export let DEBUG_MODE:boolean = true;
 injectTapEventPlugin();
 
 
-export const reducer = (state = {}, action) => {
+export const reducer = (state = {}, action):any => {
+    console.log(action);
     switch (action.type) {
         case 'MOUSE_ENTER_SCREENSHOT':
+            console.log('enter');
             return {
                 hoverMovieOclcId: action.movieOclcId,
-                hoverMovieTitle: action.movieTitle
+                hoverMovieTitle: action.movieTitle,
+                hoverCaption: action.movieLineText
             };
         case 'MOUSE_LEAVE_SCREENSHOT':
             return {};

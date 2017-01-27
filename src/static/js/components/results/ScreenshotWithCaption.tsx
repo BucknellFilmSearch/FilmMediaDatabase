@@ -4,7 +4,7 @@ import {DEBUG_MODE} from "../../app";
 import {connect} from 'react-redux'
 import {GridTile} from 'material-ui/GridList';
 
-class ScreenshotWithCaption extends React.Component<any, {}> {
+class ScreenshotWithCaption extends React.Component<any, any> {
 
     render() {
         let movieOclcId = this.props.movieOclcId;
@@ -19,10 +19,10 @@ class ScreenshotWithCaption extends React.Component<any, {}> {
                         to ${this.props.screenshotWithCaption.movieEndTimeStamp}`
                       }
                 subtitle={ this.props.screenshotWithCaption.movieLineText }
-                style={{'height': '180px'}}>
-                onMouseEnter={() => this.props.onMouseEnterScreenshot()}
-                onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
-                <img src={imgSrc} />
+                style={{'height': '180px'}}
+            >
+                <img src={imgSrc} onMouseEnter={() => this.props.onMouseEnterScreenshot()}
+                     onMouseLeave={() => this.props.onMouseLeaveScreenshot()} />
 
             </GridTile>
         )
@@ -30,11 +30,12 @@ class ScreenshotWithCaption extends React.Component<any, {}> {
 
 }
 
-const mouseEnterScreenshot = (movieOclcId, movieTitle) => {
+const mouseEnterScreenshot = (movieOclcId, movieTitle, movieLineText) => {
     return {
         type: 'MOUSE_ENTER_SCREENSHOT',
         movieOclcId,
-        movieTitle
+        movieTitle,
+        movieLineText
     }
 };
 
@@ -47,7 +48,7 @@ const mouseLeaveScreenshot = () => {
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
-        highlight: {
+        hover: {
             movieOclcId: state.hoverMovieOclcId,
             movieTitle: state.hoverMovieTitle
         }
@@ -57,7 +58,7 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch, screenshotProps) {
     return {
-        onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieOclcId, screenshotProps.movieTitle)),
+        onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieDetails.movieOclcId, screenshotProps.movieDetails.movieTitle, screenshotProps.screenshotWithCaption.movieLineText)),
         onMouseLeaveScreenshot: () => dispatch(mouseLeaveScreenshot()),
     }
 }
