@@ -2,8 +2,6 @@
 env/
 *.pyc
 .idea/
-src/static/js/app.js*
-src/static/js/components/*/*.js*
 src/postgresSettings.py
 node_modules
 bundle.js
