@@ -19,7 +19,7 @@ export let DEBUG_MODE = true;
 injectTapEventPlugin();
 
 
-export const reducer = (state = {}, action) => {
+export const reducer = (state = {search: null}, action) => {
     console.log(action);
     switch (action.type) {
         case 'MOUSE_ENTER_SCREENSHOT':
@@ -31,11 +31,25 @@ export const reducer = (state = {}, action) => {
                 hoverCaption: action.movieLineText
             };
         case 'MOUSE_LEAVE_SCREENSHOT':
-            return {};
+            return {
+                ...state
+            };
         case 'REQUEST_NEW_SEARCH_TERM':
-            return {};
+            return {
+                ...state,
+                search: {
+                    "status": "loading",
+                    "response": null
+                }
+            };
         case 'RECEIVE_NEW_SEARCH_TERM':
-            return {};
+            return {
+                ...state,
+                search: {
+                    "status": "loaded",
+                    "response": action.response
+                }
+            };
         default:
             return state
     }

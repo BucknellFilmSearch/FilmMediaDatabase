@@ -18,7 +18,9 @@ class AllFilms extends React.Component {
     constructor() {
         super();
 
-        this.state = null;
+        this.state = {
+            "status": null
+        };
     }
 
     // This function has been converted to redux down below in fetchNewSearchTerm
@@ -38,6 +40,13 @@ class AllFilms extends React.Component {
         if (this.props.location.pathname !== nextProps.location.pathname) {
             this.props.fetchNewSearchTerm();
         }
+
+        if (nextProps.search !== undefined) {
+            this.setState(
+                nextProps.search
+            )
+        }
+        console.log(nextProps);
     }
 
 
@@ -54,23 +63,23 @@ class AllFilms extends React.Component {
         });
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
-                {this.state ? (
-                    <div>
-                        <ResultsAppBar />
-                        <ConnectedMetadataDrawer/>
-                        {/*<Graph/>*/}
-                        {this.state.films.map(function (object) {
-                                return <IndividualFilmResults
-                                    key={`filmkey${object.movieOclcId}`}
-                                    individualFilm={object} />;
-                            }
-                        )}
-                    </div>
-                    ):
+                {this.state.status == null || this.state.status == "loading" ? (
+                        <div>
+                            <h2>Loading Relevant Films...</h2>
+                        </div>
+                    ) :
                     (
-                    <div>
-                        <h2>Loading Relevant Films...</h2>
-                    </div>
+                        <div>
+                            <ResultsAppBar />
+                            <ConnectedMetadataDrawer/>
+                            {/*<Graph/>*/}
+                            {this.state.response.map(function (object) {
+                                    return <IndividualFilmResults
+                                        key={`filmkey${object.movieOclcId}`}
+                                        individualFilm={object} />;
+                                }
+                            )}
+                        </div>
                     )
                 }
             </MuiThemeProvider>
@@ -85,8 +94,6 @@ export const requestNewSearchTerm = () => {
 };
 
 const receiveNewSearchTerm = (response) => {
-    console.log(response);
-    global.response = response;
     return {
         type: 'RECEIVE_NEW_SEARCH_TERM',
         response
@@ -104,8 +111,10 @@ const fetchNewSearchTerm = (searchTerm) => {
 };
 
 // Map Redux state to component props
-function mapStateToProps() {
-    return {}
+function mapStateToProps(state) {
+    return {
+        search: state.search
+    }
 }
 
 // Map Redux actions to component props

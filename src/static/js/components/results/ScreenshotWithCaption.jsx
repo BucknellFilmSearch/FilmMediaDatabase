@@ -12,12 +12,12 @@ class ScreenshotWithCaption extends React.Component {
 
     render() {
         let movieOclcId = this.props.movieDetails.movieOclcId;
-        // let imgSrc = DEBUG_MODE ?
-        //     "/static/imageFiles/720x480.jpg" :
-        //     "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png";
-
-        let imgSrc =
+        let imgSrc = DEBUG_MODE ?
+            "/static/imageFiles/720x480.jpg" :
             "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png";
+
+        // let imgSrc =
+        //     "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png";
 
         return (
             <GridTile
