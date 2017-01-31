@@ -40,12 +40,11 @@ class ScreenshotWithCaption extends React.Component<any, any> {
 
 }
 
-const mouseEnterScreenshot = (movieOclcId, movieTitle, movieLineText) => {
+const mouseEnterScreenshot = (movieOclcId, movieLineNumber) => {
     return {
         type: 'MOUSE_ENTER_SCREENSHOT',
         movieOclcId,
-        movieTitle,
-        movieLineText
+        movieLineNumber
     }
 };
 
@@ -68,8 +67,8 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch, screenshotProps) {
     return {
-        onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieDetails.movieOclcId, screenshotProps.movieDetails.movieTitle, screenshotProps.screenshotWithCaption.movieLineText)),
-        onMouseLeaveScreenshot: () => dispatch(mouseLeaveScreenshot()),
+        onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieDetails.movieOclcId, screenshotProps.screenshotWithCaption.movieLineNumber)),
+        onMouseLeaveScreenshot: () => dispatch(mouseLeaveScreenshot())
     }
 }
 

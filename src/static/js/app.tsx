@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 
 // React component imports
 import { SearchContainer } from "./components/search/SearchContainer";
-import { AllFilms } from "./components/results/AllFilms";
+import { ConnectedAllFilms } from "./components/results/AllFilms";
 import { AllContext } from "./components/results/AllContext";
 
 // Global settings
@@ -25,11 +25,16 @@ export const reducer = (state = {}, action):any => {
         case 'MOUSE_ENTER_SCREENSHOT':
             console.log('enter');
             return {
+                ...state,
                 hoverMovieOclcId: action.movieOclcId,
                 hoverMovieTitle: action.movieTitle,
                 hoverCaption: action.movieLineText
             };
         case 'MOUSE_LEAVE_SCREENSHOT':
+            return {};
+        case 'REQUEST_NEW_SEARCH_TERM':
+            return {};
+        case 'RECEIVE_NEW_SEARCH_TERM':
             return {};
         default:
             return state
@@ -48,7 +53,7 @@ ReactDOM.render((
         <Router history={hashHistory}>
             <Route path="/">
                 <IndexRoute component={SearchContainer}/>
-                <Route path=":term/:genre/:startYear/:endYear" component={AllFilms} />
+                <Route path=":term/:genre/:startYear/:endYear" component={ConnectedAllFilms} />
                 <Route path="context/:oclc/:line" component={AllContext} />
             </Route>
         </Router>
