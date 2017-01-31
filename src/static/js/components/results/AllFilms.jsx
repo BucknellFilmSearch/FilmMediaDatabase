@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { IndividualFilmResults } from "./IndividualFilmResults.jsx";
+import { ConnectedIndividualFilmResults } from "./IndividualFilmResults.jsx";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
@@ -74,7 +74,7 @@ class AllFilms extends React.Component {
                             <ConnectedMetadataDrawer/>
                             {/*<Graph/>*/}
                             {this.state.response.map(function (object) {
-                                    return <IndividualFilmResults
+                                    return <ConnectedIndividualFilmResults
                                         key={`filmkey${object.movieOclcId}`}
                                         individualFilm={object} />;
                                 }

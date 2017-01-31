@@ -11,21 +11,19 @@ import CircularProgress from 'material-ui/CircularProgress';
 class ScreenshotWithCaption extends React.Component {
 
     render() {
-        let movieOclcId = this.props.movieDetails.movieOclcId;
         let imgSrc = DEBUG_MODE ?
             "/static/imageFiles/720x480.jpg" :
-            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png";
+            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.movieOclcId + "/" + this.props.screenshotDetails.movieLineNumber + ".png";
 
         // let imgSrc =
-        //     "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png";
+        //     "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.movieOclcId + "/" + this.props.screenshotWithCaption.movieLineNumber + ".png";
 
         return (
             <GridTile
-                title={`Line #${this.props.screenshotWithCaption.movieLineNumber}
-                        from ${this.props.screenshotWithCaption.movieStartTimeStamp}
-                        to ${this.props.screenshotWithCaption.movieEndTimeStamp}`
-                      }
-                subtitle={ this.props.screenshotWithCaption.movieLineText }
+                title={`Line #${this.props.screenshotDetails.movieLineNumber}
+                        from ${this.props.screenshotDetails.movieStartTimeStamp}
+                        to ${this.props.screenshotDetails.movieEndTimeStamp}`}
+                subtitle={ this.props.screenshotDetails.movieLineText }
                 style={{'height': '180px'}}
             >
                 <LazyLoad height={180} placeholder={<CircularProgress />}>
@@ -56,18 +54,13 @@ const mouseLeaveScreenshot = () => {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    return {
-        hover: {
-            movieOclcId: state.hoverMovieOclcId,
-            movieTitle: state.hoverMovieTitle
-        }
-    }
+    return {}
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch, screenshotProps) {
     return {
-        onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieDetails.movieOclcId, screenshotProps.screenshotWithCaption.movieLineNumber)),
+        onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber)),
         onMouseLeaveScreenshot: () => dispatch(mouseLeaveScreenshot())
     }
 }

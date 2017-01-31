@@ -5,6 +5,9 @@ import { ConnectedScreenshotWithCaption } from "./ScreenshotWithCaption.jsx";
 // import { Link } from "react-router";
 import {GridList} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
+import Waypoint from 'react-waypoint';
+import {connect} from 'react-redux'
+
 
 
 export class IndividualFilmResults extends React.Component {
@@ -14,7 +17,7 @@ export class IndividualFilmResults extends React.Component {
             return (
                 <ConnectedScreenshotWithCaption
                 key={`screenshot${this.props.individualFilm.movieTitle}linenumber${object.movieLineNumber}`}
-                screenshotWithCaption={object} movieDetails={this.props.individualFilm}/>
+                screenshotDetails={object} movieOclcId={this.props.individualFilm.movieOclcId}/>
             );
             // let linkKey = `link${this.props.movieOclcId}linenumber${object.movieLineNumber}`;
             // return this.props.fromContext ? (
@@ -36,6 +39,9 @@ export class IndividualFilmResults extends React.Component {
         return (
             <div className="screenshotsGridList">
                 <Subheader>{`${this.props.individualFilm.movieTitle} (${this.props.individualFilm.movieReleaseYear})`}</Subheader>
+                <Waypoint
+                    onEnter={() => this.props.onScrollIntoFilm()}
+                />
                 <GridList cellHeight={180} cols={4}>
                     {/*<FilmMetadata metadata={this.props.individualFilm} />*/}
                     { this.getScreenshotsWithCaption() }
@@ -44,3 +50,29 @@ export class IndividualFilmResults extends React.Component {
         )
     }
 }
+
+const scrollIntoFilm = (movieOclcId) => {
+    console.log('scroll into:');
+    console.log(movieOclcId);
+    return {
+        type: 'SCROLL_INTO_FILM',
+        movieOclcId
+    }
+};
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {}
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch, filmProps) {
+    return {
+        onScrollIntoFilm: () => dispatch(scrollIntoFilm(filmProps.individualFilm.movieOclcId))
+    }
+}
+
+export const ConnectedIndividualFilmResults = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(IndividualFilmResults);

@@ -27,12 +27,13 @@ export const reducer = (state = {search: null}, action) => {
             return {
                 ...state,
                 hoverMovieOclcId: action.movieOclcId,
-                hoverMovieTitle: action.movieTitle,
-                hoverCaption: action.movieLineText
+                hoverMovieLineNumber: action.movieLineNumber
             };
         case 'MOUSE_LEAVE_SCREENSHOT':
             return {
-                ...state
+                ...state,
+                hoverMovieOclcId: null,
+                hoverMovieLineNumber: null
             };
         case 'REQUEST_NEW_SEARCH_TERM':
             return {
@@ -49,7 +50,14 @@ export const reducer = (state = {search: null}, action) => {
                     "status": "loaded",
                     "response": action.response
                 }
+                // TODO - add default as first film, if needed
+                // currentMovieOclcId: null
             };
+        case 'SCROLL_INTO_FILM':
+            return {
+                ...state,
+                currentMovieOclcId: action.movieOclcId
+            }
         default:
             return state
     }
