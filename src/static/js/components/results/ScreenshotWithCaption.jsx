@@ -1,14 +1,14 @@
 import * as React from "react";
-import {DEBUG_MODE} from "../../app";
+import {DEBUG_MODE} from "../../app.jsx";
 
 import {connect} from 'react-redux'
 import {GridTile} from 'material-ui/GridList';
 
-import LazyLoad from 'react-lazyload';  // tslint:disable-line:no-any variable-name
+import LazyLoad from 'react-lazyload'; 
 import CircularProgress from 'material-ui/CircularProgress';
 
 
-class ScreenshotWithCaption extends React.Component<any, any> {
+class ScreenshotWithCaption extends React.Component {
 
     render() {
         let movieOclcId = this.props.movieDetails.movieOclcId;

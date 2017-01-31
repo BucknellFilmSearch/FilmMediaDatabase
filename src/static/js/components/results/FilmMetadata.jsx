@@ -3,7 +3,7 @@ import * as React from "react";
 import {DEBUG_MODE} from "../../app";
 
 
-export class FilmMetadata extends React.Component<any, {}> {
+export class FilmMetadata extends React.Component {
     render() {
         return (
             <a className="list-group-item">

@@ -1,7 +1,7 @@
 // Library imports
-import * as injectTapEventPlugin from 'react-tap-event-plugin'; // temporary dependency for material-ui
-import * as React from 'react';
-import * as ReactDOM from "react-dom";
+import injectTapEventPlugin from 'react-tap-event-plugin'; // temporary dependency for material-ui
+import React from 'react';
+import ReactDOM from "react-dom";
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 
 import { createStore, applyMiddleware } from 'redux';
@@ -9,17 +9,17 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
 // React component imports
-import { SearchContainer } from "./components/search/SearchContainer";
-import { ConnectedAllFilms } from "./components/results/AllFilms";
-import { AllContext } from "./components/results/AllContext";
+import { SearchContainer } from "./components/search/SearchContainer.jsx";
+import { ConnectedAllFilms } from "./components/results/AllFilms.jsx";
+import { AllContext } from "./components/results/AllContext.jsx";
 
 // Global settings
-export let DEBUG_MODE:boolean = true;
+export let DEBUG_MODE = true;
 
 injectTapEventPlugin();
 
 
-export const reducer = (state = {}, action):any => {
+export const reducer = (state = {}, action) => {
     console.log(action);
     switch (action.type) {
         case 'MOUSE_ENTER_SCREENSHOT':

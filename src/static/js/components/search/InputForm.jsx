@@ -2,17 +2,15 @@ import * as React from "react";
 
 import { Link, hashHistory } from 'react-router'
 
-import $ = require("jquery");
-
 let GENRES = ["Action", "Thriller", "Comedy", "Family", "Adventure", "Mystery", "Romance", "Sci-Fi", "Horror",
     "Drama", "Biography", "Fantasy", "Crime", "War", "Animation", "History", "Musical"];
 
 let EARLIEST_RELEASE_YEAR = "1996";
 let LATEST_RELEASE_YEAR = "2016";
 
-export class InputForm extends React.Component<any, any> {
+export class InputForm extends React.Component {
 
-    constructor(props:any) {
+    constructor(props) {
         super(props);
 
         this.handleFormSubmission = this.handleFormSubmission.bind(this);

@@ -1,22 +1,20 @@
 import * as React from "react";
 
-import { IndividualFilmResults } from "./IndividualFilmResults";
-
-import {IndividualFilmDataI} from "../../ts/Interfaces";
+import { IndividualFilmResults } from "./IndividualFilmResults.jsx";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-import {ConnectedMetadataDrawer} from './MetadataDrawer';
-import ResultsAppBar from './ResultsAppBar';
+import {ConnectedMetadataDrawer} from './MetadataDrawer.jsx';
+import ResultsAppBar from './ResultsAppBar.jsx';
 
 import {connect} from 'react-redux'
 
 
 // import {Graph} from "../graphs/Graph";
 
-class AllFilms extends React.Component<any, any> {
+class AllFilms extends React.Component {
     constructor() {
         super();
 
@@ -36,7 +34,7 @@ class AllFilms extends React.Component<any, any> {
         this.props.fetchNewSearchTerm();
     }
 
-    componentWillReceiveProps(nextProps: any) {
+    componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
             this.props.fetchNewSearchTerm();
         }
@@ -61,7 +59,7 @@ class AllFilms extends React.Component<any, any> {
                         <ResultsAppBar />
                         <ConnectedMetadataDrawer/>
                         {/*<Graph/>*/}
-                        {this.state.films.map(function (object: IndividualFilmDataI) {
+                        {this.state.films.map(function (object) {
                                 return <IndividualFilmResults
                                     key={`filmkey${object.movieOclcId}`}
                                     individualFilm={object} />;
@@ -87,6 +85,8 @@ export const requestNewSearchTerm = () => {
 };
 
 const receiveNewSearchTerm = (response) => {
+    console.log(response);
+    global.response = response;
     return {
         type: 'RECEIVE_NEW_SEARCH_TERM',
         response
@@ -96,9 +96,9 @@ const receiveNewSearchTerm = (response) => {
 const fetchNewSearchTerm = (searchTerm) => {
     return (dispatch) => {
         dispatch(requestNewSearchTerm());
-        return fetch(`http://localhost:8080/moviesearch/${searchTerm}`)
-            .then((response:any) => response.json().data)
-            .then((response:any) => dispatch(receiveNewSearchTerm(response)));
+        return fetch(`http://localhost:8080/moviesearch${searchTerm}`)
+            .then(response => response.json())
+            .then(response => dispatch(receiveNewSearchTerm(response.results)));
         // TODO - add catch handler to handle errors
     }
 };

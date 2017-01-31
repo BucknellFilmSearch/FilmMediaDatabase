@@ -9,6 +9,8 @@
   "author": "",
   "license": "",
   "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
+    "babel-polyfill": "^6.22.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.22.0",
     "babelify": "^7.3.0",
@@ -16,19 +18,6 @@
     "watchify": "^3.9.0"
   },
   "dependencies": {
-    "@types/flot": "0.0.28",
-    "@types/jquery": "^2.0.39",
-    "@types/material-ui": "^0.16.48",
-    "@types/react": "^15.0.3",
-    "@types/react-dom": "^0.14.21",
-    "@types/react-redux": "^4.4.36",
-    "@types/react-router": "^2.0.46",
-    "@types/react-tap-event-plugin": "0.0.30",
-    "@types/redux": "^3.6.0",
-    "@types/redux-thunk": "^2.1.0",
-    "@types/whatwg-fetch": "0.0.33",
-    "flot": "^0.8.0-alpha",
-    "jquery": "^3.1.1",
     "material-ui": "^0.16.7",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",

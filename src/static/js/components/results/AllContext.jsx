@@ -1,26 +1,24 @@
 import * as React from "react";
 
-import * as $ from "jquery";
+// import * as $ from "jquery";
 
-import {IndividualFilmResults} from "./IndividualFilmResults";
+import {IndividualFilmResults} from "./IndividualFilmResults.jsx";
 
-import {IndividualFilmDataI} from "../../ts/Interfaces";
-
-export class AllContext extends React.Component<any,any> {
+export class AllContext extends React.Component {
     constructor() {
         super();
 
         this.state = null;
     }
 
-    loadData(pathname: string) {
-        $.getJSON('http://localhost:8080/moviesearch' + pathname,  (data: IndividualFilmDataI) => {
-            this.setState({
-                // get only the first element because only one film is returned for context
-                context: data.results[0]
-            });
-            console.log(this.state.context);
-        });
+    loadData(pathname) {
+        // $.getJSON('http://localhost:8080/moviesearch' + pathname,  (data: IndividualFilmDataI) => {
+        //     this.setState({
+        //         // get only the first element because only one film is returned for context
+        //         context: data.results[0]
+        //     });
+        //     console.log(this.state.context);
+        // });
     }
 
     componentDidMount() {
