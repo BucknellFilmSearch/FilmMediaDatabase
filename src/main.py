@@ -48,7 +48,8 @@ def remapResultsHelper(lineOfDialogue):
         "movieEndTimeStamp": lineOfDialogue[4],
         "movieLineText": removeBadCharacters(lineOfDialogue[5]),
         "movieReleaseYear": lineOfDialogue[6],
-        "dvdReleaseYear": lineOfDialogue[7]
+        "dvdReleaseYear": lineOfDialogue[7],
+        "runtimeInMinutes": lineOfDialogue[8]
     }
 
 def remapResults(results):
@@ -72,11 +73,13 @@ def remapResults(results):
         film['movieTitle'] = film["results"][0]["movieTitle"]
         film['movieReleaseYear'] = film["results"][0]["movieReleaseYear"]
         film['dvdReleaseYear'] = film["results"][0]["dvdReleaseYear"]
+        film['runtimeInMinutes'] = film["results"][0]["runtimeInMinutes"]
         for lineData in film['results']:
             lineData.pop('movieOclcId')
             lineData.pop('movieTitle')
             lineData.pop('movieReleaseYear')
             lineData.pop('dvdReleaseYear')
+            lineData.pop('runtimeInMinutes')
 
     return mappedAndGrouped
 
@@ -222,7 +225,6 @@ class App():
         contextLines = getContextLines(oclcId, lineNumber, 20)
 
         results = remapResults(contextLines)
-        print results
         return {"results": results}
 
     def displayComparisonPage(self):

@@ -8,7 +8,7 @@ import LazyLoad from 'react-lazyload';
 import CircularProgress from 'material-ui/CircularProgress';
 
 
-class MetadataDrawer extends React.Component<any, any> {
+class MetadataDrawer extends React.Component {
     render() {
 
         // let imgSrc = this.props.movieDetails != null && DEBUG_MODE? "/static/imageFiles/140x197.jpg" : "http://www.filmtvsearch.net/static/imageFiles/" + this.props.movieDetails.movieOclcId + ".gif";
