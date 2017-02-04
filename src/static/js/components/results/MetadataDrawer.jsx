@@ -8,8 +8,14 @@ import LazyLoad from 'react-lazyload';
 import CircularProgress from 'material-ui/CircularProgress';
 import {black} from "material-ui/styles/colors";
 
+const timeLineLength = 200;
 
 class MetadataDrawer extends React.Component {
+
+    static timeStampToMinutes(movieStartTimeStamp, totalMovieRuntime) {
+        const splitString = movieStartTimeStamp.split(":");
+        return Math.ceil((10 + parseInt(splitString[0]) * 60 + parseInt(splitString[1]))/totalMovieRuntime*timeLineLength);
+    }
 
     render() {
 
@@ -41,6 +47,11 @@ class MetadataDrawer extends React.Component {
 
                         {this.props.screenshotDetails.movieStartTimeStamp} -
                         {this.props.screenshotDetails.movieEndTimeStamp} <br/>
+                        {this.props.movieDetails.runtimeInMinutes} <br/>
+                            <svg height="210" width="500">
+                                <line x1="10" y1="50" x2="210" y2="50" stroke={"grey"} strokeWidth={1} />
+                                <line x1={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp, this.props.movieDetails.runtimeInMinutes)} y1="20" x2={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp, this.props.movieDetails.runtimeInMinutes)} y2="70" stroke={"gray"} strokeWidth={1}/>
+                            </svg>
                     </div>
                     ): null
                 }
