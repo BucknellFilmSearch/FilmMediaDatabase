@@ -11,12 +11,6 @@ import {black} from "material-ui/styles/colors";
 
 class MetadataDrawer extends React.Component {
 
-    static timeStampToMinutes(movieStartTimeStamp) {
-        let timeStamp = movieStartTimeStamp;
-        let splitString = timeStamp.split(":");
-        return parseInt(splitString[0]) * 60 + parseInt(splitString[1]);
-    }
-
     render() {
 
         // let imgSrc = this.props.movieDetails != null && DEBUG_MODE? "/static/imageFiles/140x197.jpg" : "http://www.filmtvsearch.net/static/imageFiles/" + this.props.movieDetails.movieOclcId + ".gif";
@@ -46,11 +40,7 @@ class MetadataDrawer extends React.Component {
                         {this.props.screenshotDetails.movieLineText} <br />
 
                         {this.props.screenshotDetails.movieStartTimeStamp} -
-                        {this.props.screenshotDetails.movieEndTimeStamp} <br />
-                        <svg height="210" width="500">
-                            <line x1="0" y1="50" x2="200" y2="50" stroke={black} strokeWidth={1} />
-                            <line x1={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp)} y1="0" x2={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp)} y2="70" stroke={black} strokeWidth={1}/>
-                        </svg>
+                        {this.props.screenshotDetails.movieEndTimeStamp} <br/>
                     </div>
                     ): null
                 }

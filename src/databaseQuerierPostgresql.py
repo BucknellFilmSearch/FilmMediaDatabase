@@ -32,6 +32,7 @@ def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEa
     :return: search results, basically formatted as a list of lists
     """
     currentYear = datetime.now().year
+
     # no params specified
     if genre == "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
         results = searchResults(keywordOrPhrase)
@@ -91,13 +92,15 @@ def searchResults(keywordOrPhrase):
 
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
                           MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
-                          MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
+                          MediaMetadata.original_release_year, MediaMetadata.dvd_release_year,
+                          MediaMetadata.runtime_in_minutes).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
         order_by(MediaMetadata.keyword_count.desc()).\
         order_by(MediaMetadata.movie_title).\
         order_by(MediaText.line_number)
+
     return query.all()
 
 # rewritten for postgresql and sqlalchemy
@@ -179,7 +182,8 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
 
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
                           MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
-                          MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
+                          MediaMetadata.original_release_year, MediaMetadata.dvd_release_year,
+                          MediaMetadata.runtime_in_minutes).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaMetadata.original_release_year >= earliestReleaseYear).\
         filter(MediaMetadata.original_release_year <= latestReleaseYear).\
@@ -316,7 +320,6 @@ def percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseY
 
     # get count of search term by year
     counts = occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
-    print counts
     i = 0
     currYear = earliestReleaseYear
     while currYear <= latestReleaseYear:
