@@ -39,13 +39,13 @@ export class IndividualFilmResults extends React.Component {
         return (
             <div className="screenshotsGridList">
                 <Subheader>{`${this.props.individualFilm.movieTitle} (${this.props.individualFilm.movieReleaseYear})`}</Subheader>
-                <Waypoint
-                    onEnter={() => this.props.onScrollIntoFilm()}
-                />
                 <GridList cellHeight={180} cols={4}>
                     {/*<FilmMetadata metadata={this.props.individualFilm} />*/}
                     { this.getScreenshotsWithCaption() }
                 </GridList>
+                <Waypoint
+                    onEnter={() => this.props.onScrollIntoFilm()}
+                />
             </div>
         )
     }

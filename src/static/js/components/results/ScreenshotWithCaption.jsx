@@ -24,6 +24,7 @@ class ScreenshotWithCaption extends React.Component {
                     <img src={imgSrc} height={'180px'}
                          onMouseEnter={() => this.props.onMouseEnterScreenshot()}
                          onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
+                         onClick={() => this.props.onClickScreenshot()}
                     />
                 </LazyLoad>
             </GridTile>
@@ -46,6 +47,14 @@ const mouseLeaveScreenshot = () => {
     };
 };
 
+const clickScreenshot = (movieOclcId, movieLineNumber) => {
+    return {
+        type: 'CLICK_SCREENSHOT',
+        movieOclcId,
+        movieLineNumber
+    }
+};
+
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {}
@@ -55,7 +64,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, screenshotProps) {
     return {
         onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber)),
-        onMouseLeaveScreenshot: () => dispatch(mouseLeaveScreenshot())
+        onMouseLeaveScreenshot: () => dispatch(mouseLeaveScreenshot()),
+        onClickScreenshot: () => dispatch(clickScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber))
     }
 }
 

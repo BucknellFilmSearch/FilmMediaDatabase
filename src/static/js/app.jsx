@@ -35,6 +35,18 @@ export const reducer = (state = {search: null}, action) => {
                 hoverMovieOclcId: null,
                 hoverMovieLineNumber: null
             };
+        case 'CLICK_SCREENSHOT':
+            return {
+                ...state,
+                clickedScreenshotMovieOclcId: action.movieOclcId,
+                clickedScreenshotMovieLineNumber: action.movieLineNumber
+            };
+        case 'CLOSE_CONTEXT_DIALOG':
+            return {
+                ...state,
+                clickedScreenshotMovieOclcId: null,
+                clickedScreenshotMovieLineNumber: null
+            }
         case 'REQUEST_NEW_SEARCH_TERM':
             return {
                 ...state,

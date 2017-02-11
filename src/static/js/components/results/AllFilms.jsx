@@ -7,6 +7,7 @@ import {cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import {ConnectedMetadataDrawer} from './MetadataDrawer.jsx';
+import {ConnectedContextDialog} from './ContextDialog.jsx';
 import ResultsAppBar from './ResultsAppBar.jsx';
 
 import {connect} from 'react-redux'
@@ -71,7 +72,8 @@ class AllFilms extends React.Component {
                     (
                         <div>
                             <ResultsAppBar />
-                            <ConnectedMetadataDrawer/>
+                            <ConnectedMetadataDrawer />
+                            <ConnectedContextDialog />
                             {/*<Graph/>*/}
                             {this.state.response.map(function (object) {
                                     return <ConnectedIndividualFilmResults
