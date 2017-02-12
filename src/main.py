@@ -49,7 +49,8 @@ def remapResultsHelper(lineOfDialogue):
         "movieLineText": removeBadCharacters(lineOfDialogue[5]),
         "movieReleaseYear": lineOfDialogue[6],
         "dvdReleaseYear": lineOfDialogue[7],
-        "runtimeInMinutes": lineOfDialogue[8]
+        "runtimeInMinutes": lineOfDialogue[8],
+        "totalNumberOfLines": lineOfDialogue[9]
     }
 
 def remapResults(results):
@@ -74,12 +75,13 @@ def remapResults(results):
         film['movieReleaseYear'] = film["results"][0]["movieReleaseYear"]
         film['dvdReleaseYear'] = film["results"][0]["dvdReleaseYear"]
         film['runtimeInMinutes'] = film["results"][0]["runtimeInMinutes"]
+        film['totalNumberOfLines'] = film["results"][0]["totalNumberOfLines"]
         for lineData in film['results']:
             lineData.pop('movieOclcId')
             lineData.pop('movieTitle')
             lineData.pop('movieReleaseYear')
             lineData.pop('dvdReleaseYear')
-            lineData.pop('runtimeInMinutes')
+            lineData.pop('totalNumberOfLines')
 
     return mappedAndGrouped
 

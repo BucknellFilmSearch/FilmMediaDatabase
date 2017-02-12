@@ -180,10 +180,13 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
         group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
 
+    count = session.query(MediaText.oclc_id, func.max(MediaText.line_number).label('totalNumberOfLines')).group_by(MediaText.oclc_id).subquery()
+
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
                           MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
                           MediaMetadata.original_release_year, MediaMetadata.dvd_release_year,
-                          MediaMetadata.runtime_in_minutes).\
+                          MediaMetadata.runtime_in_minutes, count.c.totalNumberOfLines).\
+        join(count, count.c.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaMetadata.original_release_year >= earliestReleaseYear).\
         filter(MediaMetadata.original_release_year <= latestReleaseYear).\
