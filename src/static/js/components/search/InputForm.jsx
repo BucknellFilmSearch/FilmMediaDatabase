@@ -20,7 +20,7 @@ export class InputForm extends React.Component {
      * Retrieve form data and push the new URL to the router
      * @param event Used to prevent default form submission behavior
      */
-    handleFormSubmission(event:any) {
+    handleFormSubmission(event) {
 
         // stop default form submission behavior
         event.preventDefault();
@@ -31,7 +31,7 @@ export class InputForm extends React.Component {
         var earliestReleaseYear = this.refs["earliestReleaseYear"]["value"] || EARLIEST_RELEASE_YEAR;
         var latestReleaseYear = this.refs["latestReleaseYear"]["value"] || LATEST_RELEASE_YEAR;
 
-        // TODO - sanitize url
+        // TODO - sanitize url and allow for multiple word search phrase
 
         // update the URL
         var newPath = `/${keywordOrPhrase}/${genre}/${earliestReleaseYear}/${latestReleaseYear}`;

@@ -49,8 +49,8 @@ def remapResultsHelper(lineOfDialogue):
         "movieLineText": removeBadCharacters(lineOfDialogue[5]),
         "movieReleaseYear": lineOfDialogue[6],
         "dvdReleaseYear": lineOfDialogue[7],
-        "runtimeInMinutes": lineOfDialogue[8],
-        "totalNumberOfLines": lineOfDialogue[9]
+        "runtimeInMinutes": lineOfDialogue[8] if len(lineOfDialogue) > 8 else None,
+        "totalNumberOfLines": lineOfDialogue[9] if len(lineOfDialogue) > 8 else None
     }
 
 def remapResults(results):

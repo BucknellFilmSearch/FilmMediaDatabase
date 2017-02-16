@@ -38,8 +38,6 @@ class ContextDialog extends React.Component {
         };
 
         this.handleClose = this.handleClose.bind(this);
-        this.slideLeft = this.slideLeft.bind(this);
-        this.slideRight = this.slideRight.bind(this);
     }
 
     handleOpen(clickedScreenshotMovieLineNumber) {
@@ -54,21 +52,22 @@ class ContextDialog extends React.Component {
         this.props.onCloseContextDialog();
     }
 
-    slideLeft() {
-        if (this.state.currentMovieLineNumber !== 1) {
-            this.setState({
-                currentMovieLineNumber: this.state.currentMovieLineNumber - 1
-            });
-        }
-    }
-
-    slideRight() {
-        if (this.state.currentMovieLineNumber !== this.props.totalNumberOfLines) {
-            this.setState({
-                currentMovieLineNumber: this.state.currentMovieLineNumber + 1
-            });
-        }
-    }
+    // slideLeft() {
+    //     // TODO - move this to reducer
+    //     if (this.state.currentMovieLineNumber !== 1) {
+    //         this.setState({
+    //             currentMovieLineNumber: this.state.currentMovieLineNumber - 1
+    //         });
+    //     }
+    // }
+    //
+    // slideRight() {
+    //     if (this.state.currentMovieLineNumber !== this.props.currentFilm.totalNumberOfLines) {
+    //         this.setState({
+    //             currentMovieLineNumber: this.state.currentMovieLineNumber + 1
+    //         });
+    //     }
+    // }
 
     componentWillReceiveProps(nextProps) {
         if (this.state.open === false && nextProps.clickedScreenshotMovieOclcId !== null) {
@@ -90,6 +89,9 @@ class ContextDialog extends React.Component {
         let imgSrc =
             "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + this.state.currentMovieLineNumber + ".png";
 
+        // let currentScreenshot = this.props.currentFilm.results.find(
+        //     film => state.clickedScreenshotMovieOclcId === film.movieOclcId
+        // );
 
         return (
             <Dialog
@@ -98,25 +100,29 @@ class ContextDialog extends React.Component {
                 contentStyle={customContentStyle}
                 modal={false}
                 open={this.state.open}
+                autoScrollBodyContent={true}
             >
 
-                <FlatButton
-                    label={<LeftArrow/>}
-                    primary={true}
-                    onTouchTap={this.slideLeft}
-                />
-
-                <FlatButton
-                    label={<RightArrow/>}
-                    primary={true}
-                    onTouchTap={this.slideRight}
-                /> <br />
-
-
-                {this.props.clickedScreenshotMovieOclcId} <br />
-                {this.state.currentMovieLineNumber} <br />
-
                 <img src={imgSrc} height="300px" />
+
+                <div>
+                    {this.props.clickedScreenshotMovieOclcId} <br />
+                    {this.state.currentMovieLineNumber} <br />
+
+                    <FlatButton
+                        label={<LeftArrow/>}
+                        primary={true}
+                        onTouchTap={() => this.props.onSlideLeft}
+                    />
+
+                    <FlatButton
+                        label={<RightArrow/>}
+                        primary={true}
+                        onTouchTap={() => this.props.onSlideRight}
+                    /> <br />
+                </div>
+
+
             </Dialog>
         );
     }
@@ -129,24 +135,59 @@ const closeContextDialog = () => {
     };
 };
 
+const slideLeft = () => {
+    return {
+      type: 'SLIDE_CONTEXT_LEFT'
+    };
+};
+
+const slideRight = () => {
+    return {
+        type: 'SLIDE_CONTEXT_RIGHT'
+    }
+};
+
+const receiveContext = (context) => {
+    return {
+        type: 'RECEIVE_CONTEXT',
+        movieOclcId: context.movieOclcId,
+        context: context.results
+    };
+};
+
+const slideAndCheckForContext = (slideFunction) => {
+    return (dispatch) => {
+        dispatch(slideFunction);
+
+        return fetch(`/moviesearch/context/${this.props.individualFilm.movieOclcId}/${object.movieLineNumber}`)
+            .then(response => response.json())
+            .then(response => response.results[0])
+            .then(response => dispatch(receiveContext(response)));
+
+        // TODO - add catch handler to handle errors
+    }
+};
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
     console.log(state);
     return {
         clickedScreenshotMovieOclcId: state.clickedScreenshotMovieOclcId,
-        clickedScreenshotMovieLineNumber: state.clickedScreenshotMovieLineNumber,
-        totalNumberOfLines: !state.clickedScreenshotMovieOclcId ? null :
+        clickedScreenshotMovieLineNumber: state.currentContextMovieLineNumber,
+        currentFilm: !state.clickedScreenshotMovieOclcId ? null :
             state.search.response.find(
                 film => state.clickedScreenshotMovieOclcId === film.movieOclcId
-            ).totalNumberOfLines
+            )
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        onCloseContextDialog: () => dispatch(closeContextDialog())
+        onCloseContextDialog: () => dispatch(closeContextDialog()),
+        onSlideLeft: () => dispatch(slideAndCheckForContext(slideLeft)),
+        onSlideRight: () => dispatch(slideAndCheckForContext(slideRight))
     }
 }
 
