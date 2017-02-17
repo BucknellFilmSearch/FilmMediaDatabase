@@ -40,10 +40,9 @@ class ContextDialog extends React.Component {
         this.handleClose = this.handleClose.bind(this);
     }
 
-    handleOpen(clickedScreenshotMovieLineNumber) {
+    handleOpen() {
         this.setState({
-            open: true,
-            currentMovieLineNumber: clickedScreenshotMovieLineNumber
+            open: true
         });
     }
 
@@ -52,27 +51,10 @@ class ContextDialog extends React.Component {
         this.props.onCloseContextDialog();
     }
 
-    // slideLeft() {
-    //     // TODO - move this to reducer
-    //     if (this.state.currentMovieLineNumber !== 1) {
-    //         this.setState({
-    //             currentMovieLineNumber: this.state.currentMovieLineNumber - 1
-    //         });
-    //     }
-    // }
-    //
-    // slideRight() {
-    //     if (this.state.currentMovieLineNumber !== this.props.currentFilm.totalNumberOfLines) {
-    //         this.setState({
-    //             currentMovieLineNumber: this.state.currentMovieLineNumber + 1
-    //         });
-    //     }
-    // }
-
     componentWillReceiveProps(nextProps) {
         if (this.state.open === false && nextProps.clickedScreenshotMovieOclcId !== null) {
             console.log('opening');
-            this.handleOpen(nextProps.clickedScreenshotMovieLineNumber);
+            this.handleOpen();
         }
     }
 
@@ -87,11 +69,7 @@ class ContextDialog extends React.Component {
 
 
         let imgSrc =
-            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + this.state.currentMovieLineNumber + ".png";
-
-        // let currentScreenshot = this.props.currentFilm.results.find(
-        //     film => state.clickedScreenshotMovieOclcId === film.movieOclcId
-        // );
+            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + this.props.currentMovieLineNumber + ".png";
 
         return (
             <Dialog
@@ -107,7 +85,7 @@ class ContextDialog extends React.Component {
 
                 <div>
                     {this.props.clickedScreenshotMovieOclcId} <br />
-                    {this.state.currentMovieLineNumber} <br />
+                    {this.props.currentMovieLineNumber} <br />
 
                     <FlatButton
                         label={<LeftArrow/>}
@@ -135,16 +113,11 @@ const closeContextDialog = () => {
     };
 };
 
-const slideLeft = () => {
+const slideScreenshot = (newMovieLineNumber) => {
     return {
-      type: 'SLIDE_CONTEXT_LEFT'
+        type: 'SLIDE_SCREENSHOT',
+        newMovieLineNumber
     };
-};
-
-const slideRight = () => {
-    return {
-        type: 'SLIDE_CONTEXT_RIGHT'
-    }
 };
 
 const receiveContext = (context) => {
@@ -155,16 +128,33 @@ const receiveContext = (context) => {
     };
 };
 
-const slideAndCheckForContext = (slideFunction) => {
+const slideAndCheckForContext = (slideDirection, props) => {
     return (dispatch) => {
-        dispatch(slideFunction);
 
-        return fetch(`/moviesearch/context/${this.props.individualFilm.movieOclcId}/${object.movieLineNumber}`)
-            .then(response => response.json())
-            .then(response => response.results[0])
-            .then(response => dispatch(receiveContext(response)));
+        // calculate new movie line number based on slide direction
+        let newMovieLineNumber = props.currentMovieLineNumber;
 
-        // TODO - add catch handler to handle errors
+        if (slideDirection == "SLIDE_RIGHT" && props.currentMovieLineNumber !== props.currentFilm.totalNumberOfLines) {
+            newMovieLineNumber = props.currentMovieLineNumber + 1
+        } else if (slideDirection == "SLIDE_LEFT" && props.currentMovieLineNumber !== 1) {
+            newMovieLineNumber = props.currentMovieLineNumber - 1;
+        }
+
+        // check if context already exists
+        let newMovieLineNumberNotInContext = props.context.find(screenshot =>
+            screenshot.key == `oclc${props.currentFilm.movieOclcId}line${newMovieLineNumber}`) === undefined;
+
+        dispatch(slideScreenshot(newMovieLineNumber));
+
+        // make API call if screenshot does not exist
+        if (newMovieLineNumberNotInContext) {
+            return fetch(`/moviesearch/context/${props.currentFilm.movieOclcId}/${newMovieLineNumber}`)
+                .then(response => response.json())
+                .then(response => response.results[0])
+                .then(response => dispatch(receiveContext(response)));
+            // TODO - add catch handler to handle errors
+        }
+
     }
 };
 
@@ -174,20 +164,19 @@ function mapStateToProps(state) {
     console.log(state);
     return {
         clickedScreenshotMovieOclcId: state.clickedScreenshotMovieOclcId,
-        clickedScreenshotMovieLineNumber: state.currentContextMovieLineNumber,
+        currentMovieLineNumber: state.currentContextMovieLineNumber,
         currentFilm: !state.clickedScreenshotMovieOclcId ? null :
-            state.search.response.find(
-                film => state.clickedScreenshotMovieOclcId === film.movieOclcId
-            )
+            state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId),
+        context: state.context
     }
 }
 
 // Map Redux actions to component props
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, props) {
     return {
         onCloseContextDialog: () => dispatch(closeContextDialog()),
-        onSlideLeft: () => dispatch(slideAndCheckForContext(slideLeft)),
-        onSlideRight: () => dispatch(slideAndCheckForContext(slideRight))
+        onSlideLeft: () => dispatch(slideAndCheckForContext('SLIDE_LEFT', props)),
+        onSlideRight: () => dispatch(slideAndCheckForContext('SLIDE_RIGHT', props))
     }
 }
 

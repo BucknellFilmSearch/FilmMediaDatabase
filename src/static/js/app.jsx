@@ -40,34 +40,29 @@ export const reducer = (state = {search: null, context: []}, action) => {
                 clickedScreenshotMovieOclcId: action.movieOclcId,
                 currentContextMovieLineNumber: action.movieLineNumber
             };
+        case 'SLIDE_SCREENSHOT':
+            return {
+                ...state,
+                currentContextMovieLineNumber: action.newMovieLineNumber
+            };
         case 'CLOSE_CONTEXT_DIALOG':
             return {
                 ...state,
                 clickedScreenshotMovieOclcId: null,
-                clickedScreenshotMovieLineNumber: null
+                currentContextMovieLineNumber: null
             };
         case 'RECEIVE_CONTEXT':
-            // // if new search is being requested, context is no longer relevant
-            // if (state.search.status == "loading") {
-            //     return {
-            //         ...state
-            //     }
-            // }state.search.find())
-            //
-            // let currentFilm = state.search.response.
-            //
-            // // filter out elements already loaded into the context
-            // let filteredContext = action.context.filter(newScreenshot =>
-            //     state.search.response.find(existingScreenshot =>
-            //         newScreenshot.movieLineNumber == existingScreenshot.movieLineNumber
-            //     )
-            // );
-            //
-            // console.log(filteredContext)
+            // remap context screenshots to include key
+            let newContextScreenshots = action.context.map(screenshot =>
+                    ({...screenshot, key: `oclc${action.movieOclcId}line${screenshot.movieLineNumber}`})
+                // filter out films that are already in the context
+                ).filter(newScreenshot =>
+                    state.context.find(contextScreenshot => newScreenshot.key == contextScreenshot.key) === undefined
+                );
 
-            // return new context
             return {
-                ...state
+                ...state,
+                context: state.context.concat(newContextScreenshots)
             };
         case 'REQUEST_NEW_SEARCH_TERM':
             return {
@@ -79,44 +74,27 @@ export const reducer = (state = {search: null, context: []}, action) => {
             };
         case 'RECEIVE_NEW_SEARCH_TERM':
 
-            // find films that are already in the context list and add new screenshots
-            let newContext = state.context.map(contextFilm => {
-                    // search for current context film in response object
-                    let filmInResponse = action.response.find(
-                        searchResultsFilm => searchResultsFilm.movieOclcId == contextFilm.movieOclcId
-                    );
-
-                    // return unmodified context film if the film is not in the response; otherwise add new screenshots
-                    return filmInResponse == undefined ?
-                        // TODO - remove duplicates here from concat
-                        contextFilm : contextFilm.screenshots.concat(filmInResponse.results);
-                }
-            )
-            // append films to the context list that aren't already in the context list
-            .concat(
-                // filter films that are not in the context
-                action.response.filter(searchResultsFilm =>
-                    state.context.find(contextFilm => contextFilm.oclc == searchResultsFilm.movieOclcId) === undefined
-                )
-                // remap these films so they can be added to the context list
-                .map(filmToAddToContext => ({
-                    movieOclcId: filmToAddToContext.movieOclcId,
-                    screenshots: filmToAddToContext.results
-                }))
-            );
+            // flatten 2D list containing screenshots for each film to a 1D list
+            let newSearchResultsScreenshots = action.response.map(film =>
+                    // collect screenshots from each film
+                    film.results.map(screenshot =>
+                        ({...screenshot, key: `oclc${film.movieOclcId}line${screenshot.movieLineNumber}`})
+                    )
+                // flatten list of screenshots
+                ).reduce(
+                    ((screenshots, filmScreenshots) => screenshots.concat(filmScreenshots)), []
+                // filter out films that are already in the context
+                ).filter(newScreenshot =>
+                    state.context.find(contextScreenshot => newScreenshot.key == contextScreenshot.key) === undefined
+                );
 
             return {
                 ...state,
                 search: {
                     "status": "loaded",
                     "response": action.response
-                    //     .map((film) => ({
-                    //     ...film,
-                    //     // initialize context to be the film results, load in other context as needed
-                    //     context: [...film.results]
-                    // }))
                 },
-                context: contextWithNewFilms
+                context: state.context.concat(newSearchResultsScreenshots)
             };
         case 'SCROLL_INTO_FILM':
             return {
