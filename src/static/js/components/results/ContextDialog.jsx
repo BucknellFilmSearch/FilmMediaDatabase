@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Slider from 'react-slick';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import SvgIcon from 'material-ui/SvgIcon';
@@ -7,7 +8,7 @@ import {connect} from 'react-redux';
 
 const customContentStyle = {
     width: '90%',
-    maxWidth: 'none',
+    maxWidth: 'none'
 };
 
 const LeftArrow = (props) => (
@@ -70,6 +71,19 @@ class ContextDialog extends React.Component {
 
         let imgSrc =
             "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + this.props.currentMovieLineNumber + ".png";
+        let imgSrcA =
+            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + (this.props.currentMovieLineNumber-1) + ".png";
+        let imgSrcB =
+            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + (this.props.currentMovieLineNumber+1) + ".png";
+
+        let sliderSettings = {
+            dots: false,
+            infinite: false,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            centerMode: true
+        };
 
         return (
             <Dialog
@@ -82,6 +96,12 @@ class ContextDialog extends React.Component {
             >
 
                 <img src={imgSrc} height="300px" />
+
+                {/*<Slider {...sliderSettings}>*/}
+                    {/*<img src={imgSrcA} height="300px" />*/}
+                    {/*<img src={imgSrc} height="300px" />*/}
+                    {/*<img src={imgSrcB} height="300px" />*/}
+                {/*</Slider>*/}
 
                 <div>
                     {this.props.clickedScreenshotMovieOclcId} <br />
@@ -177,7 +197,7 @@ const slideAndCheckForContext = (slideDirection) => {
         if (newMovieLineNumberNotInContext) {
             return fetch(`/moviesearch/context/${currentFilm.movieOclcId}/${newMovieLineNumber}`)
                 .then(response => response.json())
-                .then(response => response.results[0])
+                .then(response => response.context)
                 .then(response => dispatch(receiveContext(response)));
             // TODO - add catch handler to handle errors
         }

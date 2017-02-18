@@ -81,6 +81,7 @@ def remapResults(results):
             lineData.pop('movieTitle')
             lineData.pop('movieReleaseYear')
             lineData.pop('dvdReleaseYear')
+            lineData.pop('runtimeInMinutes')
             lineData.pop('totalNumberOfLines')
 
     return mappedAndGrouped
@@ -226,8 +227,10 @@ class App():
         # remember previous search without passing data through URL
         contextLines = getContextLines(oclcId, lineNumber, 20)
 
-        results = remapResults(contextLines)
-        return {"results": results}
+        results = remapResults(contextLines)[0]
+        results.pop('runtimeInMinutes')
+        results.pop('totalNumberOfLines')
+        return {"context": results}
 
     def displayComparisonPage(self):
         """
