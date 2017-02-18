@@ -3,17 +3,14 @@ import * as React from "react";
 import { ConnectedIndividualFilmResults } from "./IndividualFilmResults.jsx";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
+import {grey50, cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import {ConnectedMetadataDrawer} from './MetadataDrawer.jsx';
 import {ConnectedContextDialog} from './ContextDialog.jsx';
-import ResultsAppBar from './ResultsAppBar.jsx';
+import ResultsToolbar from './ResultsToolbar.jsx';
 
 import {connect} from 'react-redux'
-
-
-// import {Graph} from "../graphs/Graph";
 
 class AllFilms extends React.Component {
     constructor() {
@@ -23,15 +20,6 @@ class AllFilms extends React.Component {
             "status": null
         };
     }
-
-    // This function has been converted to redux down below in fetchNewSearchTerm
-    // loadData(pathname: string) {
-    //     $.getJSON('http://localhost:8080/moviesearch' + pathname,  (data: FilmResultsDataWrapperI) => {
-    //         this.setState({
-    //             films: data.results
-    //         });
-    //     });
-    // }
 
     componentDidMount() {
         this.props.fetchNewSearchTerm();
@@ -58,7 +46,7 @@ class AllFilms extends React.Component {
                 primary2Color: cyan700,
                 primary3Color: pinkA200,
                 accent1Color: grey800,
-                accent2Color: grey800,
+                accent2Color: grey50,
                 accent3Color: grey800
             }
         });
@@ -71,7 +59,7 @@ class AllFilms extends React.Component {
                     ) :
                     (
                         <div>
-                            <ResultsAppBar />
+                            <ResultsToolbar />
                             <ConnectedMetadataDrawer />
                             <ConnectedContextDialog />
                             {/*<Graph/>*/}
