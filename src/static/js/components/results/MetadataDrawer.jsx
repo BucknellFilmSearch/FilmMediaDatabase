@@ -1,6 +1,8 @@
 import * as React from "react";
 import Drawer from 'material-ui/Drawer';
 import {connect} from 'react-redux';
+import Roboto from 'material-ui/FontIcon';
+import Paper from 'material-ui/Paper'
 
 import {DEBUG_MODE} from "../../app.jsx";
 
@@ -17,6 +19,12 @@ class MetadataDrawer extends React.Component {
         return Math.ceil((10 + parseInt(splitString[0]) * 60 + parseInt(splitString[1]))/totalMovieRuntime*timeLineLength);
     }
 
+    /* Removes the junk after the comma in the screenshot's timestamp */
+    static beautifyTimeStamp(movieStartTimeStamp) {
+        const splitString = movieStartTimeStamp.split(",");
+        return (splitString[0]);
+    }
+
     render() {
 
         // let imgSrc = this.props.movieDetails != null && DEBUG_MODE? "/static/imageFiles/140x197.jpg" : "http://www.filmtvsearch.net/static/imageFiles/" + this.props.movieDetails.movieOclcId + ".gif";
@@ -28,30 +36,42 @@ class MetadataDrawer extends React.Component {
                         <div>Metadata <br /></div>
                     ) : (
                         <div>
-                            {this.props.movieDetails.movieOclcId} <br />
+                            <div className="movieTitleInMetadataDrawer">
+                                <Roboto>
+                                    {this.props.movieDetails.movieTitle} ({this.props.movieDetails.movieReleaseYear}) <br />
+                                </Roboto>
+                            </div>
+                                <LazyLoad height={197} placeholder={<CircularProgress />}>
+                                    <img className="thumbnail" src={imgSrc} width="140" height="197" />
+                                </LazyLoad>
+                            {/*{this.props.movieDetails.movieOclcId} <br />*/}
 
-                            {this.props.movieDetails.movieTitle} ({this.props.movieDetails.movieReleaseYear}) <br />
+                            {/*{this.props.movieDetails.movieTitle} ({this.props.movieDetails.movieReleaseYear}) <br />*/}
 
-                            <LazyLoad height={197} placeholder={<CircularProgress />}>
-                                <img className="thumbnail" src={imgSrc} width="140" height="197" />
-                            </LazyLoad>
+                            {/*<LazyLoad height={197} placeholder={<CircularProgress />}>*/}
+                                {/*<img className="thumbnail" src={imgSrc} width="140" height="197" />*/}
+                            {/*</LazyLoad>*/}
                         </div>
                     )
                 }
 
                 {this.props.screenshotDetails != null ? (
                     <div>
-                        Line {this.props.screenshotDetails.movieLineNumber} <br />
+                        <div className="metadataDrawerDialogueContainer">
+                            Line {this.props.screenshotDetails.movieLineNumber}: <br />
+                            "{this.props.screenshotDetails.movieLineText}" <br />
+                        </div>
 
-                        {this.props.screenshotDetails.movieLineText} <br />
-
-                        {this.props.screenshotDetails.movieStartTimeStamp} -
-                        {this.props.screenshotDetails.movieEndTimeStamp} <br/>
-                        {this.props.movieDetails.runtimeInMinutes} <br/>
-                            <svg height="210" width="500">
+                        <Paper>
+                        <div className="metadataDrawerTimelineContainer">
+                            {/*{this.props.movieDetails.runtimeInMinutes} <br/>*/}
+                            <svg height="70" width="200">
                                 <line x1="10" y1="50" x2="210" y2="50" stroke={"grey"} strokeWidth={1} />
-                                <line x1={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp, this.props.movieDetails.runtimeInMinutes)} y1="20" x2={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp, this.props.movieDetails.runtimeInMinutes)} y2="70" stroke={"gray"} strokeWidth={1}/>
+                                <line x1={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp, this.props.movieDetails.runtimeInMinutes)} y1="30" x2={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp, this.props.movieDetails.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={1}/>
                             </svg>
+                            {MetadataDrawer.beautifyTimeStamp(this.props.screenshotDetails.movieStartTimeStamp)}
+                        </div>
+                        </Paper>
                     </div>
                     ): null
                 }
