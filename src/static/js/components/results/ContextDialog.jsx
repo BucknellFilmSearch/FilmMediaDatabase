@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Slider from 'react-slick';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import SvgIcon from 'material-ui/SvgIcon';
@@ -7,7 +8,7 @@ import {connect} from 'react-redux';
 
 const customContentStyle = {
     width: '90%',
-    maxWidth: 'none',
+    maxWidth: 'none'
 };
 
 const LeftArrow = (props) => (
@@ -38,14 +39,11 @@ class ContextDialog extends React.Component {
         };
 
         this.handleClose = this.handleClose.bind(this);
-        this.slideLeft = this.slideLeft.bind(this);
-        this.slideRight = this.slideRight.bind(this);
     }
 
-    handleOpen(clickedScreenshotMovieLineNumber) {
+    handleOpen() {
         this.setState({
-            open: true,
-            currentMovieLineNumber: clickedScreenshotMovieLineNumber
+            open: true
         });
     }
 
@@ -54,26 +52,10 @@ class ContextDialog extends React.Component {
         this.props.onCloseContextDialog();
     }
 
-    slideLeft() {
-        if (this.state.currentMovieLineNumber !== 1) {
-            this.setState({
-                currentMovieLineNumber: this.state.currentMovieLineNumber - 1
-            });
-        }
-    }
-
-    slideRight() {
-        if (this.state.currentMovieLineNumber !== this.props.totalNumberOfLines) {
-            this.setState({
-                currentMovieLineNumber: this.state.currentMovieLineNumber + 1
-            });
-        }
-    }
-
     componentWillReceiveProps(nextProps) {
         if (this.state.open === false && nextProps.clickedScreenshotMovieOclcId !== null) {
             console.log('opening');
-            this.handleOpen(nextProps.clickedScreenshotMovieLineNumber);
+            this.handleOpen();
         }
     }
 
@@ -88,8 +70,20 @@ class ContextDialog extends React.Component {
 
 
         let imgSrc =
-            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + this.state.currentMovieLineNumber + ".png";
+            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + this.props.currentMovieLineNumber + ".png";
+        let imgSrcA =
+            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + (this.props.currentMovieLineNumber-1) + ".png";
+        let imgSrcB =
+            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + (this.props.currentMovieLineNumber+1) + ".png";
 
+        let sliderSettings = {
+            dots: false,
+            infinite: false,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            centerMode: true
+        };
 
         return (
             <Dialog
@@ -98,25 +92,51 @@ class ContextDialog extends React.Component {
                 contentStyle={customContentStyle}
                 modal={false}
                 open={this.state.open}
+                autoScrollBodyContent={true}
             >
 
-                <FlatButton
-                    label={<LeftArrow/>}
-                    primary={true}
-                    onTouchTap={this.slideLeft}
-                />
-
-                <FlatButton
-                    label={<RightArrow/>}
-                    primary={true}
-                    onTouchTap={this.slideRight}
-                /> <br />
-
-
-                {this.props.clickedScreenshotMovieOclcId} <br />
-                {this.state.currentMovieLineNumber} <br />
-
                 <img src={imgSrc} height="300px" />
+
+                {/*<Slider {...sliderSettings}>*/}
+                    {/*<img src={imgSrcA} height="300px" />*/}
+                    {/*<img src={imgSrc} height="300px" />*/}
+                    {/*<img src={imgSrcB} height="300px" />*/}
+                {/*</Slider>*/}
+
+                <div>
+                    {this.props.clickedScreenshotMovieOclcId} <br />
+                    {this.props.currentMovieLineNumber} <br />
+                    {this.props.currentScreenshot != null ? (
+                            <div>
+                                Line {this.props.currentScreenshot.movieLineNumber} <br />
+
+                                {this.props.currentScreenshot.movieLineText} <br />
+
+                                {this.props.currentScreenshot.movieStartTimeStamp} -
+                                {this.props.currentScreenshot.movieEndTimeStamp} <br/>
+                            </div>
+                        ): (
+                            <div>
+                                Loading Context...
+                            </div>
+                        )
+
+                    }
+
+                    <FlatButton
+                        label={<LeftArrow/>}
+                        primary={true}
+                        onTouchTap={this.props.onSlideLeft}
+                    />
+
+                    <FlatButton
+                        label={<RightArrow/>}
+                        primary={true}
+                        onTouchTap={this.props.onSlideRight}
+                    /> <br />
+                </div>
+
+
             </Dialog>
         );
     }
@@ -129,24 +149,88 @@ const closeContextDialog = () => {
     };
 };
 
+const slideScreenshot = (newMovieLineNumber) => {
+    return {
+        type: 'SLIDE_SCREENSHOT',
+        newMovieLineNumber
+    };
+};
+
+const receiveContext = (context) => {
+    return {
+        type: 'RECEIVE_CONTEXT',
+        movieOclcId: context.movieOclcId,
+        context: context.results
+    };
+};
+
+const slideAndCheckForContext = (slideDirection) => {
+    return (dispatch, getState) => {
+
+        // http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator
+
+        let state = getState();
+
+        let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
+            state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
+
+        let currentMovieLineNumber = state.currentContextMovieLineNumber;
+
+        let context = state.context;
+
+        // calculate new movie line number based on slide direction
+        let newMovieLineNumber = currentMovieLineNumber;
+
+        if (slideDirection == "SLIDE_RIGHT" && currentMovieLineNumber !== currentFilm.totalNumberOfLines) {
+            newMovieLineNumber = currentMovieLineNumber + 1
+        } else if (slideDirection == "SLIDE_LEFT" && currentMovieLineNumber !== 1) {
+            newMovieLineNumber = currentMovieLineNumber - 1;
+        }
+
+        // check if context already exists
+        let newMovieLineNumberNotInContext = context.find(screenshot =>
+            screenshot.key == `oclc${currentFilm.movieOclcId}line${newMovieLineNumber}`) === undefined;
+
+        dispatch(slideScreenshot(newMovieLineNumber));
+
+        // make API call if screenshot does not exist
+        if (newMovieLineNumberNotInContext) {
+            return fetch(`/moviesearch/context/${currentFilm.movieOclcId}/${newMovieLineNumber}`)
+                .then(response => response.json())
+                .then(response => response.context)
+                .then(response => dispatch(receiveContext(response)));
+            // TODO - add catch handler to handle errors
+        }
+
+    }
+};
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
     console.log(state);
+
+    let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
+        state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
+
+    let key = `oclc${state.clickedScreenshotMovieOclcId}line${state.currentContextMovieLineNumber}`;
+
+    let currentScreenshot = state.context.find(screenshot => (screenshot.key == key)) || null;
+
     return {
         clickedScreenshotMovieOclcId: state.clickedScreenshotMovieOclcId,
-        clickedScreenshotMovieLineNumber: state.clickedScreenshotMovieLineNumber,
-        totalNumberOfLines: !state.clickedScreenshotMovieOclcId ? null :
-            state.search.response.find(
-                film => state.clickedScreenshotMovieOclcId === film.movieOclcId
-            ).totalNumberOfLines
+        currentMovieLineNumber: state.currentContextMovieLineNumber,
+        currentFilm: currentFilm,
+        currentScreenshot: currentScreenshot
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        onCloseContextDialog: () => dispatch(closeContextDialog())
+        onCloseContextDialog: () => dispatch(closeContextDialog()),
+        onSlideLeft: () => dispatch(slideAndCheckForContext('SLIDE_LEFT')),
+        onSlideRight: () => dispatch(slideAndCheckForContext('SLIDE_RIGHT'))
     }
 }
 

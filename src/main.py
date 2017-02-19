@@ -49,8 +49,8 @@ def remapResultsHelper(lineOfDialogue):
         "movieLineText": removeBadCharacters(lineOfDialogue[5]),
         "movieReleaseYear": lineOfDialogue[6],
         "dvdReleaseYear": lineOfDialogue[7],
-        "runtimeInMinutes": lineOfDialogue[8],
-        "totalNumberOfLines": lineOfDialogue[9]
+        "runtimeInMinutes": lineOfDialogue[8] if len(lineOfDialogue) > 8 else None,
+        "totalNumberOfLines": lineOfDialogue[9] if len(lineOfDialogue) > 8 else None
     }
 
 def remapResults(results):
@@ -81,6 +81,7 @@ def remapResults(results):
             lineData.pop('movieTitle')
             lineData.pop('movieReleaseYear')
             lineData.pop('dvdReleaseYear')
+            lineData.pop('runtimeInMinutes')
             lineData.pop('totalNumberOfLines')
 
     return mappedAndGrouped
@@ -226,8 +227,10 @@ class App():
         # remember previous search without passing data through URL
         contextLines = getContextLines(oclcId, lineNumber, 20)
 
-        results = remapResults(contextLines)
-        return {"results": results}
+        results = remapResults(contextLines)[0]
+        results.pop('runtimeInMinutes')
+        results.pop('totalNumberOfLines')
+        return {"context": results}
 
     def displayComparisonPage(self):
         """

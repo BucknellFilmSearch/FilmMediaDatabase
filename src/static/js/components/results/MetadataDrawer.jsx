@@ -31,7 +31,7 @@ class MetadataDrawer extends React.Component {
         let imgSrc = this.props.movieDetails != null ? "http://www.filmtvsearch.net/static/imageFiles/" + this.props.movieDetails.movieOclcId + ".gif" : null;
         console.log(this.props);
         return (
-            <Drawer docked={true} open={true} openSecondary={true} zDepth={2}>
+            <Drawer docked={true} open={true} openSecondary={true} zDepth={2} containerStyle={{height: 'calc(100% - 56px)', top: 56}}>
                 {this.props.movieDetails == null ? (
                         <div>Metadata <br /></div>
                     ) : (

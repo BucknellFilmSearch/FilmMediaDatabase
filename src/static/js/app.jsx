@@ -19,11 +19,10 @@ export let DEBUG_MODE = true;
 injectTapEventPlugin();
 
 
-export const reducer = (state = {search: null}, action) => {
+export const reducer = (state = {search: null, context: []}, action) => {
     console.log(action);
     switch (action.type) {
         case 'MOUSE_ENTER_SCREENSHOT':
-            console.log('enter');
             return {
                 ...state,
                 hoverMovieOclcId: action.movieOclcId,
@@ -39,14 +38,32 @@ export const reducer = (state = {search: null}, action) => {
             return {
                 ...state,
                 clickedScreenshotMovieOclcId: action.movieOclcId,
-                clickedScreenshotMovieLineNumber: action.movieLineNumber
+                currentContextMovieLineNumber: action.movieLineNumber
+            };
+        case 'SLIDE_SCREENSHOT':
+            return {
+                ...state,
+                currentContextMovieLineNumber: action.newMovieLineNumber
             };
         case 'CLOSE_CONTEXT_DIALOG':
             return {
                 ...state,
                 clickedScreenshotMovieOclcId: null,
-                clickedScreenshotMovieLineNumber: null
-            }
+                currentContextMovieLineNumber: null
+            };
+        case 'RECEIVE_CONTEXT':
+            // remap context screenshots to include key
+            let newContextScreenshots = action.context.map(screenshot =>
+                    ({...screenshot, key: `oclc${action.movieOclcId}line${screenshot.movieLineNumber}`})
+                // filter out films that are already in the context
+                ).filter(newScreenshot =>
+                    state.context.find(contextScreenshot => newScreenshot.key == contextScreenshot.key) === undefined
+                );
+
+            return {
+                ...state,
+                context: state.context.concat(newContextScreenshots)
+            };
         case 'REQUEST_NEW_SEARCH_TERM':
             return {
                 ...state,
@@ -56,14 +73,28 @@ export const reducer = (state = {search: null}, action) => {
                 }
             };
         case 'RECEIVE_NEW_SEARCH_TERM':
+
+            // flatten 2D list containing screenshots for each film to a 1D list
+            let newSearchResultsScreenshots = action.response.map(film =>
+                    // collect screenshots from each film
+                    film.results.map(screenshot =>
+                        ({...screenshot, key: `oclc${film.movieOclcId}line${screenshot.movieLineNumber}`})
+                    )
+                // flatten list of screenshots
+                ).reduce(
+                    ((screenshots, filmScreenshots) => screenshots.concat(filmScreenshots)), []
+                // filter out films that are already in the context
+                ).filter(newScreenshot =>
+                    state.context.find(contextScreenshot => newScreenshot.key == contextScreenshot.key) === undefined
+                );
+
             return {
                 ...state,
                 search: {
                     "status": "loaded",
                     "response": action.response
-                }
-                // TODO - add default as first film, if needed
-                // currentMovieOclcId: null
+                },
+                context: state.context.concat(newSearchResultsScreenshots)
             };
         case 'SCROLL_INTO_FILM':
             return {
