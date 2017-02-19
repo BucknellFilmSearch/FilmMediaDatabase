@@ -15,10 +15,6 @@ import {connect} from 'react-redux'
 class AllFilms extends React.Component {
     constructor() {
         super();
-
-        this.state = {
-            "status": null
-        };
     }
 
     componentDidMount() {
@@ -29,13 +25,6 @@ class AllFilms extends React.Component {
         if (this.props.location.pathname !== nextProps.location.pathname) {
             this.props.fetchNewSearchTerm();
         }
-
-        if (nextProps.search !== undefined) {
-            this.setState(
-                nextProps.search
-            )
-        }
-        console.log(nextProps);
     }
 
 
