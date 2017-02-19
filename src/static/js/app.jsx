@@ -18,7 +18,7 @@ export let DEBUG_MODE = true;
 injectTapEventPlugin();
 
 
-export const reducer = (state = {search: null, context: [], sortType: 1}, action) => {
+export const reducer = (state = {search: null, context: [], sortType: 1, genre: 'All'}, action) => {
     console.log(action);
     switch (action.type) {
         case 'MOUSE_ENTER_SCREENSHOT':
@@ -104,6 +104,11 @@ export const reducer = (state = {search: null, context: [], sortType: 1}, action
             return {
                 ...state,
                 sortType: action.sortType
+            }
+        case 'SELECT_GENRE':
+            return {
+                ...state,
+                genre: action.genre
             }
         default:
             return state

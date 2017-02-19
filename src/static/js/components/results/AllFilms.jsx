@@ -41,7 +41,7 @@ class AllFilms extends React.Component {
         });
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
-                {this.props.search == null || this.props.search.status == "loading" ? (
+                {!this.props.filmsLoaded ? (
                         <div>
                             <h2>Loading Relevant Films...</h2>
                         </div>
@@ -52,7 +52,7 @@ class AllFilms extends React.Component {
                             <ConnectedMetadataDrawer />
                             <ConnectedContextDialog />
                             {/*<Graph/>*/}
-                            {this.props.search.response.map(function (object) {
+                            {this.props.films.map(function (object) {
                                     return <ConnectedIndividualFilmResults
                                         key={`filmkey${object.movieOclcId}`}
                                         individualFilm={object} />;
@@ -91,33 +91,43 @@ const fetchNewSearchTerm = (searchTerm) => {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    console.log('resorting');
-    console.log('sortType:');
-    console.log(state.sortType);
+    let filmsLoaded = state.search && state.search.status == "loaded";
 
-    let search = state.search;
+    let films = filmsLoaded ? [...state.search.response] : [] ;
 
-    if (search && search.status == "loaded") {
+    // check if films are loaded
+    if (filmsLoaded) {
+
+        // sort films based on user input
         if (state.sortType == 1) {
-            search.response = search.response.sort(relevanceSort);
+            films = films.sort(relevanceSort);
         }
         else if (state.sortType == 2) {
-            search.response = search.response.sort(alphabeticalSort);
+            films = films.sort(alphabeticalSort);
         }
         else if (state.sortType == 3) {
-            search.response = search.response.sort(alphabeticalSort).reverse();
+            films = films.sort(alphabeticalSort).reverse();
         }
         else if (state.sortType == 4) {
-            search.response = search.response.sort(yearSort);
+            films = films.sort(yearSort);
         }
         else if (state.sortType == 5) {
-            search.response = search.response.sort(yearSort).reverse();
+            films = films.sort(yearSort).reverse();
         }
+
+        // filter films by genre
+        let genre = state.genre;
+
+        films = genre == 'All' ? films :
+            films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
     }
 
+
     return {
-        search: search,
-        sortType: state.sortType
+        filmsLoaded: filmsLoaded,
+        films: films,
+        sortType: state.sortType,
+        genre: state.genre
     }
 }
 

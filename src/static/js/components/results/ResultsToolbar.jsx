@@ -48,11 +48,11 @@ class ResultsToolbar extends React.Component {
 
                     <SelectField
                         floatingLabelText="Genre"
-                        value={1}
-                        onChange={console.log}
+                        value={this.props.genre}
+                        onChange={this.props.onSelectGenre}
                         style={selectStyle}
                     >
-                        {GENRES.map((genre, index) => <MenuItem key={genre} value={index+1} primaryText={genre} />) }
+                        {GENRES.map((genre, index) => <MenuItem key={genre} value={genre} primaryText={genre} />) }
                     </SelectField>
 
                 </ToolbarGroup>
@@ -63,11 +63,16 @@ class ResultsToolbar extends React.Component {
 
 
 const selectSortType = (sortType) => {
-    console.log('new sort type');
-    console.log(sortType);
     return {
         type: "SELECT_SORT_TYPE",
         sortType
+    }
+};
+
+const selectGenre = (genre) => {
+    return {
+        type: "SELECT_GENRE",
+        genre
     }
 };
 
@@ -76,6 +81,7 @@ const selectSortType = (sortType) => {
 function mapStateToProps(state) {
     return {
         sortType: state.sortType,
+        genre: state.genre,
         films: state.search != null && state.search.status == "loaded" ? state.search.response : null,
         currentOclcId: state.currentMovieOclcId
     }
@@ -84,7 +90,8 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        onSelectSortType: (event, index, sortType) => dispatch(selectSortType(sortType))
+        onSelectSortType: (event, index, sortType) => dispatch(selectSortType(sortType)),
+        onSelectGenre: (event, index, genre) => dispatch(selectGenre(genre))
     }
 }
 
