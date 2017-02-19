@@ -19,7 +19,11 @@ class ScreenshotWithCaption extends React.Component {
             "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.movieOclcId + "/" + this.props.screenshotDetails.movieLineNumber + ".png";
 
         return (
-            <GridTile style={{'height': '180px'}}>
+            <GridTile
+                style={{'height': '180px'}}
+                title={this.props.screenshotDetails.movieLineNumber}
+                titleBackground={'rgba(0, 0, 0, 0.3)'}
+            >
                 <LazyLoad height={180} placeholder={<CircularProgress />}>
                     <img src={imgSrc} height={'180px'}
                          onMouseEnter={() => this.props.onMouseEnterScreenshot()}
