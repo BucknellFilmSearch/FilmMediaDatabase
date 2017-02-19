@@ -1,3 +1,6 @@
+/*@import url('https://fonts.googleapis.com/css?family=Roboto');*/
+@import url('https://fonts.googleapis.com/css?family=Pangolin|Roboto');
+
 
 /* Search results page */
 .resultsToolbar {
@@ -39,8 +42,48 @@
 "font-weight": "bold"
 }
 
+/* Styling for MetadataDrawer Elements */
+/* Movie poster styling */
+.thumbnail {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    /*background-position: 50%;*/
+    /*left: 50%;*/
+    /*margin-right: -50%;*/
+}
 
+/* Movie title in MetadataDrawer */
+.movieTitleInMetadataDrawer {
+    /*font-family: 'Roboto', sans-serif;*/
+    /*font-family: "Arial";*/
+    /*font-family: 'Pangolin', cursive;*/
+    padding-top: 85px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    height: 165px;
+    text-align: center;
+    position: relative;
+}
 
+/* Timeline in MetadataDrawer */
+.metadataDrawerTimelineContainer {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    text-align: center;
+    position: relative;
+}
+
+/* Dialogue of the screenshot */
+.metadataDrawerDialogueContainer {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    height: 120px;
+    text-align: center;
+    position: relative;
+    margin-right: auto;
+    margin-left: auto;
+}
 /* Graph related style */
 #header {
   color: white;
