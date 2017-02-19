@@ -50,7 +50,10 @@ def remapResultsHelper(lineOfDialogue):
         "movieReleaseYear": lineOfDialogue[6],
         "dvdReleaseYear": lineOfDialogue[7],
         "runtimeInMinutes": lineOfDialogue[8] if len(lineOfDialogue) > 8 else None,
-        "totalNumberOfLines": lineOfDialogue[9] if len(lineOfDialogue) > 8 else None
+        "totalNumberOfLines": lineOfDialogue[9] if len(lineOfDialogue) > 8 else None,
+        "genre1": lineOfDialogue[10] if len(lineOfDialogue) > 8 else None,
+        "genre2": lineOfDialogue[11] if len(lineOfDialogue) > 8 else None,
+        "genre3": lineOfDialogue[12] if len(lineOfDialogue) > 8 else None
     }
 
 def remapResults(results):
@@ -76,6 +79,9 @@ def remapResults(results):
         film['dvdReleaseYear'] = film["results"][0]["dvdReleaseYear"]
         film['runtimeInMinutes'] = film["results"][0]["runtimeInMinutes"]
         film['totalNumberOfLines'] = film["results"][0]["totalNumberOfLines"]
+        film['genre1'] = film["results"][0]["genre1"]
+        film['genre2'] = film["results"][0]["genre2"]
+        film['genre3'] = film["results"][0]["genre3"]
         for lineData in film['results']:
             lineData.pop('movieOclcId')
             lineData.pop('movieTitle')
@@ -83,6 +89,9 @@ def remapResults(results):
             lineData.pop('dvdReleaseYear')
             lineData.pop('runtimeInMinutes')
             lineData.pop('totalNumberOfLines')
+            lineData.pop('genre1')
+            lineData.pop('genre2')
+            lineData.pop('genre3')
 
     return mappedAndGrouped
 
@@ -230,6 +239,9 @@ class App():
         results = remapResults(contextLines)[0]
         results.pop('runtimeInMinutes')
         results.pop('totalNumberOfLines')
+        results.pop('genre1')
+        results.pop('genre2')
+        results.pop('genre3')
         return {"context": results}
 
     def displayComparisonPage(self):

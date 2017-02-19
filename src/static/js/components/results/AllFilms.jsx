@@ -8,17 +8,13 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import {ConnectedMetadataDrawer} from './MetadataDrawer.jsx';
 import {ConnectedContextDialog} from './ContextDialog.jsx';
-import ResultsToolbar from './ResultsToolbar.jsx';
+import {ConnectedResultsToolbar} from './ResultsToolbar.jsx';
 
 import {connect} from 'react-redux'
 
 class AllFilms extends React.Component {
     constructor() {
         super();
-
-        this.state = {
-            "status": null
-        };
     }
 
     componentDidMount() {
@@ -29,13 +25,6 @@ class AllFilms extends React.Component {
         if (this.props.location.pathname !== nextProps.location.pathname) {
             this.props.fetchNewSearchTerm();
         }
-
-        if (nextProps.search !== undefined) {
-            this.setState(
-                nextProps.search
-            )
-        }
-        console.log(nextProps);
     }
 
 
@@ -52,18 +41,18 @@ class AllFilms extends React.Component {
         });
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
-                {this.state.status == null || this.state.status == "loading" ? (
+                {!this.props.filmsLoaded ? (
                         <div>
                             <h2>Loading Relevant Films...</h2>
                         </div>
                     ) :
                     (
                         <div>
-                            <ResultsToolbar />
+                            <ConnectedResultsToolbar />
                             <ConnectedMetadataDrawer />
                             <ConnectedContextDialog />
                             {/*<Graph/>*/}
-                            {this.state.response.map(function (object) {
+                            {this.props.films.map(function (object) {
                                     return <ConnectedIndividualFilmResults
                                         key={`filmkey${object.movieOclcId}`}
                                         individualFilm={object} />;
@@ -102,8 +91,71 @@ const fetchNewSearchTerm = (searchTerm) => {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
+    let filmsLoaded = state.search && state.search.status == "loaded";
+
+    let films = filmsLoaded ? [...state.search.response] : [] ;
+
+    // check if films are loaded
+    if (filmsLoaded) {
+
+        // sort films based on user input
+        if (state.sortType == 1) {
+            films = films.sort(relevanceSort);
+        }
+        else if (state.sortType == 2) {
+            films = films.sort(alphabeticalSort);
+        }
+        else if (state.sortType == 3) {
+            films = films.sort(alphabeticalSort).reverse();
+        }
+        else if (state.sortType == 4) {
+            films = films.sort(yearSort);
+        }
+        else if (state.sortType == 5) {
+            films = films.sort(yearSort).reverse();
+        }
+
+        // filter films by genre
+        let genre = state.genre;
+
+        films = genre == 'All' ? films :
+            films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
+    }
+
+
     return {
-        search: state.search
+        filmsLoaded: filmsLoaded,
+        films: films,
+        sortType: state.sortType,
+        genre: state.genre
+    }
+}
+
+function relevanceSort(a, b) {
+    if (a.results.length > b.results.length) {
+        return -1;
+    }
+    else if (a.results.length < b.results.length) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+function alphabeticalSort(a, b) {
+    return a.movieTitle.localeCompare(b.movieTitle);
+}
+
+function yearSort(a, b) {
+    if (a.movieReleaseYear > b.movieReleaseYear) {
+        return -1;
+    }
+    else if (a.movieReleaseYear < b.movieReleaseYear) {
+        return 1;
+    }
+    else {
+        return 0;
     }
 }
 
