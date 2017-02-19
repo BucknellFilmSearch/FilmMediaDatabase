@@ -57,10 +57,9 @@
     /*font-family: 'Roboto', sans-serif;*/
     /*font-family: "Arial";*/
     /*font-family: 'Pangolin', cursive;*/
-    padding-top: 85px;
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
-    height: 165px;
+    height: 80px;
     text-align: center;
     position: relative;
 }

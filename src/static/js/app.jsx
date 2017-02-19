@@ -31,8 +31,8 @@ export const reducer = (state = {search: null, context: []}, action) => {
         case 'MOUSE_LEAVE_SCREENSHOT':
             return {
                 ...state,
-                // hoverMovieOclcId: null,
-                // hoverMovieLineNumber: null
+                hoverMovieOclcId: null,
+                hoverMovieLineNumber: null
             };
         case 'CLICK_SCREENSHOT':
             return {
