@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Slider from 'react-slick';
+import ImageGallery from 'react-image-gallery';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import SvgIcon from 'material-ui/SvgIcon';
@@ -8,22 +8,9 @@ import {connect} from 'react-redux';
 
 const customContentStyle = {
     width: '90%',
-    maxWidth: 'none'
+    maxWidth: 'none',
+    textAlign: 'center'
 };
-
-const LeftArrow = (props) => (
-    <SvgIcon {...props}>
-        <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"/>
-        <path d="M0-.5h24v24H0z" fill="none"/>
-    </SvgIcon>
-);
-
-const RightArrow = (props) => (
-    <SvgIcon  {...props}>
-        <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-        <path d="M0-.25h24v24H0z" fill="none"/>
-    </SvgIcon>
-);
 
 
 /**
@@ -62,56 +49,56 @@ class ContextDialog extends React.Component {
     render() {
         const actions = [
             <FlatButton
-                label="Cancel"
+                label="Close"
                 primary={true}
                 onTouchTap={this.handleClose}
             />
         ];
 
+        let totalNumberOfLines = this.props.currentFilm === null ? 0 : this.props.currentFilm.totalNumberOfLines;
 
-        let imgSrc =
-            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + this.props.currentMovieLineNumber + ".png";
-        let imgSrcA =
-            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + (this.props.currentMovieLineNumber-1) + ".png";
-        let imgSrcB =
-            "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + (this.props.currentMovieLineNumber+1) + ".png";
+        let images = [...Array(totalNumberOfLines).keys()].map(screenshotNumber => ({
+            original: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`,
+            // thumbnail: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
+        }));
 
-        let sliderSettings = {
-            dots: false,
-            infinite: false,
-            speed: 500,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            centerMode: true
-        };
+        // let imgSrc =
+        //     "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + this.props.currentMovieLineNumber + ".png";
+
 
         return (
             <Dialog
-                title="The firehose/context"
                 actions={actions}
                 contentStyle={customContentStyle}
                 modal={false}
                 open={this.state.open}
                 autoScrollBodyContent={true}
+                onRequestClose={this.handleClose}
             >
 
-                <img src={imgSrc} height="300px" />
+                {/*<img src={imgSrc} height="300px" />*/}
 
-                {/*<Slider {...sliderSettings}>*/}
-                    {/*<img src={imgSrcA} height="300px" />*/}
-                    {/*<img src={imgSrc} height="300px" />*/}
-                    {/*<img src={imgSrcB} height="300px" />*/}
-                {/*</Slider>*/}
+                <div style={{width: '500px', textAlign: 'center'}}>
+                    <ImageGallery
+                        items={images}
+                        slideInterval={2000}
+                        lazyLoad={true}
+                        showIndex={true}
+                        startIndex={this.props.currentMovieLineNumber-1}
+                        showPlayButton={false}
+                        showFullscreenButton={false}
+                        onSlide={this.props.onSlideAndCheckForContext}
+                    />
+                </div>
+
+
 
                 <div>
-                    {this.props.clickedScreenshotMovieOclcId} <br />
+
                     {this.props.currentMovieLineNumber} <br />
                     {this.props.currentScreenshot != null ? (
                             <div>
-                                Line {this.props.currentScreenshot.movieLineNumber} <br />
-
                                 {this.props.currentScreenshot.movieLineText} <br />
-
                                 {this.props.currentScreenshot.movieStartTimeStamp} -
                                 {this.props.currentScreenshot.movieEndTimeStamp} <br/>
                             </div>
@@ -123,17 +110,6 @@ class ContextDialog extends React.Component {
 
                     }
 
-                    <FlatButton
-                        label={<LeftArrow/>}
-                        primary={true}
-                        onTouchTap={this.props.onSlideLeft}
-                    />
-
-                    <FlatButton
-                        label={<RightArrow/>}
-                        primary={true}
-                        onTouchTap={this.props.onSlideRight}
-                    /> <br />
                 </div>
 
 
@@ -164,7 +140,7 @@ const receiveContext = (context) => {
     };
 };
 
-const slideAndCheckForContext = (slideDirection) => {
+const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     return (dispatch, getState) => {
 
         // http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator
@@ -174,18 +150,9 @@ const slideAndCheckForContext = (slideDirection) => {
         let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
             state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
 
-        let currentMovieLineNumber = state.currentContextMovieLineNumber;
-
         let context = state.context;
 
-        // calculate new movie line number based on slide direction
-        let newMovieLineNumber = currentMovieLineNumber;
-
-        if (slideDirection == "SLIDE_RIGHT" && currentMovieLineNumber !== currentFilm.totalNumberOfLines) {
-            newMovieLineNumber = currentMovieLineNumber + 1
-        } else if (slideDirection == "SLIDE_LEFT" && currentMovieLineNumber !== 1) {
-            newMovieLineNumber = currentMovieLineNumber - 1;
-        }
+        let newMovieLineNumber = newMovieLineNumberIndex + 1;
 
         // check if context already exists
         let newMovieLineNumberNotInContext = context.find(screenshot =>
@@ -229,8 +196,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onCloseContextDialog: () => dispatch(closeContextDialog()),
-        onSlideLeft: () => dispatch(slideAndCheckForContext('SLIDE_LEFT')),
-        onSlideRight: () => dispatch(slideAndCheckForContext('SLIDE_RIGHT'))
+        onSlideAndCheckForContext: (newMovieLineNumberIndex) => dispatch(slideAndCheckForContext(newMovieLineNumberIndex))
     }
 }
 
