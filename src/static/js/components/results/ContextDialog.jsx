@@ -2,7 +2,6 @@ import * as React from 'react';
 import ImageGallery from 'react-image-gallery';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import SvgIcon from 'material-ui/SvgIcon';
 import {connect} from 'react-redux';
 
 

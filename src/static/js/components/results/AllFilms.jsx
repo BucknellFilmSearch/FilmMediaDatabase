@@ -8,7 +8,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import {ConnectedMetadataDrawer} from './MetadataDrawer.jsx';
 import {ConnectedContextDialog} from './ContextDialog.jsx';
-import ResultsToolbar from './ResultsToolbar.jsx';
+import {ConnectedResultsToolbar} from './ResultsToolbar.jsx';
 
 import {connect} from 'react-redux'
 
@@ -52,18 +52,18 @@ class AllFilms extends React.Component {
         });
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
-                {this.state.status == null || this.state.status == "loading" ? (
+                {this.props.search == null || this.props.search.status == "loading" ? (
                         <div>
                             <h2>Loading Relevant Films...</h2>
                         </div>
                     ) :
                     (
                         <div>
-                            <ResultsToolbar />
+                            <ConnectedResultsToolbar />
                             <ConnectedMetadataDrawer />
                             <ConnectedContextDialog />
                             {/*<Graph/>*/}
-                            {this.state.response.map(function (object) {
+                            {this.props.search.response.map(function (object) {
                                     return <ConnectedIndividualFilmResults
                                         key={`filmkey${object.movieOclcId}`}
                                         individualFilm={object} />;
@@ -102,8 +102,61 @@ const fetchNewSearchTerm = (searchTerm) => {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
+    console.log('resorting');
+    console.log('sortType:');
+    console.log(state.sortType);
+
+    let search = state.search;
+
+    if (search && search.status == "loaded") {
+        if (state.sortType == 1) {
+            search.response = search.response.sort(relevanceSort);
+        }
+        else if (state.sortType == 2) {
+            search.response = search.response.sort(alphabeticalSort);
+        }
+        else if (state.sortType == 3) {
+            search.response = search.response.sort(alphabeticalSort).reverse();
+        }
+        else if (state.sortType == 4) {
+            search.response = search.response.sort(yearSort);
+        }
+        else if (state.sortType == 5) {
+            search.response = search.response.sort(yearSort).reverse();
+        }
+    }
+
     return {
-        search: state.search
+        search: search,
+        sortType: state.sortType
+    }
+}
+
+function relevanceSort(a, b) {
+    if (a.results.length > b.results.length) {
+        return -1;
+    }
+    else if (a.results.length < b.results.length) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+function alphabeticalSort(a, b) {
+    return a.movieTitle.localeCompare(b.movieTitle);
+}
+
+function yearSort(a, b) {
+    if (a.movieReleaseYear > b.movieReleaseYear) {
+        return -1;
+    }
+    else if (a.movieReleaseYear < b.movieReleaseYear) {
+        return 1;
+    }
+    else {
+        return 0;
     }
 }
 

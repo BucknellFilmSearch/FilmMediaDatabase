@@ -11,7 +11,6 @@ import { Provider } from 'react-redux';
 // React component imports
 import { SearchContainer } from "./components/search/SearchContainer.jsx";
 import { ConnectedAllFilms } from "./components/results/AllFilms.jsx";
-import { AllContext } from "./components/results/AllContext.jsx";
 
 // Global settings
 export let DEBUG_MODE = true;
@@ -19,7 +18,7 @@ export let DEBUG_MODE = true;
 injectTapEventPlugin();
 
 
-export const reducer = (state = {search: null, context: []}, action) => {
+export const reducer = (state = {search: null, context: [], sortType: 1}, action) => {
     console.log(action);
     switch (action.type) {
         case 'MOUSE_ENTER_SCREENSHOT':
@@ -101,6 +100,11 @@ export const reducer = (state = {search: null, context: []}, action) => {
                 ...state,
                 currentMovieOclcId: action.movieOclcId
             }
+        case 'SELECT_SORT_TYPE':
+            return {
+                ...state,
+                sortType: action.sortType
+            }
         default:
             return state
     }
@@ -119,7 +123,7 @@ ReactDOM.render((
             <Route path="/">
                 <IndexRoute component={SearchContainer}/>
                 <Route path=":term/:genre/:startYear/:endYear" component={ConnectedAllFilms} />
-                <Route path="context/:oclc/:line" component={AllContext} />
+                {/*<Route path="context/:oclc/:line" component={AllContext} />*/}
             </Route>
         </Router>
     </Provider>
