@@ -12,9 +12,13 @@ const customContentStyle = {
 };
 
 
+
 /**
  * The dialog width has been set to occupy the full width of browser through the `contentStyle` property.
  */
+
+const timeLineLength = 200;
+
 class ContextDialog extends React.Component {
 
     constructor() {
@@ -25,6 +29,17 @@ class ContextDialog extends React.Component {
         };
 
         this.handleClose = this.handleClose.bind(this);
+    }
+
+    /* Removes the junk after the comma in the screenshot's timestamp */
+    static beautifyTimeStamp(movieStartTimeStamp) {
+        const splitString = movieStartTimeStamp.split(",");
+        return (splitString[0]);
+    }
+
+    static timeStampToMinutes(movieStartTimeStamp, totalMovieRuntime) {
+        const splitString = movieStartTimeStamp.split(":");
+        return Math.ceil((10 + parseInt(splitString[0]) * 60 + parseInt(splitString[1]))/totalMovieRuntime*timeLineLength);
     }
 
     handleOpen() {
@@ -45,7 +60,11 @@ class ContextDialog extends React.Component {
         }
     }
 
+
     render() {
+
+
+
         const actions = [
             <FlatButton
                 label="Close"
@@ -77,7 +96,7 @@ class ContextDialog extends React.Component {
 
                 {/*<img src={imgSrc} height="300px" />*/}
 
-                <div style={{width: '500px', textAlign: 'center'}}>
+                <div className="contextImageGallery">
                     <ImageGallery
                         items={images}
                         slideInterval={2000}
@@ -92,14 +111,13 @@ class ContextDialog extends React.Component {
 
 
 
-                <div>
+                <div className="contextDialogue">
 
-                    {this.props.currentMovieLineNumber} <br />
+                    {/*{this.props.currentMovieLineNumber} <br />*/}
                     {this.props.currentScreenshot != null ? (
                             <div>
                                 {this.props.currentScreenshot.movieLineText} <br />
-                                {this.props.currentScreenshot.movieStartTimeStamp} -
-                                {this.props.currentScreenshot.movieEndTimeStamp} <br/>
+                                {ContextDialog.beautifyTimeStamp(this.props.currentScreenshot.movieStartTimeStamp)}<br/>
                             </div>
                         ): (
                             <div>
@@ -110,6 +128,12 @@ class ContextDialog extends React.Component {
                     }
 
                 </div>
+                {this.props.currentScreenshot != null ? (
+                <svg height="70" width="200">
+                    <line x1="10" y1="50" x2="210" y2="50" stroke={"grey"} strokeWidth={1} />
+                    <line x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={1}/>
+                </svg>
+                ): null }
 
 
             </Dialog>
