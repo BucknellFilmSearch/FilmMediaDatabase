@@ -127,7 +127,7 @@ ReactDOM.render((
         <Router history={hashHistory}>
             <Route path="/">
                 <IndexRoute component={SearchContainer}/>
-                <Route path=":term/:genre/:startYear/:endYear" component={ConnectedAllFilms} />
+                <Route path=":term" component={ConnectedAllFilms} />
                 {/*<Route path="context/:oclc/:line" component={AllContext} />*/}
             </Route>
         </Router>

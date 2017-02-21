@@ -34,7 +34,7 @@ export class InputForm extends React.Component {
         // TODO - sanitize url and allow for multiple word search phrase
 
         // update the URL
-        var newPath = `/${keywordOrPhrase}/${genre}/${earliestReleaseYear}/${latestReleaseYear}`;
+        var newPath = `/${keywordOrPhrase}`;
         hashHistory.push(newPath);
     }
 
