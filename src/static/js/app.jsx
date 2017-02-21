@@ -68,7 +68,8 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
                 ...state,
                 search: {
                     status: "loading",
-                    response: null
+                    response: null,
+                    searchTerm: action.searchTerm
                 }
             };
         case 'RECEIVE_NEW_SEARCH_TERM':
@@ -92,7 +93,8 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
                 search: {
                     status: "loaded",
                     response: action.response,
-                    searchType: "text"
+                    searchType: "text",
+                    searchTerm: state.search.searchTerm
                 },
                 context: state.context.concat(newSearchResultsScreenshots)
             };
