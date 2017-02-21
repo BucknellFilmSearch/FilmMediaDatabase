@@ -27,9 +27,8 @@ class MetadataDrawer extends React.Component {
 
     render() {
 
-        // let imgSrc = this.props.movieDetails != null && DEBUG_MODE? "/static/imageFiles/140x197.jpg" : "http://www.filmtvsearch.net/static/imageFiles/" + this.props.movieDetails.movieOclcId + ".gif";
         let imgSrc = this.props.movieDetails != null ? "http://www.filmtvsearch.net/static/imageFiles/" + this.props.movieDetails.movieOclcId + ".gif" : null;
-        console.log(this.props);
+        
         return (
             <Drawer docked={true} open={true} openSecondary={true} zDepth={2} containerStyle={{height: 'calc(100% - 56px)', top: 56}}>
                 {this.props.movieDetails == null ? (
@@ -44,13 +43,6 @@ class MetadataDrawer extends React.Component {
                                 <LazyLoad height={197} placeholder={<CircularProgress />}>
                                     <img className="thumbnail" src={imgSrc} width="140" height="197" />
                                 </LazyLoad>
-                            {/*{this.props.movieDetails.movieOclcId} <br />*/}
-
-                            {/*{this.props.movieDetails.movieTitle} ({this.props.movieDetails.movieReleaseYear}) <br />*/}
-
-                            {/*<LazyLoad height={197} placeholder={<CircularProgress />}>*/}
-                                {/*<img className="thumbnail" src={imgSrc} width="140" height="197" />*/}
-                            {/*</LazyLoad>*/}
                         </div>
                     )
                 }
@@ -64,7 +56,6 @@ class MetadataDrawer extends React.Component {
 
                         <Paper>
                         <div className="metadataDrawerTimelineContainer">
-                            {/*{this.props.movieDetails.runtimeInMinutes} <br/>*/}
                             <svg height="70" width="200">
                                 <line x1="10" y1="50" x2="210" y2="50" stroke={"grey"} strokeWidth={1} />
                                 <line x1={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp, this.props.movieDetails.runtimeInMinutes)} y1="30" x2={MetadataDrawer.timeStampToMinutes(this.props.screenshotDetails.movieStartTimeStamp, this.props.movieDetails.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={1}/>
@@ -82,8 +73,6 @@ class MetadataDrawer extends React.Component {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    console.log('mapping metadata');
-    console.log(state);
     if (state.hoverMovieOclcId) {
         let movieDetails = {...state.search.response.find((x) => x.movieOclcId == state.hoverMovieOclcId)};
         let screenshotDetails = movieDetails.results.find((x) => x.movieLineNumber == state.hoverMovieLineNumber);

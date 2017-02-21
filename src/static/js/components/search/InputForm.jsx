@@ -59,18 +59,7 @@ export class InputForm extends React.Component {
                 and
                 <input ref="latestReleaseYear" type="number" placeholder={LATEST_RELEASE_YEAR} min={EARLIEST_RELEASE_YEAR} max={LATEST_RELEASE_YEAR} />
                 <br />
-
-
-                {/*
-                    TODO - add onclick event that sends form data using AJAX $ajaxSubmit or similar
-                    more information: http://stackoverflow.com/questions/1960240/jquery-ajax-submit-form
-                    or use react router form
-                    https://github.com/insin/react-router-form
-                    http://stackoverflow.com/questions/31079158/how-to-handle-post-request-in-isomorphic-react-react-router-application
-                    https://github.com/ReactTraining/react-router/blob/c3cd9675bd8a31368f87da74ac588981cbd6eae7/examples/auth-flow/app.js
-                    https://facebook.github.io/react/docs/refs-and-the-dom.html
-                 */}
-
+                
                 <input type="submit" className="btn btn-primary" value="Search" />
             </form>
 

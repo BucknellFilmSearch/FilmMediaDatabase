@@ -19,18 +19,6 @@ export class IndividualFilmResults extends React.Component {
                 key={`screenshot${this.props.individualFilm.movieTitle}linenumber${object.movieLineNumber}`}
                 screenshotDetails={object} movieOclcId={this.props.individualFilm.movieOclcId}/>
             );
-            // let linkKey = `link${this.props.movieOclcId}linenumber${object.movieLineNumber}`;
-            // return this.props.fromContext ? (
-            //     <a key={linkKey} className="list-group-item">
-            //         {screenshotWithCaption}
-            //     </a>
-            // ) : (
-            //     <Link key={linkKey}
-            //           to={"/context/" + this.props.individualFilm.movieOclcId + "/" + object.movieLineNumber}
-            //         className="list-group-item">
-            //         {screenshotWithCaption}
-            //     </Link>
-            // )
         });
     }
 
@@ -40,7 +28,6 @@ export class IndividualFilmResults extends React.Component {
             <div className="screenshotsGridList">
                 <Subheader>{`${this.props.individualFilm.movieTitle} (${this.props.individualFilm.movieReleaseYear})`}</Subheader>
                 <GridList cellHeight={180} cols={4}>
-                    {/*<FilmMetadata metadata={this.props.individualFilm} />*/}
                     { this.getScreenshotsWithCaption() }
                 </GridList>
                 <Waypoint
@@ -52,8 +39,6 @@ export class IndividualFilmResults extends React.Component {
 }
 
 const scrollIntoFilm = (movieOclcId) => {
-    console.log('scroll into:');
-    console.log(movieOclcId);
     return {
         type: 'SCROLL_INTO_FILM',
         movieOclcId

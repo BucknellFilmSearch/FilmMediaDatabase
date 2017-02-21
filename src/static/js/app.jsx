@@ -121,8 +121,7 @@ const store = createStore(
     applyMiddleware(thunkMiddleware) // lets us dispatch() functions
 );
 
-// http://stackoverflow.com/questions/32846337/how-to-fetch-the-new-data-in-response-to-react-router-change-with-redux
-// https://github.com/reactjs/redux/issues/227
+
 ReactDOM.render((
     <Provider store={store}>
         <Router history={hashHistory}>
