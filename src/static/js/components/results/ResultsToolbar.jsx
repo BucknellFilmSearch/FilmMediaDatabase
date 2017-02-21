@@ -6,8 +6,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import {connect} from 'react-redux';
-import FontIcon from 'material-ui/FontIcon';
-
+import { hashHistory } from 'react-router'
 
 const GENRES = ["All", "Action", "Thriller", "Comedy", "Family", "Adventure", "Mystery", "Romance", "Sci-Fi", "Horror",
     "Drama", "Biography", "Fantasy", "Crime", "War", "Animation", "History", "Musical"];
@@ -25,7 +24,16 @@ const SearchIcon = (props) => {
     );
 };
 
+
 class ResultsToolbar extends React.Component {
+
+    updateSearch() {
+        let keywordOrPhrase = this.refs["updateSearchBox"].getValue();
+
+        // update the URL
+        let newPath = `/${keywordOrPhrase.replace(' ', '&').replace('!','').replace('?','')}`;
+        hashHistory.push(newPath);
+    }
 
     render() {
         return (
@@ -37,12 +45,14 @@ class ResultsToolbar extends React.Component {
                         hintText="Search Phrase"
                         defaultValue={''}
                         style={selectStyle}
+                        ref="updateSearchBox"
                     />
                     <FlatButton
                         label="Update Search"
                         labelPosition="before"
                         primary={true}
                         icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
+                        onClick={() => this.updateSearch()}
                     />
                 </ToolbarGroup>
                 <ToolbarGroup lastChild={true}>
@@ -105,7 +115,7 @@ function mapStateToProps(state) {
     return {
         sortType: state.sortType,
         genre: state.genre,
-        films: state.search != null && state.search.status == "loaded" ? state.search.response : null,
+        films: state.search != null && state.search.status == "loaded" ? state.search.response : [],
         enableSort: state.search != null && state.search.searchType == "text",
         currentOclcId: state.currentMovieOclcId,
         searchTerm: state.search != null && state.search.searchTerm ? state.search.searchTerm : ''

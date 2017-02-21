@@ -41,26 +41,26 @@ class AllFilms extends React.Component {
         });
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
-                {!this.props.filmsLoaded ? (
-                        <div>
-                            <h2>Loading Relevant Films...</h2>
-                        </div>
-                    ) :
-                    (
-                        <div>
-                            <ConnectedResultsToolbar />
-                            <ConnectedMetadataDrawer />
-                            <ConnectedContextDialog />
-                            {/*<Graph/>*/}
-                            {this.props.films.map(function (object) {
-                                    return <ConnectedIndividualFilmResults
-                                        key={`filmkey${object.movieOclcId}`}
-                                        individualFilm={object} />;
-                                }
-                            )}
-                        </div>
-                    )
-                }
+                <div>
+                    <ConnectedResultsToolbar />
+                    <ConnectedMetadataDrawer />
+                    <ConnectedContextDialog />
+                    {/*<Graph/>*/}
+                    {!this.props.filmsLoaded ? (
+                            <div style={{paddingTop: '60px'}}>
+                                <h2>Loading Relevant Films...</h2>
+                            </div>
+                        ) :
+                        this.props.films.map(function (object) {
+                                return <ConnectedIndividualFilmResults
+                                    key={`filmkey${object.movieOclcId}`}
+                                    individualFilm={object} />;
+                            }
+                        )
+                    }
+
+                </div>
+
             </MuiThemeProvider>
         );
     }
