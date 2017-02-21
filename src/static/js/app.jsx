@@ -17,6 +17,9 @@ export let DEBUG_MODE = true;
 
 injectTapEventPlugin();
 
+import 'isomorphic-fetch';
+
+
 
 export const reducer = (state = {search: null, context: [], sortType: 1, genre: 'All'}, action) => {
     console.log(action);
