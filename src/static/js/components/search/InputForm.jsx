@@ -31,16 +31,13 @@ export class InputForm extends React.Component {
         var earliestReleaseYear = this.refs["earliestReleaseYear"]["value"] || EARLIEST_RELEASE_YEAR;
         var latestReleaseYear = this.refs["latestReleaseYear"]["value"] || LATEST_RELEASE_YEAR;
 
-        // TODO - sanitize url and allow for multiple word search phrase
-
         // update the URL
-        var newPath = `/${keywordOrPhrase}`;
+        var newPath = `/${keywordOrPhrase.replace(' ', '&').replace('!','').replace('?','')}`;
         hashHistory.push(newPath);
     }
 
 
     render() {
-        // TODO - make sure user types something into the search box
         return (
             <form id="searchCriteria" onSubmit={this.handleFormSubmission}>
                 <input onChange={ (e) => this.setState({ keywordOrPhrase: e.target.value }) }
