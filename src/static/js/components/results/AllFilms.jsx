@@ -17,13 +17,24 @@ class AllFilms extends React.Component {
         super();
     }
 
+    // TODO - update this function
     componentDidMount() {
         this.props.fetchNewSearchTerm(this.props.location.pathname);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.props.fetchNewSearchTerm(nextProps.location.pathname);
+        // compare old search term to new, and old context to new
+        if (nextProps.routeParams['searchTerm'] != this.props.routeParams['searchTerm']) {
+            this.props.fetchNewSearchTerm(nextProps.routeParams['searchTerm']);
+        }
+        // swap context
+        if (nextProps.routeParams['contextOclcId'] != this.props.routeParams['contextOclcId'] ||
+            nextProps.routeParams['contextScreenshot'] != this.props.routeParams['contextScreenshot']) {
+            this.props.openContext(nextProps.routeParams['contextOclcId'], nextProps.routeParams['contextScreenshot']);
+        }
+        // close context
+        else if ((!nextProps.routeParams.hasOwnProperty('contextOclcId') && this.props.routeParams.hasOwnProperty('contextOclcId'))) {
+            this.props.closeContext();
         }
     }
 
@@ -81,14 +92,20 @@ const receiveNewSearchTerm = (response) => {
 };
 
 const fetchNewSearchTerm = (searchTerm) => {
-    console.log('searchTerm');
-    console.log(searchTerm);
     return (dispatch) => {
-        dispatch(requestNewSearchTerm(searchTerm.slice(1)));
-        return fetch(`http://localhost:8080/moviesearch${searchTerm}`)
+        dispatch(requestNewSearchTerm(searchTerm));
+        return fetch(`http://localhost:8080/moviesearch/${searchTerm}`)
             .then(response => response.json())
             .then(response => dispatch(receiveNewSearchTerm(response.results)));
         // TODO - add catch handler to handle errors
+    }
+};
+
+const openContext = (movieOclcId, movieLineNumber) => {
+    return {
+        type: 'OPEN_CONTEXT',
+        movieOclcId,
+        movieLineNumber
     }
 };
 
@@ -162,10 +179,18 @@ function yearSort(a, b) {
     }
 }
 
+const closeContextDialog = () => {
+    return {
+        type: 'CLOSE_CONTEXT_DIALOG'
+    };
+};
+
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm))
+        fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm)),
+        openContext: (oclcId, screenshot) => dispatch(openContext(oclcId, screenshot)),
+        closeContext: () => dispatch(closeContextDialog())
     }
 }
 

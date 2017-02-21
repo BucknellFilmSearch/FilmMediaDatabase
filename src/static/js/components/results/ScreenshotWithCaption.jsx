@@ -7,6 +7,8 @@ import {GridTile} from 'material-ui/GridList';
 import LazyLoad from 'react-lazyload'; 
 import CircularProgress from 'material-ui/CircularProgress';
 
+import { hashHistory } from 'react-router'
+
 
 class ScreenshotWithCaption extends React.Component {
 
@@ -24,7 +26,7 @@ class ScreenshotWithCaption extends React.Component {
                     <img src={imgSrc} height={'180px'}
                          onMouseEnter={() => this.props.onMouseEnterScreenshot()}
                          onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
-                         onClick={() => this.props.onClickScreenshot()}
+                         onClick={() => hashHistory.push(`${this.props.searchTerm}/context/${this.props.movieOclcId}/${this.props.screenshotDetails.movieLineNumber}`)}
                     />
                 </LazyLoad>
             </GridTile>
@@ -47,17 +49,12 @@ const mouseLeaveScreenshot = () => {
     };
 };
 
-const clickScreenshot = (movieOclcId, movieLineNumber) => {
-    return {
-        type: 'CLICK_SCREENSHOT',
-        movieOclcId,
-        movieLineNumber
-    }
-};
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    return {}
+    return {
+        searchTerm: state.search && state.search.searchTerm ? state.search.searchTerm : null
+    }
 }
 
 // Map Redux actions to component props

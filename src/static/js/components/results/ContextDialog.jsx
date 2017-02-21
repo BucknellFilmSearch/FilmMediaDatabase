@@ -3,6 +3,7 @@ import ImageGallery from 'react-image-gallery';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {connect} from 'react-redux';
+import { hashHistory } from 'react-router'
 
 
 const customContentStyle = {
@@ -50,12 +51,12 @@ class ContextDialog extends React.Component {
 
     handleClose() {
         this.setState({open: false});
-        this.props.onCloseContextDialog();
+        hashHistory.push(`/${this.props.searchTerm}`)
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.state.open === false && nextProps.clickedScreenshotMovieOclcId !== null) {
-            console.log('opening');
+        // open the context dialog if screenshot is clicked or URL is updated
+        if (this.state.open === false && nextProps.contextScreenshotMovieOclcId !== null) {
             this.handleOpen();
         }
     }
@@ -74,8 +75,8 @@ class ContextDialog extends React.Component {
         let totalNumberOfLines = this.props.currentFilm === null ? 0 : this.props.currentFilm.totalNumberOfLines;
 
         let images = [...Array(totalNumberOfLines).keys()].map(screenshotNumber => ({
-            original: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`,
-            // thumbnail: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
+            original: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.contextScreenshotMovieOclcId}/${screenshotNumber+1}.png`,
+            // thumbnail: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.contextScreenshotMovieOclcId}/${screenshotNumber+1}.png`
             // TODO - add thumbnail back when pull request is approved (https://github.com/xiaolin/react-image-gallery/pull/147)
         }));
 
@@ -133,13 +134,6 @@ class ContextDialog extends React.Component {
     }
 }
 
-
-const closeContextDialog = () => {
-    return {
-        type: 'CLOSE_CONTEXT_DIALOG'
-    };
-};
-
 const slideScreenshot = (newMovieLineNumber) => {
     return {
         type: 'SLIDE_SCREENSHOT',
@@ -160,8 +154,8 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
 
         let state = getState();
 
-        let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
-            state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
+        let currentFilm = !state.contextScreenshotMovieOclcId ? null :
+            state.search.response.find(film => state.contextScreenshotMovieOclcId === film.movieOclcId);
 
         let context = state.context;
 
@@ -190,25 +184,27 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
 function mapStateToProps(state) {
     console.log(state);
 
-    let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
-        state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
+    let currentFilm = !state.contextScreenshotMovieOclcId ? null :
+        state.search.response.find(film => state.contextScreenshotMovieOclcId === film.movieOclcId);
 
-    let key = `oclc${state.clickedScreenshotMovieOclcId}line${state.currentContextMovieLineNumber}`;
+    let key = `oclc${state.contextScreenshotMovieOclcId}line${state.currentContextMovieLineNumber}`;
 
     let currentScreenshot = state.context.find(screenshot => (screenshot.key == key)) || null;
 
     return {
-        clickedScreenshotMovieOclcId: state.clickedScreenshotMovieOclcId,
+        contextScreenshotMovieOclcId: state.contextScreenshotMovieOclcId,
         currentMovieLineNumber: state.currentContextMovieLineNumber,
         currentFilm: currentFilm,
-        currentScreenshot: currentScreenshot
+        currentScreenshot: currentScreenshot,
+        searchTerm: state.search && state.search.searchTerm ? state.search.searchTerm : null
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        onCloseContextDialog: () => dispatch(closeContextDialog()),
+        // TODO - update url to remove context on close
+        // onCloseContextDialog: () => dispatch(closeContextDialog()),
         onSlideAndCheckForContext: (newMovieLineNumberIndex) => dispatch(slideAndCheckForContext(newMovieLineNumberIndex))
     }
 }

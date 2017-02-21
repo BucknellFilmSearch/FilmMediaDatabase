@@ -36,10 +36,10 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
                 hoverMovieOclcId: null,
                 hoverMovieLineNumber: null
             };
-        case 'CLICK_SCREENSHOT':
+        case 'OPEN_CONTEXT':
             return {
                 ...state,
-                clickedScreenshotMovieOclcId: action.movieOclcId,
+                contextMovieOclcId: action.movieOclcId,
                 currentContextMovieLineNumber: action.movieLineNumber
             };
         case 'SLIDE_SCREENSHOT':
@@ -132,8 +132,7 @@ ReactDOM.render((
         <Router history={hashHistory}>
             <Route path="/">
                 <IndexRoute component={SearchContainer}/>
-                <Route path=":term" component={ConnectedAllFilms} />
-                {/*<Route path="context/:oclc/:line" component={AllContext} />*/}
+                <Route path=":searchTerm(/context/:contextOclcId/:contextScreenshot)" component={ConnectedAllFilms} />
             </Route>
         </Router>
     </Provider>
