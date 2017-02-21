@@ -30,8 +30,8 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
         case 'MOUSE_LEAVE_SCREENSHOT':
             return {
                 ...state,
-                // hoverMovieOclcId: null,
-                // hoverMovieLineNumber: null
+                hoverMovieOclcId: null,
+                hoverMovieLineNumber: null
             };
         case 'CLICK_SCREENSHOT':
             return {
@@ -67,8 +67,8 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
             return {
                 ...state,
                 search: {
-                    "status": "loading",
-                    "response": null
+                    status: "loading",
+                    response: null
                 }
             };
         case 'RECEIVE_NEW_SEARCH_TERM':
@@ -90,8 +90,9 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
             return {
                 ...state,
                 search: {
-                    "status": "loaded",
-                    "response": action.response
+                    status: "loaded",
+                    response: action.response,
+                    searchType: "text"
                 },
                 context: state.context.concat(newSearchResultsScreenshots)
             };

@@ -75,8 +75,6 @@ class MetadataDrawer extends React.Component {
                     </div>
                     ): null
                 }
-
-
             </Drawer>
         )
     }

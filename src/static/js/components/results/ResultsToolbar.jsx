@@ -38,6 +38,7 @@ class ResultsToolbar extends React.Component {
                         value={this.props.sortType}
                         onChange={this.props.onSelectSortType}
                         style={selectStyle}
+                        disabled={!this.props.enableSort}
                     >
                         <MenuItem value={1} primaryText="Relevance" />
                         <MenuItem value={2} primaryText="A-Z" />
@@ -83,6 +84,7 @@ function mapStateToProps(state) {
         sortType: state.sortType,
         genre: state.genre,
         films: state.search != null && state.search.status == "loaded" ? state.search.response : null,
+        enableSort: state.search != null && state.search.searchType == "text",
         currentOclcId: state.currentMovieOclcId
     }
 }
