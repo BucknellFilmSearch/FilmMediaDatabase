@@ -31,7 +31,7 @@ class ResultsToolbar extends React.Component {
         let keywordOrPhrase = this.refs["updateSearchBox"].getValue();
 
         // update the URL
-        let newPath = `/${keywordOrPhrase.replace(' ', '&').replace('!','').replace('?','')}`;
+        let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
         hashHistory.push(newPath);
     }
 
@@ -40,7 +40,7 @@ class ResultsToolbar extends React.Component {
             <Toolbar className="resultsToolbar">
                 <ToolbarGroup firstChild={true}>
                     <Link to={"/"}><FlatButton label="Home" /></Link>
-                    <ToolbarTitle text={`Search Results for '${this.props.searchTerm.replace('&', ' ')}'`} />
+                    <ToolbarTitle text={`Search Results for '${this.props.searchTerm.replace(/&/g, ' ')}'`} />
                     <TextField
                         hintText="Search Phrase"
                         defaultValue={''}

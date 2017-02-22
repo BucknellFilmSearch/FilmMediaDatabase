@@ -32,7 +32,7 @@ export class InputForm extends React.Component {
         var latestReleaseYear = this.refs["latestReleaseYear"]["value"] || LATEST_RELEASE_YEAR;
 
         // update the URL
-        var newPath = `/${keywordOrPhrase.replace(' ', '&').replace('!','').replace('?','')}`;
+        var newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
         hashHistory.push(newPath);
     }
 
