@@ -67,8 +67,6 @@ class ContextDialog extends React.Component {
 
     render() {
 
-
-
         const actions = [
             <FlatButton
                 label="Close"
@@ -82,11 +80,8 @@ class ContextDialog extends React.Component {
         let images = [...Array(totalNumberOfLines).keys()].map(screenshotNumber => ({
             original: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`,
             // thumbnail: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
+            // TODO - add thumbnail back when pull request is approved (https://github.com/xiaolin/react-image-gallery/pull/147)
         }));
-
-        // let imgSrc =
-        //     "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.clickedScreenshotMovieOclcId + "/" + this.props.currentMovieLineNumber + ".png";
-
 
         return (
             <Dialog
@@ -97,8 +92,6 @@ class ContextDialog extends React.Component {
                 autoScrollBodyContent={true}
                 onRequestClose={this.handleClose}
             >
-
-                {/*<img src={imgSrc} height="300px" />*/}
 
                 <div className="contextImageGallery">
                     <ImageGallery
@@ -117,7 +110,6 @@ class ContextDialog extends React.Component {
 
                 <div className="contextDialogue">
 
-                    {/*{this.props.currentMovieLineNumber} <br />*/}
                     {this.props.currentScreenshot != null ? (
                             <div>
                                 {this.props.currentScreenshot.movieLineText} <br />
@@ -172,8 +164,6 @@ const receiveContext = (context) => {
 
 const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     return (dispatch, getState) => {
-
-        // http://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator
 
         let state = getState();
 

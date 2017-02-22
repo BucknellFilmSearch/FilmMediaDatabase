@@ -17,6 +17,9 @@ export let DEBUG_MODE = true;
 
 injectTapEventPlugin();
 
+import 'isomorphic-fetch';
+
+
 
 export const reducer = (state = {search: null, context: [], sortType: 1, genre: 'All'}, action) => {
     console.log(action);
@@ -30,8 +33,8 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
         case 'MOUSE_LEAVE_SCREENSHOT':
             return {
                 ...state,
-                // hoverMovieOclcId: null,
-                // hoverMovieLineNumber: null
+                hoverMovieOclcId: null,
+                hoverMovieLineNumber: null
             };
         case 'CLICK_SCREENSHOT':
             return {
@@ -67,8 +70,9 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
             return {
                 ...state,
                 search: {
-                    "status": "loading",
-                    "response": null
+                    status: "loading",
+                    response: null,
+                    searchTerm: action.searchTerm
                 }
             };
         case 'RECEIVE_NEW_SEARCH_TERM':
@@ -90,8 +94,10 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
             return {
                 ...state,
                 search: {
-                    "status": "loaded",
-                    "response": action.response
+                    status: "loaded",
+                    response: action.response,
+                    searchType: "text",
+                    searchTerm: state.search.searchTerm
                 },
                 context: state.context.concat(newSearchResultsScreenshots)
             };
@@ -120,14 +126,13 @@ const store = createStore(
     applyMiddleware(thunkMiddleware) // lets us dispatch() functions
 );
 
-// http://stackoverflow.com/questions/32846337/how-to-fetch-the-new-data-in-response-to-react-router-change-with-redux
-// https://github.com/reactjs/redux/issues/227
+
 ReactDOM.render((
     <Provider store={store}>
         <Router history={hashHistory}>
             <Route path="/">
                 <IndexRoute component={SearchContainer}/>
-                <Route path=":term/:genre/:startYear/:endYear" component={ConnectedAllFilms} />
+                <Route path=":term" component={ConnectedAllFilms} />
                 {/*<Route path="context/:oclc/:line" component={AllContext} />*/}
             </Route>
         </Router>

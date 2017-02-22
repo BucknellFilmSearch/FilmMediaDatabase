@@ -11,7 +11,7 @@ __date__ = "$Jun 2, 2015 2:43:11 PM$"
 
 from datetime import datetime
 from bottle import route, run, install, template, request, get, post, static_file, redirect
-from databaseQuerierPostgresql import search, totalMovies, getContextLines
+from databaseQuerierPostgresql import searchResults, totalMovies, getContextLines
 from webpageGenerator import generateSearchPage, generateComparisonPage,\
     generateGraphOfTwoKeywords, generateFeedbackPage
 from feedbackEmailSender import sendEmail
@@ -99,25 +99,9 @@ class App():
 
     def __init__(self):
         """
-        Provides location to store results, so that all functions can access it after retrieving results only once.
-        Also the master location for resultsPerPage. This is the only place where you should have to adjust this.
-        Also stores the current keyword/phrase being searched, and other search params.
-        Also stores default earliest release year. Right now we're only including movies released after 2000.
+        Stores default earliest release year. Right now we're only including movies released after 2000.
         """
 
-        # Below is where search results are stored so that, ideally,
-        # a new search isn't performed every time a page is loaded.
-        self.results = []
-
-        # show all results on one page in debug mode
-        self.resultsPerPage = (99999999 if DEBUG_MODE else 25)
-
-        # info about previous search
-        self.keywordOrPhraseSearched = ""
-        self.genreSearched = ""
-        self.earliestReleaseYearSearched = ""
-        self.latestReleaseYearSearched = ""
-        self.currentPageNumber = 0
         # path to media files set up to point to web server static file location
         self.pathToMediaFiles = "/home1/filmtvse/public_html/static"
 
@@ -171,70 +155,28 @@ class App():
             twoDimensArrayOfVals.append([item[0], round(item[1])])
         return {"results": twoDimensArrayOfVals}
 
-    def displayResultsPage(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
+    def getSearchResults(self,keywordOrPhrase):
         """
-        If the search hasn't been done yet, perform search with keyword. Either way, generate the page of
-        results specified by parameters received through the URL.
+        API call for a text-based search, all filtering is done on the client
+        side.
         :param keywordOrPhrase: the keyword or phrase to search.
-        :param genre: genre to restrict the results.
-        :param earliestReleaseYear: earliest release year to include.
-        :param latestReleaseYear: latest release year to include.
-        :return: the HTML code for the entire page of results.
+        :return: JSON containing all search results.
         """
 
-        # if results aren't already for current search, perform the search
-        if (keywordOrPhrase != self.keywordOrPhraseSearched or genre != self.genreSearched or
-                        earliestReleaseYear != self.earliestReleaseYearSearched or
-                        latestReleaseYear != self.latestReleaseYearSearched):
+        results = searchResults(keywordOrPhrase)
 
-            # store params that were searched
-            self.keywordOrPhraseSearched = keywordOrPhrase
-            self.genreSearched = genre
-            self.earliestReleaseYearSearched = earliestReleaseYear
-            self.latestReleaseYearSearched = latestReleaseYear
+        return {"results": remapResults(results)}
 
-            results = None
 
-            # this can be used to quickly return JSON for development
-            if DEBUG_MODE and keywordOrPhrase == "phone":
-                with open('sampleData/phoneSampleOutput.json') as sampleData:
-                    results = json.load(sampleData)
-            else:
-                results = search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,
-                                             self.defaultEarliestReleaseYear)
-                results = remapResults(results)
-
-            # store results, if not none
-            if not (results is None):
-                self.results = results
-
-            return {"results": results}
-
-        # if params (other than page number) are identical to previous search, use previous search results (implied)
-        # generate html page of results
-        else:
-            return {"results": self.results}
-
-    def displayContextPage(self,oclcId,lineNumber):
+    def getContext(self,oclcId,lineNumber):
         """
-        Get the user's previous search term/params so we can create a back button. Display the context of the
-        clicked result to the user.
-        :param prevKeywordOrPhrase: searched keyword/phrase to go back to
-        :param prevGenre: searched genre tag to go back to (or All)
-        :param prevEarliestReleaseYear: searched earliest release year param to go back to
-        :param prevLatestReleaseYear: searched latest release year param to go back to
-        :param prevPageNumber: page of results to go back to
+        Get the user's previous search term/params so we can create a back button. Return JSON
+        containing the context requested by the client.
         :param oclcId: oclc number of movie to get context from
         :param lineNumber: line number clicked by user
         :return: html code for the page of context
         """
-        # return generateContextPage(oclcId,lineNumber,self.keywordOrPhraseSearched,self.genreSearched,
-        #                            self.earliestReleaseYearSearched,self.latestReleaseYearSearched,self.currentPageNumber,
-        #                            self.pathToMediaFiles)
-
-        # switched to passing info about previous search through the URL: CGI scripts don't have persistence, can't
-        # remember previous search without passing data through URL
-        contextLines = getContextLines(oclcId, lineNumber, 20)
+        contextLines = getContextLines(oclcId, lineNumber, 40)
 
         results = remapResults(contextLines)[0]
         results.pop('runtimeInMinutes')
@@ -242,6 +184,7 @@ class App():
         results.pop('genre1')
         results.pop('genre2')
         results.pop('genre3')
+
         return {"context": results}
 
     def displayComparisonPage(self):
@@ -335,12 +278,12 @@ appInstance = App()
 # route the proper URL's to the proper methods in the class
 get('/moviesearch/')(appInstance.displaySearchPage)
 post('/moviesearch/')(appInstance.searchFromLandingPage)
-route('/moviesearch/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>')\
-    (appInstance.displayResultsPage)
+route('/moviesearch/<keywordOrPhrase>')\
+    (appInstance.getSearchResults)
 route('/moviesearchgraph/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>')\
     (appInstance.displayGraph)
 route('/moviesearch/context/<oclcId:int>/<lineNumber:int>')\
-    (appInstance.displayContextPage)
+    (appInstance.getContext)
 route()
 get('/moviesearch/compare')(appInstance.displayComparisonPage)
 post('/moviesearch/compare')(appInstance.graphComparison)

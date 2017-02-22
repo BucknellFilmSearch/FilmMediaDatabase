@@ -11,10 +11,6 @@ import CircularProgress from 'material-ui/CircularProgress';
 class ScreenshotWithCaption extends React.Component {
 
     render() {
-        // let imgSrc = DEBUG_MODE ?
-        //     "/static/imageFiles/720x480.jpg" :
-        //     "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.movieOclcId + "/" + this.props.screenshotDetails.movieLineNumber + ".png";
-
         let imgSrc =
             "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.movieOclcId + "/" + this.props.screenshotDetails.movieLineNumber + ".png";
 

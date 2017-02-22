@@ -21,40 +21,6 @@ from config import DEBUG_MODE
 engine = create_engine(URL(**DATABASE))
 Session = sessionmaker(bind=engine)
 
-def search(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear,defaultEarliestReleaseYear):
-    """
-    Main search function. Forwards work to other methods based on the parameters that were specified/not.
-    :param keywordOrPhrase: keyword/phrase searched
-    :param genre: genre param searched
-    :param earliestReleaseYear: earliest release year searched
-    :param latestReleaseYear: latest release year searched
-    :param defaultEarliestReleaseYear: the default earliest release year (adjusted in main.py, at top of App class)
-    :return: search results, basically formatted as a list of lists
-    """
-    currentYear = datetime.now().year
-
-    # no params specified
-    if genre == "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
-        results = searchResults(keywordOrPhrase)
-    # if genre specified, no release year params specified
-    elif genre != "All" and earliestReleaseYear==defaultEarliestReleaseYear and latestReleaseYear==currentYear:
-        results = searchResultsByGenre(keywordOrPhrase,genre)
-    # if genre specified, and one or both release year params specified
-    elif genre != "All" and (earliestReleaseYear!=defaultEarliestReleaseYear or latestReleaseYear!=currentYear):
-        if earliestReleaseYear=="":
-            earliestReleaseYear = defaultEarliestReleaseYear
-        if latestReleaseYear=="":
-            latestReleaseYear = str(datetime.now().year)
-        results = searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear)
-    # if genre not specified, and one or both release year params specified
-    elif genre == "All" and (earliestReleaseYear!=defaultEarliestReleaseYear or latestReleaseYear!=currentYear):
-        if earliestReleaseYear=="":
-            earliestReleaseYear = defaultEarliestReleaseYear
-        if latestReleaseYear=="":
-            latestReleaseYear = str(datetime.now().year)
-        results = searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestReleaseYear)
-    return results
-
 def updateKeywordCount(listOfOclcIdsAndCounts):
     """
     Update the keyword_count column of the media_metadata table, so that we can use it to sort results by density.
@@ -73,104 +39,19 @@ def updateKeywordCount(listOfOclcIdsAndCounts):
             currentId = oclcId
             currentCount = 1
 
+def search():
+    """
+    Removed. This is not longer relevant when making generic API calls using
+    searchResults().
+    """
+    return None
+
 # rewritten for postgresql and sqlalchemy
 def searchResults(keywordOrPhrase):
     """
-    This returns the search results for a keyword or phrase. Each result includes the oclc id, movie title, line number
-    of the occurrence, time stamps, the matched text, original release year, and dvd release year.
-    :param keywordOrPhrase: the keyword or phrase to search.
-    :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
-    """
-    session = Session()
-
-    if not DEBUG_MODE:
-        query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))). \
-            filter(or_(text("media_text.search_vector @@ to_tsquery('english','" + keywordOrPhrase + "')"),
-                       text("media_text.search_vector @@ to_tsquery('english','012" + keywordOrPhrase + "')"))). \
-            group_by(MediaText.oclc_id)
-        updateKeywordCount(query.all())
-
-    query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
-                          MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
-                          MediaMetadata.original_release_year, MediaMetadata.dvd_release_year,
-                          MediaMetadata.runtime_in_minutes).\
-        filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
-        filter(MediaMetadata.movie_or_tv_show == "Movie").\
-        order_by(MediaMetadata.keyword_count.desc()).\
-        order_by(MediaMetadata.movie_title).\
-        order_by(MediaText.line_number)
-
-    return query.all()
-
-# rewritten for postgresql and sqlalchemy
-def searchResultsByGenre(keywordOrPhrase,genre):
-    """
-    This returns the search results for a keyword or phrase with genre specified. Each result includes the oclc id,
-    movie title, line number of the occurrence, time stamps, the matched text, original release year, and dvd release
-    year.
-    :param genre:
-    :param keywordOrPhrase: the keyword or phrase to search.
-    :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
-    """
-    session = Session()
-    query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
-        group_by(MediaText.oclc_id)
-    updateKeywordCount(query.all())
-
-    query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
-                          MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
-                          MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
-        filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
-        filter(MediaMetadata.genre1 == genre or MediaMetadata.genre2 == genre or MediaMetadata.genre3 == genre).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
-        filter(MediaMetadata.movie_or_tv_show == "Movie").\
-        order_by(MediaMetadata.keyword_count.desc()).\
-        order_by(MediaMetadata.movie_title).\
-        order_by(MediaText.line_number)
-    return query.all()
-
-# rewritten for postgresql and sqlalchemy
-def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
-    """
-    This returns the search results for a keyword or phrase with genre and release year params. Each result includes
+    This returns the search results for a keyword or phrase. Each result includes
     the oclc id, movie title, line number of the occurrence, time stamps, the matched text, original release year,
     and dvd release year.
-    :param genre:
-    :param earliestReleaseYear:
-    :param latestReleaseYear:
-    :param keywordOrPhrase: the keyword or phrase to search.
-    :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
-    """
-    session = Session()
-    query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
-        group_by(MediaText.oclc_id)
-    updateKeywordCount(query.all())
-
-    query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
-                          MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
-                          MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
-        filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
-        filter(MediaMetadata.genre1 == genre or MediaMetadata.genre2 == genre or MediaMetadata.genre3 == genre).\
-        filter(MediaMetadata.original_release_year >= earliestReleaseYear).\
-        filter(MediaMetadata.original_release_year <= latestReleaseYear).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
-        filter(MediaMetadata.movie_or_tv_show == "Movie").\
-        order_by(MediaMetadata.keyword_count.desc()).\
-        order_by(MediaMetadata.movie_title).\
-        order_by(MediaText.line_number)
-    return query.all()
-
-# rewritten for postgresql and sqlalchemy
-def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestReleaseYear):
-    """
-    This returns the search results for a keyword or phrase, with release year params specified. Each result includes
-    the oclc id, movie title, line number of the occurrence, time stamps, the matched text, original release year,
-    and dvd release year.
-    :param earliestReleaseYear:
-    :param latestReleaseYear:
     :param keywordOrPhrase: the keyword or phrase to search.
     :return: the occurrences of the keyword or phrase, information about the line where they occur, info about movie
     """
@@ -189,13 +70,12 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
                           MediaMetadata.genre1, MediaMetadata.genre2, MediaMetadata.genre3).\
         join(count, count.c.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
-        filter(MediaMetadata.original_release_year >= earliestReleaseYear).\
-        filter(MediaMetadata.original_release_year <= latestReleaseYear).\
         filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
         order_by(MediaMetadata.keyword_count.desc()).\
         order_by(MediaMetadata.movie_title).\
         order_by(MediaText.line_number)
+
     return query.all()
 
 # rewritten for postgresql and sqlalchemy

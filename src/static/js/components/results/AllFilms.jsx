@@ -18,12 +18,12 @@ class AllFilms extends React.Component {
     }
 
     componentDidMount() {
-        this.props.fetchNewSearchTerm();
+        this.props.fetchNewSearchTerm(this.props.location.pathname);
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.props.fetchNewSearchTerm();
+            this.props.fetchNewSearchTerm(nextProps.location.pathname);
         }
     }
 
@@ -41,34 +41,35 @@ class AllFilms extends React.Component {
         });
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
-                {!this.props.filmsLoaded ? (
-                        <div>
-                            <h2>Loading Relevant Films...</h2>
-                        </div>
-                    ) :
-                    (
-                        <div>
-                            <ConnectedResultsToolbar />
-                            <ConnectedMetadataDrawer />
-                            <ConnectedContextDialog />
-                            {/*<Graph/>*/}
-                            {this.props.films.map(function (object) {
-                                    return <ConnectedIndividualFilmResults
-                                        key={`filmkey${object.movieOclcId}`}
-                                        individualFilm={object} />;
-                                }
-                            )}
-                        </div>
-                    )
-                }
+                <div>
+                    <ConnectedResultsToolbar />
+                    <ConnectedMetadataDrawer />
+                    <ConnectedContextDialog />
+                    {/*<Graph/>*/}
+                    {!this.props.filmsLoaded ? (
+                            <div style={{paddingTop: '60px'}}>
+                                <h2>Loading Relevant Films...</h2>
+                            </div>
+                        ) :
+                        this.props.films.map(function (object) {
+                                return <ConnectedIndividualFilmResults
+                                    key={`filmkey${object.movieOclcId}`}
+                                    individualFilm={object} />;
+                            }
+                        )
+                    }
+
+                </div>
+
             </MuiThemeProvider>
         );
     }
 }
 
-export const requestNewSearchTerm = () => {
+export const requestNewSearchTerm = (searchTerm) => {
     return {
-        type: 'REQUEST_NEW_SEARCH_TERM'
+        type: 'REQUEST_NEW_SEARCH_TERM',
+        searchTerm
     }
 };
 
@@ -80,8 +81,10 @@ const receiveNewSearchTerm = (response) => {
 };
 
 const fetchNewSearchTerm = (searchTerm) => {
+    console.log('searchTerm');
+    console.log(searchTerm);
     return (dispatch) => {
-        dispatch(requestNewSearchTerm());
+        dispatch(requestNewSearchTerm(searchTerm.slice(1)));
         return fetch(`http://localhost:8080/moviesearch${searchTerm}`)
             .then(response => response.json())
             .then(response => dispatch(receiveNewSearchTerm(response.results)));
@@ -160,9 +163,9 @@ function yearSort(a, b) {
 }
 
 // Map Redux actions to component props
-function mapDispatchToProps(dispatch, props) {
+function mapDispatchToProps(dispatch) {
     return {
-        fetchNewSearchTerm: () => dispatch(fetchNewSearchTerm(props.location.pathname))
+        fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm))
     }
 }
 
