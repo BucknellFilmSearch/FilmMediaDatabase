@@ -130,9 +130,9 @@ class ContextDialog extends React.Component {
                     <line onClick={() => {alert('test')}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>
                 </svg>
                 ): null }
-                <svg>
-                    <circle onClick={() => {alert('hi')}} cx={100} cy={100} r={50} fill="red" />
-                </svg>
+                {/*<svg>*/}
+                    {/*<circle onClick={() => {alert('hi')}} cx={100} cy={100} r={50} fill="red" />*/}
+                {/*</svg>*/}
 
 
             </Dialog>
