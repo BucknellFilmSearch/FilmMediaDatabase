@@ -22,7 +22,6 @@ import 'isomorphic-fetch';
 
 
 export const reducer = (state = {search: null, context: [], sortType: 1, genre: 'All'}, action) => {
-    console.log(action);
     switch (action.type) {
         case 'MOUSE_ENTER_SCREENSHOT':
             return {

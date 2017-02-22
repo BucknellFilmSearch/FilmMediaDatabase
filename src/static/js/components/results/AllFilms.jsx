@@ -43,7 +43,7 @@ class AllFilms extends React.Component {
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
                     <ConnectedResultsToolbar />
-                    <ConnectedMetadataDrawer />
+                    <ConnectedMetadataDrawer firstFilm={this.props.films[0]} />
                     <ConnectedContextDialog />
                     {/*<Graph/>*/}
                     {!this.props.filmsLoaded ? (

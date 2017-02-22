@@ -27,17 +27,20 @@ class MetadataDrawer extends React.Component {
 
     render() {
 
-        let imgSrc = this.props.movieDetails != null ? "http://www.filmtvsearch.net/static/imageFiles/" + this.props.movieDetails.movieOclcId + ".gif" : null;
+        // if there's no film to show in the metadata (because the user hasn't scrolled down yet), show the first film
+        let movieDetails = this.props.movieDetails || this.props.firstFilm;
+
+        let imgSrc = movieDetails != null ? "http://www.filmtvsearch.net/static/imageFiles/" + movieDetails.movieOclcId + ".gif" : null;
         
         return (
             <Drawer docked={true} open={true} openSecondary={true} zDepth={2} containerStyle={{height: 'calc(100% - 56px)', top: 56}}>
-                {this.props.movieDetails == null ? (
+                {movieDetails == null ? (
                         <div>Metadata <br /></div>
                     ) : (
                         <div>
                             <div className="movieTitleInMetadataDrawer">
                                 <Roboto>
-                                    {this.props.movieDetails.movieTitle} ({this.props.movieDetails.movieReleaseYear}) <br />
+                                    {movieDetails.movieTitle} ({movieDetails.movieReleaseYear}) <br />
                                 </Roboto>
                             </div>
                                 <LazyLoad height={197} placeholder={<CircularProgress />}>
@@ -73,6 +76,7 @@ class MetadataDrawer extends React.Component {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
+    // screenshot is being hovered
     if (state.hoverMovieOclcId) {
         let movieDetails = {...state.search.response.find((x) => x.movieOclcId == state.hoverMovieOclcId)};
         let screenshotDetails = movieDetails.results.find((x) => x.movieLineNumber == state.hoverMovieLineNumber);
@@ -82,6 +86,7 @@ function mapStateToProps(state) {
             screenshotDetails: screenshotDetails
         }
     }
+    // no screenshot is being hovered but a scrolling waypoint has been reached
     else if (state.currentMovieOclcId) {
         let movieDetails = {...state.search.response.find((x) => x.movieOclcId == state.currentMovieOclcId)};
         delete movieDetails["results"];
