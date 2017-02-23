@@ -71,14 +71,6 @@ export default class ContextDialog extends React.Component {
             />
         ];
 
-        let totalNumberOfLines = this.props.currentFilm === null ? 0 : this.props.currentFilm.totalNumberOfLines;
-
-        let images = [...Array(totalNumberOfLines).keys()].map(screenshotNumber => ({
-            original: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`,
-            // thumbnail: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
-            // TODO - add thumbnail back when pull request is approved (https://github.com/xiaolin/react-image-gallery/pull/147)
-        }));
-
         return (
             <Dialog
                 actions={actions}
@@ -91,11 +83,12 @@ export default class ContextDialog extends React.Component {
 
                 <div className="contextImageGallery">
                     <ImageGallery
-                        items={images}
+                        items={this.props.images}
                         slideInterval={2000}
                         lazyLoad={true}
                         showIndex={true}
-                        startIndex={this.props.currentMovieLineNumber-1}
+                        showThumbnails={false}
+                        startIndex={this.props.currentMovieLineNumber - 1}
                         showPlayButton={false}
                         showFullscreenButton={false}
                         onSlide={this.props.onSlideAndCheckForContext}
@@ -212,6 +205,17 @@ const getCurrentScreenshot = createSelector(
     }
 );
 
+const getImages = createSelector(
+    [ getClickedScreenshotMovieOclcId, getCurrentFilm ],
+    (clickedScreenshotMovieOclcId, currentFilm) => {
+        let totalNumberOfLines = currentFilm === null ? 0 : currentFilm.totalNumberOfLines;
+
+        return [...Array(totalNumberOfLines).keys()].map(screenshotNumber => ({
+            original: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
+        }));
+    }
+);
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
@@ -219,7 +223,8 @@ function mapStateToProps(state) {
         clickedScreenshotMovieOclcId: getClickedScreenshotMovieOclcId(state),
         currentMovieLineNumber: getCurrentContextMovieLineNumber(state),
         currentFilm: getCurrentFilm(state),
-        currentScreenshot: getCurrentScreenshot(state)
+        currentScreenshot: getCurrentScreenshot(state),
+        images: getImages(state)
     }
 }
 

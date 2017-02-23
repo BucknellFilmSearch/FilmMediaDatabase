@@ -17,6 +17,7 @@
     "babelify": "^7.3.0",
     "browserify": "^14.0.0",
     "envify": "^4.0.0",
+    "react-addons-perf": "^15.4.2",
     "watchify": "^3.9.0"
   },
   "dependencies": {
