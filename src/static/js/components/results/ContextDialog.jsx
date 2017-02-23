@@ -11,15 +11,10 @@ const customContentStyle = {
     textAlign: 'center'
 };
 
-
-
-/**
- * The dialog width has been set to occupy the full width of browser through the `contentStyle` property.
- */
-
 const timeLineLength = 200;
 
-class ContextDialog extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class ContextDialog extends React.Component {
 
     constructor() {
         super();
@@ -212,8 +207,3 @@ function mapDispatchToProps(dispatch) {
         onSlideAndCheckForContext: (newMovieLineNumberIndex) => dispatch(slideAndCheckForContext(newMovieLineNumberIndex))
     }
 }
-
-export const ConnectedContextDialog = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ContextDialog);

@@ -12,7 +12,8 @@ import {black} from "material-ui/styles/colors";
 
 const timeLineLength = 200;
 
-class MetadataDrawer extends React.Component {
+@connect(mapStateToProps)
+export default class MetadataDrawer extends React.Component {
 
     static timeStampToMinutes(movieStartTimeStamp, totalMovieRuntime) {
         const splitString = movieStartTimeStamp.split(":");
@@ -102,7 +103,3 @@ function mapStateToProps(state) {
         }
     }
 }
-
-export const ConnectedMetadataDrawer= connect(
-    mapStateToProps
-)(MetadataDrawer);

@@ -25,7 +25,8 @@ const SearchIcon = (props) => {
 };
 
 
-class ResultsToolbar extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class ResultsToolbar extends React.Component {
 
     updateSearch() {
         let keywordOrPhrase = this.refs["updateSearchBox"].getValue();
@@ -129,8 +130,3 @@ function mapDispatchToProps(dispatch) {
         onSelectGenre: (event, index, genre) => dispatch(selectGenre(genre))
     }
 }
-
-export const ConnectedResultsToolbar = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ResultsToolbar);

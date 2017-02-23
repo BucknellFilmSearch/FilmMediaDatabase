@@ -8,7 +8,7 @@ let GENRES = ["Action", "Thriller", "Comedy", "Family", "Adventure", "Mystery", 
 let EARLIEST_RELEASE_YEAR = "1996";
 let LATEST_RELEASE_YEAR = "2016";
 
-export class InputForm extends React.Component {
+export default class InputForm extends React.Component {
 
     constructor(props) {
         super(props);

@@ -1,11 +1,11 @@
 import * as React from "react";
-import { InputForm } from "./InputForm.jsx";
+import InputForm from "./InputForm.jsx";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-export class SearchContainer extends React.Component {
+export default class SearchContainer extends React.Component {
     
     render() {
         const muiTheme = getMuiTheme({

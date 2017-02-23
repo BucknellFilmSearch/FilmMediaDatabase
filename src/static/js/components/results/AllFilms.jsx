@@ -1,18 +1,19 @@
 import * as React from "react";
 
-import { ConnectedIndividualFilmResults } from "./IndividualFilmResults.jsx";
+import IndividualFilmResults from "./IndividualFilmResults.jsx";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {grey50, cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-import {ConnectedMetadataDrawer} from './MetadataDrawer.jsx';
-import {ConnectedContextDialog} from './ContextDialog.jsx';
-import {ConnectedResultsToolbar} from './ResultsToolbar.jsx';
+import MetadataDrawer from './MetadataDrawer.jsx';
+import ContextDialog from './ContextDialog.jsx';
+import ResultsToolbar from './ResultsToolbar.jsx';
 
 import {connect} from 'react-redux'
 
-class AllFilms extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class AllFilms extends React.Component {
     constructor() {
         super();
     }
@@ -42,9 +43,9 @@ class AllFilms extends React.Component {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
-                    <ConnectedResultsToolbar />
-                    <ConnectedMetadataDrawer firstFilm={this.props.films[0]} />
-                    <ConnectedContextDialog />
+                    <ResultsToolbar />
+                    <MetadataDrawer firstFilm={this.props.films[0]} />
+                    <ContextDialog />
                     {/*<Graph/>*/}
                     {!this.props.filmsLoaded ? (
                             <div style={{paddingTop: '60px'}}>
@@ -52,7 +53,7 @@ class AllFilms extends React.Component {
                             </div>
                         ) :
                         this.props.films.map(function (object) {
-                                return <ConnectedIndividualFilmResults
+                                return <IndividualFilmResults
                                     key={`filmkey${object.movieOclcId}`}
                                     individualFilm={object} />;
                             }
@@ -91,6 +92,34 @@ const fetchNewSearchTerm = (searchTerm) => {
         // TODO - add catch handler to handle errors
     }
 };
+
+function relevanceSort(a, b) {
+    if (a.results.length > b.results.length) {
+        return -1;
+    }
+    else if (a.results.length < b.results.length) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+function alphabeticalSort(a, b) {
+    return a.movieTitle.localeCompare(b.movieTitle);
+}
+
+function yearSort(a, b) {
+    if (a.movieReleaseYear > b.movieReleaseYear) {
+        return -1;
+    }
+    else if (a.movieReleaseYear < b.movieReleaseYear) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
 
 // Map Redux state to component props
 function mapStateToProps(state) {
@@ -134,42 +163,9 @@ function mapStateToProps(state) {
     }
 }
 
-function relevanceSort(a, b) {
-    if (a.results.length > b.results.length) {
-        return -1;
-    }
-    else if (a.results.length < b.results.length) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-
-function alphabeticalSort(a, b) {
-    return a.movieTitle.localeCompare(b.movieTitle);
-}
-
-function yearSort(a, b) {
-    if (a.movieReleaseYear > b.movieReleaseYear) {
-        return -1;
-    }
-    else if (a.movieReleaseYear < b.movieReleaseYear) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
         fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm))
     }
 }
-
-export const ConnectedAllFilms = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AllFilms);

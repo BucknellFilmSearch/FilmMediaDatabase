@@ -9,8 +9,8 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
 // React component imports
-import { SearchContainer } from "./components/search/SearchContainer.jsx";
-import { ConnectedAllFilms } from "./components/results/AllFilms.jsx";
+import SearchContainer from "./components/search/SearchContainer.jsx";
+import AllFilms from "./components/results/AllFilms.jsx";
 
 // Global settings
 export let DEBUG_MODE = true;
@@ -131,8 +131,7 @@ ReactDOM.render((
         <Router history={hashHistory}>
             <Route path="/">
                 <IndexRoute component={SearchContainer}/>
-                <Route path=":term" component={ConnectedAllFilms} />
-                {/*<Route path="context/:oclc/:line" component={AllContext} />*/}
+                <Route path=":term" component={AllFilms} />
             </Route>
         </Router>
     </Provider>
