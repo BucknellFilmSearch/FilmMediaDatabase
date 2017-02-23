@@ -10,9 +10,12 @@ import LazyLoad from 'react-lazyload';
 import CircularProgress from 'material-ui/CircularProgress';
 import {black} from "material-ui/styles/colors";
 
+import {createSelector} from 'reselect';
+
 const timeLineLength = 200;
 
-class MetadataDrawer extends React.Component {
+@connect(mapStateToProps)
+export default class MetadataDrawer extends React.Component {
 
     static timeStampToMinutes(movieStartTimeStamp, totalMovieRuntime) {
         const splitString = movieStartTimeStamp.split(":");
@@ -27,17 +30,20 @@ class MetadataDrawer extends React.Component {
 
     render() {
 
-        let imgSrc = this.props.movieDetails != null ? "http://www.filmtvsearch.net/static/imageFiles/" + this.props.movieDetails.movieOclcId + ".gif" : null;
+        // if there's no film to show in the metadata (because the user hasn't scrolled down yet), show the first film
+        let movieDetails = this.props.movieDetails || this.props.firstFilm;
+
+        let imgSrc = movieDetails != null ? "http://www.filmtvsearch.net/static/imageFiles/" + movieDetails.movieOclcId + ".gif" : null;
         
         return (
             <Drawer docked={true} open={true} openSecondary={true} zDepth={2} containerStyle={{height: 'calc(100% - 56px)', top: 56}}>
-                {this.props.movieDetails == null ? (
+                {movieDetails == null ? (
                         <div>Metadata <br /></div>
                     ) : (
                         <div>
                             <div className="movieTitleInMetadataDrawer">
                                 <Roboto>
-                                    {this.props.movieDetails.movieTitle} ({this.props.movieDetails.movieReleaseYear}) <br />
+                                    {movieDetails.movieTitle} ({movieDetails.movieReleaseYear}) <br />
                                 </Roboto>
                             </div>
                                 <LazyLoad height={197} placeholder={<CircularProgress />}>
@@ -71,33 +77,47 @@ class MetadataDrawer extends React.Component {
     }
 }
 
+const getHoverMovieOclcId = (state) => state.hoverMovieOclcId;
+
+const getHoverMovieLineNumber = (state) => state.hoverMovieLineNumber;
+
+const getCurrentMovieOclcId = (state) => state.currentMovieOclcId;
+
+const getSearchResponse = (state) => state.search && state.search.response;
+
+const getMovieDetails = createSelector(
+    [getHoverMovieOclcId, getCurrentMovieOclcId, getSearchResponse],
+    (hoverMovieOclcId, currentMovieOclcId, searchResponse) => {
+        // screenshot is being hovered
+        if (hoverMovieOclcId) {
+            return {...searchResponse.find((x) => x.movieOclcId == hoverMovieOclcId)};
+        }
+        // no screenshot is being hovered but a scrolling waypoint has been reached
+        else if (currentMovieOclcId) {
+            return {...searchResponse.find((x) => x.movieOclcId == currentMovieOclcId)};
+        }
+        else {
+            return null;
+        }
+    }
+);
+
+const getScreenshotDetails = createSelector(
+    [getHoverMovieLineNumber, getMovieDetails],
+    (hoverMovieLineNumber, movieDetails) => {
+        if (hoverMovieLineNumber) {
+            return movieDetails.results.find((x) => x.movieLineNumber == hoverMovieLineNumber);
+        }
+        else {
+            return null;
+        }
+    }
+);
+
 // Map Redux state to component props
 function mapStateToProps(state) {
-    if (state.hoverMovieOclcId) {
-        let movieDetails = {...state.search.response.find((x) => x.movieOclcId == state.hoverMovieOclcId)};
-        let screenshotDetails = movieDetails.results.find((x) => x.movieLineNumber == state.hoverMovieLineNumber);
-        delete movieDetails["results"];
-        return {
-            movieDetails: movieDetails,
-            screenshotDetails: screenshotDetails
-        }
-    }
-    else if (state.currentMovieOclcId) {
-        let movieDetails = {...state.search.response.find((x) => x.movieOclcId == state.currentMovieOclcId)};
-        delete movieDetails["results"];
-        return {
-            movieDetails: movieDetails,
-            screenshotDetails: null
-        }
-    }
-    else {
-        return {
-            movieDetails: null,
-            screenshotDetails: null
-        }
+    return {
+        movieDetails: getMovieDetails(state),
+        screenshotDetails: getScreenshotDetails(state)
     }
 }
-
-export const ConnectedMetadataDrawer= connect(
-    mapStateToProps
-)(MetadataDrawer);

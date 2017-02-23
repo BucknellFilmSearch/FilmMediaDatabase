@@ -6,7 +6,8 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import {connect} from 'react-redux';
-import { hashHistory } from 'react-router'
+import { hashHistory } from 'react-router';
+import {createSelector} from 'reselect';
 
 const GENRES = ["All", "Action", "Thriller", "Comedy", "Family", "Adventure", "Mystery", "Romance", "Sci-Fi", "Horror",
     "Drama", "Biography", "Fantasy", "Crime", "War", "Animation", "History", "Musical"];
@@ -25,13 +26,14 @@ const SearchIcon = (props) => {
 };
 
 
-class ResultsToolbar extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class ResultsToolbar extends React.Component {
 
     updateSearch() {
         let keywordOrPhrase = this.refs["updateSearchBox"].getValue();
 
         // update the URL
-        let newPath = `/${keywordOrPhrase.replace(' ', '&').replace('!','').replace('?','')}`;
+        let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
         hashHistory.push(newPath);
     }
 
@@ -40,7 +42,7 @@ class ResultsToolbar extends React.Component {
             <Toolbar className="resultsToolbar">
                 <ToolbarGroup firstChild={true}>
                     <Link to={"/"}><FlatButton label="Home" /></Link>
-                    <ToolbarTitle text={`Search Results for '${this.props.searchTerm.replace('&', ' ')}'`} />
+                    <ToolbarTitle text={`Search Results for '${this.props.searchTerm.replace(/&/g, ' ')}'`} />
                     <TextField
                         hintText="Search Phrase"
                         defaultValue={''}
@@ -109,13 +111,22 @@ const selectGenre = (genre) => {
     }
 };
 
+const getSearch = (state) => state.search;
+
+const getFilms = createSelector(
+    [getSearch],
+    (search) => {
+        return search != null && search.status == "loaded" ? search.response : []
+    }
+);
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
         sortType: state.sortType,
         genre: state.genre,
-        films: state.search != null && state.search.status == "loaded" ? state.search.response : [],
+        films: getFilms(state),
         enableSort: state.search != null && state.search.searchType == "text",
         currentOclcId: state.currentMovieOclcId,
         searchTerm: state.search != null && state.search.searchTerm ? state.search.searchTerm : ''
@@ -129,8 +140,3 @@ function mapDispatchToProps(dispatch) {
         onSelectGenre: (event, index, genre) => dispatch(selectGenre(genre))
     }
 }
-
-export const ConnectedResultsToolbar = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ResultsToolbar);

@@ -9,8 +9,8 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 
 // React component imports
-import { SearchContainer } from "./components/search/SearchContainer.jsx";
-import { ConnectedAllFilms } from "./components/results/AllFilms.jsx";
+import SearchContainer from "./components/search/SearchContainer.jsx";
+import AllFilms from "./components/results/AllFilms.jsx";
 
 // Global settings
 export let DEBUG_MODE = true;
@@ -22,7 +22,6 @@ import 'isomorphic-fetch';
 
 
 export const reducer = (state = {search: null, context: [], sortType: 1, genre: 'All'}, action) => {
-    console.log(action);
     switch (action.type) {
         case 'MOUSE_ENTER_SCREENSHOT':
             return {
@@ -123,6 +122,7 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
 
 const store = createStore(
     reducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
     applyMiddleware(thunkMiddleware) // lets us dispatch() functions
 );
 
@@ -132,8 +132,7 @@ ReactDOM.render((
         <Router history={hashHistory}>
             <Route path="/">
                 <IndexRoute component={SearchContainer}/>
-                <Route path=":term" component={ConnectedAllFilms} />
-                {/*<Route path="context/:oclc/:line" component={AllContext} />*/}
+                <Route path=":term" component={AllFilms} />
             </Route>
         </Router>
     </Provider>

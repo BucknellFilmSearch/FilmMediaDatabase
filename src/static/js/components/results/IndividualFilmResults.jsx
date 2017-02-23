@@ -1,7 +1,7 @@
 import * as React from "react";
 
 // import { FilmMetadata } from "./FilmMetadata";
-import { ConnectedScreenshotWithCaption } from "./ScreenshotWithCaption.jsx";
+import ScreenshotWithCaption from "./ScreenshotWithCaption.jsx";
 // import { Link } from "react-router";
 import {GridList} from 'material-ui/GridList';
 import Subheader from 'material-ui/Subheader';
@@ -9,13 +9,13 @@ import Waypoint from 'react-waypoint';
 import {connect} from 'react-redux'
 
 
-
-export class IndividualFilmResults extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class IndividualFilmResults extends React.Component {
 
     getScreenshotsWithCaption() {
         return this.props.individualFilm.results.map((object) => {
             return (
-                <ConnectedScreenshotWithCaption
+                <ScreenshotWithCaption
                 key={`screenshot${this.props.individualFilm.movieTitle}linenumber${object.movieLineNumber}`}
                 screenshotDetails={object} movieOclcId={this.props.individualFilm.movieOclcId}/>
             );
@@ -47,7 +47,7 @@ const scrollIntoFilm = (movieOclcId) => {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    return {}
+    return {};
 }
 
 // Map Redux actions to component props
@@ -56,8 +56,3 @@ function mapDispatchToProps(dispatch, filmProps) {
         onScrollIntoFilm: () => dispatch(scrollIntoFilm(filmProps.individualFilm.movieOclcId))
     }
 }
-
-export const ConnectedIndividualFilmResults = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(IndividualFilmResults);

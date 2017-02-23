@@ -7,8 +7,8 @@ import {GridTile} from 'material-ui/GridList';
 import LazyLoad from 'react-lazyload'; 
 import CircularProgress from 'material-ui/CircularProgress';
 
-
-class ScreenshotWithCaption extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class ScreenshotWithCaption extends React.Component {
 
     render() {
         let imgSrc =
@@ -68,8 +68,3 @@ function mapDispatchToProps(dispatch, screenshotProps) {
         onClickScreenshot: () => dispatch(clickScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber))
     }
 }
-
-export const ConnectedScreenshotWithCaption = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ScreenshotWithCaption);

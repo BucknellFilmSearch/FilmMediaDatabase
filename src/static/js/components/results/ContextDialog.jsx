@@ -3,6 +3,7 @@ import ImageGallery from 'react-image-gallery';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 
 const customContentStyle = {
@@ -11,15 +12,10 @@ const customContentStyle = {
     textAlign: 'center'
 };
 
-
-
-/**
- * The dialog width has been set to occupy the full width of browser through the `contentStyle` property.
- */
-
 const timeLineLength = 200;
 
-class ContextDialog extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class ContextDialog extends React.Component {
 
     constructor() {
         super();
@@ -192,23 +188,38 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     }
 };
 
+const getContext = (state) => state.context;
+
+const getClickedScreenshotMovieOclcId = (state) => state.clickedScreenshotMovieOclcId;
+
+const getCurrentContextMovieLineNumber = (state) => state.currentContextMovieLineNumber;
+
+const getSearchResponse = (state) => state.search && state.search.response;
+
+const getCurrentFilm = createSelector(
+    [ getClickedScreenshotMovieOclcId, getSearchResponse ],
+    (clickedScreenshotMovieOclcId, searchResponse) => {
+        return !clickedScreenshotMovieOclcId ? null :
+            searchResponse.find(film => clickedScreenshotMovieOclcId === film.movieOclcId)
+    }
+);
+
+const getCurrentScreenshot = createSelector(
+    [ getClickedScreenshotMovieOclcId, getCurrentContextMovieLineNumber, getContext ],
+    (clickedScreenshotMovieOclcId, currentContextMovieLineNumber, context) => {
+        let key = `oclc${clickedScreenshotMovieOclcId}line${currentContextMovieLineNumber}`;
+        return context.find(screenshot => (screenshot.key == key)) || null;
+    }
+);
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    console.log(state);
-
-    let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
-        state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
-
-    let key = `oclc${state.clickedScreenshotMovieOclcId}line${state.currentContextMovieLineNumber}`;
-
-    let currentScreenshot = state.context.find(screenshot => (screenshot.key == key)) || null;
-
     return {
-        clickedScreenshotMovieOclcId: state.clickedScreenshotMovieOclcId,
-        currentMovieLineNumber: state.currentContextMovieLineNumber,
-        currentFilm: currentFilm,
-        currentScreenshot: currentScreenshot
+        clickedScreenshotMovieOclcId: getClickedScreenshotMovieOclcId(state),
+        currentMovieLineNumber: getCurrentContextMovieLineNumber(state),
+        currentFilm: getCurrentFilm(state),
+        currentScreenshot: getCurrentScreenshot(state)
     }
 }
 
@@ -219,8 +230,3 @@ function mapDispatchToProps(dispatch) {
         onSlideAndCheckForContext: (newMovieLineNumberIndex) => dispatch(slideAndCheckForContext(newMovieLineNumberIndex))
     }
 }
-
-export const ConnectedContextDialog = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ContextDialog);

@@ -1,18 +1,20 @@
 import * as React from "react";
 
-import { ConnectedIndividualFilmResults } from "./IndividualFilmResults.jsx";
+import IndividualFilmResults from "./IndividualFilmResults.jsx";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {grey50, cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-import {ConnectedMetadataDrawer} from './MetadataDrawer.jsx';
-import {ConnectedContextDialog} from './ContextDialog.jsx';
-import {ConnectedResultsToolbar} from './ResultsToolbar.jsx';
+import MetadataDrawer from './MetadataDrawer.jsx';
+import ContextDialog from './ContextDialog.jsx';
+import ResultsToolbar from './ResultsToolbar.jsx';
 
 import {connect} from 'react-redux'
+import {createSelector} from 'reselect';
 
-class AllFilms extends React.Component {
+@connect(mapStateToProps, mapDispatchToProps)
+export default class AllFilms extends React.Component {
     constructor() {
         super();
     }
@@ -42,9 +44,9 @@ class AllFilms extends React.Component {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
-                    <ConnectedResultsToolbar />
-                    <ConnectedMetadataDrawer />
-                    <ConnectedContextDialog />
+                    <ResultsToolbar />
+                    <MetadataDrawer firstFilm={this.props.films[0]} />
+                    <ContextDialog />
                     {/*<Graph/>*/}
                     {!this.props.filmsLoaded ? (
                             <div style={{paddingTop: '60px'}}>
@@ -52,7 +54,7 @@ class AllFilms extends React.Component {
                             </div>
                         ) :
                         this.props.films.map(function (object) {
-                                return <ConnectedIndividualFilmResults
+                                return <IndividualFilmResults
                                     key={`filmkey${object.movieOclcId}`}
                                     individualFilm={object} />;
                             }
@@ -92,48 +94,6 @@ const fetchNewSearchTerm = (searchTerm) => {
     }
 };
 
-// Map Redux state to component props
-function mapStateToProps(state) {
-    let filmsLoaded = state.search && state.search.status == "loaded";
-
-    let films = filmsLoaded ? [...state.search.response] : [] ;
-
-    // check if films are loaded
-    if (filmsLoaded) {
-
-        // sort films based on user input
-        if (state.sortType == 1) {
-            films = films.sort(relevanceSort);
-        }
-        else if (state.sortType == 2) {
-            films = films.sort(alphabeticalSort);
-        }
-        else if (state.sortType == 3) {
-            films = films.sort(alphabeticalSort).reverse();
-        }
-        else if (state.sortType == 4) {
-            films = films.sort(yearSort);
-        }
-        else if (state.sortType == 5) {
-            films = films.sort(yearSort).reverse();
-        }
-
-        // filter films by genre
-        let genre = state.genre;
-
-        films = genre == 'All' ? films :
-            films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
-    }
-
-
-    return {
-        filmsLoaded: filmsLoaded,
-        films: films,
-        sortType: state.sortType,
-        genre: state.genre
-    }
-}
-
 function relevanceSort(a, b) {
     if (a.results.length > b.results.length) {
         return -1;
@@ -162,14 +122,51 @@ function yearSort(a, b) {
     }
 }
 
+const areFilmsLoaded = (state) => state.search && state.search.status == "loaded";
+
+const getSearchResponse = (state) => areFilmsLoaded(state) ? [...state.search.response] : [] ;
+
+const getSortType = (state) => state.sortType;
+
+const getGenre = (state) => state.genre;
+
+const getFilms = createSelector(
+    [ getSearchResponse, getSortType, getGenre],
+    (films, sortType, genre) => {
+
+        // sort films based on user input
+        if (sortType == 1) {
+            films = films.sort(relevanceSort);
+        }
+        else if (sortType == 2) {
+            films = films.sort(alphabeticalSort);
+        }
+        else if (sortType == 3) {
+            films = films.sort(alphabeticalSort).reverse();
+        }
+        else if (sortType == 4) {
+            films = films.sort(yearSort);
+        }
+        else if (sortType == 5) {
+            films = films.sort(yearSort).reverse();
+        }
+
+        return genre == 'All' ? films :
+            films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
+    }
+);
+
+// Map Redux state to component props
+function mapStateToProps(state) {
+    return {
+        filmsLoaded: areFilmsLoaded(state),
+        films: getFilms(state)
+    }
+}
+
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
         fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm))
     }
 }
-
-export const ConnectedAllFilms = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AllFilms);
