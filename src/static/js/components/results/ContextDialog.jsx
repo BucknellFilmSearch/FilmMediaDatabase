@@ -61,7 +61,7 @@ class ContextDialog extends React.Component {
     }
 
     svgTest() {
-        alert('clicked!');
+        ImageGallery.slideToIndex(10);
     }
 
 
@@ -127,7 +127,8 @@ class ContextDialog extends React.Component {
                 {this.props.currentScreenshot != null ? (
                 <svg height="70" width="200">
                     <line x1="10" y1="50" x2="210" y2="50" stroke={"grey"} strokeWidth={1} />
-                    <line onClick={() => {alert('test')}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>
+                    {/*<line onClick={() => {this.props.onSlideAndCheckForContext(10)}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
+                    <line onClick={() => {this.svgTest()}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>
                 </svg>
                 ): null }
                 {/*<svg>*/}
@@ -164,7 +165,6 @@ const receiveContext = (context) => {
 
 const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     return (dispatch, getState) => {
-
         let state = getState();
 
         let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
