@@ -6,7 +6,8 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import {connect} from 'react-redux';
-import { hashHistory } from 'react-router'
+import { hashHistory } from 'react-router';
+import {createSelector} from 'reselect';
 
 const GENRES = ["All", "Action", "Thriller", "Comedy", "Family", "Adventure", "Mystery", "Romance", "Sci-Fi", "Horror",
     "Drama", "Biography", "Fantasy", "Crime", "War", "Animation", "History", "Musical"];
@@ -110,13 +111,22 @@ const selectGenre = (genre) => {
     }
 };
 
+const getSearch = (state) => state.search;
+
+const getFilms = createSelector(
+    [getSearch],
+    (search) => {
+        return search != null && search.status == "loaded" ? search.response : []
+    }
+);
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
         sortType: state.sortType,
         genre: state.genre,
-        films: state.search != null && state.search.status == "loaded" ? state.search.response : [],
+        films: getFilms(state),
         enableSort: state.search != null && state.search.searchType == "text",
         currentOclcId: state.currentMovieOclcId,
         searchTerm: state.search != null && state.search.searchTerm ? state.search.searchTerm : ''

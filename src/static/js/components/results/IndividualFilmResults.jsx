@@ -47,7 +47,7 @@ const scrollIntoFilm = (movieOclcId) => {
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    return {}
+    return {};
 }
 
 // Map Redux actions to component props

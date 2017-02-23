@@ -3,6 +3,7 @@ import ImageGallery from 'react-image-gallery';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {connect} from 'react-redux';
+import {createSelector} from 'reselect';
 
 
 const customContentStyle = {
@@ -180,23 +181,38 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     }
 };
 
+const getContext = (state) => state.context;
+
+const getClickedScreenshotMovieOclcId = (state) => state.clickedScreenshotMovieOclcId;
+
+const getCurrentContextMovieLineNumber = (state) => state.currentContextMovieLineNumber;
+
+const getSearchResponse = (state) => state.search && state.search.response;
+
+const getCurrentFilm = createSelector(
+    [ getClickedScreenshotMovieOclcId, getSearchResponse ],
+    (clickedScreenshotMovieOclcId, searchResponse) => {
+        return !clickedScreenshotMovieOclcId ? null :
+            searchResponse.find(film => clickedScreenshotMovieOclcId === film.movieOclcId)
+    }
+);
+
+const getCurrentScreenshot = createSelector(
+    [ getClickedScreenshotMovieOclcId, getCurrentContextMovieLineNumber, getContext ],
+    (clickedScreenshotMovieOclcId, currentContextMovieLineNumber, context) => {
+        let key = `oclc${clickedScreenshotMovieOclcId}line${currentContextMovieLineNumber}`;
+        return context.find(screenshot => (screenshot.key == key)) || null;
+    }
+);
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
-    console.log(state);
-
-    let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
-        state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
-
-    let key = `oclc${state.clickedScreenshotMovieOclcId}line${state.currentContextMovieLineNumber}`;
-
-    let currentScreenshot = state.context.find(screenshot => (screenshot.key == key)) || null;
-
     return {
-        clickedScreenshotMovieOclcId: state.clickedScreenshotMovieOclcId,
-        currentMovieLineNumber: state.currentContextMovieLineNumber,
-        currentFilm: currentFilm,
-        currentScreenshot: currentScreenshot
+        clickedScreenshotMovieOclcId: getClickedScreenshotMovieOclcId(state),
+        currentMovieLineNumber: getCurrentContextMovieLineNumber(state),
+        currentFilm: getCurrentFilm(state),
+        currentScreenshot: getCurrentScreenshot(state)
     }
 }
 

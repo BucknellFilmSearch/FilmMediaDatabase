@@ -11,6 +11,7 @@ import ContextDialog from './ContextDialog.jsx';
 import ResultsToolbar from './ResultsToolbar.jsx';
 
 import {connect} from 'react-redux'
+import {createSelector} from 'reselect';
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AllFilms extends React.Component {
@@ -121,45 +122,45 @@ function yearSort(a, b) {
     }
 }
 
-// Map Redux state to component props
-function mapStateToProps(state) {
-    let filmsLoaded = state.search && state.search.status == "loaded";
+const areFilmsLoaded = (state) => state.search && state.search.status == "loaded";
 
-    let films = filmsLoaded ? [...state.search.response] : [] ;
+const getSearchResponse = (state) => areFilmsLoaded(state) ? [...state.search.response] : [] ;
 
-    // check if films are loaded
-    if (filmsLoaded) {
+const getSortType = (state) => state.sortType;
+
+const getGenre = (state) => state.genre;
+
+const getFilms = createSelector(
+    [ getSearchResponse, getSortType, getGenre],
+    (films, sortType, genre) => {
 
         // sort films based on user input
-        if (state.sortType == 1) {
+        if (sortType == 1) {
             films = films.sort(relevanceSort);
         }
-        else if (state.sortType == 2) {
+        else if (sortType == 2) {
             films = films.sort(alphabeticalSort);
         }
-        else if (state.sortType == 3) {
+        else if (sortType == 3) {
             films = films.sort(alphabeticalSort).reverse();
         }
-        else if (state.sortType == 4) {
+        else if (sortType == 4) {
             films = films.sort(yearSort);
         }
-        else if (state.sortType == 5) {
+        else if (sortType == 5) {
             films = films.sort(yearSort).reverse();
         }
 
-        // filter films by genre
-        let genre = state.genre;
-
-        films = genre == 'All' ? films :
+        return genre == 'All' ? films :
             films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
     }
+);
 
-
+// Map Redux state to component props
+function mapStateToProps(state) {
     return {
-        filmsLoaded: filmsLoaded,
-        films: films,
-        sortType: state.sortType,
-        genre: state.genre
+        filmsLoaded: areFilmsLoaded(state),
+        films: getFilms(state)
     }
 }
 

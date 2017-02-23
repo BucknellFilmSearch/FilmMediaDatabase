@@ -10,6 +10,8 @@ import LazyLoad from 'react-lazyload';
 import CircularProgress from 'material-ui/CircularProgress';
 import {black} from "material-ui/styles/colors";
 
+import {createSelector} from 'reselect';
+
 const timeLineLength = 200;
 
 @connect(mapStateToProps)
@@ -75,31 +77,47 @@ export default class MetadataDrawer extends React.Component {
     }
 }
 
+const getHoverMovieOclcId = (state) => state.hoverMovieOclcId;
+
+const getHoverMovieLineNumber = (state) => state.hoverMovieLineNumber;
+
+const getCurrentMovieOclcId = (state) => state.currentMovieOclcId;
+
+const getSearchResponse = (state) => state.search && state.search.response;
+
+const getMovieDetails = createSelector(
+    [getHoverMovieOclcId, getCurrentMovieOclcId, getSearchResponse],
+    (hoverMovieOclcId, currentMovieOclcId, searchResponse) => {
+        // screenshot is being hovered
+        if (hoverMovieOclcId) {
+            return {...searchResponse.find((x) => x.movieOclcId == hoverMovieOclcId)};
+        }
+        // no screenshot is being hovered but a scrolling waypoint has been reached
+        else if (currentMovieOclcId) {
+            return {...searchResponse.find((x) => x.movieOclcId == currentMovieOclcId)};
+        }
+        else {
+            return null;
+        }
+    }
+);
+
+const getScreenshotDetails = createSelector(
+    [getHoverMovieLineNumber, getMovieDetails],
+    (hoverMovieLineNumber, movieDetails) => {
+        if (hoverMovieLineNumber) {
+            return movieDetails.results.find((x) => x.movieLineNumber == hoverMovieLineNumber);
+        }
+        else {
+            return null;
+        }
+    }
+);
+
 // Map Redux state to component props
 function mapStateToProps(state) {
-    // screenshot is being hovered
-    if (state.hoverMovieOclcId) {
-        let movieDetails = {...state.search.response.find((x) => x.movieOclcId == state.hoverMovieOclcId)};
-        let screenshotDetails = movieDetails.results.find((x) => x.movieLineNumber == state.hoverMovieLineNumber);
-        delete movieDetails["results"];
-        return {
-            movieDetails: movieDetails,
-            screenshotDetails: screenshotDetails
-        }
-    }
-    // no screenshot is being hovered but a scrolling waypoint has been reached
-    else if (state.currentMovieOclcId) {
-        let movieDetails = {...state.search.response.find((x) => x.movieOclcId == state.currentMovieOclcId)};
-        delete movieDetails["results"];
-        return {
-            movieDetails: movieDetails,
-            screenshotDetails: null
-        }
-    }
-    else {
-        return {
-            movieDetails: null,
-            screenshotDetails: null
-        }
+    return {
+        movieDetails: getMovieDetails(state),
+        screenshotDetails: getScreenshotDetails(state)
     }
 }
