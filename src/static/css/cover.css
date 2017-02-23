@@ -91,16 +91,20 @@
 /* Context Page */
 /* Context Page Image Gallery */
 .contextImageGallery {
-    font-family: 'Roboto', sans-serif;
+    /*font-family: 'Roboto', sans-serif;*/
     /*font-size: 20px;*/
     /*height: 80px;*/
-    text-align: center;
-    position: relative;
+    /*text-align: center;
+    position: relative;*/
     /*margin-left: auto;*/
     /*margin-right: auto;*/
-    margin: auto;
-    width: 40%;
+    /*margin: auto;*/
     /*height:30%;*/
+}
+
+.contextImageGallery img {
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 /* Context page's dialogue section */

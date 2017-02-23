@@ -1,7 +1,8 @@
 import * as React from 'react';
-import ImageGallery from 'react-image-gallery';
+import Slider from 'react-slick';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import SvgIcon from 'material-ui/SvgIcon';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 
@@ -13,6 +14,19 @@ const customContentStyle = {
 };
 
 const timeLineLength = 200;
+
+const LeftArrow = (props) => (
+    <SvgIcon onClick={props.onClick}>
+        <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"/>
+        <path d="M0-.5h24v24H0z" fill="none"/>
+    </SvgIcon>
+);
+const RightArrow = (props) => (
+    <SvgIcon  onClick={props.onClick}>
+        <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
+        <path d="M0-.25h24v24H0z" fill="none"/>
+    </SvgIcon>
+);
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ContextDialog extends React.Component {
@@ -82,17 +96,23 @@ export default class ContextDialog extends React.Component {
             >
 
                 <div className="contextImageGallery">
-                    <ImageGallery
-                        items={this.props.images}
-                        slideInterval={2000}
+                    <Slider
+                        dots={false}
+                        speed={500}
+                        slidesToShow={3}
+                        slidesToScroll={1}
+                        infinite={true}
+                        initialSlide={this.props.currentMovieLineNumber - 1}
+                        afterChange={this.props.onSlideAndCheckForContext}
+                        nextArrow={<RightArrow />}
+                        prevArrow={<LeftArrow />}
                         lazyLoad={true}
-                        showIndex={true}
-                        showThumbnails={false}
-                        startIndex={this.props.currentMovieLineNumber - 1}
-                        showPlayButton={false}
-                        showFullscreenButton={false}
-                        onSlide={this.props.onSlideAndCheckForContext}
-                    />
+                        centerMode={true}
+                    >
+
+                            { this.props.images.map(imageUrl => <img key={imageUrl} src={imageUrl}/>) }
+
+                    </Slider>
                 </div>
 
 
@@ -210,9 +230,9 @@ const getImages = createSelector(
     (clickedScreenshotMovieOclcId, currentFilm) => {
         let totalNumberOfLines = currentFilm === null ? 0 : currentFilm.totalNumberOfLines;
 
-        return [...Array(totalNumberOfLines).keys()].map(screenshotNumber => ({
-            original: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
-        }));
+        return [...Array(totalNumberOfLines).keys()].map(screenshotNumber =>
+            `http://www.filmtvsearch.net/static/imageFiles/screenshots/${clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
+        );
     }
 );
 
