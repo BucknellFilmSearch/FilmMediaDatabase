@@ -56,6 +56,10 @@ export default class ContextDialog extends React.Component {
         }
     }
 
+    svgTest() {
+        alert('clicked!');
+    }
+
 
     render() {
 
@@ -119,9 +123,12 @@ export default class ContextDialog extends React.Component {
                 {this.props.currentScreenshot != null ? (
                 <svg height="70" width="200">
                     <line x1="10" y1="50" x2="210" y2="50" stroke={"grey"} strokeWidth={1} />
-                    <line x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={1}/>
+                    <line onClick={() => {alert('test')}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>
                 </svg>
                 ): null }
+                {/*<svg>*/}
+                    {/*<circle onClick={() => {alert('hi')}} cx={100} cy={100} r={50} fill="red" />*/}
+                {/*</svg>*/}
 
 
             </Dialog>
