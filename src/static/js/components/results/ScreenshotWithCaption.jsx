@@ -13,7 +13,7 @@ export default class ScreenshotWithCaption extends React.Component {
     render() {
         let imgSrc =
             "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.movieOclcId + "/" + this.props.screenshotDetails.movieLineNumber + ".png";
-
+        
         return (
             <GridTile
                 style={{'height': '180px'}}
