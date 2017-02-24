@@ -13,13 +13,12 @@ import {connect} from 'react-redux'
 export default class IndividualFilmResults extends React.Component {
 
     getScreenshotsWithCaption() {
-        return this.props.individualFilm.results.map((object) => {
-            return (
-                <ScreenshotWithCaption
+        return this.props.individualFilm.results.map(object => (
+            <ScreenshotWithCaption
                 key={`screenshot${this.props.individualFilm.movieTitle}linenumber${object.movieLineNumber}`}
                 screenshotDetails={object} movieOclcId={this.props.individualFilm.movieOclcId}/>
-            );
-        });
+            )
+        );
     }
 
     render() {

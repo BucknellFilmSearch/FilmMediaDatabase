@@ -42,7 +42,7 @@ export default class ResultsToolbar extends React.Component {
             <Toolbar className="resultsToolbar">
                 <ToolbarGroup firstChild={true}>
                     <Link to={"/"}><FlatButton label="Home" /></Link>
-                    <ToolbarTitle text={`Search Results for '${this.props.searchTerm.replace(/&/g, ' ')}'`} />
+                    <ToolbarTitle text={`${this.props.totalScreenshots} Results for '${this.props.searchTerm.replace(/&/g, ' ')}'`} />
                     <TextField
                         hintText="Search Phrase"
                         defaultValue={''}
@@ -120,6 +120,12 @@ const getFilms = createSelector(
     }
 );
 
+const getTotalScreenshots = createSelector(
+    [getSearch, getFilms],
+    (search, films) => search && search.status == "loading" ? "Loading" :
+        films.reduce((totalScreenshots, film) => totalScreenshots + film.results.length, 0)
+);
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
@@ -129,7 +135,8 @@ function mapStateToProps(state) {
         films: getFilms(state),
         enableSort: state.search != null && state.search.searchType == "text",
         currentOclcId: state.currentMovieOclcId,
-        searchTerm: state.search != null && state.search.searchTerm ? state.search.searchTerm : ''
+        searchTerm: state.search != null && state.search.searchTerm ? state.search.searchTerm : '',
+        totalScreenshots: getTotalScreenshots(state)
     }
 }
 

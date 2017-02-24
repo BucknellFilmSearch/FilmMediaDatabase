@@ -1,18 +1,42 @@
 import * as React from 'react';
-import ImageGallery from 'react-image-gallery';
-import Dialog from 'material-ui/Dialog';
+import Slider from 'react-slick';
 import FlatButton from 'material-ui/FlatButton';
+import SvgIcon from 'material-ui/SvgIcon';
+import IconButton from 'material-ui/IconButton';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-
-
-const customContentStyle = {
-    width: '90%',
-    maxWidth: 'none',
-    textAlign: 'center'
-};
+import FullscreenDialog from 'material-ui-fullscreen-dialog'
 
 const timeLineLength = 200;
+
+const LeftArrow = (props) => (
+    <IconButton>
+        <SvgIcon onClick={props.onClick}>
+            <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"/>
+            <path d="M0-.5h24v24H0z" fill="none"/>
+        </SvgIcon>
+    </IconButton>
+);
+
+const RightArrow = (props) => (
+    <IconButton>
+        <SvgIcon onClick={props.onClick}>
+            <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
+            <path d="M0-.25h24v24H0z" fill="none"/>
+        </SvgIcon>
+    </IconButton>
+);
+
+const CloseButton = (props) => (
+    <IconButton>
+        <SvgIcon onClick={props.onClick}>
+            <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+        </SvgIcon>
+    </IconButton>
+);
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ContextDialog extends React.Component {
@@ -63,43 +87,32 @@ export default class ContextDialog extends React.Component {
 
     render() {
 
-        const actions = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onTouchTap={this.handleClose}
-            />
-        ];
-
-        let totalNumberOfLines = this.props.currentFilm === null ? 0 : this.props.currentFilm.totalNumberOfLines;
-
-        let images = [...Array(totalNumberOfLines).keys()].map(screenshotNumber => ({
-            original: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`,
-            // thumbnail: `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
-            // TODO - add thumbnail back when pull request is approved (https://github.com/xiaolin/react-image-gallery/pull/147)
-        }));
-
         return (
-            <Dialog
-                actions={actions}
-                contentStyle={customContentStyle}
-                modal={false}
+            <FullscreenDialog
+                title={'Context'}
                 open={this.state.open}
-                autoScrollBodyContent={true}
+                closeIcon={<CloseButton />}
                 onRequestClose={this.handleClose}
             >
 
                 <div className="contextImageGallery">
-                    <ImageGallery
-                        items={images}
-                        slideInterval={2000}
+                    <Slider
+                        dots={false}
+                        speed={500}
+                        slidesToShow={3}
+                        slidesToScroll={1}
+                        infinite={true}
+                        initialSlide={this.props.currentMovieLineNumber - 1}
+                        afterChange={this.props.onSlideAndCheckForContext}
+                        nextArrow={<RightArrow />}
+                        prevArrow={<LeftArrow />}
                         lazyLoad={true}
-                        showIndex={true}
-                        startIndex={this.props.currentMovieLineNumber-1}
-                        showPlayButton={false}
-                        showFullscreenButton={false}
-                        onSlide={this.props.onSlideAndCheckForContext}
-                    />
+                        centerMode={true}
+                    >
+
+                            { this.props.images.map(imageUrl => <img key={imageUrl} src={imageUrl}/>) }
+
+                    </Slider>
                 </div>
 
 
@@ -132,7 +145,7 @@ export default class ContextDialog extends React.Component {
                 {/*</svg>*/}
 
 
-            </Dialog>
+            </FullscreenDialog>
         );
     }
 }
@@ -212,6 +225,17 @@ const getCurrentScreenshot = createSelector(
     }
 );
 
+const getImages = createSelector(
+    [ getClickedScreenshotMovieOclcId, getCurrentFilm ],
+    (clickedScreenshotMovieOclcId, currentFilm) => {
+        let totalNumberOfLines = currentFilm === null ? 0 : currentFilm.totalNumberOfLines;
+
+        return [...Array(totalNumberOfLines).keys()].map(screenshotNumber =>
+            `http://www.filmtvsearch.net/static/imageFiles/screenshots/${clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
+        );
+    }
+);
+
 
 // Map Redux state to component props
 function mapStateToProps(state) {
@@ -219,7 +243,8 @@ function mapStateToProps(state) {
         clickedScreenshotMovieOclcId: getClickedScreenshotMovieOclcId(state),
         currentMovieLineNumber: getCurrentContextMovieLineNumber(state),
         currentFilm: getCurrentFilm(state),
-        currentScreenshot: getCurrentScreenshot(state)
+        currentScreenshot: getCurrentScreenshot(state),
+        images: getImages(state)
     }
 }
 

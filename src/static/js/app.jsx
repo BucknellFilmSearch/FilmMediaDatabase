@@ -12,6 +12,11 @@ import { Provider } from 'react-redux';
 import SearchContainer from "./components/search/SearchContainer.jsx";
 import AllFilms from "./components/results/AllFilms.jsx";
 
+import Perf from 'react-addons-perf'
+
+window.Perf = Perf
+
+
 // Global settings
 export let DEBUG_MODE = true;
 
