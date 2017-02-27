@@ -5,13 +5,14 @@ import {connect} from 'react-redux'
 import {GridTile} from 'material-ui/GridList';
 
 import LazyLoad from 'react-lazyload'; 
-import CircularProgress from 'material-ui/CircularProgress';
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ScreenshotWithCaption extends React.Component {
 
     render() {
+
         let imgSrc =
+            // DEBUG_MODE ? "/static/imageFiles/720x480.jpg" :
             "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.movieOclcId + "/" + this.props.screenshotDetails.movieLineNumber + ".png";
         
         return (
@@ -20,7 +21,7 @@ export default class ScreenshotWithCaption extends React.Component {
                 title={this.props.screenshotDetails.movieLineNumber}
                 titleBackground={'rgba(0, 0, 0, 0.3)'}
             >
-                <LazyLoad height={180} placeholder={<CircularProgress />}>
+                <LazyLoad height={180}>
                     <img src={imgSrc} height={'180px'}
                          onMouseEnter={() => this.props.onMouseEnterScreenshot()}
                          onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
