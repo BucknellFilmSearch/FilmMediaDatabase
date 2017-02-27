@@ -20,7 +20,7 @@ export default class ScreenshotWithCaption extends React.Component {
                 title={this.props.screenshotDetails.movieLineNumber}
                 titleBackground={'rgba(0, 0, 0, 0.3)'}
             >
-                <LazyLoad height={180} placeholder={<CircularProgress />}>
+                <LazyLoad height={180} >
                     <img src={imgSrc} height={'180px'}
                          onMouseEnter={() => this.props.onMouseEnterScreenshot()}
                          onMouseLeave={() => this.props.onMouseLeaveScreenshot()}

@@ -5,9 +5,17 @@ import SvgIcon from 'material-ui/SvgIcon';
 import IconButton from 'material-ui/IconButton';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
-import FullscreenDialog from 'material-ui-fullscreen-dialog'
+import FullscreenDialog from 'material-ui-fullscreen-dialog';
+import SVGLine from './SVGLine.jsx';
 
-const timeLineLength = 200;
+const TIME_LINE_LENGTH = 1250;
+const STROKE_WIDTH = 3;
+const MIN_DIST = 2*STROKE_WIDTH;
+
+SVGLine.propTypes = {
+    slideTo: React.PropTypes.func,
+};
+
 
 const LeftArrow = (props) => (
     <IconButton>
@@ -57,9 +65,9 @@ export default class ContextDialog extends React.Component {
         return (splitString[0]);
     }
 
-    static timeStampToMinutes(movieStartTimeStamp, totalMovieRuntime) {
+    static timeStampToSeconds(movieStartTimeStamp, totalMovieRuntime) {
         const splitString = movieStartTimeStamp.split(":");
-        return Math.ceil((10 + parseInt(splitString[0]) * 60 + parseInt(splitString[1]))/totalMovieRuntime*timeLineLength);
+        return Math.ceil((10 + parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*TIME_LINE_LENGTH);
     }
 
     handleOpen() {
@@ -80,8 +88,60 @@ export default class ContextDialog extends React.Component {
         }
     }
 
-    svgTest() {
-        ImageGallery.slideToIndex(10);
+    svgTest(index) {
+        this.refs.slider.slickGoTo(index);
+    }
+
+    getScreenShotTimes() {
+        // let state = getState();
+        //
+        // let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
+        //     state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
+        // let totalNumberOfLines = currentFilm === null ? 0 : currentFilm.totalNumberOfLines;
+        // let results = currentFilm.results;
+        // var svgLines = [];
+        // var lastPosition = 0;
+        // var newX = 0;
+        // var currentTimeStampInSeconds = 0;
+        // for (var i = 0; i < this.props.currentFilm.results.length; i++) {
+        //     currentTimeStampInSeconds = ContextDialog.timeStampToSeconds(
+        //         this.props.currentFilm.results[i].movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes);
+        //     newX = currentTimeStampInSeconds - lastPosition < MIN_DIST ? lastPosition + MIN_DIST : currentTimeStampInSeconds;
+        //     lastPosition = newX;
+        //     svgLines.push(
+        //         <SVGLine
+        //         slideTo={this.svgTest.bind(this)}
+        //         index={this.props.currentFilm.results[i].movieLineNumber-1}
+        //         x={newX}
+        //         y1="30"
+        //         y2="65"
+        //         stroke={"gray"}
+        //         strokeWidth={1}/>);
+        //
+        // }
+            // const svgLines = this.props.currentFilm.results.map(
+                // (result) =>
+                //     <SVGLine
+                //         slideTo={this.svgTest.bind(this)}
+                //         index={result.movieLineNumber-1}
+                //         x={ContextDialog.timeStampToSeconds(result.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)}
+                //         y1="30"
+                //         y2="65"
+                //         stroke={"gray"}
+                //         strokeWidth={1}/>)
+        const svgLines = this.props.currentFilm.results.map(
+        (result) =>
+            <SVGLine
+                slideTo={this.svgTest.bind(this)}
+                index={result.movieLineNumber-1}
+                x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+                y1="30"
+                y2="65"
+                stroke={"gray"}
+                strokeWidth={1}/>)
+
+        return svgLines;
+
     }
 
 
@@ -108,6 +168,7 @@ export default class ContextDialog extends React.Component {
                         prevArrow={<LeftArrow />}
                         lazyLoad={true}
                         centerMode={true}
+                        ref="slider"
                     >
 
                             { this.props.images.map(imageUrl => <img key={imageUrl} src={imageUrl}/>) }
@@ -133,11 +194,24 @@ export default class ContextDialog extends React.Component {
                     }
 
                 </div>
-                {this.props.currentScreenshot != null ? (
-                <svg height="70" width="200">
-                    <line x1="10" y1="50" x2="210" y2="50" stroke={"grey"} strokeWidth={1} />
+                {this.props.currentFilm != null ? (
+                <svg height="70" width="1200">
+                    <line x1="10" y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
                     {/*<line onClick={() => {this.props.onSlideAndCheckForContext(10)}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
-                    <line onClick={() => {this.svgTest()}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>
+                    {/*<line onClick={() => {this.svgTest()}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
+                    {/*<SVGLine slideTo={this.svgTest.bind(this)} index={20} x={ContextDialog.timeStampToSeconds(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" y2="65" stroke={"gray"} strokeWidth={1}/>*/}
+                    {this.getScreenShotTimes()}
+                    {this.props.currentScreenshot != null ? (
+                        <line
+                            x1={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+                            x2={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+                            y1="20"
+                            y2="75"
+                            strokeWidth={2}
+                            stroke={"black"}
+                        />
+                    ): null }
+
                 </svg>
                 ): null }
                 {/*<svg>*/}

@@ -1,35 +1,26 @@
 import * as React from "react";
-
 import IndividualFilmResults from "./IndividualFilmResults.jsx";
-
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {grey50, cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-
 import MetadataDrawer from './MetadataDrawer.jsx';
 import ContextDialog from './ContextDialog.jsx';
 import ResultsToolbar from './ResultsToolbar.jsx';
-
 import {connect} from 'react-redux'
 import {createSelector} from 'reselect';
-
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AllFilms extends React.Component {
     constructor() {
         super();
     }
-
     componentDidMount() {
         this.props.fetchNewSearchTerm(this.props.location.pathname);
     }
-
     componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
             this.props.fetchNewSearchTerm(nextProps.location.pathname);
         }
     }
-
-
     render () {
         const muiTheme = getMuiTheme({
             palette: {
@@ -49,10 +40,10 @@ export default class AllFilms extends React.Component {
                     <ContextDialog />
                     {/*<Graph/>*/}
                     {!this.props.filmsLoaded ? (
-                            <div style={{paddingTop: '60px'}}>
-                                <h2>Loading Relevant Films...</h2>
-                            </div>
-                        ) :
+                        <div style={{paddingTop: '60px'}}>
+                            <h2>Loading Relevant Films...</h2>
+                        </div>
+                    ) :
                         this.props.films.map(function (object) {
                                 return <IndividualFilmResults
                                     key={`filmkey${object.movieOclcId}`}
@@ -60,28 +51,23 @@ export default class AllFilms extends React.Component {
                             }
                         )
                     }
-
                 </div>
-
             </MuiThemeProvider>
         );
     }
 }
-
 export const requestNewSearchTerm = (searchTerm) => {
     return {
         type: 'REQUEST_NEW_SEARCH_TERM',
         searchTerm
     }
 };
-
 const receiveNewSearchTerm = (response) => {
     return {
         type: 'RECEIVE_NEW_SEARCH_TERM',
         response
     }
 };
-
 const fetchNewSearchTerm = (searchTerm) => {
     console.log('searchTerm');
     console.log(searchTerm);
@@ -93,7 +79,6 @@ const fetchNewSearchTerm = (searchTerm) => {
         // TODO - add catch handler to handle errors
     }
 };
-
 function relevanceSort(a, b) {
     if (a.results.length > b.results.length) {
         return -1;
@@ -105,11 +90,9 @@ function relevanceSort(a, b) {
         return 0;
     }
 }
-
 function alphabeticalSort(a, b) {
     return a.movieTitle.localeCompare(b.movieTitle);
 }
-
 function yearSort(a, b) {
     if (a.movieReleaseYear > b.movieReleaseYear) {
         return -1;
@@ -121,19 +104,13 @@ function yearSort(a, b) {
         return 0;
     }
 }
-
 const areFilmsLoaded = (state) => state.search && state.search.status == "loaded";
-
 const getSearchResponse = (state) => areFilmsLoaded(state) ? [...state.search.response] : [] ;
-
 const getSortType = (state) => state.sortType;
-
 const getGenre = (state) => state.genre;
-
 const getFilms = createSelector(
     [ getSearchResponse, getSortType, getGenre],
     (films, sortType, genre) => {
-
         // sort films based on user input
         if (sortType == 1) {
             films = films.sort(relevanceSort);
@@ -150,12 +127,10 @@ const getFilms = createSelector(
         else if (sortType == 5) {
             films = films.sort(yearSort).reverse();
         }
-
         return genre == 'All' ? films :
             films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
     }
 );
-
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
@@ -163,7 +138,6 @@ function mapStateToProps(state) {
         films: getFilms(state)
     }
 }
-
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
