@@ -120,8 +120,6 @@ export default class SearchContainer extends React.Component {
                         </div>
                     </Dialog>
 
-                    <br />
-                    <p><a className="hyperlink" href="/moviesearch/feedback">Comments Or Suggestions? Please Contact Us</a></p>
 
                     <div id="frontFoot">
                         <Footer/>

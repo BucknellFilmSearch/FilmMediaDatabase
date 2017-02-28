@@ -8,6 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 const projectIcon = <FontIcon className="material-icons"></FontIcon>;
 const aboutUsIcon = <FontIcon className="material-icons"></FontIcon>;
 const githubIcon = <FontIcon className="material-icons"></FontIcon>;
+const feedbackIcon = <FontIcon className="material-icons"></FontIcon>;
 //const githubIcon = <img src="/static/imageFiles/github.jpg" style="width:25"></img>;
 
 
@@ -16,13 +17,13 @@ export default class Footer extends React.Component {
 
     constructor() {
         super();
-        this.state = {selectedIndex: -1, openProject: false, openAbout: false, openGithub: false};
+        this.state = {selectedIndex: -1, openProject: false, openAbout: false, openGithub: false, openFeedback: false};
         this.handleOpenProject = this.handleOpenProject.bind(this);
         this.handleCloseProject = this.handleCloseProject.bind(this);
         this.handleOpenAbout = this.handleOpenAbout.bind(this);
         this.handleCloseAbout = this.handleCloseAbout.bind(this);
         this.handleOpenGithub = this.handleOpenGithub.bind(this);
-        this.handleCloseGithub = this.handleCloseGithub.bind(this);
+        this.handleOpenFeedback = this.handleOpenFeedback.bind(this);
     }
 
     handleOpenProject(index) {
@@ -44,6 +45,11 @@ export default class Footer extends React.Component {
     handleOpenGithub(index) {
         this.setState({selectedIndex: index, openGithub: true});
         window.open('http://www.github.com');
+    };
+
+    handleOpenFeedback(index) {
+        this.setState({selectedIndex: index, openFeedback: true});
+        window.open('/moviesearch/feedback');
     };
 
 
@@ -84,6 +90,11 @@ export default class Footer extends React.Component {
                         label="GitHub"
                         icon={githubIcon}
                         onTouchTap={() => this.handleOpenGithub(2)}
+                    />
+                    <BottomNavigationItem
+                        label="Feedback"
+                        icon={feedbackIcon}
+                        onTouchTap={() => this.handleOpenFeedback(3)}
                     />
 
                     <Dialog
