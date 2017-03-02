@@ -8,6 +8,7 @@ import {createSelector} from 'reselect';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 import SVGLine from './SVGLine.jsx';
 import {GridTile} from 'material-ui/GridList';
+import SVGCircle from './SVGCircle.jsx'
 
 const TIME_LINE_LENGTH = 1250;
 const STROKE_WIDTH = 3;
@@ -66,7 +67,7 @@ export default class ContextDialog extends React.Component {
 
     static timeStampToSeconds(movieStartTimeStamp, totalMovieRuntime) {
         const splitString = movieStartTimeStamp.split(":");
-        return Math.ceil((10 + parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*TIME_LINE_LENGTH);
+        return Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*TIME_LINE_LENGTH);
     }
 
     handleOpen() {
@@ -130,15 +131,15 @@ export default class ContextDialog extends React.Component {
                 //         strokeWidth={1}/>)
         const svgLines = this.props.currentFilm.results.map(
         (result) =>
-            <SVGLine
-                slideTo={this.svgTest.bind(this)}
-                index={result.movieLineNumber-1}
-                x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
-                key={`screenshot${result.movieLineNumber}`}
-                y1="30"
-                y2="65"
-                stroke={"gray"}
-                strokeWidth={1}/>)
+        <SVGCircle
+            slideTo={this.svgTest.bind(this)}
+            index={result.movieLineNumber-1}
+            key={`screenshot${result.movieLineNumber}`}
+            x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+            y="50"
+            radius={7}
+            stroke={"gray"}
+            strokeWidth={1}/>)
 
         return svgLines;
 
@@ -202,8 +203,8 @@ export default class ContextDialog extends React.Component {
 
                 </div>
                 {this.props.currentFilm != null ? (
-                <svg height="70" width="1200">
-                    <line x1="10" y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
+                <svg height="70" width="1250">
+                    <line x1="0" y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
                     {/*<line onClick={() => {this.props.onSlideAndCheckForContext(10)}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
                     {/*<line onClick={() => {this.svgTest()}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
                     {/*<SVGLine slideTo={this.svgTest.bind(this)} index={20} x={ContextDialog.timeStampToSeconds(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" y2="65" stroke={"gray"} strokeWidth={1}/>*/}
