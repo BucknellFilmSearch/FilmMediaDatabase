@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 import SVGLine from './SVGLine.jsx';
+import SVGCircle from './SVGCircle.jsx'
 
 const TIME_LINE_LENGTH = 1250;
 const STROKE_WIDTH = 3;
@@ -131,15 +132,15 @@ export default class ContextDialog extends React.Component {
                 //         strokeWidth={1}/>)
         const svgLines = this.props.currentFilm.results.map(
         (result) =>
-            <SVGLine
-                slideTo={this.svgTest.bind(this)}
-                index={result.movieLineNumber-1}
-                key={`screenshot${result.movieLineNumber}`}
-                x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
-                y1="30"
-                y2="65"
-                stroke={"gray"}
-                strokeWidth={1}/>)
+        <SVGCircle
+            slideTo={this.svgTest.bind(this)}
+            index={result.movieLineNumber-1}
+            key={`screenshot${result.movieLineNumber}`}
+            x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+            y="50"
+            radius={7}
+            stroke={"gray"}
+            strokeWidth={1}/>)
 
         return svgLines;
 
