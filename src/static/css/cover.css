@@ -102,6 +102,15 @@
     /*height:30%;*/
 }
 
+.slick-list {
+    width: calc(100% - 100px);
+    float: left;
+}
+
+.contextImageGallery button {
+    float: left;
+}
+
 .contextImage {
     padding-left: 40px;
     padding-right: 40px;
@@ -109,11 +118,19 @@
 }
 
 .contextImage img {
-    width:100%
+    width:100%;
+    transform: translateY(0)!important;
+}
+
+.contextImage > div {
+    height: 30px!important;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 /* Context page's dialogue section */
 .contextDialogue {
+    clear: both;
 }
 /* Graph related style */
 #header {

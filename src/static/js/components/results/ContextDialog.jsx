@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 import SVGLine from './SVGLine.jsx';
+import {GridTile} from 'material-ui/GridList';
 
 const TIME_LINE_LENGTH = 1250;
 const STROKE_WIDTH = 3;
@@ -161,7 +162,7 @@ export default class ContextDialog extends React.Component {
                         slidesToScroll={1}
                         infinite={true}
                         initialSlide={this.props.currentMovieLineNumber - 1}
-                        beforeChange={this.props.onSlideAndCheckForContext}
+                        afterChange={this.props.onSlideAndCheckForContext}
                         nextArrow={<RightArrow />}
                         prevArrow={<LeftArrow />}
                         lazyLoad={true}
@@ -169,7 +170,15 @@ export default class ContextDialog extends React.Component {
                         ref="slider"
                     >
 
-                        { this.props.images.map(imageUrl => <div className="contextImage" key={imageUrl}><img src={imageUrl}/></div>) }
+                        { this.props.images.map(imageNumber =>
+                            <GridTile className="contextImage"
+                                title={imageNumber}
+                                titleBackground={'rgba(0, 0, 0, 0.3)'}
+                            >
+                                <img src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}/>
+                            </GridTile>
+                            )
+                        }
 
                     </Slider>
                 </div>
@@ -302,9 +311,7 @@ const getImages = createSelector(
     (clickedScreenshotMovieOclcId, currentFilm) => {
         let totalNumberOfLines = currentFilm === null ? 0 : currentFilm.totalNumberOfLines;
 
-        return [...Array(totalNumberOfLines).keys()].map(screenshotNumber =>
-            `http://www.filmtvsearch.net/static/imageFiles/screenshots/${clickedScreenshotMovieOclcId}/${screenshotNumber+1}.png`
-        );
+        return [...Array(totalNumberOfLines).keys()].map(screenshotNumber => screenshotNumber+1);
     }
 );
 
