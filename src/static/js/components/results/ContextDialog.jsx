@@ -161,7 +161,7 @@ export default class ContextDialog extends React.Component {
                         slidesToScroll={1}
                         infinite={true}
                         initialSlide={this.props.currentMovieLineNumber - 1}
-                        afterChange={this.props.onSlideAndCheckForContext}
+                        beforeChange={this.props.onSlideAndCheckForContext}
                         nextArrow={<RightArrow />}
                         prevArrow={<LeftArrow />}
                         lazyLoad={true}
@@ -169,7 +169,7 @@ export default class ContextDialog extends React.Component {
                         ref="slider"
                     >
 
-                            { this.props.images.map(imageUrl => <img key={imageUrl} src={imageUrl}/>) }
+                        { this.props.images.map(imageUrl => <div className="contextImage" key={imageUrl}><img src={imageUrl}/></div>) }
 
                     </Slider>
                 </div>
