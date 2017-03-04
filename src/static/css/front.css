@@ -8,3 +8,16 @@
   text-align: center;
 }
 
+#textIcon {
+  text-align: center;
+  display: inline-block;
+}
+
+#photoIcon {
+  text-align: center;
+  display: inline-block;
+}
+
+#photoModal {
+  text-align: center;
+}

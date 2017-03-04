@@ -26,6 +26,7 @@
     "material-ui-fullscreen-dialog": "^0.2.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-dropzone": "^3.11.0",
     "react-image-gallery": "^0.7.12",
     "react-lazyload": "^2.2.0",
     "react-redux": "^5.0.2",

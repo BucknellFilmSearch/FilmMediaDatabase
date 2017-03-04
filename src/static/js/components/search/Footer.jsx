@@ -17,13 +17,13 @@ export default class Footer extends React.Component {
 
     constructor() {
         super();
-        this.state = {selectedIndex: -1, openProject: false, openAbout: false, openGithub: false, openFeedback: false};
+        this.state = {selectedIndex: -1, openProject: false, openAbout: false};
         this.handleOpenProject = this.handleOpenProject.bind(this);
         this.handleCloseProject = this.handleCloseProject.bind(this);
         this.handleOpenAbout = this.handleOpenAbout.bind(this);
         this.handleCloseAbout = this.handleCloseAbout.bind(this);
-        this.handleOpenGithub = this.handleOpenGithub.bind(this);
-        this.handleOpenFeedback = this.handleOpenFeedback.bind(this);
+        Footer.handleOpenGithub = Footer.handleOpenGithub.bind(this);
+        Footer.handleOpenFeedback = Footer.handleOpenFeedback.bind(this);
     }
 
     handleOpenProject(index) {
@@ -42,13 +42,11 @@ export default class Footer extends React.Component {
         this.setState({selectedIndex: index, openAbout: false});
     };
 
-    handleOpenGithub(index) {
-        this.setState({selectedIndex: index, openGithub: true});
+    static handleOpenGithub() {
         window.open('http://www.github.com');
     };
 
-    handleOpenFeedback(index) {
-        this.setState({selectedIndex: index, openFeedback: true});
+    static handleOpenFeedback() {
         window.open('/moviesearch/feedback');
     };
 
@@ -89,12 +87,12 @@ export default class Footer extends React.Component {
                     <BottomNavigationItem
                         label="GitHub"
                         icon={githubIcon}
-                        onTouchTap={() => this.handleOpenGithub(2)}
+                        onTouchTap={() => Footer.handleOpenGithub()}
                     />
                     <BottomNavigationItem
                         label="Feedback"
                         icon={feedbackIcon}
-                        onTouchTap={() => this.handleOpenFeedback(3)}
+                        onTouchTap={() => Footer.handleOpenFeedback()}
                     />
 
                     <Dialog
