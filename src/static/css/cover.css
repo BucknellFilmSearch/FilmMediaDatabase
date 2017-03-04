@@ -102,13 +102,43 @@
     /*height:30%;*/
 }
 
-.contextImageGallery img {
+.slick-list {
+    width: calc(100% - 100px);
+    float: left;
+}
+
+.contextImageGallery button {
+    float: left;
+}
+
+.contextImage {
     padding-left: 40px;
     padding-right: 40px;
+    width:500px;
+}
+
+.contextImage img {
+    width:100%;
+    transform: translateY(0)!important;
+}
+
+.contextImage > div {
+    height: 30px!important;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 /* Context page's dialogue section */
 .contextDialogue {
+    clear: both;
+    text-align: center;
+}
+
+/* Context page's timeline */
+.timelineCircles:hover {
+    height: 300px;
+    fill: #228022;
+    fill-opacity: 90;
 }
 /* Graph related style */
 #header {
