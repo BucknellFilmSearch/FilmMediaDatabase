@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Slider from 'react-slick';
-import FlatButton from 'material-ui/FlatButton';
 import SvgIcon from 'material-ui/SvgIcon';
 import IconButton from 'material-ui/IconButton';
 import {connect} from 'react-redux';
@@ -129,17 +128,18 @@ export default class ContextDialog extends React.Component {
                 //         y2="65"
                 //         stroke={"gray"}
                 //         strokeWidth={1}/>)
-        const svgLines = this.props.currentFilm.results.map(
-        (result) =>
-        <SVGCircle
-            slideTo={this.svgTest.bind(this)}
-            index={result.movieLineNumber-1}
-            key={`screenshot${result.movieLineNumber}`}
-            x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
-            y="50"
-            radius={7}
-            stroke={"gray"}
-            strokeWidth={1}/>)
+        const svgLines = this.props.currentFilm.results.map((result) =>
+            <SVGCircle
+                slideTo={this.svgTest.bind(this)}
+                index={result.movieLineNumber-1}
+                key={`screenshot${result.movieLineNumber}`}
+                x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+                y="50"
+                radius={7}
+                stroke={"gray"}
+                strokeWidth={1}
+            />
+        );
 
         return svgLines;
 
@@ -150,7 +150,7 @@ export default class ContextDialog extends React.Component {
 
         return (
             <FullscreenDialog
-                title={'Context'}
+                title={`${this.props.currentFilm && this.props.currentFilm.results.length} Results in ${this.props.currentFilm && this.props.currentFilm.movieTitle}`}
                 open={this.state.open}
                 onRequestClose={this.handleClose}
             >
