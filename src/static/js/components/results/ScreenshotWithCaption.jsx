@@ -4,7 +4,8 @@ import {DEBUG_MODE} from "../../app.jsx";
 import {connect} from 'react-redux'
 import {GridTile} from 'material-ui/GridList';
 
-import LazyLoad from 'react-lazyload'; 
+import LazyLoad from 'react-lazyload';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ScreenshotWithCaption extends React.Component {
@@ -22,11 +23,20 @@ export default class ScreenshotWithCaption extends React.Component {
                 titleBackground={'rgba(0, 0, 0, 0.3)'}
             >
                 <LazyLoad height={180}>
-                    <img src={imgSrc} height={'180px'}
-                         onMouseEnter={() => this.props.onMouseEnterScreenshot()}
-                         onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
-                         onClick={() => this.props.onClickScreenshot()}
-                    />
+                    <ReactCSSTransitionGroup
+                        key="1"
+                        transitionName="fade"
+                        transitionAppear={true}
+                        transitionAppearTimeout={5000}
+                        transitionEnter={false}
+                        transitionLeave={false}
+                    >
+                        <img src={imgSrc} height={'180px'}
+                             onMouseEnter={() => this.props.onMouseEnterScreenshot()}
+                             onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
+                             onClick={() => this.props.onClickScreenshot()}
+                        />
+                    </ReactCSSTransitionGroup>
                 </LazyLoad>
             </GridTile>
         )

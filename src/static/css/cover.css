@@ -29,6 +29,15 @@
   cursor: pointer;
 }
 
+.fade-appear {
+  opacity: 0.01;
+}
+
+.fade-appear.fade-appear-active {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
+
 /* Styling for search page */
 #mainSearchCover {
   text-align: center;
