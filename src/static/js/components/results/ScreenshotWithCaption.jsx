@@ -21,6 +21,7 @@ export default class ScreenshotWithCaption extends React.Component {
                 style={{'height': '180px'}}
                 title={this.props.screenshotDetails.movieLineNumber}
                 titleBackground={'rgba(0, 0, 0, 0.3)'}
+                className="screenshot"
             >
                 <LazyLoad height={180}>
                     <ReactCSSTransitionGroup

@@ -25,6 +25,9 @@ export default class IndividualFilmResults extends React.Component {
         // TODO - make this responsive using http://broucz.github.io/react-inline-grid/
         return (
             <div className="screenshotsGridList">
+                <Waypoint
+                    onEnter={() => this.props.onScrollIntoFilm()}
+                />
                 <Subheader>{`${this.props.individualFilm.movieTitle} (${this.props.individualFilm.movieReleaseYear})`}</Subheader>
                 <GridList cellHeight={180} cols={4}>
                     { this.getScreenshotsWithCaption() }

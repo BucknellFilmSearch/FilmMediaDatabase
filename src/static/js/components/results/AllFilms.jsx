@@ -8,6 +8,7 @@ import ContextDialog from './ContextDialog.jsx';
 import ResultsToolbar from './ResultsToolbar.jsx';
 import {connect} from 'react-redux'
 import {createSelector} from 'reselect';
+
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AllFilms extends React.Component {
     constructor() {
