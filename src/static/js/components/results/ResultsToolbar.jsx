@@ -107,8 +107,8 @@ export default class ResultsToolbar extends React.Component {
                         disabled={!this.props.enableSort}
                     >
                         <MenuItem value={1} primaryText="Relevance" />
-                        <MenuItem value={2} primaryText="A-Z" />
-                        <MenuItem value={3} primaryText="Z-A" />
+                        <MenuItem value={2} primaryText="Movie Title (A-Z)" />
+                        <MenuItem value={3} primaryText="Movie Title (Z-A)" />
                         <MenuItem value={4} primaryText="Year (High to Low)" />
                         <MenuItem value={5} primaryText="Year (Low to High)" />
                     </SelectField>
