@@ -29,12 +29,40 @@ const SearchIcon = (props) => {
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ResultsToolbar extends React.Component {
 
+    constructor() {
+        super();
+
+        this.state = {
+            searchText: ''
+        };
+
+        this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
     updateSearch() {
+        // stop default form submission behavior
+        event.preventDefault();
+
         let keywordOrPhrase = this.refs["updateSearchBox"].getValue();
+
+        this.setState({searchText: ''});
 
         // update the URL
         let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
         hashHistory.push(newPath);
+    }
+
+    updateSearchForEnterKeypress(event) {
+
+        // stop default form submission behavior
+        event.preventDefault();
+
+        this.updateSearch();
+    }
+
+    handleChange(event, newValue) {
+        this.setState({searchText: newValue});
     }
 
     render() {
@@ -43,12 +71,16 @@ export default class ResultsToolbar extends React.Component {
                 <ToolbarGroup firstChild={true}>
                     <Link to={"/"}><FlatButton label="Home" /></Link>
                     <ToolbarTitle text={`${this.props.totalScreenshots} Results for '${this.props.searchTerm.replace(/&/g, ' ')}'`} />
-                    <TextField
-                        hintText="Search Phrase"
-                        defaultValue={''}
-                        style={selectStyle}
-                        ref="updateSearchBox"
-                    />
+                    <form onSubmit={this.updateSearchForEnterKeypress}>
+                        <TextField
+                            hintText="Search Phrase"
+                            defaultValue={''}
+                            value={this.state.searchText}
+                            onChange={this.handleChange}
+                            style={selectStyle}
+                            ref="updateSearchBox"
+                        />
+                    </form>
                     <FlatButton
                         label="Update Search"
                         labelPosition="before"
