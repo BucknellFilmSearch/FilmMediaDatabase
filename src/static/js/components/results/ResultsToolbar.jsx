@@ -74,7 +74,6 @@ export default class ResultsToolbar extends React.Component {
                     <form onSubmit={this.updateSearchForEnterKeypress}>
                         <TextField
                             hintText="Search Phrase"
-                            defaultValue={''}
                             value={this.state.searchText}
                             onChange={this.handleChange}
                             style={selectStyle}
