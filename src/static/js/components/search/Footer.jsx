@@ -1,7 +1,6 @@
 import * as React from "react";
 import FontIcon from 'material-ui/FontIcon';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
-import Paper from 'material-ui/Paper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -54,7 +53,7 @@ export default class Footer extends React.Component {
 
     render() {
 
-        // actions for the project box modle
+        // actions for the project box modal
         const projectActions = [
             <FlatButton
                 label="Close"

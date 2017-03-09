@@ -17,8 +17,7 @@ const modalStyle = {
 };
 
 const sortStyle = {
-    height: '71px',
-    top: '18px',
+    height: '89px',
     width: '20%'
 };
 
@@ -42,26 +41,14 @@ export default class TextInputModal extends React.Component {
 
     constructor() {
         super();
-
-        this.state = {
-            open: false,
-            searchText: ''
-        };
-
+        this.state = {open: false};
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
-        this.handleChange = this.handleChange.bind(this);
     }
 
 
     updateSearch() {
-        // stop default form submission behavior
-        event.preventDefault();
-
         let keywordOrPhrase = this.refs["updateSearchBox"].getValue();
-
-        this.setState({searchText: ''});
 
         // update the URL
         let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
@@ -75,20 +62,6 @@ export default class TextInputModal extends React.Component {
     handleClose() {
         this.setState({open: false});
     };
-
-    updateSearchForEnterKeypress(event) {
-
-        // stop default form submission behavior
-        event.preventDefault();
-
-        this.updateSearch();
-    }
-
-    handleChange(event, newValue) {
-        this.setState({searchText: newValue});
-    }
-
-
 
     render() {
 
@@ -110,52 +83,49 @@ export default class TextInputModal extends React.Component {
 
 
         return (
-                <div>
-                    <img src="/static/imageFiles/textIcon.jpg" onTouchTap={this.handleOpen}></img>
+            <div>
+                <img src="/static/imageFiles/textIcon.jpg" onTouchTap={this.handleOpen}></img>
 
-                    <Dialog
-                        actions={actions}
-                        style={modalStyle}
-                        modal={false}
-                        open={this.state.open}
-                        autoScrollBodyContent={true}
-                        onRequestClose={this.handleClose}
-                    >
-                        <form id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
-                            <TextField
-                                hintText="Search Phrase"
-                                value={this.state.searchText}
-                                style={inputStyle}
-                                onChange={this.handleChange}
-                                ref="updateSearchBox"
-                            />
-                        </form>
+                <Dialog
+                    actions={actions}
+                    style={modalStyle}
+                    modal={false}
+                    open={this.state.open}
+                    autoScrollBodyContent={true}
+                    onRequestClose={this.handleClose}
+                >
+                    <TextField
+                        hintText="Search Phrase"
+                        defaultValue={''}
+                        style={inputStyle}
+                        ref="updateSearchBox"
+                    />
 
-                        <SelectField
+                    <SelectField
                         floatingLabelText="Sort"
                         value={this.props.sortType}
                         onChange={this.props.onSelectSortType}
                         style={sortStyle}
-                        >
-                            <MenuItem value={1} primaryText="Relevance" />
-                            <MenuItem value={2} primaryText="Movie Title (A-Z)" />
-                            <MenuItem value={3} primaryText="Movie Title (Z-A)" />
-                            <MenuItem value={4} primaryText="Year (High to Low)" />
-                            <MenuItem value={5} primaryText="Year (Low to High)" />
-                        </SelectField>
+                    >
+                        <MenuItem value={1} primaryText="Relevance" />
+                        <MenuItem value={2} primaryText="Movie Title (A-Z)" />
+                        <MenuItem value={3} primaryText="Movie Title (Z-A)" />
+                        <MenuItem value={4} primaryText="Year (High to Low)" />
+                        <MenuItem value={5} primaryText="Year (Low to High)" />
+                    </SelectField>
 
-                        <SelectField
-                            floatingLabelText="Genre"
-                            value={this.props.genre}
-                            onChange={this.props.onSelectGenre}
-                            style={sortStyle}
-                        >
-                            {GENRES.map(genre => <MenuItem key={genre} value={genre} primaryText={genre} />) }
-                        </SelectField>
+                    <SelectField
+                        floatingLabelText="Genre"
+                        value={this.props.genre}
+                        onChange={this.props.onSelectGenre}
+                        style={sortStyle}
+                    >
+                        {GENRES.map((genre, index) => <MenuItem key={genre} value={genre} primaryText={genre} />) }
+                    </SelectField>
 
 
-                    </Dialog>
-                </div>
+                </Dialog>
+            </div>
         );
     }
 }
@@ -175,14 +145,32 @@ const selectGenre = (genre) => {
     }
 };
 
+const getSearch = (state) => state.search;
+
+const getFilms = createSelector(
+    [getSearch],
+    (search) => {
+        return search != null && search.status == "loaded" ? search.response : []
+    }
+);
+
+const getTotalScreenshots = createSelector(
+    [getSearch, getFilms],
+    (search, films) => search && search.status == "loading" ? "Loading" :
+        films.reduce((totalScreenshots, film) => totalScreenshots + film.results.length, 0)
+);
+
+
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
         sortType: state.sortType,
         genre: state.genre,
+        films: getFilms(state),
         enableSort: state.search != null && state.search.searchType == "text",
         currentOclcId: state.currentMovieOclcId,
-        searchTerm: state.search != null && state.search.searchTerm ? state.search.searchTerm : ''
+        searchTerm: state.search != null && state.search.searchTerm ? state.search.searchTerm : '',
+        totalScreenshots: getTotalScreenshots(state)
     }
 }
 

@@ -27,17 +27,14 @@ export default class SearchContainer extends React.Component {
                 <div id="mainSearchCover" className="filmSearch">
                     <span id="mainTitle">The Film Search Engine</span><br />
                     <span id="names"> A collaborative effort from Bucknell University</span><br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <div id="textIcon">
-                        <TextInputModal/>
+                    <div id="searchIcons">
+                        <div id="textIcon">
+                            <TextInputModal/>
+                        </div>
+                        <div id="photoIcon">
+                            <PhotoInputModal/>
+                        </div>
                     </div>
-                    <div id="photoIcon">
-                        <PhotoInputModal/>
-                    </div>
-
                     <div id="frontFoot">
                         <Footer/>
                     </div>
