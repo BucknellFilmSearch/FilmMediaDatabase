@@ -98,25 +98,39 @@ export default class Footer extends React.Component {
                     </div>
 
                         <Dialog
-                            title="Dialog With Actions"
+                            title="About the Project"
                             actions={projectActions}
                             modal={false}
                             open={this.state.openProject}
                             autoScrollBodyContent={true}
                             onRequestClose={this.handleCloseProject}
                         >
-                            Text Project
+                            <br/>
+                                This project was started as a new way to conduct film and media studies research. By allowing
+                            users to see quickly what was happening when a line of dialogue was said, they can gain deeper meaning
+                            than just textual context. With the addition of being able to search for images which have a similar amount
+                            of color, users can now find scenes in films which are visually similar and more easily draw conclusions
+                            about similarities between the two films.
+                            <br/>
+                            <br/>
+                                The project is still a work in progress as more films are added to the database. If there is a film
+                            you would like to see added, if you have any new feature suggestions, or if you encounter any bugs, please
+                            feel free to use the feedback button on this page. We will review your request and act upon it as quickly as possible.
                         </Dialog>
 
                     <Dialog
-                        title="Dialog With Actions"
+                        title="About Us"
                         actions={aboutActions}
                         modal={false}
                         open={this.state.openAbout}
                         autoScrollBodyContent={true}
                         onRequestClose={this.handleCloseAbout}
                     >
-                        Text About Us
+                        <br/>
+                            This project was started by Professor John Hunter from Bucknell University.
+                        Students Dale Hartman and Justi Eyster began the project with the construction of the film database
+                        and the back-end logic. The senior design team, Team Endframe, comprised of Anmol Singh, Devon Wasson, Elliot Radsliff, and Nadeem Nasimi,
+                        went on the design and build the user interface.
                     </Dialog>
 
                 </BottomNavigation>
