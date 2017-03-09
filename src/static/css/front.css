@@ -1,4 +1,5 @@
 #frontFoot {
+  font-size: 30px;
   position: absolute;
   right: 0;
   bottom: 0;
@@ -6,6 +7,16 @@
   padding: 1rem;
   background-color: #efefef;
   text-align: center;
+}
+
+#githubIcon {
+  width: 60%;
+}
+
+#about {
+}
+
+#feedback {
 }
 
 #searchIcons {
