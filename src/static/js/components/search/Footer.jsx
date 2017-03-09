@@ -7,9 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 const projectIcon = <FontIcon className="material-icons"></FontIcon>;
 const aboutUsIcon = <FontIcon className="material-icons"></FontIcon>;
 const githubIcon = <FontIcon className="material-icons"></FontIcon>;
-const feedbackIcon = <FontIcon className="material-icons"></FontIcon>;
-//const githubIcon = <img src="/static/imageFiles/github.jpg" style="width:25"></img>;
-
+const feedbackIcon = <img src="/static/imageFiles/feedback.jpg"></img>;
 
 
 export default class Footer extends React.Component {
@@ -73,37 +71,42 @@ export default class Footer extends React.Component {
 
         return (
                 <BottomNavigation selectedIndex={this.state.selectedIndex}>
-                    <BottomNavigationItem
-                        label="About the Project"
-                        icon={projectIcon}
-                        onTouchTap={() => this.handleOpenProject(0)}
-                    />
-                    <BottomNavigationItem
-                        label="About Us"
-                        icon={aboutUsIcon}
-                        onTouchTap={() => this.handleOpenAbout(1)}
-                    />
-                    <BottomNavigationItem
-                        label="GitHub"
-                        icon={githubIcon}
-                        onTouchTap={() => Footer.handleOpenGithub()}
-                    />
-                    <BottomNavigationItem
-                        label="Feedback"
-                        icon={feedbackIcon}
-                        onTouchTap={() => Footer.handleOpenFeedback()}
-                    />
+                    <div id="about">
+                        <BottomNavigationItem
+                            label="About the Project"
+                            icon={projectIcon}
+                            onTouchTap={() => this.handleOpenProject(0)}
+                        />
+                        <BottomNavigationItem
+                            label="About Us"
+                            icon={aboutUsIcon}
+                            onTouchTap={() => this.handleOpenAbout(1)}
+                        />
+                        <BottomNavigationItem
+                            label="GitHub"
+                            icon={githubIcon}
+                            onTouchTap={() => Footer.handleOpenGithub()}
+                        />
+                    </div>
 
-                    <Dialog
-                        title="Dialog With Actions"
-                        actions={projectActions}
-                        modal={false}
-                        open={this.state.openProject}
-                        autoScrollBodyContent={true}
-                        onRequestClose={this.handleCloseProject}
-                    >
-                        Text Project
-                    </Dialog>
+                    <div id="feedback">
+                        <BottomNavigationItem
+
+                            icon={feedbackIcon}
+                            onTouchTap={() => Footer.handleOpenFeedback()}
+                        />
+                    </div>
+
+                        <Dialog
+                            title="Dialog With Actions"
+                            actions={projectActions}
+                            modal={false}
+                            open={this.state.openProject}
+                            autoScrollBodyContent={true}
+                            onRequestClose={this.handleCloseProject}
+                        >
+                            Text Project
+                        </Dialog>
 
                     <Dialog
                         title="Dialog With Actions"

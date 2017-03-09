@@ -151,7 +151,7 @@ export default class TextInputModal extends React.Component {
                             style={sortStyle}
                             maxHeight={200}
                         >
-                            {GENRES.map((genre, index) => <MenuItem value={genre} primaryText={genre} />) }
+                            {GENRES.map((genre, index) => <MenuItem key={genre} value={genre} primaryText={genre} />) }
                         </SelectField>
 
 
