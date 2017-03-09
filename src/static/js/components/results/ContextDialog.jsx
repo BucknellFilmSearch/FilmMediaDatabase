@@ -7,9 +7,10 @@ import {createSelector} from 'reselect';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 import SVGLine from './SVGLine.jsx';
 import {GridTile} from 'material-ui/GridList';
-import SVGCircle from './SVGCircle.jsx'
+import SVGCircle from './SVGCircle.jsx';
+import ReactTooltip from 'react-tooltip';
 
-const TIME_LINE_LENGTH = 1250;
+const TIME_LINE_LENGTH = 1200;
 const STROKE_WIDTH = 3;
 const MIN_DIST = 2*STROKE_WIDTH;
 
@@ -145,7 +146,19 @@ export default class ContextDialog extends React.Component {
 
     }
 
+    createImageTooltip() {
+        const Tooltips = this.props.currentFilm.results.map((result) =>
+            <ReactTooltip
+                id={'SVGCircle' + (result.movieLineNumber - 1)}
+                aria-haspopup='true'
+                role='example'
+            >
+                <img height='100' src={"http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.currentFilm.movieOclcId + "/" + result.movieLineNumber + ".png"}/>
+            </ReactTooltip>
 
+            );
+        return Tooltips;
+    }
     render() {
 
         return (
@@ -202,8 +215,11 @@ export default class ContextDialog extends React.Component {
                     }
 
                 </div>
+
+                <div className="ContextTimeLine">
                 {this.props.currentFilm != null ? (
-                <svg height="70" width="1250">
+                    <div>
+                <svg height="70" width="1200">
                     <line x1="0" y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
                     {/*<line onClick={() => {this.props.onSlideAndCheckForContext(10)}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
                     {/*<line onClick={() => {this.svgTest()}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
@@ -213,15 +229,19 @@ export default class ContextDialog extends React.Component {
                         <line
                             x1={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
                             x2={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
-                            y1="20"
-                            y2="75"
+                            y1="35"
+                            y2="65"
                             strokeWidth={2}
                             stroke={"black"}
                         />
                     ): null }
 
                 </svg>
+                        {this.createImageTooltip()}
+                    </div>
                 ): null }
+
+                </div>
                 {/*<svg>*/}
                     {/*<circle onClick={() => {alert('hi')}} cx={100} cy={100} r={50} fill="red" />*/}
                 {/*</svg>*/}
