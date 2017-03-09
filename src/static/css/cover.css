@@ -141,6 +141,15 @@
 .contextDialogue {
     clear: both;
     text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    height: 100px;
+    padding-top: 30px;
+}
+
+/*Conext Timeline centering */
+.ContextTimeLine{
+    text-align: center;
 }
 
 /* Context page's timeline */

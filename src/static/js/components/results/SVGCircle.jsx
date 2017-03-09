@@ -29,7 +29,17 @@ export default class SVGCircle extends React.Component {
     render() {
         return(
             <svg>
-                <circle className="timelineCircles" onClick={this.click.bind(this)} cx={this.props.x} cy={this.props.y} r={this.props.radius} stroke={"grey"} strokeWidth={2} fill={"green"} fillOpacity={0}/>
+                <circle
+                    className="timelineCircles"
+                    onClick={this.click.bind(this)}
+                    cx={this.props.x}
+                    cy={this.props.y}
+                    r={this.props.radius}
+                    stroke={"grey"}
+                    strokeWidth={2}
+                    data-tip data-for={'SVGCircle' + this.props.index}
+                    fill={"green"}
+                    fillOpacity={0}/>
                 {/*<line x1="10" x2="100" y1="50" y2="75" stroke={"grey"} strokeWidth={20}/>*/}
             </svg>
         );
