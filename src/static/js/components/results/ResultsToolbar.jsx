@@ -16,6 +16,11 @@ const selectStyle = {
     width: '150px'
 };
 
+const inputFieldStyle = {
+    width: '150px'
+};
+
+
 const SearchIcon = (props) => {
     return (
         <svg {...props} fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -76,28 +81,19 @@ export default class ResultsToolbar extends React.Component {
                             hintText="Search Phrase"
                             value={this.state.searchText}
                             onChange={this.handleChange}
-                            style={selectStyle}
+                            style={inputFieldStyle}
                             ref="updateSearchBox"
                         />
                     </form>
                     <FlatButton
                         label="Update Search"
-                        labelPosition="before"
+                        labelPosition="after"
                         primary={true}
                         icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
                         onClick={() => this.updateSearch()}
                     />
                 </ToolbarGroup>
                 <ToolbarGroup lastChild={true}>
-                    <SelectField
-                        floatingLabelText="Film"
-                        value={this.props.currentOclcId}
-                        onChange={console.log}
-                        style={selectStyle}
-                    >
-                        {this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}
-                    </SelectField>
-
                     <SelectField
                         floatingLabelText="Sort"
                         value={this.props.sortType}
