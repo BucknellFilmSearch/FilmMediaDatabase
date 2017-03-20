@@ -95,6 +95,15 @@ export default class ResultsToolbar extends React.Component {
                 </ToolbarGroup>
                 <ToolbarGroup lastChild={true}>
                     <SelectField
+                        floatingLabelText="Film"
+                        value={this.props.currentOclcId}
+                        onChange={console.log}
+                        style={selectStyle}
+                    >
+                        {this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}
+                    </SelectField>
+
+                    <SelectField
                         floatingLabelText="Sort"
                         value={this.props.sortType}
                         onChange={this.props.onSelectSortType}
