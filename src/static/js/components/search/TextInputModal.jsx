@@ -23,7 +23,7 @@ const sortStyle = {
 };
 
 const inputStyle = {
-    width: '50%'
+    width: '35%'
 };
 
 const SearchIcon = (props) => {
@@ -92,29 +92,11 @@ export default class TextInputModal extends React.Component {
 
     render() {
 
-        // Actions for the text box modal
-        const actions = [
-            <FlatButton
-                label="Cancel"
-                primary={true}
-                onTouchTap={this.handleClose}
-            />,
-            <FlatButton
-                label="Search"
-                labelPosition="before"
-                primary={true}
-                icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
-                onClick={() => this.updateSearch()}
-            />
-        ];
-
-
         return (
                 <div>
                     <img src="/static/imageFiles/textIcon.jpg" onTouchTap={this.handleOpen}></img>
 
                     <Dialog
-                        actions={actions}
                         style={modalStyle}
                         modal={false}
                         open={this.state.open}
@@ -153,7 +135,13 @@ export default class TextInputModal extends React.Component {
                         >
                             {GENRES.map((genre, index) => <MenuItem key={genre} value={genre} primaryText={genre} />) }
                         </SelectField>
-
+                        <FlatButton
+                            label="Search"
+                            labelPosition="before"
+                            primary={true}
+                            icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
+                            onClick={() => this.updateSearch()}
+                        />
 
                     </Dialog>
                 </div>
