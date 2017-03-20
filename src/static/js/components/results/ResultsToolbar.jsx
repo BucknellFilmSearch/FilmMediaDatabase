@@ -113,8 +113,8 @@ export default class ResultsToolbar extends React.Component {
                         <MenuItem value={1} primaryText="Relevance" />
                         <MenuItem value={2} primaryText="Movie Title (A-Z)" />
                         <MenuItem value={3} primaryText="Movie Title (Z-A)" />
-                        <MenuItem value={4} primaryText="Year (High to Low)" />
-                        <MenuItem value={5} primaryText="Year (Low to High)" />
+                        <MenuItem value={4} primaryText="Year (New to Old)" />
+                        <MenuItem value={5} primaryText="Year (Old to New)" />
                     </SelectField>
 
                     <SelectField

@@ -163,7 +163,7 @@ export default class ContextDialog extends React.Component {
 
         return (
             <FullscreenDialog
-                title={`${this.props.currentFilm && this.props.currentFilm.results.length} Results in ${this.props.currentFilm && this.props.currentFilm.movieTitle}`}
+                title={`${this.props.currentFilm && this.props.currentFilm.results.length} Results in "${this.props.currentFilm && this.props.currentFilm.movieTitle}"`}
                 open={this.state.open}
                 onRequestClose={this.handleClose}
             >
