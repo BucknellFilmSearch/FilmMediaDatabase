@@ -75,7 +75,11 @@ export default class ResultsToolbar extends React.Component {
             <Toolbar className="resultsToolbar">
                 <ToolbarGroup firstChild={true}>
                     <Link to={"/"}><FlatButton label="Home" /></Link>
-                    <ToolbarTitle text={`${this.props.totalScreenshots} Results for '${this.props.searchTerm.replace(/&/g, ' ')}'`} />
+                    {(this.props.films.length > 0 || this.props.totalScreenshots == 0) ? (
+                        <ToolbarTitle
+                            text={`${this.props.totalScreenshots} Results for '${this.props.searchTerm.replace(/&/g, ' ')}' in ${this.props.films.length} films`}/>
+                    ) : null
+                    }
                     <form onSubmit={this.updateSearchForEnterKeypress}>
                         <TextField
                             hintText="Search Phrase"
