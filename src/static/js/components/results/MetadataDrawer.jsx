@@ -56,6 +56,7 @@ export default class MetadataDrawer extends React.Component {
                 {this.props.screenshotDetails != null ? (
                     <div>
                         <div className="metadataDrawerDialogueContainer">
+                            {movieDetails.runtimeInMinutes} minutes <br /> <br />
                             Line {this.props.screenshotDetails.movieLineNumber}: <br />
                             "{this.props.screenshotDetails.movieLineText}" <br />
                         </div>

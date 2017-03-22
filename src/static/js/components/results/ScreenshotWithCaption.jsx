@@ -10,6 +10,12 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ScreenshotWithCaption extends React.Component {
 
+    /* Removes the junk after the comma in the screenshot's timestamp */
+    static beautifyTimeStamp(movieStartTimeStamp) {
+        const splitString = movieStartTimeStamp.split(",");
+        return (splitString[0]);
+    }
+
     render() {
 
         let imgSrc =
@@ -19,7 +25,7 @@ export default class ScreenshotWithCaption extends React.Component {
         return (
             <GridTile
                 style={{'height': '180px'}}
-                title={this.props.screenshotDetails.movieLineNumber}
+                title={ScreenshotWithCaption.beautifyTimeStamp(this.props.screenshotDetails.movieStartTimeStamp)}
                 titleBackground={'rgba(0, 0, 0, 0.3)'}
                 className="screenshot"
             >

@@ -12,6 +12,7 @@ import ReactTooltip from 'react-tooltip';
 
 const TIME_LINE_LENGTH = 1200;
 const STROKE_WIDTH = 3;
+const CIRCLE_RADIUS = 7;
 const MIN_DIST = 2*STROKE_WIDTH;
 
 SVGLine.propTypes = {
@@ -136,7 +137,7 @@ export default class ContextDialog extends React.Component {
                 key={`screenshot${result.movieLineNumber}`}
                 x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
                 y="50"
-                radius={7}
+                radius={CIRCLE_RADIUS}
                 stroke={"gray"}
                 strokeWidth={1}
             />
@@ -219,7 +220,7 @@ export default class ContextDialog extends React.Component {
                 <div className="ContextTimeLine">
                 {this.props.currentFilm != null ? (
                     <div>
-                <svg height="70" width="1200">
+                <svg height="70" width={TIME_LINE_LENGTH + CIRCLE_RADIUS + 5}>
                     <line x1="0" y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
                     {/*<line onClick={() => {this.props.onSlideAndCheckForContext(10)}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
                     {/*<line onClick={() => {this.svgTest()}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
