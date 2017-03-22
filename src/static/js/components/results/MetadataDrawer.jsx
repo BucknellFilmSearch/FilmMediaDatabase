@@ -31,20 +31,18 @@ export default class MetadataDrawer extends React.Component {
     render() {
 
         // if there's no film to show in the metadata (because the user hasn't scrolled down yet), show the first film
-        let movieDetails = this.props.movieDetails || this.props.firstFilm;
+        let movieDetails = this.props.movieDetails;
 
         let imgSrc = movieDetails != null ? "http://www.filmtvsearch.net/static/imageFiles/" + movieDetails.movieOclcId + ".gif" : null;
         
         return (
             <Drawer docked={true} open={true} openSecondary={true} zDepth={2} containerStyle={{height: 'calc(100% - 56px)', top: 56}}>
                 {movieDetails == null ? (
-                        <div>Metadata <br /></div>
+                        <div>Mouse over a film for details ;) <br /></div>
                     ) : (
                         <div>
                             <div className="movieTitleInMetadataDrawer">
-                                <Roboto>
-                                    {movieDetails.movieTitle} ({movieDetails.movieReleaseYear}) <br />
-                                </Roboto>
+                                {movieDetails.movieTitle} ({movieDetails.movieReleaseYear}) <br />
                             </div>
                                 <LazyLoad height={197} placeholder={<CircularProgress />}>
                                     <img className="thumbnail" src={imgSrc} width="140" height="197" />
@@ -92,10 +90,6 @@ const getMovieDetails = createSelector(
         // screenshot is being hovered
         if (hoverMovieOclcId) {
             return {...searchResponse.find((x) => x.movieOclcId == hoverMovieOclcId)};
-        }
-        // no screenshot is being hovered but a scrolling waypoint has been reached
-        else if (currentMovieOclcId) {
-            return {...searchResponse.find((x) => x.movieOclcId == currentMovieOclcId)};
         }
         else {
             return null;
