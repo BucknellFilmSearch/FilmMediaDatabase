@@ -53,9 +53,11 @@ export default class ResultsToolbar extends React.Component {
 
         this.setState({searchText: ''});
 
-        // update the URL
-        let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
-        hashHistory.push(newPath);
+        if (keywordOrPhrase != '') {
+            // update the URL
+            let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!', '').replace('?', '')}`;
+            hashHistory.push(newPath);
+        }
     }
 
     updateSearchForEnterKeypress(event) {
