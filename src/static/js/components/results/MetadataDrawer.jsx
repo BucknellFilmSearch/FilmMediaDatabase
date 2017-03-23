@@ -80,32 +80,22 @@ const getHoverMovieOclcId = (state) => state.hoverMovieOclcId;
 
 const getHoverMovieLineNumber = (state) => state.hoverMovieLineNumber;
 
-const getCurrentMovieOclcId = (state) => state.currentMovieOclcId;
-
 const getSearchResponse = (state) => state.search && state.search.response;
 
 const getMovieDetails = createSelector(
-    [getHoverMovieOclcId, getCurrentMovieOclcId, getSearchResponse],
-    (hoverMovieOclcId, currentMovieOclcId, searchResponse) => {
-        // screenshot is being hovered
-        if (hoverMovieOclcId) {
-            return {...searchResponse.find((x) => x.movieOclcId == hoverMovieOclcId)};
-        }
-        else {
-            return null;
-        }
+    [getHoverMovieOclcId, getSearchResponse],
+    (hoverMovieOclcId, searchResponse) => {
+        // return film if screenshot is being hovered
+        return hoverMovieOclcId && searchResponse ?
+            {...searchResponse.find((x) => x.movieOclcId == hoverMovieOclcId)} : null;
     }
 );
 
 const getScreenshotDetails = createSelector(
     [getHoverMovieLineNumber, getMovieDetails],
     (hoverMovieLineNumber, movieDetails) => {
-        if (hoverMovieLineNumber) {
-            return movieDetails.results.find((x) => x.movieLineNumber == hoverMovieLineNumber);
-        }
-        else {
-            return null;
-        }
+        return hoverMovieLineNumber && movieDetails ?
+            movieDetails.results.find((x) => x.movieLineNumber == hoverMovieLineNumber) : null;
     }
 );
 

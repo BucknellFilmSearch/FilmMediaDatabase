@@ -77,7 +77,9 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
                     status: "loading",
                     response: null,
                     searchTerm: action.searchTerm
-                }
+                },
+                hoverMovieOclcId: null,
+                hoverMovieLineNumber: null
             };
         case 'RECEIVE_NEW_SEARCH_TERM':
 
