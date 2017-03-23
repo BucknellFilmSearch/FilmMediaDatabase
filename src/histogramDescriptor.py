@@ -1,6 +1,9 @@
 __author__ = "Dale Hartman"
 __date__ = "July 21, 2016 3:38:40 PM$"
 
+# Many implementation details for the color search process were learned from
+# the PyImageSearch blog at https://www.pyimagesearch.com/
+
 import numpy as np
 import cv2
 
