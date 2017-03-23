@@ -106,5 +106,5 @@ def fullIndexer():
         print(str(gc.collect()))
     return
 
-main_menu()
+# main_menu()
 

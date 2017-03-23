@@ -106,6 +106,10 @@ def fullColorSearch(oclcID, lineNumber):
 def optimizedColorSearch(imgPath):
     """
     Run a color search that uses our reverse indexing system to only compare images that are likely similar already
+    :param imgPath: Path to an image in our file system to use as a query
+    :return: A list of tuples in the form (1.7101471707244245, '855265148\\1341.png'), where the first element is the
+    calculated similarity value and the second value is a unique key made of the OCLCID and line number/image file of
+    the screenshot.  This list of tuples contains a result for every screenshot that the query was tested against.
     """
 
     # Load our query image
@@ -190,5 +194,5 @@ def optimizedColorSearch(imgPath):
 
 
 # TODO: The main_menu() function is only for simplicity of testing, comment out when you put this file on the webserver
-main_menu()
+# main_menu()
 
