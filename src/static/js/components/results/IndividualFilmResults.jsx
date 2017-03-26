@@ -28,7 +28,10 @@ export default class IndividualFilmResults extends React.Component {
                 <Waypoint
                     onEnter={() => this.props.onScrollIntoFilm()}
                 />
-                <Subheader>{`${this.props.individualFilm.movieTitle} (${this.props.individualFilm.movieReleaseYear})`}</Subheader>
+                <div className="screenshotsMovieTitle">
+                    {this.props.individualFilm.movieTitle} ({this.props.individualFilm.movieReleaseYear})
+                </div>
+
                 <GridList cellHeight={180} cols={4}>
                     { this.getScreenshotsWithCaption() }
                 </GridList>
