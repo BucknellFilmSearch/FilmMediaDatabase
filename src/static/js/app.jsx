@@ -12,9 +12,9 @@ import { Provider } from 'react-redux';
 import SearchContainer from "./components/search/SearchContainer.jsx";
 import AllFilms from "./components/results/AllFilms.jsx";
 
-import Perf from 'react-addons-perf'
+import Perf from 'react-addons-perf';
 
-window.Perf = Perf
+window.Perf = Perf;
 
 
 // Global settings
@@ -34,7 +34,7 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
                 hoverMovieOclcId: action.movieOclcId,
                 hoverMovieLineNumber: action.movieLineNumber
             };
-        case 'MOUSE_LEAVE_SCREENSHOT':
+        case 'SCROLL_SCREEN':
             return {
                 ...state,
                 hoverMovieOclcId: null,
@@ -77,7 +77,9 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
                     status: "loading",
                     response: null,
                     searchTerm: action.searchTerm
-                }
+                },
+                hoverMovieOclcId: null,
+                hoverMovieLineNumber: null
             };
         case 'RECEIVE_NEW_SEARCH_TERM':
 
@@ -109,17 +111,17 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
             return {
                 ...state,
                 currentMovieOclcId: action.movieOclcId
-            }
+            };
         case 'SELECT_SORT_TYPE':
             return {
                 ...state,
                 sortType: action.sortType
-            }
+            };
         case 'SELECT_GENRE':
             return {
                 ...state,
                 genre: action.genre
-            }
+            };
         default:
             return state
     }

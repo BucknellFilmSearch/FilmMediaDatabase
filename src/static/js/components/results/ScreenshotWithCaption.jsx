@@ -40,7 +40,6 @@ export default class ScreenshotWithCaption extends React.Component {
                     >
                         <img src={imgSrc} height={'180px'}
                              onMouseEnter={() => this.props.onMouseEnterScreenshot()}
-                             onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
                              onClick={() => this.props.onClickScreenshot()}
                         />
                     </ReactCSSTransitionGroup>
@@ -57,12 +56,6 @@ const mouseEnterScreenshot = (movieOclcId, movieLineNumber) => {
         movieOclcId,
         movieLineNumber
     }
-};
-
-const mouseLeaveScreenshot = () => {
-    return {
-        type: 'MOUSE_LEAVE_SCREENSHOT'
-    };
 };
 
 const clickScreenshot = (movieOclcId, movieLineNumber) => {
@@ -82,7 +75,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, screenshotProps) {
     return {
         onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber)),
-        onMouseLeaveScreenshot: () => dispatch(mouseLeaveScreenshot()),
         onClickScreenshot: () => dispatch(clickScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber))
     }
 }

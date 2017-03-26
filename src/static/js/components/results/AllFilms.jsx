@@ -8,26 +8,30 @@ import ContextDialog from './ContextDialog.jsx';
 import ResultsToolbar from './ResultsToolbar.jsx';
 import {connect} from 'react-redux'
 import {createSelector} from 'reselect';
+import ScrollEvent from 'react-onscroll';
+
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AllFilms extends React.Component {
     constructor() {
         super();
+        this.handleScrollCallback = this.handleScrollCallback.bind(this);
     }
+
     componentDidMount() {
         this.props.fetchNewSearchTerm(this.props.location.pathname);
     }
+
     componentWillReceiveProps(nextProps) {
         if (this.props.location.pathname !== nextProps.location.pathname) {
             this.props.fetchNewSearchTerm(nextProps.location.pathname);
         }
     }
-    handleEscape(e) {
-        alert('Enter... (KeyPress, use charCode)');
-        if (e.charCode == 27) {
-            alert('Enter... (KeyPress, use charCode)');
-        }
+
+    handleScrollCallback() {
+        this.props.onScrollScreen();
     }
+
     render () {
         const muiTheme = getMuiTheme({
             palette: {
@@ -42,6 +46,7 @@ export default class AllFilms extends React.Component {
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
+                    <ScrollEvent handleScrollCallback={this.handleScrollCallback} />
                     <ResultsToolbar />
                     <MetadataDrawer firstFilm={this.props.films[0]} />
                     <ContextDialog />
@@ -138,6 +143,7 @@ const getFilms = createSelector(
             films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
     }
 );
+
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
@@ -145,9 +151,17 @@ function mapStateToProps(state) {
         films: getFilms(state)
     }
 }
+
+const scrollScreen = () => {
+    return {
+        type: 'SCROLL_SCREEN'
+    };
+};
+
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm))
+        fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm)),
+        onScrollScreen: () => dispatch(scrollScreen())
     }
 }
