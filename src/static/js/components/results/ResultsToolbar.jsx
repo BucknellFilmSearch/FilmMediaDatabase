@@ -16,6 +16,11 @@ const selectStyle = {
     width: '150px'
 };
 
+const inputFieldStyle = {
+    width: '150px'
+};
+
+
 const SearchIcon = (props) => {
     return (
         <svg {...props} fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -48,9 +53,11 @@ export default class ResultsToolbar extends React.Component {
 
         this.setState({searchText: ''});
 
-        // update the URL
-        let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
-        hashHistory.push(newPath);
+        if (keywordOrPhrase != '') {
+            // update the URL
+            let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!', '').replace('?', '')}`;
+            hashHistory.push(newPath);
+        }
     }
 
     updateSearchForEnterKeypress(event) {
@@ -70,19 +77,23 @@ export default class ResultsToolbar extends React.Component {
             <Toolbar className="resultsToolbar">
                 <ToolbarGroup firstChild={true}>
                     <Link to={"/"}><FlatButton label="Home" /></Link>
-                    <ToolbarTitle text={`${this.props.totalScreenshots} Results for '${this.props.searchTerm.replace(/&/g, ' ')}'`} />
+                    {(this.props.films.length > 0 || this.props.totalScreenshots == 0) ? (
+                        <ToolbarTitle
+                            text={`${this.props.totalScreenshots} Results for '${this.props.searchTerm.replace(/&/g, ' ')}' in ${this.props.films.length} films`}/>
+                    ) : null
+                    }
                     <form onSubmit={this.updateSearchForEnterKeypress}>
                         <TextField
                             hintText="Search Phrase"
                             value={this.state.searchText}
                             onChange={this.handleChange}
-                            style={selectStyle}
+                            style={inputFieldStyle}
                             ref="updateSearchBox"
                         />
                     </form>
                     <FlatButton
                         label="Update Search"
-                        labelPosition="before"
+                        labelPosition="after"
                         primary={true}
                         icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
                         onClick={() => this.updateSearch()}
@@ -108,8 +119,8 @@ export default class ResultsToolbar extends React.Component {
                         <MenuItem value={1} primaryText="Relevance" />
                         <MenuItem value={2} primaryText="Movie Title (A-Z)" />
                         <MenuItem value={3} primaryText="Movie Title (Z-A)" />
-                        <MenuItem value={4} primaryText="Year (High to Low)" />
-                        <MenuItem value={5} primaryText="Year (Low to High)" />
+                        <MenuItem value={4} primaryText="Year (New to Old)" />
+                        <MenuItem value={5} primaryText="Year (Old to New)" />
                     </SelectField>
 
                     <SelectField

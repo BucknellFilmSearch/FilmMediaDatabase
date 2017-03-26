@@ -10,6 +10,12 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ScreenshotWithCaption extends React.Component {
 
+    /* Removes the junk after the comma in the screenshot's timestamp */
+    static beautifyTimeStamp(movieStartTimeStamp) {
+        const splitString = movieStartTimeStamp.split(",");
+        return (splitString[0]);
+    }
+
     render() {
 
         let imgSrc =
@@ -19,7 +25,7 @@ export default class ScreenshotWithCaption extends React.Component {
         return (
             <GridTile
                 style={{'height': '180px'}}
-                title={this.props.screenshotDetails.movieLineNumber}
+                title={ScreenshotWithCaption.beautifyTimeStamp(this.props.screenshotDetails.movieStartTimeStamp)}
                 titleBackground={'rgba(0, 0, 0, 0.3)'}
                 className="screenshot"
             >
@@ -34,7 +40,6 @@ export default class ScreenshotWithCaption extends React.Component {
                     >
                         <img src={imgSrc} height={'180px'}
                              onMouseEnter={() => this.props.onMouseEnterScreenshot()}
-                             onMouseLeave={() => this.props.onMouseLeaveScreenshot()}
                              onClick={() => this.props.onClickScreenshot()}
                         />
                     </ReactCSSTransitionGroup>
@@ -51,12 +56,6 @@ const mouseEnterScreenshot = (movieOclcId, movieLineNumber) => {
         movieOclcId,
         movieLineNumber
     }
-};
-
-const mouseLeaveScreenshot = () => {
-    return {
-        type: 'MOUSE_LEAVE_SCREENSHOT'
-    };
 };
 
 const clickScreenshot = (movieOclcId, movieLineNumber) => {
@@ -76,7 +75,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, screenshotProps) {
     return {
         onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber)),
-        onMouseLeaveScreenshot: () => dispatch(mouseLeaveScreenshot()),
         onClickScreenshot: () => dispatch(clickScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber))
     }
 }

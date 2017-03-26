@@ -31,7 +31,7 @@
   padding-top: 64px !important;
 }
 
-.screenshotsGridList > div:nth-child(2) > div:hover {
+.screenshot {
   cursor: pointer;
 }
 
