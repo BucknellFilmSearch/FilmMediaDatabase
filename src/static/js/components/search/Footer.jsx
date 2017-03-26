@@ -3,11 +3,11 @@ import FontIcon from 'material-ui/FontIcon';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const projectIcon = <FontIcon className="material-icons"></FontIcon>;
 const aboutUsIcon = <FontIcon className="material-icons"></FontIcon>;
 const githubIcon = <FontIcon className="material-icons"></FontIcon>;
-const feedbackIcon = <img src="/static/imageFiles/feedback.jpg"></img>;
 
 
 export default class Footer extends React.Component {
@@ -60,7 +60,11 @@ export default class Footer extends React.Component {
             />
         ];
 
-        // actions for the about box modle
+        const feedbackStyle = {
+            margin: 6
+        };
+
+        // actions for the about box modal
         const aboutActions = [
             <FlatButton
                 label="Close"
@@ -87,15 +91,9 @@ export default class Footer extends React.Component {
                             icon={githubIcon}
                             onTouchTap={() => Footer.handleOpenGithub()}
                         />
+                        <RaisedButton label="Contact Us!" style={feedbackStyle} onTouchTap={() => Footer.handleOpenFeedback()} />
                     </div>
 
-                    <div id="feedback">
-                        <BottomNavigationItem
-
-                            icon={feedbackIcon}
-                            onTouchTap={() => Footer.handleOpenFeedback()}
-                        />
-                    </div>
 
                         <Dialog
                             title="About the Project"

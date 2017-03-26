@@ -22,6 +22,12 @@ export default class AllFilms extends React.Component {
             this.props.fetchNewSearchTerm(nextProps.location.pathname);
         }
     }
+    handleEscape(e) {
+        alert('Enter... (KeyPress, use charCode)');
+        if (e.charCode == 27) {
+            alert('Enter... (KeyPress, use charCode)');
+        }
+    }
     render () {
         const muiTheme = getMuiTheme({
             palette: {

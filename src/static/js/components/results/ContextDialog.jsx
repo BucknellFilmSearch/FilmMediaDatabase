@@ -53,11 +53,27 @@ export default class ContextDialog extends React.Component {
     constructor() {
         super();
 
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+
         this.state = {
             open: false
         };
 
         this.handleClose = this.handleClose.bind(this);
+    }
+
+    handleKeyPress(e) {
+        if(e.keyCode === 27) {
+            this.handleClose();
+        }
+    }
+
+    componentDidMount() {
+        document.addEventListener('keydown', this.handleKeyPress);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handleKeyPress);
     }
 
     /* Removes the junk after the comma in the screenshot's timestamp */
