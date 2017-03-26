@@ -51,7 +51,7 @@ class ContextDialog extends React.Component {
 
     handleClose() {
         this.setState({open: false});
-        hashHistory.push(`/${this.props.searchTerm}`)
+        hashHistory.push(`${this.props.searchTerm}`)
     }
 
     componentWillReceiveProps(nextProps) {
@@ -85,7 +85,7 @@ class ContextDialog extends React.Component {
                 actions={actions}
                 contentStyle={customContentStyle}
                 modal={false}
-                open={this.state.open}
+                open={true}
                 autoScrollBodyContent={true}
                 onRequestClose={this.handleClose}
             >

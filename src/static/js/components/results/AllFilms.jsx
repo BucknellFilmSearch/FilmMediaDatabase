@@ -50,12 +50,16 @@ class AllFilms extends React.Component {
                 accent3Color: grey800
             }
         });
+
+        console.log('hasContext');
+        console.log(this.props.hasContext);
+
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
                     <ConnectedResultsToolbar />
                     <ConnectedMetadataDrawer />
-                    <ConnectedContextDialog />
+                    {this.props.hasContext && <ConnectedContextDialog />}
                     {/*<Graph/>*/}
                     {!this.props.filmsLoaded ? (
                             <div style={{paddingTop: '60px'}}>
@@ -94,7 +98,7 @@ const receiveNewSearchTerm = (response) => {
 const fetchNewSearchTerm = (searchTerm) => {
     return (dispatch) => {
         dispatch(requestNewSearchTerm(searchTerm));
-        return fetch(`http://localhost:8080/moviesearch/${searchTerm}`)
+        return fetch(`http://localhost:8080/moviesearch${searchTerm}`)
             .then(response => response.json())
             .then(response => dispatch(receiveNewSearchTerm(response.results)));
         // TODO - add catch handler to handle errors
@@ -142,12 +146,12 @@ function mapStateToProps(state) {
             films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
     }
 
-
     return {
         filmsLoaded: filmsLoaded,
         films: films,
         sortType: state.sortType,
-        genre: state.genre
+        genre: state.genre,
+        hasContext: state.contextMovieOclcId
     }
 }
 
