@@ -40,11 +40,11 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
                 hoverMovieOclcId: null,
                 hoverMovieLineNumber: null
             };
-        case 'CLICK_SCREENSHOT':
+        case 'OPEN_CONTEXT':
             return {
                 ...state,
-                clickedScreenshotMovieOclcId: action.movieOclcId,
-                currentContextMovieLineNumber: action.movieLineNumber
+                contextMovieOclcId: parseInt(action.movieOclcId),
+                currentContextMovieLineNumber: parseInt(action.movieLineNumber)
             };
         case 'SLIDE_SCREENSHOT':
             return {
@@ -54,7 +54,7 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
         case 'CLOSE_CONTEXT_DIALOG':
             return {
                 ...state,
-                clickedScreenshotMovieOclcId: null,
+                contextMovieOclcId: null,
                 currentContextMovieLineNumber: null
             };
         case 'RECEIVE_CONTEXT':
@@ -139,7 +139,7 @@ ReactDOM.render((
         <Router history={hashHistory}>
             <Route path="/">
                 <IndexRoute component={SearchContainer}/>
-                <Route path=":term" component={AllFilms} />
+                <Route path=":searchTerm(/context/:contextOclcId/:contextScreenshot)" component={AllFilms} />
             </Route>
         </Router>
     </Provider>

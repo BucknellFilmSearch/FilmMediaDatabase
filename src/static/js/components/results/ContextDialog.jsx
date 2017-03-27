@@ -9,6 +9,8 @@ import SVGLine from './SVGLine.jsx';
 import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
+import { hashHistory } from 'react-router'
+
 
 const TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
@@ -17,6 +19,12 @@ const MIN_DIST = 2*STROKE_WIDTH;
 
 SVGLine.propTypes = {
     slideTo: React.PropTypes.func,
+};
+
+const customContentStyle = {
+    width: '90%',
+    maxWidth: 'none',
+    textAlign: 'center'
 };
 
 
@@ -70,6 +78,7 @@ export default class ContextDialog extends React.Component {
 
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyPress);
+        this.setState({open: true});
     }
 
     componentWillUnmount() {
@@ -96,12 +105,12 @@ export default class ContextDialog extends React.Component {
 
     handleClose() {
         this.setState({open: false});
-        this.props.onCloseContextDialog();
+        hashHistory.push(`${this.props.searchTerm}`)
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.state.open === false && nextProps.clickedScreenshotMovieOclcId !== null) {
-            console.log('opening');
+        // open the context dialog if screenshot is clicked or URL is updated
+        if (this.state.open === false && nextProps.contextScreenshotMovieOclcId !== null) {
             this.handleOpen();
         }
     }
@@ -165,18 +174,18 @@ export default class ContextDialog extends React.Component {
     }
 
     createImageTooltip() {
-        const Tooltips = this.props.currentFilm.results.map((result) =>
+        return this.props.currentFilm.results.map((result) =>
             <ReactTooltip
                 id={'SVGCircle' + (result.movieLineNumber - 1)}
                 aria-haspopup='true'
                 role='example'
+                key={`tooltip${result.movieLineNumber}`}
             >
                 <img height='100' src={"http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.currentFilm.movieOclcId + "/" + result.movieLineNumber + ".png"}/>
             </ReactTooltip>
-
             );
-        return Tooltips;
     }
+
     render() {
 
         return (
@@ -206,6 +215,7 @@ export default class ContextDialog extends React.Component {
                             <GridTile className="contextImage"
                                 title={imageNumber}
                                 titleBackground={'rgba(0, 0, 0, 0.3)'}
+                                key={`img${imageNumber}`}
                             >
                                 <img src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}/>
                             </GridTile>
@@ -270,13 +280,6 @@ export default class ContextDialog extends React.Component {
     }
 }
 
-
-const closeContextDialog = () => {
-    return {
-        type: 'CLOSE_CONTEXT_DIALOG'
-    };
-};
-
 const slideScreenshot = (newMovieLineNumber) => {
     return {
         type: 'SLIDE_SCREENSHOT',
@@ -296,8 +299,8 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     return (dispatch, getState) => {
         let state = getState();
 
-        let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
-            state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
+        let currentFilm = !state.contextScreenshotMovieOclcId ? null :
+            state.search.response.find(film => state.contextScreenshotMovieOclcId === film.movieOclcId);
 
         let context = state.context;
 
@@ -323,7 +326,7 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
 
 const getContext = (state) => state.context;
 
-const getClickedScreenshotMovieOclcId = (state) => state.clickedScreenshotMovieOclcId;
+const getClickedScreenshotMovieOclcId = (state) => state.contextMovieOclcId;
 
 const getCurrentContextMovieLineNumber = (state) => state.currentContextMovieLineNumber;
 
@@ -354,22 +357,23 @@ const getImages = createSelector(
     }
 );
 
-
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
-        clickedScreenshotMovieOclcId: getClickedScreenshotMovieOclcId(state),
+        contextScreenshotMovieOclcId: getClickedScreenshotMovieOclcId(state),
         currentMovieLineNumber: getCurrentContextMovieLineNumber(state),
         currentFilm: getCurrentFilm(state),
         currentScreenshot: getCurrentScreenshot(state),
-        images: getImages(state)
+        images: getImages(state),
+        searchTerm: state.search && state.search.searchTerm ? state.search.searchTerm : null
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        onCloseContextDialog: () => dispatch(closeContextDialog()),
+        // TODO - update url to remove context on close
+        // onCloseContextDialog: () => dispatch(closeContextDialog()),
         onSlideAndCheckForContext: (newMovieLineNumberIndex) => dispatch(slideAndCheckForContext(newMovieLineNumberIndex))
     }
 }

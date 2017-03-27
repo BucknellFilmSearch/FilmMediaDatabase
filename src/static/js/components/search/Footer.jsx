@@ -1,14 +1,7 @@
 import * as React from "react";
-import FontIcon from 'material-ui/FontIcon';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-
-const projectIcon = <FontIcon className="material-icons"></FontIcon>;
-const aboutUsIcon = <FontIcon className="material-icons"></FontIcon>;
-const githubIcon = <FontIcon className="material-icons"></FontIcon>;
-
 
 export default class Footer extends React.Component {
 
@@ -61,7 +54,8 @@ export default class Footer extends React.Component {
         ];
 
         const feedbackStyle = {
-            margin: 6
+            margin: 6,
+            padding: 0
         };
 
         // actions for the about box modal
@@ -74,25 +68,11 @@ export default class Footer extends React.Component {
         ];
 
         return (
-                <BottomNavigation selectedIndex={this.state.selectedIndex}>
-                    <div id="about">
-                        <BottomNavigationItem
-                            label="About the Project"
-                            icon={projectIcon}
-                            onTouchTap={() => this.handleOpenProject(0)}
-                        />
-                        <BottomNavigationItem
-                            label="About Us"
-                            icon={aboutUsIcon}
-                            onTouchTap={() => this.handleOpenAbout(1)}
-                        />
-                        <BottomNavigationItem
-                            label="GitHub"
-                            icon={githubIcon}
-                            onTouchTap={() => Footer.handleOpenGithub()}
-                        />
-                        <RaisedButton label="Contact Us!" style={feedbackStyle} onTouchTap={() => Footer.handleOpenFeedback()} />
-                    </div>
+                <div id="footer">
+                        <RaisedButton label="About the Project" style={feedbackStyle} onTouchTap={() => this.handleOpenProject(0)} />
+                        <RaisedButton label="About Us" style={feedbackStyle} onTouchTap={() => this.handleOpenAbout(1)} />
+                        <RaisedButton label="GitHub" style={feedbackStyle} onTouchTap={() => Footer.handleOpenGithub()} />
+                        <RaisedButton label="Contact Us!" style={feedbackStyle} primary={true} onTouchTap={() => Footer.handleOpenFeedback()} />
 
 
                         <Dialog
@@ -131,7 +111,7 @@ export default class Footer extends React.Component {
                         went on the design and build the user interface.
                     </Dialog>
 
-                </BottomNavigation>
+                </div>
         );
     }
 }

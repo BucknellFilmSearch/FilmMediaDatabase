@@ -7,15 +7,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-
-
-
-
 export default class SearchContainer extends React.Component {
 
     render() {
-
-        // ?
         const muiTheme = getMuiTheme({
             palette: {
                 accent1Color: deepOrange500
@@ -35,10 +29,7 @@ export default class SearchContainer extends React.Component {
                             <PhotoInputModal/>
                         </div>
                     </div>
-                    <div id="frontFoot">
-                        <Footer/>
-                    </div>
-
+                    <Footer/>
                 </div>
 
             </MuiThemeProvider>
