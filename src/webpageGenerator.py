@@ -190,7 +190,7 @@ def generateFeedbackPage():
     # home button not active because not on home page
     homeActive = ""
     # link to home
-    homeLink = "/moviesearch"
+    homeLink = "/#"
     # no nav bar because not on results page
     navBar = ""
     # no graph
