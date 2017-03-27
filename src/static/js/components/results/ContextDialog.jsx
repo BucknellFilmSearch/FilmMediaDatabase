@@ -10,7 +10,7 @@ import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
 
-const TIME_LINE_LENGTH = 1200;
+const TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
 const CIRCLE_RADIUS = 7;
 const MIN_DIST = 2*STROKE_WIDTH;
@@ -84,7 +84,8 @@ export default class ContextDialog extends React.Component {
 
     static timeStampToSeconds(movieStartTimeStamp, totalMovieRuntime) {
         const splitString = movieStartTimeStamp.split(":");
-        return Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*TIME_LINE_LENGTH);
+        alert(Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*(TIME_LINE_LENGTH-CIRCLE_RADIUS-2))+CIRCLE_RADIUS+2);
+        return Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*(TIME_LINE_LENGTH-CIRCLE_RADIUS-2))+CIRCLE_RADIUS+2;
     }
 
     handleOpen() {
@@ -151,7 +152,7 @@ export default class ContextDialog extends React.Component {
                 slideTo={this.svgTest.bind(this)}
                 index={result.movieLineNumber-1}
                 key={`screenshot${result.movieLineNumber}`}
-                x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+                x={Math.ceil((result.movieLineNumber-1)/(this.props.currentFilm.totalNumberOfLines)*(TIME_LINE_LENGTH))+CIRCLE_RADIUS+STROKE_WIDTH}
                 y="50"
                 radius={CIRCLE_RADIUS}
                 stroke={"gray"}
@@ -236,16 +237,16 @@ export default class ContextDialog extends React.Component {
                 <div className="ContextTimeLine">
                 {this.props.currentFilm != null ? (
                     <div>
-                <svg height="70" width={TIME_LINE_LENGTH + CIRCLE_RADIUS + 5}>
-                    <line x1="0" y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
+                <svg height="70" width={TIME_LINE_LENGTH + 2*(CIRCLE_RADIUS + 5)}>
+                    <line x1={CIRCLE_RADIUS} y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
                     {/*<line onClick={() => {this.props.onSlideAndCheckForContext(10)}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
                     {/*<line onClick={() => {this.svgTest()}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
                     {/*<SVGLine slideTo={this.svgTest.bind(this)} index={20} x={ContextDialog.timeStampToSeconds(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" y2="65" stroke={"gray"} strokeWidth={1}/>*/}
                     {this.getScreenShotTimes()}
                     {this.props.currentScreenshot != null ? (
                         <line
-                            x1={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
-                            x2={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+                            x1={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)+CIRCLE_RADIUS+STROKE_WIDTH}
+                            x2={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)+CIRCLE_RADIUS+STROKE_WIDTH}
                             y1="35"
                             y2="65"
                             strokeWidth={2}
