@@ -18,13 +18,24 @@ export default class AllFilms extends React.Component {
         this.handleScrollCallback = this.handleScrollCallback.bind(this);
     }
 
+    // TODO - update this function
     componentDidMount() {
         this.props.fetchNewSearchTerm(this.props.location.pathname);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props.location.pathname !== nextProps.location.pathname) {
-            this.props.fetchNewSearchTerm(nextProps.location.pathname);
+        // compare old search term to new, and old context to new
+        if (nextProps.routeParams['searchTerm'] != this.props.routeParams['searchTerm']) {
+            this.props.fetchNewSearchTerm(nextProps.routeParams['searchTerm']);
+        }
+        // swap context
+        if (nextProps.routeParams['contextOclcId'] != this.props.routeParams['contextOclcId'] ||
+            nextProps.routeParams['contextScreenshot'] != this.props.routeParams['contextScreenshot']) {
+            this.props.openContext(nextProps.routeParams['contextOclcId'], nextProps.routeParams['contextScreenshot']);
+        }
+        // close context
+        else if ((!nextProps.routeParams.hasOwnProperty('contextOclcId') && this.props.routeParams.hasOwnProperty('contextOclcId'))) {
+            this.props.closeContext();
         }
     }
 
@@ -43,13 +54,17 @@ export default class AllFilms extends React.Component {
                 accent3Color: grey800
             }
         });
+
+        console.log('hasContext');
+        console.log(this.props.hasContext);
+
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
                     <ScrollEvent handleScrollCallback={this.handleScrollCallback} />
                     <ResultsToolbar />
-                    <MetadataDrawer firstFilm={this.props.films[0]} />
-                    <ContextDialog />
+                    <MetadataDrawer />
+                    {this.props.hasContext && <ContextDialog />}
                     {/*<Graph/>*/}
                     {!this.props.filmsLoaded ? (
                         <div style={{paddingTop: '60px'}}>
@@ -81,16 +96,23 @@ const receiveNewSearchTerm = (response) => {
     }
 };
 const fetchNewSearchTerm = (searchTerm) => {
-    console.log('searchTerm');
-    console.log(searchTerm);
     return (dispatch) => {
-        dispatch(requestNewSearchTerm(searchTerm.slice(1)));
+        dispatch(requestNewSearchTerm(searchTerm));
         return fetch(`http://localhost:8080/moviesearch${searchTerm}`)
             .then(response => response.json())
             .then(response => dispatch(receiveNewSearchTerm(response.results)));
         // TODO - add catch handler to handle errors
     }
 };
+
+const openContext = (movieOclcId, movieLineNumber) => {
+    return {
+        type: 'OPEN_CONTEXT',
+        movieOclcId,
+        movieLineNumber
+    }
+};
+
 function relevanceSort(a, b) {
     if (a.results.length > b.results.length) {
         return -1;
@@ -148,7 +170,8 @@ const getFilms = createSelector(
 function mapStateToProps(state) {
     return {
         filmsLoaded: areFilmsLoaded(state),
-        films: getFilms(state)
+        films: getFilms(state),
+        hasContext: state.contextMovieOclcId
     }
 }
 
@@ -158,10 +181,18 @@ const scrollScreen = () => {
     };
 };
 
+const closeContextDialog = () => {
+    return {
+        type: 'CLOSE_CONTEXT_DIALOG'
+    };
+};
+
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
         fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm)),
-        onScrollScreen: () => dispatch(scrollScreen())
+        onScrollScreen: () => dispatch(scrollScreen()),
+        openContext: (oclcId, screenshot) => dispatch(openContext(oclcId, screenshot)),
+        closeContext: () => dispatch(closeContextDialog())
     }
 }
