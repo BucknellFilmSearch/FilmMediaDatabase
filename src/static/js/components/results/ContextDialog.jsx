@@ -9,14 +9,22 @@ import SVGLine from './SVGLine.jsx';
 import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
+import { hashHistory } from 'react-router'
 
-const TIME_LINE_LENGTH = 1200;
+
+const TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
 const CIRCLE_RADIUS = 7;
 const MIN_DIST = 2*STROKE_WIDTH;
 
 SVGLine.propTypes = {
     slideTo: React.PropTypes.func,
+};
+
+const customContentStyle = {
+    width: '90%',
+    maxWidth: 'none',
+    textAlign: 'center'
 };
 
 
@@ -70,6 +78,7 @@ export default class ContextDialog extends React.Component {
 
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyPress);
+        this.setState({open: true});
     }
 
     componentWillUnmount() {
@@ -84,7 +93,8 @@ export default class ContextDialog extends React.Component {
 
     static timeStampToSeconds(movieStartTimeStamp, totalMovieRuntime) {
         const splitString = movieStartTimeStamp.split(":");
-        return Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*TIME_LINE_LENGTH);
+        alert(Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*(TIME_LINE_LENGTH-CIRCLE_RADIUS-2))+CIRCLE_RADIUS+2);
+        return Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*(TIME_LINE_LENGTH-CIRCLE_RADIUS-2))+CIRCLE_RADIUS+2;
     }
 
     handleOpen() {
@@ -95,12 +105,12 @@ export default class ContextDialog extends React.Component {
 
     handleClose() {
         this.setState({open: false});
-        this.props.onCloseContextDialog();
+        hashHistory.push(`${this.props.searchTerm}`)
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.state.open === false && nextProps.clickedScreenshotMovieOclcId !== null) {
-            console.log('opening');
+        // open the context dialog if screenshot is clicked or URL is updated
+        if (this.state.open === false && nextProps.contextScreenshotMovieOclcId !== null) {
             this.handleOpen();
         }
     }
@@ -151,7 +161,7 @@ export default class ContextDialog extends React.Component {
                 slideTo={this.svgTest.bind(this)}
                 index={result.movieLineNumber-1}
                 key={`screenshot${result.movieLineNumber}`}
-                x={Math.ceil((result.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+                x={Math.ceil((result.movieLineNumber-1)/(this.props.currentFilm.totalNumberOfLines)*(TIME_LINE_LENGTH))+CIRCLE_RADIUS+STROKE_WIDTH}
                 y="50"
                 radius={CIRCLE_RADIUS}
                 stroke={"gray"}
@@ -164,18 +174,18 @@ export default class ContextDialog extends React.Component {
     }
 
     createImageTooltip() {
-        const Tooltips = this.props.currentFilm.results.map((result) =>
+        return this.props.currentFilm.results.map((result) =>
             <ReactTooltip
                 id={'SVGCircle' + (result.movieLineNumber - 1)}
                 aria-haspopup='true'
                 role='example'
+                key={`tooltip${result.movieLineNumber}`}
             >
                 <img height='100' src={"http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.currentFilm.movieOclcId + "/" + result.movieLineNumber + ".png"}/>
             </ReactTooltip>
-
             );
-        return Tooltips;
     }
+
     render() {
 
         return (
@@ -205,6 +215,7 @@ export default class ContextDialog extends React.Component {
                             <GridTile className="contextImage"
                                 title={imageNumber}
                                 titleBackground={'rgba(0, 0, 0, 0.3)'}
+                                key={`img${imageNumber}`}
                             >
                                 <img src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}/>
                             </GridTile>
@@ -236,16 +247,16 @@ export default class ContextDialog extends React.Component {
                 <div className="ContextTimeLine">
                 {this.props.currentFilm != null ? (
                     <div>
-                <svg height="70" width={TIME_LINE_LENGTH + CIRCLE_RADIUS + 5}>
-                    <line x1="0" y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
+                <svg height="70" width={TIME_LINE_LENGTH + 2*(CIRCLE_RADIUS + 5)}>
+                    <line x1={CIRCLE_RADIUS} y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
                     {/*<line onClick={() => {this.props.onSlideAndCheckForContext(10)}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
                     {/*<line onClick={() => {this.svgTest()}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
                     {/*<SVGLine slideTo={this.svgTest.bind(this)} index={20} x={ContextDialog.timeStampToSeconds(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" y2="65" stroke={"gray"} strokeWidth={1}/>*/}
                     {this.getScreenShotTimes()}
                     {this.props.currentScreenshot != null ? (
                         <line
-                            x1={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
-                            x2={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)}
+                            x1={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)+CIRCLE_RADIUS+STROKE_WIDTH}
+                            x2={Math.ceil((this.props.currentScreenshot.movieLineNumber-1)/this.props.currentFilm.totalNumberOfLines*TIME_LINE_LENGTH)+CIRCLE_RADIUS+STROKE_WIDTH}
                             y1="35"
                             y2="65"
                             strokeWidth={2}
@@ -269,13 +280,6 @@ export default class ContextDialog extends React.Component {
     }
 }
 
-
-const closeContextDialog = () => {
-    return {
-        type: 'CLOSE_CONTEXT_DIALOG'
-    };
-};
-
 const slideScreenshot = (newMovieLineNumber) => {
     return {
         type: 'SLIDE_SCREENSHOT',
@@ -295,8 +299,8 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     return (dispatch, getState) => {
         let state = getState();
 
-        let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
-            state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
+        let currentFilm = !state.contextScreenshotMovieOclcId ? null :
+            state.search.response.find(film => state.contextScreenshotMovieOclcId === film.movieOclcId);
 
         let context = state.context;
 
@@ -322,7 +326,7 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
 
 const getContext = (state) => state.context;
 
-const getClickedScreenshotMovieOclcId = (state) => state.clickedScreenshotMovieOclcId;
+const getClickedScreenshotMovieOclcId = (state) => state.contextMovieOclcId;
 
 const getCurrentContextMovieLineNumber = (state) => state.currentContextMovieLineNumber;
 
@@ -353,22 +357,23 @@ const getImages = createSelector(
     }
 );
 
-
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
-        clickedScreenshotMovieOclcId: getClickedScreenshotMovieOclcId(state),
+        contextScreenshotMovieOclcId: getClickedScreenshotMovieOclcId(state),
         currentMovieLineNumber: getCurrentContextMovieLineNumber(state),
         currentFilm: getCurrentFilm(state),
         currentScreenshot: getCurrentScreenshot(state),
-        images: getImages(state)
+        images: getImages(state),
+        searchTerm: state.search && state.search.searchTerm ? state.search.searchTerm : null
     }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        onCloseContextDialog: () => dispatch(closeContextDialog()),
+        // TODO - update url to remove context on close
+        // onCloseContextDialog: () => dispatch(closeContextDialog()),
         onSlideAndCheckForContext: (newMovieLineNumberIndex) => dispatch(slideAndCheckForContext(newMovieLineNumberIndex))
     }
 }

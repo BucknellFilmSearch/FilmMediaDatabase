@@ -6,6 +6,7 @@ import {GridTile} from 'material-ui/GridList';
 
 import LazyLoad from 'react-lazyload';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { hashHistory } from 'react-router'
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ScreenshotWithCaption extends React.Component {
@@ -40,8 +41,7 @@ export default class ScreenshotWithCaption extends React.Component {
                     >
                         <img src={imgSrc} height={'180px'}
                              onMouseEnter={() => this.props.onMouseEnterScreenshot()}
-                             onClick={() => this.props.onClickScreenshot()}
-                        />
+                             onClick={() => hashHistory.push(`${this.props.searchTerm}/context/${this.props.movieOclcId}/${this.props.screenshotDetails.movieLineNumber}`)}                        />
                     </ReactCSSTransitionGroup>
                 </LazyLoad>
             </GridTile>
@@ -58,23 +58,16 @@ const mouseEnterScreenshot = (movieOclcId, movieLineNumber) => {
     }
 };
 
-const clickScreenshot = (movieOclcId, movieLineNumber) => {
-    return {
-        type: 'CLICK_SCREENSHOT',
-        movieOclcId,
-        movieLineNumber
-    }
-};
-
 // Map Redux state to component props
 function mapStateToProps(state) {
-    return {}
+    return {
+        searchTerm: state.search && state.search.searchTerm ? state.search.searchTerm : null
+    }
 }
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch, screenshotProps) {
     return {
-        onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber)),
-        onClickScreenshot: () => dispatch(clickScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber))
+        onMouseEnterScreenshot: () => dispatch(mouseEnterScreenshot(screenshotProps.movieOclcId, screenshotProps.screenshotDetails.movieLineNumber))
     }
 }
