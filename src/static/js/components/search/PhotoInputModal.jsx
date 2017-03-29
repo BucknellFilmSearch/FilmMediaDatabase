@@ -34,7 +34,7 @@ export default class PhotoInputModal extends React.Component {
         ];
 
         return (
-                <div>
+                <div id="photoIconImage">
                     <img src="/static/imageFiles/photoIcon.jpg" onTouchTap={this.handleOpen}></img>
 
                     <Dialog

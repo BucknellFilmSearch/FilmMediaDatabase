@@ -126,7 +126,7 @@ export default class TextInputModal extends React.Component {
     render() {
 
         return (
-                <div>
+                <div id="textIconImage">
                     <img src="/static/imageFiles/textIcon.jpg" onTouchTap={this.handleOpen}></img>
 
                     <Dialog
