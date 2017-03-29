@@ -35,7 +35,6 @@ const inputFieldStyle = {
     width: '150px'
 };
 
-
 const SearchIcon = (props) => {
     return (
         <svg {...props} fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -93,6 +92,8 @@ export default class ResultsToolbar extends React.Component {
             hashHistory.push(newPath);
         }
     }
+
+
 
     updateSearchForEnterKeypress(event) {
 

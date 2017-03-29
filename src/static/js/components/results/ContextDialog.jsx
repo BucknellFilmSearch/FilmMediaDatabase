@@ -9,7 +9,9 @@ import SVGLine from './SVGLine.jsx';
 import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
-import { hashHistory } from 'react-router'
+import { hashHistory } from 'react-router';
+import RaisedButton from 'material-ui/RaisedButton';
+
 
 
 const TIME_LINE_LENGTH = 1150;
@@ -25,6 +27,10 @@ const customContentStyle = {
     width: '90%',
     maxWidth: 'none',
     textAlign: 'center'
+};
+
+const style = {
+    margin: 12,
 };
 
 
@@ -68,6 +74,7 @@ export default class ContextDialog extends React.Component {
         };
 
         this.handleClose = this.handleClose.bind(this);
+        this.UpdateURLColor = this.UpdateURLColor.bind(this);
     }
 
     handleKeyPress(e) {
@@ -186,6 +193,12 @@ export default class ContextDialog extends React.Component {
             );
     }
 
+    UpdateURLColor() {
+
+        alert(this.props.currentFilm.movieOclcId);
+        alert(this.props.currentScreenshot.movieLineNumber);
+    }
+
     render() {
 
         return (
@@ -273,6 +286,7 @@ export default class ContextDialog extends React.Component {
                 {/*<svg>*/}
                     {/*<circle onClick={() => {alert('hi')}} cx={100} cy={100} r={50} fill="red" />*/}
                 {/*</svg>*/}
+                        <RaisedButton onClick={this.UpdateURLColor} label="Color Search" style={style} />
 
 
             </FullscreenDialog>
