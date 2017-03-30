@@ -44,23 +44,6 @@
   transition: opacity .5s ease-in;
 }
 
-/* Styling for search page */
-#mainSearchCover {
-  text-align: center;
-  padding-top: 50px;
-  padding-bottom: 150px;
-}
-
-#mainTitle {
-  font-size: 22px;
-  font-weight: bold
-}
-
-#names {
-"font-size":"15px";
-"font-weight": "bold"
-}
-
 /* Styling for MetadataDrawer Elements */
 /* Movie poster styling */
 .thumbnail {

@@ -69,32 +69,32 @@ export default class Footer extends React.Component {
 
         return (
                 <div id="footer">
-                        <RaisedButton label="About the Project" style={feedbackStyle} onTouchTap={() => this.handleOpenProject(0)} />
-                        <RaisedButton label="About Us" style={feedbackStyle} onTouchTap={() => this.handleOpenAbout(1)} />
-                        <RaisedButton label="GitHub" style={feedbackStyle} onTouchTap={() => Footer.handleOpenGithub()} />
-                        <RaisedButton label="Contact Us!" style={feedbackStyle} primary={true} onTouchTap={() => Footer.handleOpenFeedback()} />
+                    <RaisedButton label="About the Project" style={feedbackStyle} onTouchTap={() => this.handleOpenProject(0)} />
+                    <RaisedButton label="About Us" style={feedbackStyle} onTouchTap={() => this.handleOpenAbout(1)} />
+                    <RaisedButton label="GitHub" style={feedbackStyle} onTouchTap={() => Footer.handleOpenGithub()} />
+                    <RaisedButton label="Contact Us!" style={feedbackStyle} primary={true} onTouchTap={() => Footer.handleOpenFeedback()} />
 
 
-                        <Dialog
-                            title="About the Project"
-                            actions={projectActions}
-                            modal={false}
-                            open={this.state.openProject}
-                            autoScrollBodyContent={true}
-                            onRequestClose={this.handleCloseProject}
-                        >
-                            <br/>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This project was started as a new way to conduct film and media studies research. By allowing
-                            users to see quickly what was happening when a line of dialogue was said, they can gain deeper meaning
-                            than just textual context. With the addition of being able to search for images which have a similar amount
-                            of color, users can now find scenes in films which are visually similar and more easily draw conclusions
-                            about similarities between the two films.
-                            <br/>
-                            <br/>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The project is still a work in progress as more films are added to the database. If there is a film
-                            you would like to see added, if you have any new feature suggestions, or if you encounter any bugs, please
-                            feel free to use the feedback button on this page. We will review your request and act upon it as quickly as possible.
-                        </Dialog>
+                    <Dialog
+                        title="About the Project"
+                        actions={projectActions}
+                        modal={false}
+                        open={this.state.openProject}
+                        autoScrollBodyContent={true}
+                        onRequestClose={this.handleCloseProject}
+                    >
+                        <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This project was started as a new way to conduct film and media studies research. By allowing
+                        users to see quickly what was happening when a line of dialogue was said, they can gain deeper meaning
+                        than just textual context. With the addition of being able to search for images which have a similar amount
+                        of color, users can now find scenes in films which are visually similar and more easily draw conclusions
+                        about similarities between the two films.
+                        <br/>
+                        <br/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The project is still a work in progress as more films are added to the database. If there is a film
+                        you would like to see added, if you have any new feature suggestions, or if you encounter any bugs, please
+                        feel free to use the feedback button on this page. We will review your request and act upon it as quickly as possible.
+                    </Dialog>
 
                     <Dialog
                         title="About Us"
