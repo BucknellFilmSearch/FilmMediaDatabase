@@ -286,8 +286,9 @@ export default class ContextDialog extends React.Component {
                 {/*<svg>*/}
                     {/*<circle onClick={() => {alert('hi')}} cx={100} cy={100} r={50} fill="red" />*/}
                 {/*</svg>*/}
+                <div className="colorSearchButton" >
                         <RaisedButton onClick={this.UpdateURLColor} label="Color Search" style={style} />
-
+                </div>
 
             </FullscreenDialog>
         );

@@ -112,6 +112,11 @@
     float: left;
 }
 
+.colorSearchButton {
+    position: relative;
+    text-align: center;
+}
+
 .contextImage {
     padding-left: 40px;
     padding-right: 40px;
