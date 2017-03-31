@@ -18,23 +18,26 @@ export default class SearchContainer extends React.Component {
 
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
-                <div id="mainSearchCover" className="filmSearch">
-                    <span id="name">The Film Search Engine</span><br />
-                    <span id="mainHeader">Research films like never before.</span><br />
-                    <span id="names">Find out what was happening in a film when a specific phrase was said using the text search.</span><br />
-                    <span id="names">Use the color search to find scenes in films with similar colors to images you upload.</span><br />
-                    <span id="names">Click on one of the options below to get started.</span><br />
-                    <div id="searchIcons">
-                        <div id="textIcon">
-                            <TextInputModal/>
-                        </div>
-                        <div id="photoIcon">
-                            <PhotoInputModal/>
-                        </div>
+                <div id="frontPage">
+                    <div id="mainHeader">
+                        <span>Research films like never before.</span><br />
                     </div>
-                    <Footer/>
+                    <div id="subText" className="filmSearch">
+                        <span>Find out what was happening in a film when a specific phrase was said using the text search.</span><br />
+                        <span>Use the color search to find scenes in films with similar colors to images you upload.</span><br />
+                        <span>Click on one of the options below to get started.</span><br />
+                        <div id="searchIcons">
+                            <div id="textIcon">
+                                <TextInputModal/>
+                            </div>
+                            <div id="photoIcon">
+                                <PhotoInputModal/>
+                            </div>
+                        </div>
+                        <Footer/>
+                    </div>
+                    <img src="/static/imageFiles/logo.jpg" id="logo"></img>
                 </div>
-
             </MuiThemeProvider>
         );
     }

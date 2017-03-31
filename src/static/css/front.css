@@ -1,21 +1,23 @@
+
 /* Styling for search page */
-#mainSearchCover {
+#mainHeader {
   text-align: center;
   padding-top: 10px;
-}
-
-#name {
-  font-size: 22px;
-  font-weight: bold
-}
-
-#mainHeader {
   font-size: 48px;
-  font-weight: bold;
+  vertical-align: middle;
 }
 
-#names {
+#logo {
+  position:absolute;
+  left:0;
+  top:0;
+}
+
+
+#subText {
   font-size: 14px;
+  font-weight: bold;
+  text-align: center;
 }
 
 #footer {
