@@ -8,6 +8,7 @@ import TextField from 'material-ui/TextField';
 import {connect} from 'react-redux';
 import { hashHistory } from 'react-router';
 import {createSelector} from 'reselect';
+import scrollToComponent from 'react-scroll-to-component';
 
 const GENRES = ["All", "Action", "Thriller", "Comedy", "Family", "Adventure", "Mystery", "Romance", "Sci-Fi", "Horror",
     "Drama", "Biography", "Fantasy", "Crime", "War", "Animation", "History", "Musical"];
@@ -93,6 +94,9 @@ export default class ResultsToolbar extends React.Component {
         }
     }
 
+    scrollToMovie(event, index, value) {
+        document.getElementsByName(value)[0].scrollIntoView();
+    };
 
 
     updateSearchForEnterKeypress(event) {
@@ -138,7 +142,7 @@ export default class ResultsToolbar extends React.Component {
                     <SelectField
                         floatingLabelText="Film"
                         value={this.props.currentOclcId}
-                        onChange={console.log}
+                        onChange={this.scrollToMovie}
                         style={selectStyle}
                     >
                         {this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}

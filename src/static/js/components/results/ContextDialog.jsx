@@ -197,6 +197,8 @@ export default class ContextDialog extends React.Component {
 
         alert(this.props.currentFilm.movieOclcId);
         alert(this.props.currentScreenshot.movieLineNumber);
+        let newPath = '/'+this.props.currentFilm.movieOclcId+'/'+this.props.currentScreenshot.movieLineNumber;
+        hashHistory.push(newPath);
     }
 
     render() {
