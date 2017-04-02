@@ -20,7 +20,6 @@ export default class AllFilms extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props);
         // save context until search term is loaded
         if (this.props.routeParams['contextOclcId']) {
             console.log('queuing context');
@@ -32,8 +31,6 @@ export default class AllFilms extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-
         if (nextProps.queueContextMovieOclcId && nextProps.filmsLoaded) {
             this.props.dequeueContext();
             // update url if there is queued context

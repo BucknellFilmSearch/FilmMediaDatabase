@@ -256,8 +256,8 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     return (dispatch, getState) => {
         let state = getState();
 
-        let currentFilm = !state.contextScreenshotMovieOclcId ? null :
-            state.search.response.find(film => state.contextScreenshotMovieOclcId === film.movieOclcId);
+        let currentFilm = !state.contextMovieOclcId ? null :
+            state.search.response.find(film => state.contextMovieOclcId === film.movieOclcId);
 
         let context = state.context;
 
