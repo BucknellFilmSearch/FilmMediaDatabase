@@ -9,7 +9,6 @@ import SVGLine from './SVGLine.jsx';
 import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
-import { hashHistory } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
@@ -112,7 +111,7 @@ export default class ContextDialog extends React.Component {
 
     handleClose() {
         this.setState({open: false});
-        hashHistory.push(`${this.props.searchTerm}`)
+         window.history.back();
     }
 
     componentWillReceiveProps(nextProps) {
