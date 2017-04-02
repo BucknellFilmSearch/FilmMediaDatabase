@@ -22,6 +22,7 @@ export default class IndividualFilmResults extends React.Component {
     }
 
     render() {
+        // TODO - delete react waypoint integration and disconnect the component from redux
         // TODO - make this responsive using http://broucz.github.io/react-inline-grid/
         return (
             <div className="screenshotsGridList" name={this.props.individualFilm.movieOclcId}>

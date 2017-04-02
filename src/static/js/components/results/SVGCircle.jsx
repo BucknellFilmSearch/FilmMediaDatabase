@@ -35,10 +35,10 @@ export default class SVGCircle extends React.Component {
                     cx={this.props.x}
                     cy={this.props.y}
                     r={this.props.radius}
-                    stroke={"grey"}
+                    stroke={"#6097b2"}
                     strokeWidth={2}
                     data-tip data-for={'SVGCircle' + this.props.index}
-                    fill={"green"}
+                    fill={"#afe5ff"}
                     fillOpacity={0}/>
                 {/*<line x1="10" x2="100" y1="50" y2="75" stroke={"grey"} strokeWidth={20}/>*/}
             </svg>

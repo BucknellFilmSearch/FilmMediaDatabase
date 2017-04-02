@@ -9,6 +9,7 @@ import ResultsToolbar from './ResultsToolbar.jsx';
 import {connect} from 'react-redux'
 import {createSelector} from 'reselect';
 import ScrollEvent from 'react-onscroll';
+import { hashHistory } from 'react-router';
 
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -18,14 +19,30 @@ export default class AllFilms extends React.Component {
         this.handleScrollCallback = this.handleScrollCallback.bind(this);
     }
 
-    // TODO - update this function
     componentDidMount() {
-        this.props.fetchNewSearchTerm(this.props.location.pathname);
+        // save context until search term is loaded
+        if (this.props.routeParams['contextOclcId']) {
+            console.log('queuing context');
+            this.props.queueContext(this.props.routeParams['contextOclcId'], this.props.routeParams['contextScreenshot']);
+            hashHistory.push(`${this.props.routeParams['searchTerm']}`);
+        }
+
+        this.props.fetchNewSearchTerm(this.props.routeParams['searchTerm']);
     }
 
     componentWillReceiveProps(nextProps) {
+        if (nextProps.queueContextMovieOclcId && nextProps.filmsLoaded) {
+            this.props.dequeueContext();
+            // update url if there is queued context
+            hashHistory.push(`${nextProps.routeParams['searchTerm']}/context/${nextProps.queueContextMovieOclcId}/${nextProps.queueCurrentContextMovieLineNumber}`);
+            return;
+        }
+
         // compare old search term to new, and old context to new
+
+        // new search term
         if (nextProps.routeParams['searchTerm'] != this.props.routeParams['searchTerm']) {
+            console.log('new search');
             this.props.fetchNewSearchTerm(nextProps.routeParams['searchTerm']);
         }
         // swap context
@@ -54,9 +71,6 @@ export default class AllFilms extends React.Component {
                 accent3Color: grey800
             }
         });
-
-        console.log('hasContext');
-        console.log(this.props.hasContext);
 
         return (
             <MuiThemeProvider muiTheme={muiTheme}>
@@ -98,7 +112,7 @@ const receiveNewSearchTerm = (response) => {
 const fetchNewSearchTerm = (searchTerm) => {
     return (dispatch) => {
         dispatch(requestNewSearchTerm(searchTerm));
-        return fetch(`http://localhost:8080/moviesearch${searchTerm}`)
+        return fetch(`http://localhost:8080/moviesearch/${searchTerm}`)
             .then(response => response.json())
             .then(response => dispatch(receiveNewSearchTerm(response.results)));
         // TODO - add catch handler to handle errors
@@ -110,6 +124,20 @@ const openContext = (movieOclcId, movieLineNumber) => {
         type: 'OPEN_CONTEXT',
         movieOclcId,
         movieLineNumber
+    }
+};
+
+const queueContext = (movieOclcId, movieLineNumber) => {
+    return {
+        type: 'QUEUE_CONTEXT',
+        movieOclcId,
+        movieLineNumber
+    }
+};
+
+const dequeueContext = () => {
+    return {
+        type: 'DEQUEUE_CONTEXT'
     }
 };
 
@@ -171,7 +199,10 @@ function mapStateToProps(state) {
     return {
         filmsLoaded: areFilmsLoaded(state),
         films: getFilms(state),
-        hasContext: state.contextMovieOclcId
+        hasContext: state.contextMovieOclcId,
+        search: state.search,
+        queueContextMovieOclcId: state.queueContextMovieOclcId,
+        queueCurrentContextMovieLineNumber: state.queueCurrentContextMovieLineNumber
     }
 }
 
@@ -193,6 +224,8 @@ function mapDispatchToProps(dispatch) {
         fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm)),
         onScrollScreen: () => dispatch(scrollScreen()),
         openContext: (oclcId, screenshot) => dispatch(openContext(oclcId, screenshot)),
-        closeContext: () => dispatch(closeContextDialog())
+        closeContext: () => dispatch(closeContextDialog()),
+        queueContext: (oclcId, screenshot) => dispatch(queueContext(oclcId, screenshot)),
+        dequeueContext: () => dispatch(dequeueContext())
     }
 }

@@ -46,6 +46,18 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
                 contextMovieOclcId: parseInt(action.movieOclcId),
                 currentContextMovieLineNumber: parseInt(action.movieLineNumber)
             };
+        case 'QUEUE_CONTEXT':
+            return {
+                ...state,
+                queueContextMovieOclcId: parseInt(action.movieOclcId),
+                queueCurrentContextMovieLineNumber: parseInt(action.movieLineNumber)
+            };
+        case 'DEQUEUE_CONTEXT':
+            return {
+                ...state,
+                queueContextMovieOclcId: null,
+                queueCurrentContextMovieLineNumber: null
+            };
         case 'SLIDE_SCREENSHOT':
             return {
                 ...state,
