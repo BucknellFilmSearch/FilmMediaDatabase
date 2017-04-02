@@ -174,7 +174,6 @@ export default class ContextDialog extends React.Component {
 
                         { this.props.images.map(imageNumber =>
                             <GridTile className="contextImage"
-                                title={imageNumber}
                                 titleBackground={'rgba(0, 0, 0, 0.3)'}
                                 key={`img${imageNumber}`}
                             >
