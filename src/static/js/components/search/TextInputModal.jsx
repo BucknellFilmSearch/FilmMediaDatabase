@@ -100,6 +100,9 @@ export default class TextInputModal extends React.Component {
         // update the URL
         let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
         hashHistory.push(newPath);
+        if (keywordOrPhrase === '') {
+            alert('Your search has returned too many results. Please close this window and try again.');
+        }
     }
 
     handleOpen() {
@@ -128,7 +131,6 @@ export default class TextInputModal extends React.Component {
         return (
                 <div id="textIconImage">
                     <img src="/static/imageFiles/textIcon.jpg" onTouchTap={this.handleOpen}></img>
-
                     <Dialog
                         style={modalStyle}
                         modal={false}
