@@ -111,7 +111,13 @@ export default class ResultsToolbar extends React.Component {
         this.setState({searchText: newValue});
     }
 
+    sortFilms() {
+        let films = this.props.films.map(film => film);
+        return films.sort(relevanceSort);
+    }
+
     render() {
+        let sortedFilms = this.sortFilms();
         return (
             <Toolbar className="resultsToolbar">
                 <ToolbarGroup firstChild={true}>
@@ -145,7 +151,8 @@ export default class ResultsToolbar extends React.Component {
                         onChange={this.scrollToMovie}
                         style={selectStyle}
                     >
-                        {this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}
+                        {/*{this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}*/}
+                        {sortedFilms.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}
                     </SelectField>
 
                     <SelectField
@@ -175,6 +182,22 @@ export default class ResultsToolbar extends React.Component {
             </Toolbar>
         );
     }
+}
+
+function relevanceSort(a, b) {
+    if (a.results.length > b.results.length) {
+        return -1;
+    }
+    else if (a.results.length < b.results.length) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+function alphabeticalSort(a, b) {
+    return a.movieTitle.localeCompare(b.movieTitle);
 }
 
 
