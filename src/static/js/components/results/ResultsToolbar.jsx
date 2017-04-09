@@ -118,8 +118,15 @@ export default class ResultsToolbar extends React.Component {
         return films.sort(relevanceSort);
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.sortType != this.props.sortType) {
+            window.scrollTo(0,1);
+            window.scrollTo(0,0);
+        }
+    }
+
     render() {
-        let sortedFilms = this.sortFilms();
+        // let sortedFilms = this.sortFilms();
         return (
             <Toolbar className="resultsToolbar">
                 <ToolbarGroup firstChild={true}>
@@ -149,12 +156,12 @@ export default class ResultsToolbar extends React.Component {
                 <ToolbarGroup lastChild={true}>
                     <SelectField
                         floatingLabelText="Film"
-                        value={this.props.currentOclcId}
+                        value={"Films"}
                         onChange={this.scrollToMovie}
                         style={selectStyle}
                     >
-                        {/*{this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}*/}
-                        {sortedFilms.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}
+                        {this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}
+                        {/*{sortedFilms.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}*/}
                     </SelectField>
 
                     <SelectField
@@ -202,6 +209,18 @@ function alphabeticalSort(a, b) {
     return a.movieTitle.localeCompare(b.movieTitle);
 }
 
+function yearSort(a, b) {
+    if (a.movieReleaseYear > b.movieReleaseYear) {
+        return -1;
+    }
+    else if (a.movieReleaseYear < b.movieReleaseYear) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
 
 const selectSortType = (sortType) => {
     return {
@@ -218,13 +237,40 @@ const selectGenre = (genre) => {
 };
 
 const getSearch = (state) => state.search;
-
+const areFilmsLoaded = (state) => state.search && state.search.status == "loaded";
+const getSearchResponse = (state) => areFilmsLoaded(state) ? [...state.search.response] : [] ;
+const getSortType = (state) => state.sortType;
+const getGenre = (state) => state.genre;
 const getFilms = createSelector(
-    [getSearch],
-    (search) => {
-        return search != null && search.status == "loaded" ? search.response : []
+    [ getSearchResponse, getSortType, getGenre],
+    (films, sortType, genre) => {
+        // sort films based on user input
+        if (sortType == 1) {
+            films = films.sort(relevanceSort);
+        }
+        else if (sortType == 2) {
+            films = films.sort(alphabeticalSort);
+        }
+        else if (sortType == 3) {
+            films = films.sort(alphabeticalSort).reverse();
+        }
+        else if (sortType == 4) {
+            films = films.sort(yearSort);
+        }
+        else if (sortType == 5) {
+            films = films.sort(yearSort).reverse();
+        }
+        return genre == 'All' ? films :
+            films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
     }
 );
+
+// const getFilms = createSelector(
+//     [getSearch],
+//     (search) => {
+//         return search != null && search.status == "loaded" ? search.response : []
+//     }
+// );
 
 const getTotalScreenshots = createSelector(
     [getSearch, getFilms],
