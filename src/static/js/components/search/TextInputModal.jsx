@@ -31,15 +31,24 @@ const modalStyle = {
     textAlign: 'center'
 };
 
-const sortStyle = {
-    height: '71px',
-    top: '18px',
-    width: '20%'
+const inputStyle = {
+    top: '20px',
+    float: 'left',
+    width: '35%',
+    marginLeft: '5%'
 };
 
-const inputStyle = {
-    width: '35%'
+const sortStyle = {
+    top: '-4px',
+    width: '20%',
+    float: 'left',
+    overflow: 'scroll'
 };
+
+const buttonStyle = {
+    top: '27px',
+    float: 'left'
+}
 
 const SearchIcon = (props) => {
     return (
@@ -154,10 +163,10 @@ export default class TextInputModal extends React.Component {
                         </form>
 
                         <SelectField
-                        floatingLabelText="Sort"
-                        value={this.props.sortType}
-                        onChange={this.props.onSelectSortType}
-                        style={sortStyle}
+                            floatingLabelText="Sort"
+                            value={this.props.sortType}
+                            onChange={this.props.onSelectSortType}
+                            style={sortStyle}
                         >
                             <MenuItem value={1} primaryText="Relevance" />
                             <MenuItem value={2} primaryText="Movie Title (A-Z)" />
@@ -181,6 +190,7 @@ export default class TextInputModal extends React.Component {
                             primary={true}
                             icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
                             onClick={() => this.updateSearch()}
+                            style={buttonStyle}
                         />
 
                     </Dialog>

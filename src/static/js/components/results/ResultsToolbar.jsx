@@ -32,7 +32,9 @@ const selectStyle = {
 };
 
 const inputFieldStyle = {
-    width: '150px'
+    width: '150px',
+    float: 'left',
+    top: '-10px'
 };
 
 const SearchIcon = (props) => {
