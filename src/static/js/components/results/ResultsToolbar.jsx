@@ -52,7 +52,8 @@ export default class ResultsToolbar extends React.Component {
         super();
 
         this.state = {
-            searchText: ''
+            searchText: '',
+            errorText: ''
         };
 
         this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
@@ -90,9 +91,10 @@ export default class ResultsToolbar extends React.Component {
             // update the URL
             let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!', '').replace('?', '')}`;
             hashHistory.push(newPath);
+            this.state.errorText = '';
         }
         else {
-            alert('Your search has returned too many results. Please close this window and try again.');
+            this.state.errorText = "Too many results, try again.";
         }
     }
 
@@ -126,6 +128,7 @@ export default class ResultsToolbar extends React.Component {
                     <form onSubmit={this.updateSearchForEnterKeypress}>
                         <TextField
                             hintText="Search Phrase"
+                            errorText={this.state.errorText}
                             value={this.state.searchText}
                             onChange={this.handleChange}
                             style={inputFieldStyle}
