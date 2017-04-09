@@ -60,7 +60,8 @@ export default class TextInputModal extends React.Component {
 
         this.state = {
             open: false,
-            searchText: ''
+            searchText: '',
+            errorText: ''
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -101,7 +102,10 @@ export default class TextInputModal extends React.Component {
         let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
         hashHistory.push(newPath);
         if (keywordOrPhrase === '') {
-            alert('Your search has returned too many results. Please close this window and try again.');
+            this.state.errorText = 'Your search has returned too many results.';
+        }
+        else {
+            this.state.errorText = '';
         }
     }
 
@@ -141,6 +145,7 @@ export default class TextInputModal extends React.Component {
                         <form id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
                             <TextField
                                 hintText="Search Phrase"
+                                errorText={this.state.errorText}
                                 value={this.state.searchText}
                                 style={inputStyle}
                                 onChange={this.handleChange}
