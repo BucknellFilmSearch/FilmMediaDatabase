@@ -213,13 +213,15 @@ export default class ContextDialog extends React.Component {
                         speed={500}
                         slidesToShow={3}
                         slidesToScroll={1}
-                        infinite={true}
+                        infinite={false}
                         initialSlide={this.props.currentMovieLineNumber - 1}
                         afterChange={this.props.onSlideAndCheckForContext}
                         nextArrow={<RightArrow />}
                         prevArrow={<LeftArrow />}
                         lazyLoad={true}
                         centerMode={true}
+                        preLoad={6}
+                        focusOnSelect={true}
                         ref="slider"
                     >
 
