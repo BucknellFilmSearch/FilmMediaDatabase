@@ -5,3 +5,4 @@ env/
 src/postgresSettings.py
 node_modules
 bundle.js
+npm-debug.log
