@@ -86,9 +86,9 @@ export default class AllFilms extends React.Component {
                         </div>
                     ) :
                         this.props.films.map(function (object) {
-                                return <IndividualFilmResults
-                                    key={`filmkey${object.movieOclcId}`}
-                                    individualFilm={object} />;
+                            return <IndividualFilmResults
+                                key={`filmkey${object.movieOclcId}`}
+                                individualFilm={object} />;
                             }
                         )
                     }

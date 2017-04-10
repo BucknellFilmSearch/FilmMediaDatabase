@@ -41,8 +41,7 @@ const inputStyle = {
 const sortStyle = {
     top: '-4px',
     width: '20%',
-    float: 'left',
-    overflow: 'scroll'
+    float: 'left'
 };
 
 const buttonStyle = {
