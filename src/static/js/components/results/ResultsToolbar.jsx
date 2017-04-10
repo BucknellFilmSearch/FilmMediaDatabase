@@ -162,11 +162,12 @@ export default class ResultsToolbar extends React.Component {
                     <SelectField
                         floatingLabelText="Film"
                         value={"Films"}
+                        hintText="Choose a film"
                         onChange={this.scrollToMovie}
                         style={selectStyle}
                     >
+                        {/*<MenuItem value={null} primaryText="Film" />*/}
                         {this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}
-                        {/*{sortedFilms.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}*/}
                     </SelectField>
 
                     <SelectField
@@ -226,7 +227,6 @@ function yearSort(a, b) {
     }
 }
 
-
 const selectSortType = (sortType) => {
     return {
         type: "SELECT_SORT_TYPE",
@@ -270,19 +270,11 @@ const getFilms = createSelector(
     }
 );
 
-// const getFilms = createSelector(
-//     [getSearch],
-//     (search) => {
-//         return search != null && search.status == "loaded" ? search.response : []
-//     }
-// );
-
 const getTotalScreenshots = createSelector(
     [getSearch, getFilms],
     (search, films) => search && search.status == "loading" ? "Loading" :
         films.reduce((totalScreenshots, film) => totalScreenshots + film.results.length, 0)
 );
-
 
 // Map Redux state to component props
 function mapStateToProps(state) {

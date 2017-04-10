@@ -1,5 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 /* Styling for search page */
+#frontPage {
+  font-family: 'Roboto', sans-serif;
+}
+
 #mainHeader {
   text-align: center;
   padding-top: 10px;
@@ -15,7 +20,7 @@
 
 
 #subText {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   text-align: center;
 }
