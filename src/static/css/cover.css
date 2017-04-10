@@ -1,4 +1,3 @@
-@import "../../static/js/node_modules/react-image-gallery/styles/css/image-gallery.css";
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 /* Search results page */
@@ -89,23 +88,10 @@
     margin-left: auto;
 }
 
-/* Context Page */
-/* Context Page Image Gallery */
-.contextImageGallery {
-    /*font-family: 'Roboto', sans-serif;*/
-    /*font-size: 20px;*/
-    /*height: 80px;*/
-    /*text-align: center;
-    position: relative;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*margin: auto;*/
-    /*height:30%;*/
-}
-
 .slick-list {
     width: calc(100% - 100px);
     float: left;
+    padding-left: 0px!important;
 }
 
 .contextImageGallery button {
@@ -118,20 +104,13 @@
 }
 
 .contextImage {
-    padding-left: 40px;
-    padding-right: 40px;
-    width:500px;
+    padding-right: 20px;
+    margin-right: -2.8px;
 }
 
 .contextImage img {
     width:100%;
     transform: translateY(0)!important;
-}
-
-.contextImage > div {
-    height: 30px!important;
-    margin-left: 40px;
-    margin-right: 40px;
 }
 
 /* Context page's dialogue section */
