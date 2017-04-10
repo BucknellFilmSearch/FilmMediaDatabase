@@ -152,7 +152,6 @@
 /* Context page's timeline */
 .timelineCircles:hover {
     height: 300px;
-    fill: #228022;
     fill-opacity: 90;
 }
 /* Graph related style */

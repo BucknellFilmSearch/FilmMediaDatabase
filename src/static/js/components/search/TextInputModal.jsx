@@ -31,15 +31,24 @@ const modalStyle = {
     textAlign: 'center'
 };
 
-const sortStyle = {
-    height: '71px',
-    top: '18px',
-    width: '20%'
+const inputStyle = {
+    top: '20px',
+    float: 'left',
+    width: '35%',
+    marginLeft: '5%'
 };
 
-const inputStyle = {
-    width: '35%'
+const sortStyle = {
+    top: '-4px',
+    width: '20%',
+    float: 'left',
+    overflow: 'scroll'
 };
+
+const buttonStyle = {
+    top: '27px',
+    float: 'left'
+}
 
 const SearchIcon = (props) => {
     return (
@@ -60,7 +69,8 @@ export default class TextInputModal extends React.Component {
 
         this.state = {
             open: false,
-            searchText: ''
+            searchText: '',
+            errorText: ''
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -100,6 +110,12 @@ export default class TextInputModal extends React.Component {
         // update the URL
         let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
         hashHistory.push(newPath);
+        if (keywordOrPhrase === '') {
+            this.state.errorText = 'Your search has returned too many results.';
+        }
+        else {
+            this.state.errorText = '';
+        }
     }
 
     handleOpen() {
@@ -128,7 +144,6 @@ export default class TextInputModal extends React.Component {
         return (
                 <div id="textIconImage">
                     <img src="/static/imageFiles/textIcon.jpg" onTouchTap={this.handleOpen}></img>
-
                     <Dialog
                         style={modalStyle}
                         modal={false}
@@ -139,6 +154,7 @@ export default class TextInputModal extends React.Component {
                         <form id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
                             <TextField
                                 hintText="Search Phrase"
+                                errorText={this.state.errorText}
                                 value={this.state.searchText}
                                 style={inputStyle}
                                 onChange={this.handleChange}
@@ -147,10 +163,10 @@ export default class TextInputModal extends React.Component {
                         </form>
 
                         <SelectField
-                        floatingLabelText="Sort"
-                        value={this.props.sortType}
-                        onChange={this.props.onSelectSortType}
-                        style={sortStyle}
+                            floatingLabelText="Sort"
+                            value={this.props.sortType}
+                            onChange={this.props.onSelectSortType}
+                            style={sortStyle}
                         >
                             <MenuItem value={1} primaryText="Relevance" />
                             <MenuItem value={2} primaryText="Movie Title (A-Z)" />
@@ -174,6 +190,7 @@ export default class TextInputModal extends React.Component {
                             primary={true}
                             icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
                             onClick={() => this.updateSearch()}
+                            style={buttonStyle}
                         />
 
                     </Dialog>

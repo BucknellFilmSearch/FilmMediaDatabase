@@ -32,7 +32,9 @@ const selectStyle = {
 };
 
 const inputFieldStyle = {
-    width: '150px'
+    width: '150px',
+    float: 'left',
+    top: '-10px'
 };
 
 const SearchIcon = (props) => {
@@ -52,7 +54,8 @@ export default class ResultsToolbar extends React.Component {
         super();
 
         this.state = {
-            searchText: ''
+            searchText: '',
+            errorText: ''
         };
 
         this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
@@ -90,9 +93,16 @@ export default class ResultsToolbar extends React.Component {
             // update the URL
             let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!', '').replace('?', '')}`;
             hashHistory.push(newPath);
+            this.state.errorText = '';
+        }
+        else {
+            this.state.errorText = "Too many results, try again.";
         }
     }
 
+    scrollToMovie(event, index, value) {
+        document.getElementsByName(value)[0].scrollIntoView();
+    };
 
 
     updateSearchForEnterKeypress(event) {
@@ -107,7 +117,20 @@ export default class ResultsToolbar extends React.Component {
         this.setState({searchText: newValue});
     }
 
+    sortFilms() {
+        let films = this.props.films.map(film => film);
+        return films.sort(relevanceSort);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.sortType != this.props.sortType) {
+            window.scrollTo(0,1);
+            window.scrollTo(0,0);
+        }
+    }
+
     render() {
+        // let sortedFilms = this.sortFilms();
         return (
             <Toolbar className="resultsToolbar">
                 <ToolbarGroup firstChild={true}>
@@ -120,6 +143,7 @@ export default class ResultsToolbar extends React.Component {
                     <form onSubmit={this.updateSearchForEnterKeypress}>
                         <TextField
                             hintText="Search Phrase"
+                            errorText={this.state.errorText}
                             value={this.state.searchText}
                             onChange={this.handleChange}
                             style={inputFieldStyle}
@@ -137,11 +161,12 @@ export default class ResultsToolbar extends React.Component {
                 <ToolbarGroup lastChild={true}>
                     <SelectField
                         floatingLabelText="Film"
-                        value={this.props.currentOclcId}
-                        onChange={console.log}
+                        value={"Films"}
+                        onChange={this.scrollToMovie}
                         style={selectStyle}
                     >
                         {this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}
+                        {/*{sortedFilms.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}*/}
                     </SelectField>
 
                     <SelectField
@@ -173,6 +198,34 @@ export default class ResultsToolbar extends React.Component {
     }
 }
 
+function relevanceSort(a, b) {
+    if (a.results.length > b.results.length) {
+        return -1;
+    }
+    else if (a.results.length < b.results.length) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+function alphabeticalSort(a, b) {
+    return a.movieTitle.localeCompare(b.movieTitle);
+}
+
+function yearSort(a, b) {
+    if (a.movieReleaseYear > b.movieReleaseYear) {
+        return -1;
+    }
+    else if (a.movieReleaseYear < b.movieReleaseYear) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
 
 const selectSortType = (sortType) => {
     return {
@@ -189,13 +242,40 @@ const selectGenre = (genre) => {
 };
 
 const getSearch = (state) => state.search;
-
+const areFilmsLoaded = (state) => state.search && state.search.status == "loaded";
+const getSearchResponse = (state) => areFilmsLoaded(state) ? [...state.search.response] : [] ;
+const getSortType = (state) => state.sortType;
+const getGenre = (state) => state.genre;
 const getFilms = createSelector(
-    [getSearch],
-    (search) => {
-        return search != null && search.status == "loaded" ? search.response : []
+    [ getSearchResponse, getSortType, getGenre],
+    (films, sortType, genre) => {
+        // sort films based on user input
+        if (sortType == 1) {
+            films = films.sort(relevanceSort);
+        }
+        else if (sortType == 2) {
+            films = films.sort(alphabeticalSort);
+        }
+        else if (sortType == 3) {
+            films = films.sort(alphabeticalSort).reverse();
+        }
+        else if (sortType == 4) {
+            films = films.sort(yearSort);
+        }
+        else if (sortType == 5) {
+            films = films.sort(yearSort).reverse();
+        }
+        return genre == 'All' ? films :
+            films.filter(film => film.genre1 == genre || film.genre2 == genre || film.genre3 == genre);
     }
 );
+
+// const getFilms = createSelector(
+//     [getSearch],
+//     (search) => {
+//         return search != null && search.status == "loaded" ? search.response : []
+//     }
+// );
 
 const getTotalScreenshots = createSelector(
     [getSearch, getFilms],

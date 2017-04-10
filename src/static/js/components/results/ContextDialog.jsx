@@ -22,14 +22,8 @@ SVGLine.propTypes = {
     slideTo: React.PropTypes.func,
 };
 
-const customContentStyle = {
-    width: '90%',
-    maxWidth: 'none',
-    textAlign: 'center'
-};
-
 const style = {
-    margin: 12,
+    margin: 12
 };
 
 
@@ -50,15 +44,6 @@ const RightArrow = (props) => (
         </SvgIcon>
     </IconButton>
 );
-
-// const CloseButton = (props) => (
-//     <IconButton onClick={props.onClick}>
-//         <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24">
-//             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-//             <path d="M0 0h24v24H0z" fill="none"/>
-//         </svg>
-//     </IconButton>
-// );
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ContextDialog extends React.Component {
@@ -126,42 +111,6 @@ export default class ContextDialog extends React.Component {
     }
 
     getScreenShotTimes() {
-        // let state = getState();
-        //
-        // let currentFilm = !state.clickedScreenshotMovieOclcId ? null :
-        //     state.search.response.find(film => state.clickedScreenshotMovieOclcId === film.movieOclcId);
-        // let totalNumberOfLines = currentFilm === null ? 0 : currentFilm.totalNumberOfLines;
-        // let results = currentFilm.results;
-        // var svgLines = [];
-        // var lastPosition = 0;
-        // var newX = 0;
-        // var currentTimeStampInSeconds = 0;
-        // for (var i = 0; i < this.props.currentFilm.results.length; i++) {
-        //     currentTimeStampInSeconds = ContextDialog.timeStampToSeconds(
-        //         this.props.currentFilm.results[i].movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes);
-        //     newX = currentTimeStampInSeconds - lastPosition < MIN_DIST ? lastPosition + MIN_DIST : currentTimeStampInSeconds;
-        //     lastPosition = newX;
-        //     svgLines.push(
-        //         <SVGLine
-        //         slideTo={this.svgTest.bind(this)}
-        //         index={this.props.currentFilm.results[i].movieLineNumber-1}
-        //         x={newX}
-        //         y1="30"
-        //         y2="65"
-        //         stroke={"gray"}
-        //         strokeWidth={1}/>);
-        //
-        // }
-            // const svgLines = this.props.currentFilm.results.map(
-                // (result) =>
-                //     <SVGLine
-                //         slideTo={this.svgTest.bind(this)}
-                //         index={result.movieLineNumber-1}
-                //         x={ContextDialog.timeStampToSeconds(result.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)}
-                //         y1="30"
-                //         y2="65"
-                //         stroke={"gray"}
-                //         strokeWidth={1}/>)
         const svgLines = this.props.currentFilm.results.map((result) =>
             <SVGCircle
                 slideTo={this.svgTest.bind(this)}
@@ -196,6 +145,8 @@ export default class ContextDialog extends React.Component {
 
         alert(this.props.currentFilm.movieOclcId);
         alert(this.props.currentScreenshot.movieLineNumber);
+        let newPath = '/'+this.props.currentFilm.movieOclcId+'/'+this.props.currentScreenshot.movieLineNumber;
+        hashHistory.push(newPath);
     }
 
     render() {
@@ -227,7 +178,6 @@ export default class ContextDialog extends React.Component {
 
                         { this.props.images.map(imageNumber =>
                             <GridTile className="contextImage"
-                                title={imageNumber}
                                 titleBackground={'rgba(0, 0, 0, 0.3)'}
                                 key={`img${imageNumber}`}
                             >
@@ -263,9 +213,6 @@ export default class ContextDialog extends React.Component {
                     <div>
                 <svg height="70" width={TIME_LINE_LENGTH + 2*(CIRCLE_RADIUS + 5)}>
                     <line x1={CIRCLE_RADIUS} y1="50" x2={10+TIME_LINE_LENGTH} y2="50" stroke={"grey"} strokeWidth={1} />
-                    {/*<line onClick={() => {this.props.onSlideAndCheckForContext(10)}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
-                    {/*<line onClick={() => {this.svgTest()}} x1={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" x2={ContextDialog.timeStampToMinutes(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y2="65" stroke={"gray"} strokeWidth={20}/>*/}
-                    {/*<SVGLine slideTo={this.svgTest.bind(this)} index={20} x={ContextDialog.timeStampToSeconds(this.props.currentScreenshot.movieStartTimeStamp, this.props.currentFilm.runtimeInMinutes)} y1="30" y2="65" stroke={"gray"} strokeWidth={1}/>*/}
                     {this.getScreenShotTimes()}
                     {this.props.currentScreenshot != null ? (
                         <line
@@ -284,9 +231,6 @@ export default class ContextDialog extends React.Component {
                 ): null }
 
                 </div>
-                {/*<svg>*/}
-                    {/*<circle onClick={() => {alert('hi')}} cx={100} cy={100} r={50} fill="red" />*/}
-                {/*</svg>*/}
                 <div className="colorSearchButton" >
                         <RaisedButton onClick={this.UpdateURLColor} label="Color Search" style={style} />
                 </div>
