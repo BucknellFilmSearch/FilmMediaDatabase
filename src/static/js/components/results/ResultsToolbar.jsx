@@ -160,6 +160,7 @@ export default class ResultsToolbar extends React.Component {
                 </ToolbarGroup>
                 <ToolbarGroup lastChild={true}>
                     <SelectField
+                        className="chooseAFilm"
                         floatingLabelText="Film"
                         value={"Films"}
                         hintText="Choose a film"
