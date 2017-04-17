@@ -332,8 +332,6 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        // TODO - update url to remove context on close
-        // onCloseContextDialog: () => dispatch(closeContextDialog()),
         onSlideAndCheckForContext: (newMovieLineNumberIndex) => dispatch(slideAndCheckForContext(newMovieLineNumberIndex))
     }
 }

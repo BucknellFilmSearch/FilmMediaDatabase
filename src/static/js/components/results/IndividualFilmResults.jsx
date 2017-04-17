@@ -1,10 +1,6 @@
 import * as React from "react";
-
-// import { FilmMetadata } from "./FilmMetadata";
 import ScreenshotWithCaption from "./ScreenshotWithCaption.jsx";
-// import { Link } from "react-router";
 import {GridList} from 'material-ui/GridList';
-import Subheader from 'material-ui/Subheader';
 import Waypoint from 'react-waypoint';
 import {connect} from 'react-redux'
 
@@ -22,8 +18,6 @@ export default class IndividualFilmResults extends React.Component {
     }
 
     render() {
-        // TODO - delete react waypoint integration and disconnect the component from redux
-        // TODO - make this responsive using http://broucz.github.io/react-inline-grid/
         return (
             <div className="screenshotsGridList" name={this.props.individualFilm.movieOclcId}>
                 <Waypoint

@@ -1,16 +1,11 @@
 import * as React from "react";
 import Drawer from 'material-ui/Drawer';
 import {connect} from 'react-redux';
-import Roboto from 'material-ui/FontIcon';
 import Paper from 'material-ui/Paper'
-
-import {DEBUG_MODE} from "../../app.jsx";
-
 import LazyLoad from 'react-lazyload';
 import CircularProgress from 'material-ui/CircularProgress';
-import {black} from "material-ui/styles/colors";
-
 import {createSelector} from 'reselect';
+
 
 const timeLineLength = 200;
 
