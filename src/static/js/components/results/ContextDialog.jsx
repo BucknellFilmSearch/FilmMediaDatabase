@@ -5,22 +5,16 @@ import IconButton from 'material-ui/IconButton';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
-import SVGLine from './SVGLine.jsx';
 import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
 import RaisedButton from 'material-ui/RaisedButton';
-
-
 
 const TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
 const CIRCLE_RADIUS = 7;
 const MIN_DIST = 2*STROKE_WIDTH;
 
-SVGLine.propTypes = {
-    slideTo: React.PropTypes.func,
-};
 
 const style = {
     margin: 12
@@ -332,8 +326,6 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        // TODO - update url to remove context on close
-        // onCloseContextDialog: () => dispatch(closeContextDialog()),
         onSlideAndCheckForContext: (newMovieLineNumberIndex) => dispatch(slideAndCheckForContext(newMovieLineNumberIndex))
     }
 }

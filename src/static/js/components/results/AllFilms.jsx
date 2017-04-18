@@ -115,7 +115,6 @@ const fetchNewSearchTerm = (searchTerm) => {
         return fetch(`http://localhost:8080/moviesearch/${searchTerm}`)
             .then(response => response.json())
             .then(response => dispatch(receiveNewSearchTerm(response.results)));
-        // TODO - add catch handler to handle errors
     }
 };
 

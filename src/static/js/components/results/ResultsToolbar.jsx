@@ -167,7 +167,6 @@ export default class ResultsToolbar extends React.Component {
                         onChange={this.scrollToMovie}
                         style={selectStyle}
                     >
-                        {/*<MenuItem value={null} primaryText="Film" />*/}
                         {this.props.films.map(film => <MenuItem key={film.movieOclcId} value={film.movieOclcId} primaryText={film.movieTitle} />)}
                     </SelectField>
 

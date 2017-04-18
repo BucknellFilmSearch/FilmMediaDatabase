@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import PhotoDropZone from './PhotoDropZone.jsx';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
