@@ -1,9 +1,6 @@
 import * as React from "react";
-import {DEBUG_MODE} from "../../app.jsx";
-
 import {connect} from 'react-redux'
 import {GridTile} from 'material-ui/GridList';
-
 import LazyLoad from 'react-lazyload';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { hashHistory } from 'react-router'
@@ -20,7 +17,6 @@ export default class ScreenshotWithCaption extends React.Component {
     render() {
 
         let imgSrc =
-            // DEBUG_MODE ? "/static/imageFiles/720x480.jpg" :
             "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + this.props.movieOclcId + "/" + this.props.screenshotDetails.movieLineNumber + ".png";
         
         return (
