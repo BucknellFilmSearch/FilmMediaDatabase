@@ -5,22 +5,16 @@ import IconButton from 'material-ui/IconButton';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
-import SVGLine from './SVGLine.jsx';
 import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
 import RaisedButton from 'material-ui/RaisedButton';
-
-
 
 const TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
 const CIRCLE_RADIUS = 7;
 const MIN_DIST = 2*STROKE_WIDTH;
 
-SVGLine.propTypes = {
-    slideTo: React.PropTypes.func,
-};
 
 const style = {
     margin: 12
@@ -59,6 +53,8 @@ export default class ContextDialog extends React.Component {
 
         this.handleClose = this.handleClose.bind(this);
         this.UpdateURLColor = this.UpdateURLColor.bind(this);
+        this.slideLeft = this.slideLeft.bind(this);
+        this.slideRight = this.slideRight.bind(this);
     }
 
     handleKeyPress(e) {
@@ -110,6 +106,16 @@ export default class ContextDialog extends React.Component {
         this.refs.slider.slickGoTo(index);
     }
 
+    slideLeft() {
+        if (this.props.currentScreenshot != null)
+            this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber-2);
+    }
+
+    slideRight() {
+        if (this.props.currentScreenshot != null)
+            this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber);
+    }
+
     getScreenShotTimes() {
         const svgLines = this.props.currentFilm.results.map((result) =>
             <SVGCircle
@@ -143,8 +149,8 @@ export default class ContextDialog extends React.Component {
 
     UpdateURLColor() {
 
-        alert(this.props.currentFilm.movieOclcId);
-        alert(this.props.currentScreenshot.movieLineNumber);
+        // alert(this.props.currentFilm.movieOclcId);
+        // alert(this.props.currentScreenshot.movieLineNumber);
         let newPath = '/'+this.props.currentFilm.movieOclcId+'/'+this.props.currentScreenshot.movieLineNumber;
         hashHistory.push(newPath);
     }
@@ -167,8 +173,8 @@ export default class ContextDialog extends React.Component {
                         infinite={false}
                         initialSlide={this.props.currentMovieLineNumber - 1}
                         afterChange={this.props.onSlideAndCheckForContext}
-                        nextArrow={<RightArrow />}
-                        prevArrow={<LeftArrow />}
+                        nextArrow={null}
+                        prevArrow={null}
                         lazyLoad={true}
                         centerMode={true}
                         preLoad={6}
@@ -192,6 +198,18 @@ export default class ContextDialog extends React.Component {
 
 
                 <div className="contextDialogue">
+                    <IconButton onClick={this.slideLeft}>
+                        <SvgIcon>
+                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                        </SvgIcon>
+                    </IconButton>
+                    <IconButton onClick={this.slideRight}>
+                        <SvgIcon>
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                        </SvgIcon>
+                    </IconButton>
 
                     {this.props.currentScreenshot != null ? (
                             <div>
@@ -234,7 +252,6 @@ export default class ContextDialog extends React.Component {
                 <div className="colorSearchButton" >
                         <RaisedButton onClick={this.UpdateURLColor} label="Color Search" style={style} />
                 </div>
-
             </FullscreenDialog>
         );
     }

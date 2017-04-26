@@ -1,7 +1,4 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {createSelector} from 'reselect';
-
 
 export default class SVGCircle extends React.Component {
 

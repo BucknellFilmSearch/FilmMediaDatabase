@@ -98,8 +98,9 @@
     padding-left: 0px!important;
 }
 
-.contextImageGallery button {
-    float: left;
+.contextImageGallery {
+    padding-left: 20px;
+    text-align: center;
 }
 
 .colorSearchButton {
@@ -107,9 +108,9 @@
     text-align: center;
 }
 
-.contextImage {
+.slick-slide {
     padding-right: 20px;
-    margin-right: -2.8px;
+    margin-right: 0.05px;
 }
 
 .contextImage img {
@@ -124,7 +125,7 @@
     font-family: 'Roboto', sans-serif;
     font-size: 20px;
     height: 100px;
-    padding-top: 30px;
+    padding-top: 20px;
 }
 
 /*Conext Timeline centering */
