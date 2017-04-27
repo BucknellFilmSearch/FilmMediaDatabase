@@ -55,15 +55,21 @@ def searchResults(keywordOrPhrase):
         group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
 
+    count = session.query(MediaText.oclc_id, func.max(MediaText.line_number).label('totalNumberOfLines')).group_by(MediaText.oclc_id).subquery()
+
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
                           MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
-                          MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
+                          MediaMetadata.original_release_year, MediaMetadata.dvd_release_year,
+                          MediaMetadata.runtime_in_minutes, count.c.totalNumberOfLines,
+                          MediaMetadata.genre1, MediaMetadata.genre2, MediaMetadata.genre3).\
+        join(count, count.c.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
         order_by(MediaMetadata.keyword_count.desc()).\
         order_by(MediaMetadata.movie_title).\
         order_by(MediaText.line_number)
+
     session.close()
     return query.all()
 
