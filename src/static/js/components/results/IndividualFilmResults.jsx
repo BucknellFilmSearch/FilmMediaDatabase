@@ -1,10 +1,23 @@
-import * as React from "react";
+/**
+ * This file generates a grid of screenshots for an individual film. This is used in the AllFilms component, which
+ * iterates through search results for multiple films.
+ */
 
+import * as React from "react";
 import ScreenshotWithCaption from "./ScreenshotWithCaption.jsx";
 import {GridList} from 'material-ui/GridList';
 
+
+/**
+ * Creates a grid of screenshots for an individual film using the GridList
+ * component from Material-UI.
+ */
 export default class IndividualFilmResults extends React.Component {
 
+    /**
+     * Iterate through screenshots and generate a screenshot component for each relevant
+     * line of dialog.
+     */
     getScreenshotsWithCaption() {
         return this.props.individualFilm.results.map(object => (
             <ScreenshotWithCaption
@@ -14,6 +27,9 @@ export default class IndividualFilmResults extends React.Component {
         );
     }
 
+    /**
+     * Render the screenshots along with a header containing the film name.
+     */
     render() {
         return (
             <div className="screenshotsGridList" name={this.props.individualFilm.movieOclcId}>
