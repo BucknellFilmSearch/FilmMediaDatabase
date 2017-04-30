@@ -36,9 +36,9 @@ These instructions are written for UNIX machines (ie MacOS and Linux). These ins
 
 ### System Requirements
 
-* Python: the language most of the backend code is written in. It can be installed from here.
-* Pip: a python package manager. This is used to install all the backend dependencies. It is typically comes bundled with Python, or can be installed from here.
-* Node: a JavaScript runtime. Bundled with Node is npm (node package manager), which is used to install the JavaScript dependencies. It can be installed from here.
+* Python: the language most of the backend code is written in. It can be installed from <a href="https://www.python.org/">here</a>.
+* Pip: a python package manager. This is used to install all the backend dependencies. It is typically comes bundled with Python, or can be installed from <a href="https://pip.pypa.io/en/stable/">here</a>.
+* Node: a JavaScript runtime. Bundled with Node is npm (node package manager), which is used to install the JavaScript dependencies. It can be installed from <a href="https://nodejs.org/en/download/">here</a>.
 
 
 ### Installation Instructions
@@ -46,9 +46,9 @@ These instructions are written for UNIX machines (ie MacOS and Linux). These ins
 These steps only need to be followed once to set up the development environment. 
 
 * Install all required software listed above by following their respective installation guides.
-* Clone the repository from GitLab: git clone git@gitlab.bucknell.edu:jde012/cell-phone-cinema-project.git
-* Enter the source folder and install the python requirements: cd src && pip install -r requirements.txt
-* Enter the JavaScript folder and install the node requirements: cd static/js && npm install
+* Clone the repository from GitLab: `git clone git@gitlab.bucknell.edu:jde012/cell-phone-cinema-project.git`
+* Enter the source folder and install the python requirements: `cd src && pip install -r requirements.txt`
+* Enter the JavaScript folder and install the node requirements: `cd static/js && npm install`
 
 
 ### Run Instructions
@@ -58,15 +58,15 @@ These steps need to be followed before each development session.
 * Open a terminal window and enter the src/ directory
 * Run python main.py
 * Open a second terminal window and enter the src/static/js directory
-* Run npm start and wait for the JavaScript file to generate
+* Run `npm start` and wait for the JavaScript file to generate
 * Go to localhost:8080 in your web browser
 
 
 ### Web Development Tips
 
 * Use Google Chrome and its debugging tools
-* Install React Developer Tools to debug issues with React
-* Install Redux DevTools to debug issues with Redux
+* Install <a href="https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi">React Developer Tools</a> to debug issues with React
+* Install <a href="https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en">Redux DevTools</a> to debug issues with Redux
 * If JavaScript files aren’t updating in the browser after modifying the code locally:
 * Make sure that Chrome isn’t caching the old JavaScript file (disable cache is checked in the network tab of the developer tools)
 * Make sure npm start is running (steps 3-4 in Run instructions) 
