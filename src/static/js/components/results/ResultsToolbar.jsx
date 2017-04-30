@@ -13,7 +13,8 @@ import TextField from 'material-ui/TextField';
 import {connect} from 'react-redux';
 import { hashHistory } from 'react-router';
 import {createSelector} from 'reselect';
-import {STOP_WORDS, GENRES} from '../helpers';
+import {STOP_WORDS, GENRES, relevanceSort, alphabeticalSort, yearSort} from '../helpers';
+
 
 const selectStyle = {
     width: '150px'
@@ -184,34 +185,6 @@ export default class ResultsToolbar extends React.Component {
                 </ToolbarGroup>
             </Toolbar>
         );
-    }
-}
-
-function relevanceSort(a, b) {
-    if (a.results.length > b.results.length) {
-        return -1;
-    }
-    else if (a.results.length < b.results.length) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-
-function alphabeticalSort(a, b) {
-    return a.movieTitle.localeCompare(b.movieTitle);
-}
-
-function yearSort(a, b) {
-    if (a.movieReleaseYear > b.movieReleaseYear) {
-        return -1;
-    }
-    else if (a.movieReleaseYear < b.movieReleaseYear) {
-        return 1;
-    }
-    else {
-        return 0;
     }
 }
 

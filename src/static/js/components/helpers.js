@@ -43,3 +43,33 @@ export function beautifyTimeStamp(movieStartTimeStamp) {
     const splitString = movieStartTimeStamp.split(",");
     return (splitString[0]);
 }
+
+
+export function relevanceSort(a, b) {
+    if (a.results.length > b.results.length) {
+        return -1;
+    }
+    else if (a.results.length < b.results.length) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+export function alphabeticalSort(a, b) {
+    return a.movieTitle.localeCompare(b.movieTitle);
+}
+
+export function yearSort(a, b) {
+    if (a.movieReleaseYear > b.movieReleaseYear) {
+        return -1;
+    }
+    else if (a.movieReleaseYear < b.movieReleaseYear) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
