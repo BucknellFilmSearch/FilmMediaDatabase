@@ -151,7 +151,7 @@ export default class ContextDialog extends React.Component {
     }
 
     /**
-     * Render the metadata using a material-ui template.
+     * Render the context page.
      */
     render() {
 
