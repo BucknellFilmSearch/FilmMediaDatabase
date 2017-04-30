@@ -10,6 +10,7 @@ import {connect} from 'react-redux'
 import {createSelector} from 'reselect';
 import ScrollEvent from 'react-onscroll';
 import { hashHistory } from 'react-router';
+import {relevanceSort, alphabeticalSort, yearSort} from '../helpers';
 
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -139,31 +140,7 @@ const dequeueContext = () => {
     }
 };
 
-function relevanceSort(a, b) {
-    if (a.results.length > b.results.length) {
-        return -1;
-    }
-    else if (a.results.length < b.results.length) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
-function alphabeticalSort(a, b) {
-    return a.movieTitle.localeCompare(b.movieTitle);
-}
-function yearSort(a, b) {
-    if (a.movieReleaseYear > b.movieReleaseYear) {
-        return -1;
-    }
-    else if (a.movieReleaseYear < b.movieReleaseYear) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
+
 const areFilmsLoaded = (state) => state.search && state.search.status == "loaded";
 const getSearchResponse = (state) => areFilmsLoaded(state) ? [...state.search.response] : [] ;
 const getSortType = (state) => state.sortType;
