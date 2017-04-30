@@ -79,7 +79,6 @@ export default class AllFilms extends React.Component {
                     <ResultsToolbar />
                     <MetadataDrawer />
                     {this.props.hasContext && <ContextDialog />}
-                    {/*<Graph/>*/}
                     {!this.props.filmsLoaded ? (
                         <div style={{paddingTop: '60px'}}>
                             <h2>Loading Relevant Films...</h2>

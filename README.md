@@ -14,7 +14,7 @@ A team of four senior Computer Science and Engineering students worked to create
 
 ## Team Endframe:  
 * Nadeem Nasimi '17  
-* Elliot Radsliff /17  
+* Elliot Radsliff '17  
 * Anmol Singh '17  
 * Devon Wasson '17  
 
