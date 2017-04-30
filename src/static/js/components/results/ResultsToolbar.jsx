@@ -1,3 +1,8 @@
+/**
+ * This file generates the toolbar that is the top of the search results view. It is used in
+ * the render function of AllFilms.
+ */
+
 import * as React from 'react';
 import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import { Link } from "react-router";

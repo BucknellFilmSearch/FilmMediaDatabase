@@ -15,3 +15,31 @@ export const STOP_WORDS = ["a", "above", "after", "again", "against", "all", "am
 
 export const GENRES = ["All", "Action", "Thriller", "Comedy", "Family", "Adventure", "Mystery", "Romance", "Sci-Fi",
     "Horror", "Drama", "Biography", "Fantasy", "Crime", "War", "Animation", "History", "Musical"];
+
+
+/**
+ * Converts a timestamp to a scaled horizontal offset for the vertical bar in the timeline.
+ *
+ * @param movieStartTimeStamp A timestamp of a line of dialogue in the format hours:minutes:seconds,milliseconds
+ * @param totalMovieRuntime The total runtime of the film, in minutes
+ * @return {number} The horizontal offset in pixels
+ */
+export function timeStampToMinutes(movieStartTimeStamp, totalMovieRuntime) {
+    // Horizontal length of the timeline in the metadata drawer (in pixels)
+    const timeLineLength = 200;
+
+    const splitString = movieStartTimeStamp.split(":");
+    return Math.ceil((10 + parseInt(splitString[0]) * 60 + parseInt(splitString[1]))/totalMovieRuntime*timeLineLength);
+}
+
+
+/**
+ * Removes milliseconds in a screenshot's timestamp
+ *
+ * @param movieStartTimeStamp A timestamp of a line of dialogue in the format hours:minutes:seconds,milliseconds
+ * @return {*}  A timestamp of a line of dialogue in the format hours:minutes:seconds
+ */
+export function beautifyTimeStamp(movieStartTimeStamp) {
+    const splitString = movieStartTimeStamp.split(",");
+    return (splitString[0]);
+}

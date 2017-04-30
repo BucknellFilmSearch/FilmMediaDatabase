@@ -9,6 +9,7 @@ import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
 import RaisedButton from 'material-ui/RaisedButton';
+import {beautifyTimeStamp} from '../helpers';
 
 const TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
@@ -70,18 +71,6 @@ export default class ContextDialog extends React.Component {
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.handleKeyPress);
-    }
-
-    /* Removes the junk after the comma in the screenshot's timestamp */
-    static beautifyTimeStamp(movieStartTimeStamp) {
-        const splitString = movieStartTimeStamp.split(",");
-        return (splitString[0]);
-    }
-
-    static timeStampToSeconds(movieStartTimeStamp, totalMovieRuntime) {
-        const splitString = movieStartTimeStamp.split(":");
-        alert(Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*(TIME_LINE_LENGTH-CIRCLE_RADIUS-2))+CIRCLE_RADIUS+2);
-        return Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*(TIME_LINE_LENGTH-CIRCLE_RADIUS-2))+CIRCLE_RADIUS+2;
     }
 
     handleOpen() {
@@ -214,7 +203,7 @@ export default class ContextDialog extends React.Component {
                     {this.props.currentScreenshot != null ? (
                             <div>
                                 {this.props.currentScreenshot.movieLineText} <br />
-                                {ContextDialog.beautifyTimeStamp(this.props.currentScreenshot.movieStartTimeStamp)}<br/>
+                                {beautifyTimeStamp(this.props.currentScreenshot.movieStartTimeStamp)}<br/>
                             </div>
                         ): (
                             <div>
