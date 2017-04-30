@@ -36,6 +36,10 @@ const SearchIcon = (props) => {
 };
 
 
+/**
+ * Uses the toolbar component in Material-UI to generate a toolbar with options to sort, filter, jump to a film,
+ * and perform new searches. Connects to the Redux store for information about the current search and sort status.
+ */
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ResultsToolbar extends React.Component {
 
@@ -53,8 +57,8 @@ export default class ResultsToolbar extends React.Component {
 
     static cleanStopWords(input) {
         let splitString = input.toLowerCase().split(' ');
-        var buildString = '';
-        for (var i = 0; i < splitString.length; i++) {
+        let buildString = '';
+        for (let i = 0; i < splitString.length; i++) {
             if (!(STOP_WORDS.includes(splitString[i]))) {
                 // If it is the first non stop word
                 if (buildString == '') {
@@ -89,6 +93,9 @@ export default class ResultsToolbar extends React.Component {
         }
     }
 
+    /**
+     * Jumps to a film that is selected from the dropdown list of films for the current search.
+     */
     scrollToMovie(event, index, value) {
         document.getElementsByName(value)[0].scrollIntoView();
     };

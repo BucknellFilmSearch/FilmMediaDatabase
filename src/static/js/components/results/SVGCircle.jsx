@@ -1,3 +1,7 @@
+/**
+ * Provides a circle used in the timeline in ContextDialog.
+ */
+
 import * as React from 'react';
 
 /**
@@ -17,7 +21,7 @@ export default class SVGCircle extends React.Component {
     }
 
     /**
-     * Slides the image gallery to the linked screenshot
+     * Slides the image gallery to the linked screenshot.
      */
     click() {
         this.props.slideTo(this.props.index);
@@ -29,7 +33,7 @@ export default class SVGCircle extends React.Component {
     }
 
     /**
-     * Render the metadata using a material-ui template.
+     * Render the svg circle.
      */
     render() {
         return(
