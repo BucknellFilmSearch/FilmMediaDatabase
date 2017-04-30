@@ -29,7 +29,7 @@ export default class SVGCircle extends React.Component {
     }
 
     /**
-     * Render the metadata using a material-ui template.
+     * Render the svg cirlce.
      */
     render() {
         return(
