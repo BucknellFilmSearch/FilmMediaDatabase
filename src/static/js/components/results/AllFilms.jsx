@@ -15,6 +15,10 @@ import {relevanceSort, alphabeticalSort, yearSort} from '../helpers';
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AllFilms extends React.Component {
+
+    /**
+     * Binds event handler to the class.
+     */
     constructor() {
         super();
         this.handleScrollCallback = this.handleScrollCallback.bind(this);
@@ -97,18 +101,37 @@ export default class AllFilms extends React.Component {
         );
     }
 }
+
+
+/**
+ * Redux action for when the user requests a new search term
+ * @param searchTerm New search term
+ */
 export const requestNewSearchTerm = (searchTerm) => {
     return {
         type: 'REQUEST_NEW_SEARCH_TERM',
         searchTerm
     }
 };
+
+
+/**
+ * Redux action for when the API call is received for the requested search term.
+ * @param response Response to the API call
+ */
 const receiveNewSearchTerm = (response) => {
     return {
         type: 'RECEIVE_NEW_SEARCH_TERM',
         response
     }
 };
+
+
+/**
+ * Composite Redux action for fetching a new search term. Requests the search term,
+ * makes the API call, and submits an action when the API call returns data.
+ * @param searchTerm New search term
+ */
 const fetchNewSearchTerm = (searchTerm) => {
     return (dispatch) => {
         dispatch(requestNewSearchTerm(searchTerm));
@@ -118,6 +141,12 @@ const fetchNewSearchTerm = (searchTerm) => {
     }
 };
 
+
+/**
+ * Redux action when the user requests opening the context for a given screenshot
+ * @param movieOclcId The movieOclcId corresponding to the context they requested
+ * @param movieLineNumber The movieLineNumber corresponding to the context they requested
+ */
 const openContext = (movieOclcId, movieLineNumber) => {
     return {
         type: 'OPEN_CONTEXT',
@@ -126,6 +155,13 @@ const openContext = (movieOclcId, movieLineNumber) => {
     }
 };
 
+
+/**
+ * Redux action when the user directly requests the context for a film before entering a
+ * search. This action queues the requesting the context until the search is completed.
+ * @param movieOclcId The movieOclcId corresponding to the context they requested
+ * @param movieLineNumber The movieLineNumber corresponding to the context they requested
+ */
 const queueContext = (movieOclcId, movieLineNumber) => {
     return {
         type: 'QUEUE_CONTEXT',
@@ -134,10 +170,35 @@ const queueContext = (movieOclcId, movieLineNumber) => {
     }
 };
 
+
+/**
+ * Redux action that dequeues the pending context request when the API call is eventually made.
+ */
 const dequeueContext = () => {
     return {
         type: 'DEQUEUE_CONTEXT'
     }
+};
+
+
+/**
+ * Redux action that triggers when the user scrolls on the screen. This removes the metadata from the
+ * metadata drawer when they scroll.
+ */
+const scrollScreen = () => {
+    return {
+        type: 'SCROLL_SCREEN'
+    };
+};
+
+
+/**
+ * Redux action that triggers when the user wishes to close the context dialog.
+ */
+const closeContextDialog = () => {
+    return {
+        type: 'CLOSE_CONTEXT_DIALOG'
+    };
 };
 
 
@@ -180,18 +241,6 @@ function mapStateToProps(state) {
         queueCurrentContextMovieLineNumber: state.queueCurrentContextMovieLineNumber
     }
 }
-
-const scrollScreen = () => {
-    return {
-        type: 'SCROLL_SCREEN'
-    };
-};
-
-const closeContextDialog = () => {
-    return {
-        type: 'CLOSE_CONTEXT_DIALOG'
-    };
-};
 
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {

@@ -1,3 +1,9 @@
+/**
+ * This file is used to generate a gallery of screenshots before and after the
+ * screenshot a user clicks on.
+ */
+
+
 import * as React from 'react';
 import Slider from 'react-slick';
 import SvgIcon from 'material-ui/SvgIcon';
@@ -21,26 +27,42 @@ const style = {
 };
 
 
+/**
+ * Uses the Material-UI dialog to display screenshots before and after the screenshot
+ * a user selects. Uses a gallery component to display the screenshots and connects
+ * to the Redux store to know when a user clicks on a screenshot or browses through
+ * screenshots in the context.
+ */
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ContextDialog extends React.Component {
 
+    /**
+     * Initializes the state and binds event handlers to the class.
+     */
     constructor() {
         super();
 
-        this.handleKeyPress = this.handleKeyPress.bind(this);
-
+        // state is initialized to keeping the dialog closed
         this.state = {
             open: false
         };
 
+        this.handleKeyPress = this.handleKeyPress.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.contextDialogueColorSearch = this.contextDialogueColorSearch.bind(this);
         this.slideLeft = this.slideLeft.bind(this);
         this.slideRight = this.slideRight.bind(this);
     }
 
+    /**
+     * Closes the dialog if the user presses the Escape key.
+     *
+     * @param e React synthetic event
+     */
     handleKeyPress(e) {
-        if(e.keyCode === 27) {
+        const ESCAPE_KEY = 27;
+
+        if(e.keyCode === ESCAPE_KEY) {
             this.handleClose();
         }
     }
@@ -104,7 +126,7 @@ export default class ContextDialog extends React.Component {
      * @returns {array of SVGCircle elements} The click-able time line circles
      */
     getScreenShotTimes() {
-        const svgCircles = this.props.currentFilm.results.map((result) =>
+        return this.props.currentFilm.results.map((result) =>
             <SVGCircle
                 slideTo={this.svgSlideTo.bind(this)}
                 index={result.movieLineNumber-1}
@@ -116,16 +138,12 @@ export default class ContextDialog extends React.Component {
                 strokeWidth={1}
             />
         );
-
-        return svgCircles;
-
     }
 
     /**
      * Instantiates all ReactTooltip elements and maps them to both
      * the correct SVGCircle element and the corresponding screenshot.
-     * @returns {array of ReactTooltip elements} All the image tooltips
-     * for the time line circles.
+     * @returns {array of ReactTooltip elements} All the image tooltips for the time line circles.
      */
     createImageTooltips() {
         return this.props.currentFilm.results.map((result) =>
@@ -255,6 +273,11 @@ export default class ContextDialog extends React.Component {
     }
 }
 
+
+/**
+ * Redux event that handles changing the current screenshot in the gallery.
+ * @param newMovieLineNumber The movie line number to change to
+ */
 const slideScreenshot = (newMovieLineNumber) => {
     return {
         type: 'SLIDE_SCREENSHOT',
@@ -262,6 +285,11 @@ const slideScreenshot = (newMovieLineNumber) => {
     };
 };
 
+
+/**
+ * Redux event that receiving context from an API call.
+ * @param context The context received from the API call
+ */
 const receiveContext = (context) => {
     return {
         type: 'RECEIVE_CONTEXT',
@@ -270,6 +298,13 @@ const receiveContext = (context) => {
     };
 };
 
+
+/**
+ * Handler function that is called by the image gallery when the current movie line number is changed.
+ * Updates the Redux store with the new line number and makes an API call for the new line number
+ * if it does not already exist in the database.
+ * @param newMovieLineNumberIndex The new movie line number
+ */
 const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     return (dispatch, getState) => {
         let state = getState();
