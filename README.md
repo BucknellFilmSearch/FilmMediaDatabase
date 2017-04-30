@@ -56,7 +56,7 @@ These steps only need to be followed once to set up the development environment.
 These steps need to be followed before each development session. 
 
 * Open a terminal window and enter the src/ directory
-* Run python main.py
+* Run `python main.py`
 * Open a second terminal window and enter the src/static/js directory
 * Run `npm start` and wait for the JavaScript file to generate
 * Go to localhost:8080 in your web browser
