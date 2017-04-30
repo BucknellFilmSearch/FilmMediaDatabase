@@ -1,9 +1,20 @@
+/**
+ * This file generates screenshots and maps them with their corresponding lines of dialogue.
+ * It's used by IndividualFilmResults file.
+ */
+
 import * as React from "react";
 import {connect} from 'react-redux'
 import {GridTile} from 'material-ui/GridList';
 import LazyLoad from 'react-lazyload';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { hashHistory } from 'react-router'
+
+/**
+ * The ScreenshotWithCaption maps the screenshot image of a film with its corresponding
+ * line of dialogue. On Click, it connects to the redux store so it can send its movieOclcId
+ * and movieLineNumber.
+ */
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ScreenshotWithCaption extends React.Component {
@@ -14,6 +25,9 @@ export default class ScreenshotWithCaption extends React.Component {
         return (splitString[0]);
     }
 
+    /**
+     * Render the ScreenshotWithCaption
+     */
     render() {
 
         let imgSrc =

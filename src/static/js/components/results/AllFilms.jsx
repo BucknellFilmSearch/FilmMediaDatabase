@@ -1,3 +1,7 @@
+/**
+ * This file generates screenshots for each result returned by the database call.
+ */
+
 import * as React from "react";
 import IndividualFilmResults from "./IndividualFilmResults.jsx";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -12,6 +16,12 @@ import ScrollEvent from 'react-onscroll';
 import { hashHistory } from 'react-router';
 import {relevanceSort, alphabeticalSort, yearSort} from '../helpers';
 
+
+/**
+ * The AllFilms returns  grid lists of screenshots for each movie where the
+ * search term or phrase was used. It connects to the redux store to map the
+ * screenshots with the oclcId of the movie.
+ */
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AllFilms extends React.Component {
