@@ -13,31 +13,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 const TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
 const CIRCLE_RADIUS = 7;
-const MIN_DIST = 2*STROKE_WIDTH;
 
 
 const style = {
     margin: 12
 };
 
-
-const LeftArrow = (props) => (
-    <IconButton onClick={props.onClick}>
-        <SvgIcon>
-            <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"/>
-            <path d="M0-.5h24v24H0z" fill="none"/>
-        </SvgIcon>
-    </IconButton>
-);
-
-const RightArrow = (props) => (
-    <IconButton onClick={props.onClick}>
-        <SvgIcon>
-            <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-            <path d="M0-.25h24v24H0z" fill="none"/>
-        </SvgIcon>
-    </IconButton>
-);
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ContextDialog extends React.Component {
@@ -52,7 +33,7 @@ export default class ContextDialog extends React.Component {
         };
 
         this.handleClose = this.handleClose.bind(this);
-        this.UpdateURLColor = this.UpdateURLColor.bind(this);
+        this.contextDialogueColorSearch = this.contextDialogueColorSearch.bind(this);
         this.slideLeft = this.slideLeft.bind(this);
         this.slideRight = this.slideRight.bind(this);
     }
@@ -102,24 +83,41 @@ export default class ContextDialog extends React.Component {
         }
     }
 
-    svgTest(index) {
+    /**
+     * Slides the image gallery to the specified index
+     * @param index An integer that represents the screenshot to slide
+     * to in the image gallery.
+     */
+    svgSlideTo(index) {
         this.refs.slider.slickGoTo(index);
     }
 
+    /**
+     * Slides the image gallery one to the left if able
+     */
     slideLeft() {
         if (this.props.currentScreenshot != null)
             this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber-2);
     }
 
+    /**
+     * Slides the image gallery one to the right if able
+     */
     slideRight() {
         if (this.props.currentScreenshot != null)
             this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber);
     }
 
+    /**
+     * Instantiates and maps each time line circle to a screenshot in the results page
+     * for the current film and sets the x position of the circle based on the
+     * timestamp of the mapped screenshot.
+     * @returns {array of SVGCircle elements} The click-able time line circles
+     */
     getScreenShotTimes() {
-        const svgLines = this.props.currentFilm.results.map((result) =>
+        const svgCircles = this.props.currentFilm.results.map((result) =>
             <SVGCircle
-                slideTo={this.svgTest.bind(this)}
+                slideTo={this.svgSlideTo.bind(this)}
                 index={result.movieLineNumber-1}
                 key={`screenshot${result.movieLineNumber}`}
                 x={Math.ceil((result.movieLineNumber-1)/(this.props.currentFilm.totalNumberOfLines)*(TIME_LINE_LENGTH))+CIRCLE_RADIUS+STROKE_WIDTH}
@@ -130,11 +128,17 @@ export default class ContextDialog extends React.Component {
             />
         );
 
-        return svgLines;
+        return svgCircles;
 
     }
 
-    createImageTooltip() {
+    /**
+     * Instantiates all ReactTooltip elements and maps them to both
+     * the correct SVGCircle element and the corresponding screenshot.
+     * @returns {array of ReactTooltip elements} All the image tooltips
+     * for the time line circles.
+     */
+    createImageTooltips() {
         return this.props.currentFilm.results.map((result) =>
             <ReactTooltip
                 id={'SVGCircle' + (result.movieLineNumber - 1)}
@@ -147,14 +151,19 @@ export default class ContextDialog extends React.Component {
             );
     }
 
-    UpdateURLColor() {
-
-        // alert(this.props.currentFilm.movieOclcId);
-        // alert(this.props.currentScreenshot.movieLineNumber);
+    /**
+     * Makes a call to the color search API by updating the
+     * URL. Performs the color search that is done on the
+     * Context Page.
+     */
+    contextDialogueColorSearch() {
         let newPath = '/'+this.props.currentFilm.movieOclcId+'/'+this.props.currentScreenshot.movieLineNumber;
         hashHistory.push(newPath);
     }
 
+    /**
+     * Render the metadata using a material-ui template.
+     */
     render() {
 
         return (
@@ -244,13 +253,13 @@ export default class ContextDialog extends React.Component {
                     ): null }
 
                 </svg>
-                        {this.createImageTooltip()}
+                        {this.createImageTooltips()}
                     </div>
                 ): null }
 
                 </div>
                 <div className="colorSearchButton" >
-                        <RaisedButton onClick={this.UpdateURLColor} label="Color Search" style={style} />
+                        <RaisedButton onClick={this.contextDialogueColorSearch} label="Color Search" style={style} />
                 </div>
             </FullscreenDialog>
         );

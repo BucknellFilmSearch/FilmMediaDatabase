@@ -1,5 +1,12 @@
 import * as React from 'react';
 
+/**
+* The SVGCirle is a wrapper class that adds additional functionality to a
+* SVG circle element, such as: linking the circle element to a specific
+* screenshot in the current film and making their onClick functionality
+* cause the image gallery in ContextDialogue to scroll to that linked
+* screenshot.
+*/
 export default class SVGCircle extends React.Component {
 
     constructor() {
@@ -9,6 +16,9 @@ export default class SVGCircle extends React.Component {
         };
     }
 
+    /**
+     * Slides the image gallery to the linked screenshot
+     */
     click() {
         this.props.slideTo(this.props.index);
         this.setState(
@@ -18,6 +28,9 @@ export default class SVGCircle extends React.Component {
         );
     }
 
+    /**
+     * Render the metadata using a material-ui template.
+     */
     render() {
         return(
             <svg>
