@@ -1,3 +1,11 @@
+/**
+ * This file includes constants and helper functions that are used across multiple classes.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
+ */
+
 export const STOP_WORDS = ["a", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren\'t",
     "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can\'t", "cannot",
     "could", "couldn\'t", "did", "didn\'t", "do", "does", "doesn\'t", "doing", "don\'t", "down", "during", "each",

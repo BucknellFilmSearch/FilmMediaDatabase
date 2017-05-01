@@ -1,6 +1,10 @@
 /**
  * This file is used to instantiate the application. This includes creating the Redux store,
  * defining the routes for React-Router, and rendering components to the DOM.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
  */
 
 import injectTapEventPlugin from 'react-tap-event-plugin';

@@ -1,9 +1,21 @@
+/**
+ * This file is a dialog that contains the PhotoDropZone component.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
+ */
+
+
 import * as React from "react";
 import PhotoDropZone from './PhotoDropZone.jsx';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 
+/**
+ * Uses a Material-UI dialog to enclose the PhotoDropZone component.
+ */
 export default class PhotoInputModal extends React.Component {
 
     constructor() {

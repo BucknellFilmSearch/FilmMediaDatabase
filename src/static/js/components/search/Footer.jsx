@@ -1,10 +1,26 @@
+/**
+ * This file adds a footer to the homepage.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
+ */
+
 import * as React from "react";
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
+
+/**
+ * The footer contains four buttons that link to additional information
+ * and an option to provide feedback.
+ */
 export default class Footer extends React.Component {
 
+    /**
+     * Binds event handlers to the class and initializes state to keep track of open dialogs.
+     */
     constructor() {
         super();
         this.state = {selectedIndex: -1, openProject: false, openAbout: false};
@@ -41,9 +57,10 @@ export default class Footer extends React.Component {
     };
 
 
-
+    /**
+     * Renders the buttons and dialogs to the homepage using Material-UI components.
+     */
     render() {
-
         // actions for the project box modal
         const projectActions = [
             <FlatButton

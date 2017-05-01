@@ -1,6 +1,10 @@
 /**
  * This file is used to generate a gallery of screenshots before and after the
  * screenshot a user clicks on.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
  */
 
 

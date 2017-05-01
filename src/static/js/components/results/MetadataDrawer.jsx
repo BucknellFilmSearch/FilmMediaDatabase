@@ -1,6 +1,10 @@
 /**
  * This file is used to generate the metadata drawer that is docked to the right side of
  * the film results page. It is used in the AllFilms render function.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
  */
 
 

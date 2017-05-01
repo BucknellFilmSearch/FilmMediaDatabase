@@ -1,6 +1,10 @@
 /**
  * This file generates a grid of screenshots for an individual film. This is used in the AllFilms component, which
  * iterates through search results for multiple films.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
  */
 
 import * as React from "react";

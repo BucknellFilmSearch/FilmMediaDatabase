@@ -1,5 +1,9 @@
 /**
  * This file generates screenshots for each result returned by the database call.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
  */
 
 import * as React from "react";

@@ -1,5 +1,9 @@
 /**
  * Provides a circle used in the timeline in ContextDialog.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
  */
 
 import * as React from 'react';

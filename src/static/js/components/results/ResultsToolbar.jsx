@@ -1,6 +1,10 @@
 /**
  * This file generates the toolbar that is the top of the search results view. It is used in
  * the render function of AllFilms.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
  */
 
 import * as React from 'react';
