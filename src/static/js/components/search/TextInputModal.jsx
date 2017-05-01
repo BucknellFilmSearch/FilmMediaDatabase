@@ -1,3 +1,11 @@
+/**
+ * This file provides inputs for the user to do a text search.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
+ */
+
 import * as React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
@@ -40,6 +48,9 @@ const SearchIcon = (props) => {
 };
 
 
+/**
+ * Uses Material-UI input components and dropdowns to allow user input for a text based search.
+ */
 @connect(mapStateToProps, mapDispatchToProps)
 export default class TextInputModal extends React.Component {
 

@@ -1,6 +1,10 @@
 /**
  * This file generates screenshots and maps them with their corresponding lines of dialogue.
- * It's used by IndividualFilmResults file.
+ * It is used by the IndividualFilmResults file.
+ *
+ * Author: Team EndFrame
+ * Organization: Bucknell University
+ * Spring 2017
  */
 
 import * as React from "react";
