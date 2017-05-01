@@ -1,3 +1,9 @@
+/**
+ * This file is used to generate a gallery of screenshots before and after the
+ * screenshot a user clicks on.
+ */
+
+
 import * as React from 'react';
 import Slider from 'react-slick';
 import SvgIcon from 'material-ui/SvgIcon';
@@ -9,11 +15,11 @@ import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
 import RaisedButton from 'material-ui/RaisedButton';
+import {beautifyTimeStamp} from '../helpers';
 
 const TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
 const CIRCLE_RADIUS = 7;
-const MIN_DIST = 2*STROKE_WIDTH;
 
 
 const style = {
@@ -21,44 +27,42 @@ const style = {
 };
 
 
-const LeftArrow = (props) => (
-    <IconButton onClick={props.onClick}>
-        <SvgIcon>
-            <path d="M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"/>
-            <path d="M0-.5h24v24H0z" fill="none"/>
-        </SvgIcon>
-    </IconButton>
-);
-
-const RightArrow = (props) => (
-    <IconButton onClick={props.onClick}>
-        <SvgIcon>
-            <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/>
-            <path d="M0-.25h24v24H0z" fill="none"/>
-        </SvgIcon>
-    </IconButton>
-);
-
+/**
+ * Uses the Material-UI dialog to display screenshots before and after the screenshot
+ * a user selects. Uses a gallery component to display the screenshots and connects
+ * to the Redux store to know when a user clicks on a screenshot or browses through
+ * screenshots in the context.
+ */
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ContextDialog extends React.Component {
 
+    /**
+     * Initializes the state and binds event handlers to the class.
+     */
     constructor() {
         super();
 
-        this.handleKeyPress = this.handleKeyPress.bind(this);
-
+        // state is initialized to keeping the dialog closed
         this.state = {
             open: false
         };
 
+        this.handleKeyPress = this.handleKeyPress.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.UpdateURLColor = this.UpdateURLColor.bind(this);
+        this.contextDialogueColorSearch = this.contextDialogueColorSearch.bind(this);
         this.slideLeft = this.slideLeft.bind(this);
         this.slideRight = this.slideRight.bind(this);
     }
 
+    /**
+     * Closes the dialog if the user presses the Escape key.
+     *
+     * @param e React synthetic event
+     */
     handleKeyPress(e) {
-        if(e.keyCode === 27) {
+        const ESCAPE_KEY = 27;
+
+        if(e.keyCode === ESCAPE_KEY) {
             this.handleClose();
         }
     }
@@ -70,18 +74,6 @@ export default class ContextDialog extends React.Component {
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.handleKeyPress);
-    }
-
-    /* Removes the junk after the comma in the screenshot's timestamp */
-    static beautifyTimeStamp(movieStartTimeStamp) {
-        const splitString = movieStartTimeStamp.split(",");
-        return (splitString[0]);
-    }
-
-    static timeStampToSeconds(movieStartTimeStamp, totalMovieRuntime) {
-        const splitString = movieStartTimeStamp.split(":");
-        alert(Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*(TIME_LINE_LENGTH-CIRCLE_RADIUS-2))+CIRCLE_RADIUS+2);
-        return Math.ceil((parseInt(splitString[0]) * 3600 + parseInt(splitString[1])*60)/(totalMovieRuntime*60)*(TIME_LINE_LENGTH-CIRCLE_RADIUS-2))+CIRCLE_RADIUS+2;
     }
 
     handleOpen() {
@@ -102,24 +94,41 @@ export default class ContextDialog extends React.Component {
         }
     }
 
-    svgTest(index) {
+    /**
+     * Slides the image gallery to the specified index
+     * @param index An integer that represents the screenshot to slide
+     * to in the image gallery.
+     */
+    svgSlideTo(index) {
         this.refs.slider.slickGoTo(index);
     }
 
+    /**
+     * Slides the image gallery one to the left if able
+     */
     slideLeft() {
         if (this.props.currentScreenshot != null)
             this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber-2);
     }
 
+    /**
+     * Slides the image gallery one to the right if able
+     */
     slideRight() {
         if (this.props.currentScreenshot != null)
             this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber);
     }
 
+    /**
+     * Instantiates and maps each time line circle to a screenshot in the results page
+     * for the current film and sets the x position of the circle based on the
+     * timestamp of the mapped screenshot.
+     * @returns {array of SVGCircle elements} The click-able time line circles
+     */
     getScreenShotTimes() {
-        const svgLines = this.props.currentFilm.results.map((result) =>
+        return this.props.currentFilm.results.map((result) =>
             <SVGCircle
-                slideTo={this.svgTest.bind(this)}
+                slideTo={this.svgSlideTo.bind(this)}
                 index={result.movieLineNumber-1}
                 key={`screenshot${result.movieLineNumber}`}
                 x={Math.ceil((result.movieLineNumber-1)/(this.props.currentFilm.totalNumberOfLines)*(TIME_LINE_LENGTH))+CIRCLE_RADIUS+STROKE_WIDTH}
@@ -129,12 +138,14 @@ export default class ContextDialog extends React.Component {
                 strokeWidth={1}
             />
         );
-
-        return svgLines;
-
     }
 
-    createImageTooltip() {
+    /**
+     * Instantiates all ReactTooltip elements and maps them to both
+     * the correct SVGCircle element and the corresponding screenshot.
+     * @returns {array of ReactTooltip elements} All the image tooltips for the time line circles.
+     */
+    createImageTooltips() {
         return this.props.currentFilm.results.map((result) =>
             <ReactTooltip
                 id={'SVGCircle' + (result.movieLineNumber - 1)}
@@ -147,14 +158,19 @@ export default class ContextDialog extends React.Component {
             );
     }
 
-    UpdateURLColor() {
-
-        // alert(this.props.currentFilm.movieOclcId);
-        // alert(this.props.currentScreenshot.movieLineNumber);
+    /**
+     * Makes a call to the color search API by updating the
+     * URL. Performs the color search that is done on the
+     * Context Page.
+     */
+    contextDialogueColorSearch() {
         let newPath = '/'+this.props.currentFilm.movieOclcId+'/'+this.props.currentScreenshot.movieLineNumber;
         hashHistory.push(newPath);
     }
 
+    /**
+     * Render the context page.
+     */
     render() {
 
         return (
@@ -214,7 +230,7 @@ export default class ContextDialog extends React.Component {
                     {this.props.currentScreenshot != null ? (
                             <div>
                                 {this.props.currentScreenshot.movieLineText} <br />
-                                {ContextDialog.beautifyTimeStamp(this.props.currentScreenshot.movieStartTimeStamp)}<br/>
+                                {beautifyTimeStamp(this.props.currentScreenshot.movieStartTimeStamp)}<br/>
                             </div>
                         ): (
                             <div>
@@ -244,19 +260,24 @@ export default class ContextDialog extends React.Component {
                     ): null }
 
                 </svg>
-                        {this.createImageTooltip()}
+                        {this.createImageTooltips()}
                     </div>
                 ): null }
 
                 </div>
                 <div className="colorSearchButton" >
-                        <RaisedButton onClick={this.UpdateURLColor} label="Color Search" style={style} />
+                        <RaisedButton onClick={this.contextDialogueColorSearch} label="Color Search" style={style} />
                 </div>
             </FullscreenDialog>
         );
     }
 }
 
+
+/**
+ * Redux event that handles changing the current screenshot in the gallery.
+ * @param newMovieLineNumber The movie line number to change to
+ */
 const slideScreenshot = (newMovieLineNumber) => {
     return {
         type: 'SLIDE_SCREENSHOT',
@@ -264,6 +285,11 @@ const slideScreenshot = (newMovieLineNumber) => {
     };
 };
 
+
+/**
+ * Redux event that receiving context from an API call.
+ * @param context The context received from the API call
+ */
 const receiveContext = (context) => {
     return {
         type: 'RECEIVE_CONTEXT',
@@ -272,6 +298,13 @@ const receiveContext = (context) => {
     };
 };
 
+
+/**
+ * Handler function that is called by the image gallery when the current movie line number is changed.
+ * Updates the Redux store with the new line number and makes an API call for the new line number
+ * if it does not already exist in the database.
+ * @param newMovieLineNumberIndex The new movie line number
+ */
 const slideAndCheckForContext = (newMovieLineNumberIndex) => {
     return (dispatch, getState) => {
         let state = getState();
