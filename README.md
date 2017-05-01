@@ -87,7 +87,7 @@ Static/js contains all of the javascript files relevant to the website. Static/j
 * /graphs contains the .jsx files relevant to data visualizations. This is currently not included in the website but is compatible with our design.  
 * /results contains the .jsx files for the results and context pages. AllFilms.jsx is the main file, which includes references to the other files in the folder.
 * /search contains the .jsx files for the home page. SearchContainer.jsx is the main file, which includes references to the other files.
-
+* In the root folder, `/docs` contains the documentation for the project as done by Team Endframe. The docs folder contains the user document, design document, poster for our final presentation, and a pdf of our slides for our final presentation. 
 
 
 # Historical README Information:
