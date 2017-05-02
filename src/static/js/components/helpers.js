@@ -51,7 +51,29 @@ export function beautifyTimeStamp(movieStartTimeStamp) {
     const splitString = movieStartTimeStamp.split(",");
     return (splitString[0]);
 }
-
+/**
+ * Takes a search string and removes any stop words as parameters and returns the cleaned string
+ *
+ * @param input A string to be stripped of stop words
+ * @returns {string} without stop words
+ */
+export function cleanStopWords(input) {
+    let splitString = input.toLowerCase().split(' ');
+    var buildString = '';
+    for (var i = 0; i < splitString.length; i++) {
+        if (!(STOP_WORDS.includes(splitString[i]))) {
+            // If it is the first non stop word
+            if (buildString == '') {
+                buildString = splitString[i];
+            }
+            // If it is a middle non stop word or last non stop word
+            else {
+                buildString = buildString + ' ' + splitString[i];
+            }
+        }
+    }
+    return buildString;
+}
 
 export function relevanceSort(a, b) {
     if (a.results.length > b.results.length) {

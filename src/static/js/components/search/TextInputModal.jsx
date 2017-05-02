@@ -14,12 +14,15 @@ import TextField from 'material-ui/TextField';
 import {connect} from 'react-redux';
 import {hashHistory} from 'react-router';
 import Dialog from 'material-ui/Dialog';
-import {STOP_WORDS, GENRES} from '../helpers';
+import {cleanStopWords, GENRES} from '../helpers';
 
 const modalStyle = {
     textAlign: 'center'
 };
 
+/**
+ * Styling to line up different input options in the text input modal
+ */
 const inputStyle = {
     top: '20px',
     float: 'left',
@@ -38,6 +41,10 @@ const buttonStyle = {
     float: 'left'
 }
 
+
+/**
+ * Constant for rendering a Search Icon for the 'Search' flat button
+ */
 const SearchIcon = (props) => {
     return (
         <svg {...props} fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -70,31 +77,16 @@ export default class TextInputModal extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    static cleanStopWords(input) {
-        let splitString = input.toLowerCase().split(' ');
-        var buildString = '';
-        for (var i = 0; i < splitString.length; i++) {
-            if (!(STOP_WORDS.includes(splitString[i]))) {
-                // If it is the first non stop word
-                if (buildString == '') {
-                    buildString = splitString[i];
-                }
-                // If it is a middle non stop word or last non stop word
-                else {
-                    buildString = buildString + ' ' + splitString[i];
-                }
-            }
-        }
-        return buildString;
-    }
-
-
+    /**
+     * takes the search phrase and returns results in the results page. If they searched for only stop word(s),
+     * a warning is displayed and no search is made.
+     */
     updateSearch() {
         // stop default form submission behavior
         event.preventDefault();
 
         let keywordOrPhrase = this.refs["updateSearchBox"].getValue();
-        keywordOrPhrase = TextInputModal.cleanStopWords(keywordOrPhrase);
+        keywordOrPhrase = cleanStopWords(keywordOrPhrase);
 
         this.setState({searchText: ''});
 
@@ -190,6 +182,9 @@ export default class TextInputModal extends React.Component {
     }
 }
 
+/**
+ * Handles Redux for searches
+ */
 
 const selectSortType = (sortType) => {
     return {
