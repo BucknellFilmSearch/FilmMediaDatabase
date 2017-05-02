@@ -1,1 +1,10 @@
 /src/CPCPModel/sqlite3.exe
+env/
+*.pyc
+.idea/
+src/postgresSettings.py
+node_modules
+bundle.js
+npm-debug.log
+*/Icon\r
+*/.DS_Store
