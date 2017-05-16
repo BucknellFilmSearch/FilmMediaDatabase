@@ -49,6 +49,8 @@ These steps only need to be followed once to set up the development environment.
 * Clone the repository from GitLab: `git clone git@gitlab.bucknell.edu:jde012/cell-phone-cinema-project.git`
 * Enter the source folder and install the python requirements: `cd src && pip install -r requirements.txt`
 * Enter the JavaScript folder and install the node requirements: `cd static/js && npm install`
+* Copy the postgresSettings.py file in the 'cell-phone-cinema-project\src\Dev Files' directory up one level to the 'src' directory
+* Edit this new postgresSettings.py file, changing the username field to match your database username
 
 
 ### Run Instructions
