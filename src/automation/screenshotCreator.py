@@ -9,13 +9,15 @@ import cv2
 from sqlalchemy import create_engine, distinct, func, update, text
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
-from MediaText import MediaText
-from postgresSettings import DATABASE
+from src.MediaText import MediaText
+from src.postgresSettings import DATABASE
 from os import makedirs, path
 from sys import exit
 
+videoPath = "/media/sarah/Seagate Exp/0_The Cell Phone Cinema Project/src/CPCPModel/static/videoFiles/"
+screenshotPath = "/media/sarah/Seagate Exp/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/"
 
-def createAllScreenshots(oclcId):
+def createAllScreenshots(oclcId, videoPath, screenshotPath):
     """
     Create all screenshots for specified media item.
     :param oclcId: oclcId for media item to create screenshots for.
@@ -41,8 +43,7 @@ def createAllScreenshots(oclcId):
 
     vob_file = 0
     # create video capture object
-    video_capture = cv2.VideoCapture('F:/0_The Cell Phone Cinema Project/src/CPCPModel/static/videoFiles/' + \
-                                     str(oclcId) + '/VTS_' + str(vob_file) + '.mp4')
+    video_capture = cv2.VideoCapture(videoPath + str(oclcId) + '/VTS_0.mp4')
 
     # get the frames per second value from the video
     frames_per_second = video_capture.get(cv2.CAP_PROP_FPS)
@@ -64,10 +65,10 @@ def createAllScreenshots(oclcId):
             break
         # if we've found the frame we're looking for, take snapshot, load information about next line
         else:
-            if not path.exists('F:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId)):
-                makedirs('F:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId))
+            if not path.exists(screenshotPath + str(oclcId)):
+                makedirs(screenshotPath + str(oclcId))
             # write screenshot to external hard drive
-            cv2.imwrite('F:/0_The Cell Phone Cinema Project/src/CPCPModel/static/imageFiles/screenshots/' + str(oclcId) + '/' + str(line_number_to_snapshot) + '.png', frame)
+            cv2.imwrite(screenshotPath + str(oclcId) + '/' + str(line_number_to_snapshot) + '.png', frame)
 
             # ger info about consecutive line to snapshot
             line_to_snapshot = all_query_lines[current_line]

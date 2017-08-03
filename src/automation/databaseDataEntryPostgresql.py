@@ -10,10 +10,11 @@ from sys import exit
 from sqlalchemy import create_engine, func
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
-from MediaMetadata import MediaMetadata
-from MediaText import MediaText
-from postgresSettings import DATABASE
-from screenshotCreator import createAllScreenshots
+
+from src.MediaMetadata import MediaMetadata
+from src.MediaText import MediaText
+from src.automation.screenshotCreator import createAllScreenshots
+from src.postgresSettings import DATABASE
 
 # create connection to database
 engine = create_engine(URL(**DATABASE))
@@ -186,14 +187,15 @@ def enter_tv_show():
         else:
             print("Invalid entry. Try again.")
 
-def fillMediaTextTable(oclc_id):
+textPath = "F:/0_The Cell Phone Cinema Project/src/CPCPModel/static/textFiles/"
+def fillMediaTextTable(oclc_id, textPath):
     """
     Method to fill a movie/tv show into the text table from the text file.
     Text files should be named OCLC_ID_NUMBER.txt, and be in the file location specified in first line of method.
     :param oclc_id:
     """
 
-    with open("F:/0_The Cell Phone Cinema Project/src/CPCPModel/static/textFiles/" + str(oclc_id) + ".txt", 'r') as file:
+    with open(textPath + str(oclc_id) + ".txt", 'r') as file:
         currentLineNumber = "1"
         nextLineNumber = "1"
         startTimeStamp = ""
