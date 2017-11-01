@@ -47,7 +47,7 @@ export default class PhotoDropZone extends React.Component {
             <div>
                 <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} style="width:15px">
                     <div id="photoModal">
-                        <img src="/static/imageFiles/photoUploadIcon.jpg" />
+                        <img src="/static/imageFiles/photoUploadIcon.svg" />
                         <div>
                             <button type="button" onClick={this.onOpenClick}>
                             Browse

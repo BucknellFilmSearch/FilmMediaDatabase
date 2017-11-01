@@ -125,8 +125,11 @@ export default class TextInputModal extends React.Component {
     render() {
 
         return (
-                <div id="textIconImage">
-                    <img src="/static/imageFiles/textIcon.jpg" onTouchTap={this.handleOpen}></img>
+                <div id="textIconImage" className="hoverHighlight" onTouchTap={this.handleOpen} >
+                    <svg height="200" width="200" >
+                      <text x="0" y="100" fontSize="160px" >Aa</text>
+                      <text x="0" y="170" fontSize="30px" >Text Search</text>
+                    </svg>
                     <Dialog
                         style={modalStyle}
                         modal={false}

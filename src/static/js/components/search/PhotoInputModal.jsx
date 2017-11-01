@@ -45,8 +45,12 @@ export default class PhotoInputModal extends React.Component {
         ];
 
         return (
-                <div id="photoIconImage">
-                    <img src="/static/imageFiles/photoIcon.jpg" onTouchTap={this.handleOpen}></img>
+                <div id="photoIconImage" className="hoverHighlight" onTouchTap={this.handleOpen} >
+                    <img src="/static/imageFiles/colorIcon.svg" style={{ 'width':'200px' }} />
+                    <br />
+                    <svg height="60" width="200" >
+                      <text x="0" y="30" fontSize="30px" >Color Search</text>
+                    </svg>
 
                     <Dialog
                         actions={actions}
