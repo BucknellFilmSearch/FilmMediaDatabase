@@ -1,0 +1,3 @@
+[submodule "submodules/darknet"]
+	path = submodules/darknet
+	url = git@github.com:emm035/darknet.git
