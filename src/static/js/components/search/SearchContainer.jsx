@@ -33,7 +33,10 @@ export default class SearchContainer extends React.Component {
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div id="frontPage">
                     <div id="mainHeader">
-                        <span>Research films like never before.</span><br />
+                        <div style={{ 'marginTop':'30px', 'height': '150px' }} >
+                            <img src='/static/imageFiles/logo.svg' id="logo" fill={'blue'} style={{ 'height':'150px', 'position':'relative' }} />
+                        </div>
+                        Research films like never before. 
                     </div>
                     <div id="subText" className="filmSearch">
                         <span>Find out what was happening in a film when a specific phrase was said using the text search.</span><br />
@@ -49,7 +52,7 @@ export default class SearchContainer extends React.Component {
                         </div>
                         <Footer/>
                     </div>
-                    <img src="/static/imageFiles/logo.jpg" id="logo" />
+                    
                 </div>
             </MuiThemeProvider>
         );

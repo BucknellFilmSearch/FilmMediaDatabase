@@ -18,5 +18,4 @@ popd &> /dev/null
 popd &> /dev/null
 popd &> /dev/null
 echo "Session successfully started"
-jobs
 exit 0
