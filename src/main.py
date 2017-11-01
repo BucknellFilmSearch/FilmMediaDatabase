@@ -18,10 +18,14 @@ from feedbackEmailSender import sendEmail
 # The import below says it's unused, but it is used on the web server. Don't remove it.
 import cgi
 
+import sys
+
 from config import DEBUG_MODE
 import itertools
 from operator import itemgetter
 import json
+
+print >> sys.stderr, 'spam'
 
 # copied from websiteGenerator.py
 def removeBadCharacters(text):
@@ -109,51 +113,51 @@ class App():
         # TODO: change value below to the year of the first movie in history when expanding to movies released pre-2000
         self.defaultEarliestReleaseYear = 1996
 
-    def displaySearchPage(self):
-        """
-        Displays the search (home) page. Uses an html form (see inputPageTemplate). Uses GET protocol.
-        :return: a string, the HTML code for the landing page, which includes a search box and metadata parameters.
-        """
-        return generateSearchPage(self.defaultEarliestReleaseYear)
+    # def displaySearchPage(self):
+    #     """
+    #     Displays the search (home) page. Uses an html form (see inputPageTemplate). Uses GET protocol.
+    #     :return: a string, the HTML code for the landing page, which includes a search box and metadata parameters.
+    #     """
+    #     return generateSearchPage(self.defaultEarliestReleaseYear)
 
-    def searchFromLandingPage(self):
-        """
-        Takes the user's search term & metadata parameters from the form on the landing page, then redirects to
-        the proper URL that will generate the results page.
-        """
-        # get search phrase and metadata parameters from the form on the search page.
-        keywordOrPhrase = request.forms.get('keywordOrPhrase')
-        # check for whitespace at end of keyword/phrase
-        if keywordOrPhrase[len(keywordOrPhrase)-1] == " ":
-            return "<p>Please enter your search term without a space at the end.<a href = '/moviesearch'> Back.</a></p>"
-        # get rid of question marks and exclamations, they cause an error
-        keywordOrPhrase = keywordOrPhrase.replace("?","")
-        keywordOrPhrase = keywordOrPhrase.replace("!","")
-        # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
-        keywordOrPhrase = keywordOrPhrase.replace(" ","&")
-        # Slashes cause an error when redirecting to the search URL.  For now, we'll interpret them the same as spaces
-        keywordOrPhrase = keywordOrPhrase.replace("/","&")
-        genre = request.forms.get('genre')
-        earliestReleaseYear = request.forms.get('earliestReleaseYear')
-        latestReleaseYear = request.forms.get('latestReleaseYear')
-        # if they didn't type anything before clicking search, say so, and give them a back button.
-        if keywordOrPhrase is None:
-            return "<p>Please specify a keyword or phrase before clicking 'search.'<a href = '/moviesearch'> Back.</a></p>"
-        if earliestReleaseYear == "":
-            earliestReleaseYear = self.defaultEarliestReleaseYear
-        if latestReleaseYear == "":
-            latestReleaseYear = datetime.now().year
-        # forward the user to the first page of results (the URL contains the parameters used to generate results)
-        redirectUrl = '/moviesearch/'+keywordOrPhrase+'/'+genre+'/'+str(earliestReleaseYear)+'/'+str(latestReleaseYear)+'/'+'1'
-        redirect(redirectUrl)
+    # def searchFromLandingPage(self):
+    #     """
+    #     Takes the user's search term & metadata parameters from the form on the landing page, then redirects to
+    #     the proper URL that will generate the results page.
+    #     """
+    #     # get search phrase and metadata parameters from the form on the search page.
+    #     keywordOrPhrase = request.forms.get('keywordOrPhrase')
+    #     # check for whitespace at end of keyword/phrase
+    #     if keywordOrPhrase[len(keywordOrPhrase)-1] == " ":
+    #         return "<p>Please enter your search term without a space at the end.<a href = '/moviesearch'> Back.</a></p>"
+    #     # get rid of question marks and exclamations, they cause an error
+    #     keywordOrPhrase = keywordOrPhrase.replace("?","")
+    #     keywordOrPhrase = keywordOrPhrase.replace("!","")
+    #     # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
+    #     keywordOrPhrase = keywordOrPhrase.replace(" ","&")
+    #     # Slashes cause an error when redirecting to the search URL.  For now, we'll interpret them the same as spaces
+    #     keywordOrPhrase = keywordOrPhrase.replace("/","&")
+    #     genre = request.forms.get('genre')
+    #     earliestReleaseYear = request.forms.get('earliestReleaseYear')
+    #     latestReleaseYear = request.forms.get('latestReleaseYear')
+    #     # if they didn't type anything before clicking search, say so, and give them a back button.
+    #     if keywordOrPhrase is None:
+    #         return "<p>Please specify a keyword or phrase before clicking 'search.'<a href = '/moviesearch'> Back.</a></p>"
+    #     if earliestReleaseYear == "":
+    #         earliestReleaseYear = self.defaultEarliestReleaseYear
+    #     if latestReleaseYear == "":
+    #         latestReleaseYear = datetime.now().year
+    #     # forward the user to the first page of results (the URL contains the parameters used to generate results)
+    #     redirectUrl = '/moviesearch/'+keywordOrPhrase+'/'+genre+'/'+str(earliestReleaseYear)+'/'+str(latestReleaseYear)+'/'+'1'
+    #     redirect(redirectUrl)
 
-    def displayGraph(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
-        data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
-        twoDimensArrayOfVals = []
-        for item in data:
-            # create a two dimension array of values to insert into template to be graphed
-            twoDimensArrayOfVals.append([item[0], round(item[1])])
-        return {"results": twoDimensArrayOfVals}
+    # def displayGraph(self,keywordOrPhrase,genre,earliestReleaseYear,latestReleaseYear):
+    #     data = percentageOfOccurrenceByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latestReleaseYear)
+    #     twoDimensArrayOfVals = []
+    #     for item in data:
+    #         # create a two dimension array of values to insert into template to be graphed
+    #         twoDimensArrayOfVals.append([item[0], round(item[1])])
+    #     return {"results": twoDimensArrayOfVals}
 
     def getSearchResults(self,keywordOrPhrase):
         """
@@ -162,78 +166,78 @@ class App():
         :param keywordOrPhrase: the keyword or phrase to search.
         :return: JSON containing all search results.
         """
-
+        print >> sys.stderr, 'spam2'
         results = searchResults(keywordOrPhrase)
 
         return {"results": remapResults(results)}
 
 
-    def getContext(self,oclcId,lineNumber):
-        """
-        Get the user's previous search term/params so we can create a back button. Return JSON
-        containing the context requested by the client.
-        :param oclcId: oclc number of movie to get context from
-        :param lineNumber: line number clicked by user
-        :return: html code for the page of context
-        """
-        contextLines = getContextLines(oclcId, lineNumber, 40)
+    # def getContext(self,oclcId,lineNumber):
+    #     """
+    #     Get the user's previous search term/params so we can create a back button. Return JSON
+    #     containing the context requested by the client.
+    #     :param oclcId: oclc number of movie to get context from
+    #     :param lineNumber: line number clicked by user
+    #     :return: html code for the page of context
+    #     """
+    #     contextLines = getContextLines(oclcId, lineNumber, 40)
 
-        results = remapResults(contextLines)[0]
-        results.pop('runtimeInMinutes')
-        results.pop('totalNumberOfLines')
-        results.pop('genre1')
-        results.pop('genre2')
-        results.pop('genre3')
+    #     results = remapResults(contextLines)[0]
+    #     results.pop('runtimeInMinutes')
+    #     results.pop('totalNumberOfLines')
+    #     results.pop('genre1')
+    #     results.pop('genre2')
+    #     results.pop('genre3')
 
-        return {"context": results}
+    #     return {"context": results}
 
-    def displayComparisonPage(self):
-        """
-        Display the comparison search page to user.
-        :return: html code for the search page that has two search boxes, to compare two words/phrases
-        """
-        return generateComparisonPage(self.defaultEarliestReleaseYear)
+    # def displayComparisonPage(self):
+    #     """
+    #     Display the comparison search page to user.
+    #     :return: html code for the search page that has two search boxes, to compare two words/phrases
+    #     """
+    #     return generateComparisonPage(self.defaultEarliestReleaseYear)
 
-    def graphComparison(self):
-        """
-        Get the dual keywords entered on the comparison page.
-        :return: graph of the two words/phrases that the user entered
-        """
-        # get graph/search parameters from search boxes
-        keywordOrPhrase1 = request.forms.get('keywordOrPhrase1')
-        keywordOrPhrase2 = request.forms.get('keywordOrPhrase2')
-        # check for whitespace at end of keywords
-        if keywordOrPhrase1[len(keywordOrPhrase1)-1] == " " or keywordOrPhrase2[len(keywordOrPhrase2)-1] == " ":
-            return "<p>Please enter your search terms without a space at the end.<a href = '/moviesearch/compare'> Back.</a></p>"
-        # get rid of question marks and exclamation marks, they cause an error
-        keywordOrPhrase1 = keywordOrPhrase1.replace("?","")
-        keywordOrPhrase2 = keywordOrPhrase2.replace("?","")
-        keywordOrPhrase1 = keywordOrPhrase1.replace("!","")
-        keywordOrPhrase2 = keywordOrPhrase2.replace("!","")
-        # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
-        keywordOrPhrase1 = keywordOrPhrase1.replace(" ","&")
-        keywordOrPhrase2 = keywordOrPhrase2.replace(" ","&")
-        if len(keywordOrPhrase1) == 0 or len(keywordOrPhrase2) == 0:
-            return "<p>Please specify two keywords or phrases before clicking 'search.'<a href = '/moviesearch/compare'> Back.</a></p>"
-        genre = request.forms.get('genre')
-        earliestReleaseYear = request.forms.get('earliestReleaseYear')
-        latestReleaseYear = request.forms.get('latestReleaseYear')
-        if earliestReleaseYear == "":
-            earliestReleaseYear = self.defaultEarliestReleaseYear
-        if latestReleaseYear == "":
-            latestReleaseYear = datetime.now().year
+    # def graphComparison(self):
+    #     """
+    #     Get the dual keywords entered on the comparison page.
+    #     :return: graph of the two words/phrases that the user entered
+    #     """
+    #     # get graph/search parameters from search boxes
+    #     keywordOrPhrase1 = request.forms.get('keywordOrPhrase1')
+    #     keywordOrPhrase2 = request.forms.get('keywordOrPhrase2')
+    #     # check for whitespace at end of keywords
+    #     if keywordOrPhrase1[len(keywordOrPhrase1)-1] == " " or keywordOrPhrase2[len(keywordOrPhrase2)-1] == " ":
+    #         return "<p>Please enter your search terms without a space at the end.<a href = '/moviesearch/compare'> Back.</a></p>"
+    #     # get rid of question marks and exclamation marks, they cause an error
+    #     keywordOrPhrase1 = keywordOrPhrase1.replace("?","")
+    #     keywordOrPhrase2 = keywordOrPhrase2.replace("?","")
+    #     keywordOrPhrase1 = keywordOrPhrase1.replace("!","")
+    #     keywordOrPhrase2 = keywordOrPhrase2.replace("!","")
+    #     # convert spaces to & signs: this ensures that matches are returned for all words/variations of each word
+    #     keywordOrPhrase1 = keywordOrPhrase1.replace(" ","&")
+    #     keywordOrPhrase2 = keywordOrPhrase2.replace(" ","&")
+    #     if len(keywordOrPhrase1) == 0 or len(keywordOrPhrase2) == 0:
+    #         return "<p>Please specify two keywords or phrases before clicking 'search.'<a href = '/moviesearch/compare'> Back.</a></p>"
+    #     genre = request.forms.get('genre')
+    #     earliestReleaseYear = request.forms.get('earliestReleaseYear')
+    #     latestReleaseYear = request.forms.get('latestReleaseYear')
+    #     if earliestReleaseYear == "":
+    #         earliestReleaseYear = self.defaultEarliestReleaseYear
+    #     if latestReleaseYear == "":
+    #         latestReleaseYear = datetime.now().year
 
-        # convert underscores to spaces
-        # (underscores are sometimes used in the URL in place of spaces, need to convert back)
-        for i in range(len(keywordOrPhrase1)):
-            if keywordOrPhrase1[i] == "_":
-                keywordOrPhrase1 = keywordOrPhrase1[0:i] + " " + keywordOrPhrase1[i+1:]
-        for i in range(len(keywordOrPhrase2)):
-            if keywordOrPhrase2[i] == "_":
-                keywordOrPhrase2 = keywordOrPhrase2[0:i] + " " + keywordOrPhrase2[i+1:]
+    #     # convert underscores to spaces
+    #     # (underscores are sometimes used in the URL in place of spaces, need to convert back)
+    #     for i in range(len(keywordOrPhrase1)):
+    #         if keywordOrPhrase1[i] == "_":
+    #             keywordOrPhrase1 = keywordOrPhrase1[0:i] + " " + keywordOrPhrase1[i+1:]
+    #     for i in range(len(keywordOrPhrase2)):
+    #         if keywordOrPhrase2[i] == "_":
+    #             keywordOrPhrase2 = keywordOrPhrase2[0:i] + " " + keywordOrPhrase2[i+1:]
 
-        return generateGraphOfTwoKeywords(keywordOrPhrase1, keywordOrPhrase2, genre, earliestReleaseYear,
-                                          latestReleaseYear)
+    #     return generateGraphOfTwoKeywords(keywordOrPhrase1, keywordOrPhrase2, genre, earliestReleaseYear,
+    #                                       latestReleaseYear)
 
     def displayFeedbackPage(self):
         """
@@ -266,8 +270,8 @@ class App():
         else:
             return static_file(path, root='static')
 
-    def handleSitemap(self):
-        redirect('/sitemap.xml')
+    # def handleSitemap(self):
+    #     redirect('/sitemap.xml')
 
     def getResultsTemplate(self):
         with open("templates/searchResultsReactTemplate.html", 'r') as f:
@@ -276,20 +280,19 @@ class App():
 # initialize App
 appInstance = App()
 # route the proper URL's to the proper methods in the class
-get('/moviesearch/')(appInstance.displaySearchPage)
-post('/moviesearch/')(appInstance.searchFromLandingPage)
-route('/moviesearch/<keywordOrPhrase>')\
-    (appInstance.getSearchResults)
-route('/moviesearchgraph/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>')\
-    (appInstance.displayGraph)
-route('/moviesearch/context/<oclcId:int>/<lineNumber:int>')\
-    (appInstance.getContext)
-route()
-get('/moviesearch/compare')(appInstance.displayComparisonPage)
-post('/moviesearch/compare')(appInstance.graphComparison)
+# get('/moviesearch/')(appInstance.displaySearchPage)
+# post('/moviesearch/')(appInstance.searchFromLandingPage)
+route('/moviesearch/<keywordOrPhrase>')(appInstance.getSearchResults)
+# route('/moviesearchgraph/<keywordOrPhrase>/<genre>/<earliestReleaseYear:int>/<latestReleaseYear:int>')\
+#     (appInstance.displayGraph)
+# route('/moviesearch/context/<oclcId:int>/<lineNumber:int>')\
+#     (appInstance.getContext)
+# route()
+# get('/moviesearch/compare')(appInstance.displayComparisonPage)
+# post('/moviesearch/compare')(appInstance.graphComparison)
 get('/moviesearch/feedback')(appInstance.displayFeedbackPage)
 post('/moviesearch/feedback')(appInstance.sendFeedback)
-route('/moviesearch/sitemap.xml')(appInstance.handleSitemap)
+# route('/moviesearch/sitemap.xml')(appInstance.handleSitemap)
 get('/')(appInstance.getResultsTemplate)
 
 # comment out the line below for web server environment (not commented out for local development server)
