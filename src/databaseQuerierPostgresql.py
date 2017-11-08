@@ -64,7 +64,7 @@ def searchResults(keywordOrPhrase):
         filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
         group_by(MediaText.oclc_id)
 
-    bgWorker = Thread(target=updateKeywordCount, args=(query.all()))
+    bgWorker = Thread(target=updateKeywordCount, args=([query.all()]))
     bgWorker.start()
 
     print >> sys.stderr, 'updated'
