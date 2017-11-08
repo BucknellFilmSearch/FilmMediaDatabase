@@ -9,3 +9,4 @@ npm-debug.log
 logs/
 */Icon\r
 */.DS_Store
+dbConfig.json

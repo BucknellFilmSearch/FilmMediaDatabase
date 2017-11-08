@@ -13,7 +13,8 @@ __date__ = "$May 29, 2015 9:26:40 AM$"
 from sqlalchemy import create_engine, distinct, func, update, text, or_
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
-from postgresSettings import DATABASE
+#from postgresSettings import DATABASE
+import json
 from datetime import datetime
 from MediaText import MediaText
 from MediaMetadata import MediaMetadata
@@ -21,8 +22,11 @@ from config import DEBUG_MODE
 
 from threading import Thread
 
+with open("dbConfig.json", 'r') as json_file:
+    json_data = json.load(json_file)
+
 # create connection to database
-engine = create_engine(URL(**DATABASE))
+engine = create_engine(URL(**json_data["DATABASE"]))
 Session = sessionmaker(bind=engine)
 
 def updateKeywordCount(listOfOclcIdsAndCounts):
