@@ -10,3 +10,4 @@ logs/
 */Icon\r
 */.DS_Store
 dbConfig.json
+/images/*
