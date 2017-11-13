@@ -48,8 +48,11 @@ try:
             print('\tdownloading image number ' + str(line_number[0]))
             #download(http://www.filmtvsearch.net/static/imageFiles/screenshots/" + str(movie[0]) + "/" + str(line_number[0]) + ".png")
             url = "http://www.filmtvsearch.net/static/imageFiles/screenshots/" + str(movie[0]) + "/" + str(line_number[0]) + ".png"
-            #print("http://www.filmtvsearch.net/static/imageFiles/screenshots/" + str(movie[0]) + "/" + str(line_number[0]) + ".png")
-            urllib.urlretrieve(url, './images/' + str(movie[0]) + "/" + str(line_number[1]) + ".png")
+            path = './images/' + str(movie[0]) + "/" + str(line_number[1]) + ".png"
+            if(os.path.isfile(path)):
+                print("\t" + str(line_number[1]) + ".png already exists")
+            else:
+                urllib.urlretrieve(url, path)
 except psycopg2.Error as e:
     print('Fetching images failed')
     print e
