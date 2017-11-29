@@ -216,7 +216,7 @@ def fillMediaTextTable(oclc_id, textPath):
                     # add the data from the previous line to the database
                     new_line = MediaText(db_line_id=max_db_line_id, oclc_id=oclc_id, line_number=currentLineNumber,
                                          start_time_stamp=startTimeStamp, end_time_stamp=endTimeStamp,
-                                         line_text=lineText.encode('utf-8'))
+                                         line_text=lineText.encode('utf-8').decode('string_escape'))
                     session.add(new_line)
                     session.commit()
                 # start looking for the next line, clear the line text
@@ -234,14 +234,14 @@ def fillMediaTextTable(oclc_id, textPath):
                 endTimeStamp = timeStampLine[17:29]
             # else, we know that what we've found must be the line text...
             else:
-                print(line.encode('utf-8'))
+                print(line.encode('utf-8').decode('string_escape'))
                 # add the line to the line text
                 lineText += line
         # enter very last line
         max_db_line_id += 1
         new_line = MediaText(db_line_id=max_db_line_id, oclc_id=oclc_id, line_number=currentLineNumber,
                                          start_time_stamp=startTimeStamp, end_time_stamp=endTimeStamp,
-                                         line_text=lineText.encode('utf-8'))
+                                         line_text=lineText.encode('utf-8').decode('string_escape'))
         session.add(new_line)
         session.commit()
 
