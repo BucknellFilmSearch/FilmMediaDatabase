@@ -40,7 +40,7 @@ def removeBadCharacters(text):
                 if len(text) > i+2 and (text[i+2] == "1" or text[i+2] == "0" or text[i+2] == "6"):
                     if len(text) > i+3 and (text[i+3] == "2"or text[i+3] == "2" or text[i+3] == "6"):
                         text = text[0:i] + " " + text[i+4:]
-    return str(text)
+    return u'{}'.format(text).encode('utf-8')
 
 # maps fields within tuple so they are named
 def remapResultsHelper(lineOfDialogue):

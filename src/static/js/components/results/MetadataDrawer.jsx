@@ -15,6 +15,7 @@ import Paper from 'material-ui/Paper'
 import LazyLoad from 'react-lazyload';
 import {createSelector} from 'reselect';
 import {beautifyTimeStamp, timeStampToMinutes} from '../helpers';
+import renderHTML from 'react-render-html';
 
 
 
@@ -67,9 +68,10 @@ export default class MetadataDrawer extends React.Component {
                                     <img className="thumbnail" src={imgSrc} width="140" height="197" />
                                 </LazyLoad>
                             <div className="metadataDrawerDialogueContainer">
+
                                 {movieDetails.runtimeInMinutes} minutes <br /> <br />
                                 Line {this.props.screenshotDetails.movieLineNumber}: <br />
-                                "{this.props.screenshotDetails.movieLineText}" <br />
+                                "{renderHTML(this.props.screenshotDetails.movieLineText)}" <br />
                             </div>
                             <Paper>
                                 <div className="metadataDrawerTimelineContainer">

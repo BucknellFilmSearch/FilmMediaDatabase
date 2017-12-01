@@ -14,7 +14,7 @@ with open("dbConfig.json", 'r') as json_file:
     json_data = json.load(json_file)
 
 # this script initializes the remote postgres database using the specifications of MediaText.py and MediaMetadata.py
-# connects to the database using settings specified in postgresSettings.py
+# connects to the database using settings specified in dbConfig.json
 engine = create_engine(URL(**json_data))
 base = BASE
 

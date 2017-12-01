@@ -5,6 +5,7 @@ set -e
 
 #put me in the right dir
 pushd $(dirname $0) >> /dev/null
+pushd .. >> /dev/null
 
 which pip2
 if [[ $? == 1 ]]; then
@@ -26,6 +27,7 @@ pushd static/js >> /dev/null
 npm install
 
 # success
+popd >> /dev/null
 popd >> /dev/null
 popd >> /dev/null
 popd >> /dev/null

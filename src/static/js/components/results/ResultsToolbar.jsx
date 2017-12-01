@@ -153,9 +153,9 @@ export default class ResultsToolbar extends React.Component {
                     <FlatButton
                         label="Update Search"
                         labelPosition="after"
-                        primary={true}
                         icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
                         onClick={() => this.updateSearch()}
+                        secondary={true}
                     />
                 </ToolbarGroup>
                 <ToolbarGroup lastChild={true}>

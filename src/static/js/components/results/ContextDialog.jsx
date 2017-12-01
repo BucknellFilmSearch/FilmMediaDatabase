@@ -7,7 +7,7 @@
  * Spring 2017
  */
 
-
+import renderHTML from 'react-render-html';
 import * as React from 'react';
 import Slider from 'react-slick';
 import SvgIcon from 'material-ui/SvgIcon';
@@ -233,7 +233,7 @@ export default class ContextDialog extends React.Component {
 
                     {this.props.currentScreenshot != null ? (
                             <div>
-                                {this.props.currentScreenshot.movieLineText} <br />
+                                {renderHTML(this.props.currentScreenshot.movieLineText)} <br />
                                 {beautifyTimeStamp(this.props.currentScreenshot.movieStartTimeStamp)}<br/>
                             </div>
                         ): (

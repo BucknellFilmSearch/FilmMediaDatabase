@@ -61,7 +61,7 @@ def searchResults(keywordOrPhrase):
 
     session = Session()
     query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         group_by(MediaText.oclc_id)
 
     bgWorker = Thread(target=updateKeywordCount, args=([query.all()]))
@@ -77,7 +77,7 @@ def searchResults(keywordOrPhrase):
                           MediaMetadata.genre1, MediaMetadata.genre2, MediaMetadata.genre3).\
         join(count, count.c.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
         order_by(MediaMetadata.keyword_count.desc()).\
         order_by(MediaMetadata.movie_title).\
@@ -99,7 +99,7 @@ def searchResultsByGenre(keywordOrPhrase,genre):
     """
     session = Session()
     query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
 
@@ -108,7 +108,7 @@ def searchResultsByGenre(keywordOrPhrase,genre):
                           MediaMetadata.original_release_year, MediaMetadata.dvd_release_year).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaMetadata.genre1 == genre or MediaMetadata.genre2 == genre or MediaMetadata.genre3 == genre).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
         order_by(MediaMetadata.keyword_count.desc()).\
         order_by(MediaMetadata.movie_title).\
@@ -140,7 +140,7 @@ def searchResultsByGenreAndReleaseYear(keywordOrPhrase,genre,earliestReleaseYear
         filter(MediaMetadata.genre1 == genre or MediaMetadata.genre2 == genre or MediaMetadata.genre3 == genre).\
         filter(MediaMetadata.original_release_year >= earliestReleaseYear).\
         filter(MediaMetadata.original_release_year <= latestReleaseYear).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
         order_by(MediaMetadata.keyword_count.desc()).\
         order_by(MediaMetadata.movie_title).\
@@ -161,7 +161,7 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
     """
     session = Session()
     query = session.query(MediaText.oclc_id, func.count(distinct(MediaText.line_number))).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         group_by(MediaText.oclc_id)
     updateKeywordCount(query.all())
 
@@ -172,7 +172,7 @@ def searchResultsByReleaseYear(keywordOrPhrase,earliestReleaseYear,latestRelease
                           MediaMetadata.genre1, MediaMetadata.genre2, MediaMetadata.genre3).\
         join(count, count.c.oclc_id == MediaMetadata.oclc_id).\
         filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
-        filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
+        filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         filter(MediaMetadata.movie_or_tv_show == "Movie").\
         order_by(MediaMetadata.keyword_count.desc()).\
         order_by(MediaMetadata.movie_title).\
@@ -261,14 +261,14 @@ def occurrencesByReleaseYear(keywordOrPhrase, genre, earliestReleaseYear, latest
             filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
             filter(MediaMetadata.original_release_year.between(earliestReleaseYear, latestReleaseYear)).\
             filter(MediaMetadata.genre1 == genre or MediaMetadata.genre2 == genre or MediaMetadata.genre3 == genre).\
-            filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
+            filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
             filter(MediaMetadata.movie_or_tv_show == "Movie").\
             group_by(MediaMetadata.original_release_year)
     else:
         query = session.query(MediaMetadata.original_release_year, func.count(distinct(MediaText.oclc_id))).\
             filter(MediaText.oclc_id == MediaMetadata.oclc_id).\
             filter(MediaMetadata.original_release_year.between(earliestReleaseYear, latestReleaseYear)).\
-            filter(or_(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')"), text("media_text.search_vector @@ to_tsquery('english','012"+keywordOrPhrase+"')"))).\
+            filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
             filter(MediaMetadata.movie_or_tv_show == "Movie").\
             group_by(MediaMetadata.original_release_year)
     session.close()
