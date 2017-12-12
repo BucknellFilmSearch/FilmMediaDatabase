@@ -81,7 +81,7 @@ export default class TextInputModal extends React.Component {
      * takes the search phrase and returns results in the results page. If they searched for only stop word(s),
      * a warning is displayed and no search is made.
      */
-    updateSearch() {
+    updateSearch(event) {
         // stop default form submission behavior
         event.preventDefault();
 
@@ -114,7 +114,7 @@ export default class TextInputModal extends React.Component {
         // stop default form submission behavior
         event.preventDefault();
 
-        this.updateSearch();
+        this.updateSearch(event);
     }
 
     handleChange(event, newValue) {
@@ -175,7 +175,7 @@ export default class TextInputModal extends React.Component {
                             labelPosition="before"
                             primary={true}
                             icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
-                            onClick={() => this.updateSearch()}
+                            onClick={(event) => this.updateSearch(event)}
                             style={buttonStyle}
                         />
 

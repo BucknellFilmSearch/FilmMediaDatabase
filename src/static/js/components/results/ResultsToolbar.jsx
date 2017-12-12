@@ -77,7 +77,7 @@ export default class ResultsToolbar extends React.Component {
         return buildString;
     }
 
-    updateSearch() {
+    updateSearch(event) {
         // stop default form submission behavior
         event.preventDefault();
 
@@ -110,7 +110,7 @@ export default class ResultsToolbar extends React.Component {
         // stop default form submission behavior
         event.preventDefault();
 
-        this.updateSearch();
+        this.updateSearch(event);
     }
 
     handleChange(event, newValue) {
@@ -154,7 +154,7 @@ export default class ResultsToolbar extends React.Component {
                         label="Update Search"
                         labelPosition="after"
                         icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
-                        onClick={() => this.updateSearch()}
+                        onClick={(event) => this.updateSearch(event)}
                         secondary={true}
                     />
                 </ToolbarGroup>
