@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
+from __future__ import print_function
+
 # enable debugging
 import cgitb
 cgitb.enable()
@@ -35,18 +37,14 @@ def updateKeywordCount(listOfOclcIdsAndCounts):
     Update the keyword_count column of the media_metadata table, so that we can use it to sort results by density.
     :param listOfOclcIdsAndCounts: A list of lists. Each list has an oclc id, and then the count for that media item.
     """
+    print('Updating density counts for {} items'.format(len(listOfOclcIdsAndCounts)), file=sys.stderr)
     if len(listOfOclcIdsAndCounts) > 0:
         session = Session()
+        # Increment for each oclc id that was found in the search
         for id in listOfOclcIdsAndCounts:
             oclcId = id[0]
-            count = id[1]
-            updateStatement = update(MediaMetadata.__table__).\
-                where(MediaMetadata.oclc_id == oclcId).\
-                values(keyword_count = count)
-            session.execute(updateStatement)
-            session.commit()
-            currentId = oclcId
-            currentCount = 1
+            session.query(MediaMetadata).filter_by(oclc_id=oclcId).update({'keyword_count': MediaMetadata.keyword_count + 1})
+        session.commit()
         session.close()
 
 def search():
@@ -64,12 +62,12 @@ def searchResults(keywordOrPhrase):
         filter(text("media_text.search_vector @@ to_tsquery('english','"+keywordOrPhrase+"')")).\
         group_by(MediaText.oclc_id)
 
+    # Runs 'updateKeywordCount(query.all())' in a background thread
+    # to prevent hanging while it waits (doesn't add much)
     bgWorker = Thread(target=updateKeywordCount, args=([query.all()]))
     bgWorker.start()
 
-    print >> sys.stderr, 'updated'
     count = session.query(MediaText.oclc_id, func.max(MediaText.line_number).label('totalNumberOfLines')).group_by(MediaText.oclc_id).subquery()
-    print >> sys.stderr, 'big query'
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
                           MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
                           MediaMetadata.original_release_year, MediaMetadata.dvd_release_year,
@@ -82,9 +80,7 @@ def searchResults(keywordOrPhrase):
         order_by(MediaMetadata.keyword_count.desc()).\
         order_by(MediaMetadata.movie_title).\
         order_by(MediaText.line_number)
-    print >> sys.stderr, 'about to close'
     session.close()
-    print >> sys.stderr, 'spam4'
     return query.all()
 
 # rewritten for postgresql and sqlalchemy
@@ -187,12 +183,10 @@ def totalMovies():
     """
     :returns: the total number of movies in the database, as an integer.
     """
-    print "fuq"
     session = Session()
     query = session.query(func.count(MediaMetadata.oclc_id)).\
         filter(MediaMetadata.movie_or_tv_show == "Movie")
     session.close()
-    print "fuq2"
     return query.all()[0][0]
 
 # rewritten for postgresql and sqlalchemy

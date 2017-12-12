@@ -22,7 +22,7 @@ pushd .. &> /dev/null
 mkdir -p logs
 logdir=$(pwd)/logs
 
-colorize 'Starting Session' 2
+colorize 'Starting Server (use ctrl-C to exit)' 2
 
 pushd src &> /dev/null
 python main.py 2>&1 | tee ${logdir}/python.log | log 'python' 3 &
@@ -35,6 +35,6 @@ popd &> /dev/null
 popd &> /dev/null
 popd &> /dev/null
 
-colorize '\nSession successfully stopped' 2
+colorize '\nServer successfully stopped' 2
 
 exit 0

@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
+from __future__ import print_function
+
 # enable debugging in web server environment
 import cgitb
 from webpageGenerator import percentageOfOccurrenceByReleaseYear
@@ -24,8 +26,6 @@ from config import DEBUG_MODE
 import itertools
 from operator import itemgetter
 import json
-
-print >> sys.stderr, 'spam'
 
 # copied from websiteGenerator.py
 def removeBadCharacters(text):
@@ -166,9 +166,7 @@ class App():
         :param keywordOrPhrase: the keyword or phrase to search.
         :return: JSON containing all search results.
         """
-        print >> sys.stderr, 'spam2'
         results = searchResults(keywordOrPhrase)
-
         return {"results": remapResults(results)}
 
 
@@ -301,4 +299,5 @@ route('/static/:path#.+#', name='static')(appInstance.static)
 # make sure the line below isn't commented out for web server environment (comment out for local development server)
 # run(server='cgi')
 # comment out the line below for web server environment (not commented out for local development server)
+print('Starting server', file=sys.stderr)
 run(host='localhost', port=8080, debug=True)(appInstance)
