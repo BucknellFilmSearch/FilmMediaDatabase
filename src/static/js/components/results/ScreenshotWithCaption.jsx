@@ -39,7 +39,7 @@ export default class ScreenshotWithCaption extends React.Component {
         
         return (
             <GridTile
-                style={{'height': '180px'}}
+                style={{'height': '180px', objectFit:'fill'}}
                 title={ScreenshotWithCaption.beautifyTimeStamp(this.props.screenshotDetails.movieStartTimeStamp)}
                 titleBackground={'rgba(0, 0, 0, 0.3)'}
                 className="screenshot"
@@ -53,7 +53,8 @@ export default class ScreenshotWithCaption extends React.Component {
                         transitionEnter={false}
                         transitionLeave={false}
                     >
-                        <img src={imgSrc} height={'180px'}
+                        <img src={imgSrc}
+                             width={'100%'}
                              onMouseEnter={() => this.props.onMouseEnterScreenshot()}
                              onClick={() => hashHistory.push(`${this.props.searchTerm}/context/${this.props.movieOclcId}/${this.props.screenshotDetails.movieLineNumber}`)}                        />
                     </ReactCSSTransitionGroup>

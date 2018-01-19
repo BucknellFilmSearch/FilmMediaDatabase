@@ -26,8 +26,7 @@ const selectStyle = {
 
 const inputFieldStyle = {
     width: '150px',
-    float: 'left',
-    top: '-10px'
+    float: 'left'
 };
 
 const SearchIcon = (props) => {
@@ -132,7 +131,7 @@ export default class ResultsToolbar extends React.Component {
     render() {
         // let sortedFilms = this.sortFilms();
         return (
-            <Toolbar className="resultsToolbar">
+            <Toolbar className="resultsToolbar" style={{height:'72px'}}>
                 <ToolbarGroup firstChild={true}>
                     <Link to={"/"}><FlatButton label="Home" /></Link>
                     {(this.props.films.length > 0 || this.props.totalScreenshots == 0) ? (
