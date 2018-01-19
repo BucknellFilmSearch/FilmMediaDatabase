@@ -5,19 +5,30 @@ colorize() {
 }
 
 # if anything errors out, quit
-set -e
+
+colorize() {
+    echo -e "$(tput setaf $2)$1$(tput sgr0)";
+}
 
 #put me in the right dir
 pushd $(dirname $0) >> /dev/null
 pushd .. >> /dev/null
 
+<<<<<<< Updated upstream
 type pip &> /dev/null
+=======
+pwd
+
+type pip2 &> /dev/null
+>>>>>>> Stashed changes
 if [[ $? != 0 ]]; then
   echo $(colorize "✘ Please install https://pip.pypa.io/en/stable/ and then run this script again..." 1)
   exit 1
 else
   echo $(colorize '✔ Found Pip install:' 2) $(pip --version)
 fi
+
+pwd
 
 # Check for either npm or yarn
 type yarn &> /dev/null
@@ -50,14 +61,21 @@ fi
 pushd src >> /dev/null
 pip install -r requirements.txt &
 
+if [[ $? != 0 ]]; then
+  echo $(colorize "Error installing requirements...Exiting" 1)
+  exit 1
+fi
+
 # Install js libs with yarn if it's found, otherwise with npm
 pushd static/js >> /dev/null
 type yarn &> /dev/null
 if [[ $? == 0 ]]; then
   echo 'Installing static dependencies with yarn'
+  yarn global add watchify &
   yarn install &
 else
   echo 'Installing static dependencies with npm'
+  npm install -g watchify &
   npm install &
 fi
 
