@@ -9,11 +9,12 @@
 import * as React from "react";
 import IndividualFilmResults from "./IndividualFilmResults.jsx";
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {grey50, cyan700, pinkA200, grey800} from 'material-ui/styles/colors';
+import {grey50, cyan700, pinkA200, grey800, deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MetadataDrawer from './MetadataDrawer.jsx';
 import ContextDialog from './ContextDialog.jsx';
 import ResultsToolbar from './ResultsToolbar.jsx';
+import TextInputModal from '../search/TextInputModal.jsx';
 import {connect} from 'react-redux'
 import {createSelector} from 'reselect';
 import ScrollEvent from 'react-onscroll';
@@ -36,6 +37,9 @@ export default class AllFilms extends React.Component {
     constructor() {
         super();
         this.handleScrollCallback = this.handleScrollCallback.bind(this);
+        this.state = {
+            searchModalOpen: false
+        };
     }
 
     componentDidMount() {
@@ -47,6 +51,14 @@ export default class AllFilms extends React.Component {
         }
 
         this.props.fetchNewSearchTerm(this.props.routeParams['searchTerm']);
+    }
+
+    openSearchModal() {
+        this.setState({ searchModalOpen: true });
+    }
+
+    closeSearchModal() {
+        this.setState({ searchModalOpen: true });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -75,19 +87,35 @@ export default class AllFilms extends React.Component {
         }
     }
 
+    openSearchModal() {
+        console.log(1);
+        this.setState({searchModalOpen: true})
+        console.log(2);
+    }
+
+    closeSearchModal() {
+        this.setState({searchModalOpen: false})
+    }
+
     handleScrollCallback() {
         this.props.onScrollScreen();
     }
 
     render () {
+        // const muiTheme = getMuiTheme({
+        //     palette: {
+        //         primary1Color: grey800,
+        //         primary2Color: cyan700,
+        //         primary3Color: pinkA200,
+        //         accent1Color: grey800,
+        //         accent2Color: grey50,
+        //         accent3Color: grey800
+        //     }
+        // });
+
         const muiTheme = getMuiTheme({
             palette: {
-                primary1Color: grey800,
-                primary2Color: cyan700,
-                primary3Color: pinkA200,
-                accent1Color: grey800,
-                accent2Color: grey50,
-                accent3Color: grey800
+                accent1Color: deepOrange500
             }
         });
 
@@ -95,7 +123,8 @@ export default class AllFilms extends React.Component {
             <MuiThemeProvider muiTheme={muiTheme}>
                 <div>
                     <ScrollEvent handleScrollCallback={this.handleScrollCallback} />
-                    <ResultsToolbar />
+                    <ResultsToolbar openSearchModal={() => this.openSearchModal()}/>
+                    <TextInputModal open={this.state.searchModalOpen} closeFcn={() => this.closeSearchModal()} />
                     <MetadataDrawer />
                     {this.props.hasContext && <ContextDialog />}
                     {!this.props.filmsLoaded ? (

@@ -23,11 +23,14 @@ const modalStyle = {
 /**
  * Styling to line up different input options in the text input modal
  */
+const modalDivStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+};
+
 const inputStyle = {
-    top: '20px',
-    float: 'left',
-    width: '35%',
-    marginLeft: '5%'
+    top: '8px'
 };
 
 const sortStyle = {
@@ -36,10 +39,15 @@ const sortStyle = {
     float: 'left'
 };
 
-const buttonStyle = {
-    top: '27px',
+const searchStyle = {
+    top: '-4px',
+    width: '20%',
     float: 'left'
-}
+};
+
+const buttonStyle = {
+    float: 'center'
+};
 
 
 /**
@@ -62,17 +70,15 @@ const SearchIcon = (props) => {
 export default class TextInputModal extends React.Component {
 
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            open: false,
             searchText: '',
             errorText: ''
         };
 
-        this.handleOpen = this.handleOpen.bind(this);
-        this.handleClose = this.handleClose.bind(this);
+        // this.handleClose =  this.props.closeFcn.bind(this);
         this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
@@ -90,30 +96,22 @@ export default class TextInputModal extends React.Component {
 
         this.setState({searchText: ''});
 
-        // update the URL
-        let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
-        hashHistory.push(newPath);
+
         if (keywordOrPhrase === '') {
             this.state.errorText = 'Your search has returned too many results.';
         }
         else {
+            // update the URL
+            let newPath = `/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
+            hashHistory.push(newPath);
             this.state.errorText = '';
+            this.handleClose();
         }
     }
 
-    handleOpen() {
-        this.setState({open: true});
-    };
-
-    handleClose() {
-        this.setState({open: false});
-    };
-
     updateSearchForEnterKeypress(event) {
-
         // stop default form submission behavior
         event.preventDefault();
-
         this.updateSearch(event);
     }
 
@@ -121,22 +119,24 @@ export default class TextInputModal extends React.Component {
         this.setState({searchText: newValue});
     }
 
+    handleClose() {
+        this.setState({ errorText: '' });
+        this.props.closeFcn();
+    }
 
     render() {
 
         return (
-                <div id="textIconImage" className="hoverHighlight" onTouchTap={this.handleOpen} >
-                    <svg height="200" width="200" >
-                      <text x="0" y="100" fontSize="160px" >Aa</text>
-                      <text x="0" y="170" fontSize="30px" >Text Search</text>
-                    </svg>
+                <div id="textIconImage" className="hoverHighlight" >
                     <Dialog
                         style={modalStyle}
                         modal={false}
-                        open={this.state.open}
+                        open={this.props.open}
                         autoScrollBodyContent={true}
-                        onRequestClose={this.handleClose}
+                        onRequestClose={() => this.handleChange()}
                     >
+                        <div style={modalDivStyle}>
+
                         <form id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
                             <TextField
                                 hintText="Search Phrase"
@@ -144,9 +144,21 @@ export default class TextInputModal extends React.Component {
                                 value={this.state.searchText}
                                 style={inputStyle}
                                 onChange={this.handleChange}
+                                autoFocus
                                 ref="updateSearchBox"
                             />
                         </form>
+
+                        <SelectField
+                            floatingLabelText="Search in"
+                            value={this.props.searchType}
+                            onChange={this.props.onSelectSearchType}
+                            style={searchStyle}
+                        >
+                            <MenuItem value={1} primaryText="Objects" />
+                            <MenuItem value={2} primaryText="Subtitles" />
+                            <MenuItem value={3} primaryText="Objects/Subtitles" />
+                        </SelectField>
 
                         <SelectField
                             floatingLabelText="Sort"
@@ -170,15 +182,17 @@ export default class TextInputModal extends React.Component {
                         >
                             {GENRES.map((genre, index) => <MenuItem key={genre} value={genre} primaryText={genre} />) }
                         </SelectField>
-                        <FlatButton
-                            label="Search"
-                            labelPosition="before"
-                            primary={true}
-                            icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
-                            onClick={(event) => this.updateSearch(event)}
-                            style={buttonStyle}
-                        />
-
+                        </div>
+                        <div style={modalDivStyle}>
+                            <FlatButton
+                                label="Search"
+                                labelPosition="before"
+                                primary={true}
+                                // icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
+                                onClick={(event) => this.updateSearch(event)}
+                                style={buttonStyle}
+                            />
+                        </div>
                     </Dialog>
                 </div>
         );
@@ -188,6 +202,13 @@ export default class TextInputModal extends React.Component {
 /**
  * Handles Redux for searches
  */
+
+const selectSearchType = (searchType) => {
+    return {
+        type: "SELECT_SEARCH_TYPE",
+        searchType
+    }
+};
 
 const selectSortType = (sortType) => {
     return {
@@ -206,6 +227,7 @@ const selectGenre = (genre) => {
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
+        searchType: state.searchType,
         sortType: state.sortType,
         genre: state.genre,
         enableSort: state.search != null && state.search.searchType == "text",
@@ -217,6 +239,7 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
+        onSelectSearchType: (event, index, searchType) => dispatch(selectSearchType(searchType)),
         onSelectSortType: (event, index, sortType) => dispatch(selectSortType(sortType)),
         onSelectGenre: (event, index, genre) => dispatch(selectGenre(genre))
     }

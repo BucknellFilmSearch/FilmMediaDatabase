@@ -36,7 +36,7 @@ injectTapEventPlugin();
  * @param action An action triggered by the user or an API call
  * @return {*} The next state of the application
  */
-export const reducer = (state = {search: null, context: [], sortType: 1, genre: 'All'}, action) => {
+export const reducer = (state = {search: null, context: [], searchType: 1, sortType: 1, genre: 'All'}, action) => {
     switch (action.type) {
         case 'MOUSE_ENTER_SCREENSHOT':
             return {
@@ -133,6 +133,11 @@ export const reducer = (state = {search: null, context: [], sortType: 1, genre: 
             return {
                 ...state,
                 currentMovieOclcId: action.movieOclcId
+            };
+        case 'SELECT_SEARCH_TYPE':
+            return {
+                ...state,
+                searchType: action.searchType
             };
         case 'SELECT_SORT_TYPE':
             return {
