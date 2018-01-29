@@ -67,7 +67,9 @@ def searchResults(keywordOrPhrase):
     bgWorker = Thread(target=updateKeywordCount, args=([query.all()]))
     bgWorker.start()
 
-    count = session.query(MediaText.oclc_id, func.max(MediaText.line_number).label('totalNumberOfLines')).group_by(MediaText.oclc_id).subquery()
+    count = session.query(MediaText.oclc_id, func.max(MediaText.line_number)\
+                          .label('totalNumberOfLines'))\
+                          .group_by(MediaText.oclc_id).subquery()
     query = session.query(MediaMetadata.oclc_id, MediaMetadata.movie_title, MediaText.line_number,
                           MediaText.start_time_stamp, MediaText.end_time_stamp, MediaText.line_text,
                           MediaMetadata.original_release_year, MediaMetadata.dvd_release_year,

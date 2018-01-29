@@ -3,10 +3,10 @@
 
 # enable debugging in web server environment
 import cgitb
-cgitb.enable()
+# cgitb.enable()
 
 import os
-from databaseQuerierPostgresql import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, search, \
+from databaseQuerierPostgresql import cumulativeOccurrencesByReleaseYear, percentageOfOccurrenceByReleaseYear, totalMovies, \
     getContextLines, getMovieInfo
 from datetime import datetime
 from os import path

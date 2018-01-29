@@ -21,13 +21,12 @@ import {STOP_WORDS, GENRES, relevanceSort, alphabeticalSort, yearSort} from '../
 
 
 const selectStyle = {
-    width: '150px'
+    width: '160px'
 };
 
 const inputFieldStyle = {
     width: '150px',
-    float: 'left',
-    top: '-10px'
+    float: 'left'
 };
 
 const SearchIcon = (props) => {
@@ -47,14 +46,13 @@ const SearchIcon = (props) => {
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ResultsToolbar extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             searchText: '',
-            errorText: ''
+            errorText: '',
         };
-
         this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
@@ -132,7 +130,7 @@ export default class ResultsToolbar extends React.Component {
     render() {
         // let sortedFilms = this.sortFilms();
         return (
-            <Toolbar className="resultsToolbar">
+            <Toolbar className="resultsToolbar" style={{height:'72px'}}>
                 <ToolbarGroup firstChild={true}>
                     <Link to={"/"}><FlatButton label="Home" /></Link>
                     {(this.props.films.length > 0 || this.props.totalScreenshots == 0) ? (
@@ -140,23 +138,8 @@ export default class ResultsToolbar extends React.Component {
                             text={`${this.props.totalScreenshots} Results for '${this.props.searchTerm.replace(/&/g, ' ')}' in ${this.props.films.length} films`}/>
                     ) : null
                     }
-                    <form onSubmit={this.updateSearchForEnterKeypress}>
-                        <TextField
-                            hintText="Search Phrase"
-                            errorText={this.state.errorText}
-                            value={this.state.searchText}
-                            onChange={this.handleChange}
-                            style={inputFieldStyle}
-                            ref="updateSearchBox"
-                        />
-                    </form>
-                    <FlatButton
-                        label="Update Search"
-                        labelPosition="after"
-                        icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
-                        onClick={(event) => this.updateSearch(event)}
-                        secondary={true}
-                    />
+                    
+                    
                 </ToolbarGroup>
                 <ToolbarGroup lastChild={true}>
                     <SelectField
@@ -193,6 +176,13 @@ export default class ResultsToolbar extends React.Component {
                         {GENRES.map((genre, index) => <MenuItem key={genre} value={genre} primaryText={genre} />) }
                     </SelectField>
 
+                    <FlatButton
+                        label="Update Search"
+                        labelPosition="after"
+                        icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
+                        onClick={(event) => this.props.openSearchModal(event)}
+                        secondary={true}
+                    />
                 </ToolbarGroup>
             </Toolbar>
         );
