@@ -133,7 +133,7 @@ export default class TextInputModal extends React.Component {
                         modal={false}
                         open={this.props.open}
                         autoScrollBodyContent={true}
-                        onRequestClose={() => this.handleChange()}
+                        onRequestClose={() => this.handleClose()}
                     >
                         <div style={modalDivStyle}>
 
