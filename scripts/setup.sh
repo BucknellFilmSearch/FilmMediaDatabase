@@ -14,13 +14,7 @@ colorize() {
 pushd $(dirname $0) >> /dev/null
 pushd .. >> /dev/null
 
-<<<<<<< Updated upstream
-type pip &> /dev/null
-=======
-pwd
-
 type pip2 &> /dev/null
->>>>>>> Stashed changes
 if [[ $? != 0 ]]; then
   echo $(colorize "✘ Please install https://pip.pypa.io/en/stable/ and then run this script again..." 1)
   exit 1
