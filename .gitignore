@@ -12,3 +12,4 @@ logs/
 dbConfig.json
 /images/*
 *.sql
+build/
