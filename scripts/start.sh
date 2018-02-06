@@ -10,7 +10,7 @@ log() {
     done;
 }
 
-pythonLogClr=3
+pythonLogClr=4
 nodeLogClr=1
 
 trap 'kill $(jobs -p) &> /dev/null' SIGINT
@@ -25,10 +25,12 @@ logdir=$(pwd)/logs
 colorize 'Starting Server (use ctrl-C to exit)' 2
 
 pushd src &> /dev/null
-python main.py 2>&1 | tee ${logdir}/python.log | log 'python' 3 &
+pushd server
+npm start 2>&1 | tee ${logdir}/backend.log | log 'backend' 4 &
 
+popd &> /dev/null
 pushd static/js &> /dev/null
-npm start 2>&1 | tee $logdir/node.log | log 'node' 1
+npm start 2>&1 | tee $logdir/frontend.log | log 'frontend' 1
 
 popd &> /dev/null
 popd &> /dev/null
