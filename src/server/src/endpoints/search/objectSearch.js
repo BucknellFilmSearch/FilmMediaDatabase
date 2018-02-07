@@ -52,24 +52,6 @@ ORDER BY
   mt.line_number;
 `;
 
-const lineQueryString = `
-SELECT
-    ro.text_label,
-    ro.bounding_left,
-    ro.bounding_top,
-    ro.bounding_right,
-    ro.bounding_bottom,
-    ro.confidence
-FROM
-    media_recognized_objects ro
-WHERE
-    ro.db_line_id = '$1::text'
-  AND
-    ro.confidence >= $2::float
-;
-`;
-
-
 const objectSearch = (req, res) => {
   const {params} = req;
 
@@ -95,29 +77,6 @@ const objectSearch = (req, res) => {
   });
 };
 
-const lineObjectSearch = (req, res) => {
-  const {params} = req;
 
-  const queryCfg = {
-    text: queryString,
-    values: [params.text, params.confidence]
-  };
 
-  // TODO: Add density count updates
-  pool.query(queryCfg, (err, dbRes) => {
-    if (err) {
-      console.error(err);
-      res.status(err.status || 500);
-      throw err;
-    }
-    // Map mapResults
-    dbRes.
-    // Return the mapped results
-    res.json({
-      results: lineQueryString //TEMPORARY, THIS IS WRONG
-    });
-  });
-
-};
-
-export {objectSearch, lineObjectSearch};
+export {objectSearch};

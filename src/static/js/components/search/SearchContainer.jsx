@@ -61,7 +61,7 @@ export default class SearchContainer extends React.Component {
                         <span>Click on one of the options below to get started.</span><br />
                         <div id="searchIcons">
                             <div id="textIcon">
-                                <svg height="200" width="200" onTouchTap={() => this.openTextSearchModal()}>
+                                <svg class="hoverHighlight" height="200" width="200" onTouchTap={() => this.openTextSearchModal()}>
                                     <text x="0" y="100" fontSize="160px" >Aa</text>
                                     <text x="0" y="170" fontSize="30px" >Text Search</text>
                                 </svg>
