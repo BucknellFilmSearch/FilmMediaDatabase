@@ -5,6 +5,7 @@ const queryString = `
 SELECT
   mm.oclc_id,
   mm.movie_title,
+  mt.db_line_id,
   mt.line_number,
   mt.start_time_stamp,
   mt.end_time_stamp,

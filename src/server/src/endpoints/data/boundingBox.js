@@ -13,7 +13,7 @@ FROM
 WHERE
     ro.db_line_id = '$1::text'
   AND
-    ro.confidence >= $2::float
+    ro.confidence >= .85
 ;
 `;
 
@@ -22,7 +22,7 @@ const boundingBox = (req, res) => {
 
   const queryCfg = {
     text: queryString,
-    values: [params.text, params.confidence]
+    values: [params.text]
   };
 
   // TODO: Add density count updates

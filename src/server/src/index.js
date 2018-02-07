@@ -21,7 +21,7 @@ app.use('/feedback', express.static(path.join(staticDir, 'feedback.html')));
 app.get('/moviesearch/:text', textSearch);
 
 // Add data endpoints
-app.get('/boundingbox/:oclcId/:lineNumber', boundingBox);
+app.get('/boundingbox/:dbLineId', boundingBox);
 
 // Handle Errors
 app.use((err, req, res) => {
