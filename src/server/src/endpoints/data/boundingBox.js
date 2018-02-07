@@ -1,5 +1,5 @@
 import pool from '../../postgres/dbClient';
-import mapBBResults from 'dataUtils';
+import { mapBBResults } from './dataUtils';
 const queryString = `
 SELECT
     ro.text_label,
@@ -34,7 +34,7 @@ const boundingBox = (req, res) => {
     }
     // Return the mapped results
     res.json({
-      results: mapBBResults(queryString) //TEMPORARY, THIS IS WRONG
+      results: mapBBResults(dbRes.rows) //TEMPORARY, THIS IS WRONG
     });
   });
 

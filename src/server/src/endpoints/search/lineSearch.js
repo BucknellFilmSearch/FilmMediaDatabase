@@ -1,5 +1,5 @@
 import pool from '../../postgres/dbClient';
-import {mapResults} from './searchUtils';
+import { mapResults } from './searchUtils';
 
 const queryString = `
 SELECT
