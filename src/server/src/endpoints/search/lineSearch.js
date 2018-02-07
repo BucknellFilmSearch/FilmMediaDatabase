@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import pool from '../../postgres/dbClient';
+import {mapResults} from './searchUtils';
 
 const queryString = `
 SELECT
@@ -15,24 +15,24 @@ SELECT
   counts.line_count,
   mm.genre1,
   mm.genre2,
-  mm.genre3 
+  mm.genre3
 FROM
-  media_metadata mm 
+  media_metadata mm
 INNER JOIN
-    media_text mt 
+    media_text mt
   ON
-    mt.oclc_id = mm.oclc_id 
+    mt.oclc_id = mm.oclc_id
 INNER JOIN
     (SELECT
-      oclc_id, MAX(line_number) AS line_count 
+      oclc_id, MAX(line_number) AS line_count
     FROM
-      media_text 
+      media_text
     GROUP
-      BY oclc_id ) counts 
+      BY oclc_id ) counts
   ON
-    counts.oclc_id = mm.oclc_id 
+    counts.oclc_id = mm.oclc_id
 WHERE
-    mt.oclc_id = mm.oclc_id 
+    mt.oclc_id = mm.oclc_id
   AND
     mt.search_vector @@ to_tsquery('english', $1::text)
 GROUP BY
@@ -47,60 +47,6 @@ ORDER BY
   mm.movie_title,
   mt.line_number;
 `;
-
-const mapResults = (rows) => {
-
-  const oclcIdMap = {};
-  const groupedData = [];
-
-  _(rows).each((row) => {
-    // Unwrap row values to variables
-    // format is:  [ column_name ]: [ variableName ]
-    const {
-      oclc_id: movieOclcId,
-      movie_title: movieTitle,
-      line_number: movieLineNumber,
-      start_time_stamp: movieStartTimeStamp,
-      end_time_stamp: movieEndTimeStamp,
-      line_text: movieLineText,
-      original_release_year: movieReleaseYear,
-      dvd_release_year: dvdReleaseYear,
-      runtime_in_minutes: runtimeInMinutes,
-      line_count: totalNumberOfLines,
-      genre1, genre2, genre3
-    } = row;
-
-    if (!_.has(oclcIdMap, `${row.oclc_id}`)) {
-      // Add the movie to groupedData if it doesn't already exist
-      oclcIdMap[`${row.oclc_id}`] = _.values(groupedData).length;
-      groupedData[oclcIdMap[`${row.oclc_id}`]] = {
-        runtimeInMinutes,
-        genre1, genre2, genre3,
-        movieReleaseYear,
-        totalNumberOfLines,
-        results: [{
-          movieLineNumber,
-          movieStartTimeStamp,
-          movieEndTimeStamp,
-          movieLineText
-        }],
-        dvdReleaseYear,
-        movieOclcId,
-        movieTitle
-      };
-    } else {
-      // Add line data from the row to the existing movie
-      groupedData[oclcIdMap[`${row.oclc_id}`]].results.push({
-        movieLineNumber,
-        movieStartTimeStamp,
-        movieEndTimeStamp,
-        movieLineText
-      });
-    }
-  });
-
-  return groupedData;
-};
 
 
 const lineSearch = (req, res) => {
