@@ -39,14 +39,15 @@ INNER JOIN
 WHERE
     mt.oclc_id = mm.oclc_id
   AND
-    ro.text_label = '$1::text'
+    ro.text_label = $1::text
 GROUP BY
   mm.oclc_id,
   mt.line_number,
   mt.start_time_stamp,
   mt.end_time_stamp,
   counts.line_count,
-  mt.line_text
+  mt.line_text,
+  mt.db_line_id
 ORDER BY
   mm.keyword_count DESC,
   mm.movie_title,

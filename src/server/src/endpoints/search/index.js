@@ -10,6 +10,7 @@ const textSearch = (req, res) => {
       lineSearch(req, res);
       break;
     case 'object':  // Search for objects in images
+      console.log('a');
       objectSearch(req, res);
       break;
     case 'mixed':   // Search in both subtitles and objects

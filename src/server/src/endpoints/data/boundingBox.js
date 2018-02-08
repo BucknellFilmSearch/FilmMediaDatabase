@@ -11,7 +11,7 @@ SELECT
 FROM
     media_recognized_objects ro
 WHERE
-    ro.db_line_id = '$1::text'
+    ro.db_line_id = $1
   AND
     ro.confidence >= .85
 ;
