@@ -79,6 +79,4 @@ const objectSearch = (req, res) => {
   });
 };
 
-
-
 export default objectSearch;
