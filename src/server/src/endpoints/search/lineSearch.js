@@ -1,10 +1,11 @@
 import pool from '../../postgres/dbClient';
-import {mapResults} from './searchUtils';
+import { mapResults } from './searchUtils';
 
 const queryString = `
 SELECT
   mm.oclc_id,
   mm.movie_title,
+  mt.db_line_id,
   mt.line_number,
   mt.start_time_stamp,
   mt.end_time_stamp,
@@ -37,6 +38,7 @@ WHERE
     mt.search_vector @@ to_tsquery('english', $1::text)
 GROUP BY
   mm.oclc_id,
+  mt.db_line_id,
   mt.line_number,
   mt.start_time_stamp,
   mt.end_time_stamp,

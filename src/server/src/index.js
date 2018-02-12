@@ -2,6 +2,7 @@ import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
 import { textSearch } from './endpoints/search';
+import { boundingBox } from './endpoints/data/boundingBox';
 
 const app = express();
 
@@ -19,8 +20,11 @@ app.use('/feedback', express.static(path.join(staticDir, 'feedback.html')));
 // Add search endpoint
 app.get('/moviesearch/:text', textSearch);
 
+// Add data endpoints
+app.get('/boundingbox/:dbLineId', boundingBox);
+
 // Handle Errors
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.message);
   console.log(res);
   res.status(err.status || 500).send(err);

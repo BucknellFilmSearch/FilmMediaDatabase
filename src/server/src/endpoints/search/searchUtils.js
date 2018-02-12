@@ -10,6 +10,7 @@ const mapResults = (rows) => {
     const {
       oclc_id: movieOclcId,
       movie_title: movieTitle,
+      db_line_id: movieDbLineId,
       line_number: movieLineNumber,
       start_time_stamp: movieStartTimeStamp,
       end_time_stamp: movieEndTimeStamp,
@@ -30,6 +31,7 @@ const mapResults = (rows) => {
         movieReleaseYear,
         totalNumberOfLines,
         results: [{
+          movieDbLineId,
           movieLineNumber,
           movieStartTimeStamp,
           movieEndTimeStamp,
@@ -42,6 +44,7 @@ const mapResults = (rows) => {
     } else {
       // Add line data from the row to the existing movie
       groupedData[oclcIdMap[`${row.oclc_id}`]].results.push({
+        movieDbLineId,
         movieLineNumber,
         movieStartTimeStamp,
         movieEndTimeStamp,
