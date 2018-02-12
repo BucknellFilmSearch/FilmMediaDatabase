@@ -12,3 +12,9 @@ logs/
 dbConfig.json
 /images/*
 *.sql
+
+# Don't add config files
+*/config.json
+# Don't add build files
+build/
+*/server/static/
