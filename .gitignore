@@ -14,7 +14,7 @@ dbConfig.json
 *.sql
 
 # Don't add config files
-*/config.json
+**/*/config.json
 # Don't add build files
-build/
-*/server/static/
+**/build/
+**/server/static/
