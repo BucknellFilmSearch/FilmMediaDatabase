@@ -40,6 +40,8 @@ WHERE
     mt.oclc_id = mm.oclc_id
   AND
     ro.text_label = $1::text
+  AND
+    ro.confidence >= $2
 GROUP BY
   mm.oclc_id,
   mt.line_number,
@@ -57,10 +59,11 @@ ORDER BY
 const objectSearch = (req, res) => {
   const {params} = req;
 
+  params.confidence = params.confidence || 0.75;
   // Build query
   const queryCfg = {
     text: queryString,
-    values: [params.text]
+    values: [params.text, params.confidence]
   };
 
   // TODO: Add density count updates

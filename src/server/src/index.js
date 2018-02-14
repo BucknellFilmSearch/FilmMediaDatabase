@@ -26,7 +26,7 @@ apiRouter.get('/boundingbox/:dbLineId', boundingBox);
 app.use('/api', apiRouter);
 
 // Handle Errors
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   console.log(res);
   res.status(err.status || 500).send(err);
