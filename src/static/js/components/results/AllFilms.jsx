@@ -20,6 +20,7 @@ import {createSelector} from 'reselect';
 import ScrollEvent from 'react-onscroll';
 import { hashHistory } from 'react-router';
 import {relevanceSort, alphabeticalSort, yearSort} from '../helpers';
+import _ from 'lodash';
 
 
 /**
@@ -50,7 +51,10 @@ export default class AllFilms extends React.Component {
             hashHistory.push(`${this.props.routeParams['searchTerm']}`);
         }
 
-        this.props.fetchNewSearchTerm(this.props.routeParams['searchTerm']);
+        const params = {
+          type: this.props.searchType || undefined
+        };
+        this.props.fetchNewSearchTerm(this.props.routeParams['searchTerm'], params);
     }
 
     openSearchModal() {
@@ -88,9 +92,7 @@ export default class AllFilms extends React.Component {
     }
 
     openSearchModal() {
-        console.log(1);
         this.setState({searchModalOpen: true})
-        console.log(2);
     }
 
     closeSearchModal() {
@@ -175,10 +177,15 @@ const receiveNewSearchTerm = (response) => {
  * makes the API call, and submits an action when the API call returns data.
  * @param searchTerm New search term
  */
-const fetchNewSearchTerm = (searchTerm) => {
+const fetchNewSearchTerm = (searchTerm, params) => {
     return (dispatch) => {
+        console.log("sup");
         dispatch(requestNewSearchTerm(searchTerm));
-        return fetch(`http://localhost:8080/moviesearch/${searchTerm}`)
+        let queryString = `http://localhost:8080/moviesearch/${searchTerm}`;
+        if(_.has(params, 'type')){
+          queryString += `?type=${params.type}`;
+        }
+        return fetch(queryString)
             .then(response => response.json())
             .then(response => dispatch(receiveNewSearchTerm(response.results)));
     }
@@ -249,6 +256,7 @@ const areFilmsLoaded = (state) => state.search && state.search.status == "loaded
 const getSearchResponse = (state) => areFilmsLoaded(state) ? [...state.search.response] : [] ;
 const getSortType = (state) => state.sortType;
 const getGenre = (state) => state.genre;
+const getSearchType = (state) => state.searchType;
 const getFilms = createSelector(
     [ getSearchResponse, getSortType, getGenre],
     (films, sortType, genre) => {
@@ -273,6 +281,13 @@ const getFilms = createSelector(
     }
 );
 
+function mapSearchType(idx) {
+  switch (idx) {
+    case 1: return 'object';
+    default: return 'line';
+  }
+}
+
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
@@ -280,6 +295,7 @@ function mapStateToProps(state) {
         films: getFilms(state),
         hasContext: state.contextMovieOclcId,
         search: state.search,
+        searchType: mapSearchType(state.searchType),
         queueContextMovieOclcId: state.queueContextMovieOclcId,
         queueCurrentContextMovieLineNumber: state.queueCurrentContextMovieLineNumber
     }
@@ -288,7 +304,7 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
     return {
-        fetchNewSearchTerm: (searchTerm) => dispatch(fetchNewSearchTerm(searchTerm)),
+        fetchNewSearchTerm: (searchTerm, params) => dispatch(fetchNewSearchTerm(searchTerm, params)),
         onScrollScreen: () => dispatch(scrollScreen()),
         openContext: (oclcId, screenshot) => dispatch(openContext(oclcId, screenshot)),
         closeContext: () => dispatch(closeContextDialog()),

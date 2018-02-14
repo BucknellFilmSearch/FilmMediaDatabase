@@ -4,7 +4,7 @@
   "description": "The Cell Phone Cinema Project",
   "main": "app.tsx",
   "scripts": {
-    "start": "watchify app.jsx -o bundle.js -t [ envify --NODE_ENV production  ] -t [ babelify --presets [ es2015 react ] --plugins [transform-object-rest-spread transform-decorators-legacy] ] -v",
+    "start": "watchify app.jsx -o bundle.js -t [ envify ] -t [ babelify --presets [ es2015 react ] --plugins [transform-object-rest-spread transform-decorators-legacy] ] -v",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
