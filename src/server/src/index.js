@@ -19,11 +19,11 @@ app.use('/static', express.static(staticDir));
 
 app.use('/feedback', express.static(path.join(staticDir, 'feedback.html')));
 
-// Add search endpoint
-app.get('/moviesearch/:text', textSearch);
-
-// Add data endpoints
-app.get('/boundingbox/:dbLineId', boundingBox);
+// Add API routes
+const apiRouter = express.Router();
+apiRouter.get('/moviesearch/:text', textSearch);
+apiRouter.get('/boundingbox/:dbLineId', boundingBox);
+app.use('/api', apiRouter);
 
 // Handle Errors
 app.use((err, req, res, next) => {
