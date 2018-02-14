@@ -26,7 +26,7 @@ app.get('/moviesearch/:text', textSearch);
 app.get('/boundingbox/:dbLineId', boundingBox);
 
 // Handle Errors
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   console.log(res);
   res.status(err.status || 500).send(err);
