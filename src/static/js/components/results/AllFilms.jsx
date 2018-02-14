@@ -181,7 +181,7 @@ const fetchNewSearchTerm = (searchTerm, params) => {
     return (dispatch) => {
         console.log("sup");
         dispatch(requestNewSearchTerm(searchTerm));
-        let queryString = `http://localhost:8080/moviesearch/${searchTerm}`;
+        let queryString = `http://localhost:8080/api/moviesearch/${searchTerm}`;
         if(_.has(params, 'type')){
           queryString += `?type=${params.type}`;
         }
