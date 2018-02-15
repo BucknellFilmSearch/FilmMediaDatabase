@@ -1,4 +1,4 @@
-x/**
+/**
  * This file includes components from all other files from the search folder to render the homepage.
  *
  * Author: Team EndFrame
