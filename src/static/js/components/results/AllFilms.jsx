@@ -46,7 +46,6 @@ export default class AllFilms extends React.Component {
     componentDidMount() {
         // save context until search term is loaded
         if (this.props.routeParams['contextOclcId']) {
-            console.log('queuing context');
             this.props.queueContext(this.props.routeParams['contextOclcId'], this.props.routeParams['contextScreenshot']);
             hashHistory.push(`${this.props.routeParams['searchTerm']}`);
         }
@@ -77,8 +76,10 @@ export default class AllFilms extends React.Component {
 
         // new search term
         if (nextProps.routeParams['searchTerm'] != this.props.routeParams['searchTerm']) {
-            console.log('new search');
-            this.props.fetchNewSearchTerm(nextProps.routeParams['searchTerm']);
+            const params = {
+              type: this.props.searchType || undefined
+            };
+            this.props.fetchNewSearchTerm(nextProps.routeParams['searchTerm'], params);
         }
         // swap context
         if (nextProps.routeParams['contextOclcId'] != this.props.routeParams['contextOclcId'] ||
@@ -179,7 +180,6 @@ const receiveNewSearchTerm = (response) => {
  */
 const fetchNewSearchTerm = (searchTerm, params) => {
     return (dispatch) => {
-        console.log("sup");
         dispatch(requestNewSearchTerm(searchTerm));
         let queryString = `http://localhost:8080/api/moviesearch/${searchTerm}`;
         if(_.has(params, 'type')){
