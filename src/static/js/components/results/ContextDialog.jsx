@@ -328,7 +328,7 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
 
         // make API call if screenshot does not exist
         if (newMovieLineNumberNotInContext) {
-            return fetch(`/moviesearch/context/${currentFilm.movieOclcId}/${newMovieLineNumber}`)
+            return fetch(`/api/moviesearch/context/${currentFilm.movieOclcId}/${newMovieLineNumber}`)
                 .then(response => response.json())
                 .then(response => response.context)
                 .then(response => dispatch(receiveContext(response)));
