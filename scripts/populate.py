@@ -20,19 +20,6 @@ def process(img):
     DARKNET_PROC.stdin.flush()
 
 
-# def listfiles(media_dir):
-#     '''
-#     Recursively generates all of the files in the given directory
-#     that have .png and .jpg extensions
-
-#     :param: media_dir The directory to list files from
-#     '''
-#     for root, _, files in os.walk(media_dir):
-#         for filename in files:
-#             if filename.endswith('.jpg') or filename.endswith('.png'):
-#                 yield os.path.join(root, filename)
-
-
 def traverse():
     '''
     Traverses all of the files in media_dir, and checks if a given
@@ -49,16 +36,8 @@ def traverse():
             'Added files',
             prefix_color='green'
         ),
-        tag_id='T1_DISP'
+        tag_id='LIST_T_DISP'
     )
-            # for filename in file_list:
-            #     try:
-            #         process(filename.strip(), count)
-            #         count += 1
-            #     except Exception as e:
-            #         print(e.message)
-            #         sys.exit(1)
-            # process('',  count)
 
 
 def upload():
@@ -93,10 +72,10 @@ def upload():
             if line_no not in movies[oclc_id].keys():
                 try:
                     # Get DB Line ID
-                    READ_CUR_T2.execute('''
+                    READ_CUR_UPLOAD_T.execute('''
                         SELECT db_line_id FROM media_text WHERE oclc_id = %(oclc_id)s AND line_number = %(db_line_id)s LIMIT 1;
                     ''', data)
-                    res = READ_CUR_T2.fetchone()
+                    res = READ_CUR_UPLOAD_T.fetchone()
                     movies[oclc_id][line_no] = res[0]
                 except Exception as e:
                     if oclc_id != cur_oclc_id:
@@ -108,7 +87,7 @@ def upload():
             data['db_line_id'] = movies[oclc_id][line_no]
 
             # Insert new data
-            WRITE_CUR_T2.execute('''
+            WRITE_CUR_UPLOAD_T.execute('''
                 INSERT INTO media_recognized_objects
                 (db_line_id, text_label, confidence, bounding_left, bounding_right, bounding_top, bounding_bottom)
                 VALUES
@@ -122,7 +101,7 @@ def upload():
                     '{step} entered into DB ({oclc_id}/{line_no})'.format(**locals()),
                     prefix_color='blue'
                 ),
-                tag_id='T2_COUNT'
+                tag_id='UPLOAD_T_COUNT'
             )
             if step % 100 == 0 and step > 0:
                 CONN.commit()
@@ -138,7 +117,7 @@ def upload():
                 '{step} entered into DB'.format(**locals()),
                 prefix_color='blue'
             ),
-            tag_id='T2_COUNT'
+            tag_id='UPLOAD_T_COUNT'
         )
         CONN.commit()
         CONN.close()
@@ -173,12 +152,12 @@ if __name__ == '__main__':
     LOGGER.tag('db_login').log(Msg('DB Login', 'Logging into DB...', prefix_color='yellow'))
     try:
         CONN = psycopg2.connect(**DB_CFG)
-        READ_CUR_T1 = CONN.cursor()
-        READ_CUR_T2 = CONN.cursor()
-        WRITE_CUR_T2 = CONN.cursor()
-        psycopg2.extensions.register_type(psycopg2.extensions.UNICODE, READ_CUR_T1)
-        psycopg2.extensions.register_type(psycopg2.extensions.UNICODE, READ_CUR_T2)
-        psycopg2.extensions.register_type(psycopg2.extensions.UNICODE, WRITE_CUR_T2)
+        READ_CUR_LIST_T = CONN.cursor()
+        READ_CUR_UPLOAD_T = CONN.cursor()
+        WRITE_CUR_UPLOAD_T = CONN.cursor()
+        psycopg2.extensions.register_type(psycopg2.extensions.UNICODE, READ_CUR_LIST_T)
+        psycopg2.extensions.register_type(psycopg2.extensions.UNICODE, READ_CUR_UPLOAD_T)
+        psycopg2.extensions.register_type(psycopg2.extensions.UNICODE, WRITE_CUR_UPLOAD_T)
     except Exception as err:
         LOGGER.log(
             Msg(
@@ -206,12 +185,19 @@ if __name__ == '__main__':
 
     START = timeit.default_timer()
 
-    # FIND_PATH = os.path.join(sys.argv[1], '*')
-    # T1 = subprocess.Popen(
-    #     'find {} -maxdepth 1 -type f \( -iname \*.jpg -o -iname \*.png \) && exit 0'.format(FIND_PATH),
-    #     shell=True, 
-    #     stdout=subprocess.PIPE
-    # )
+    # Start thread for adding all necessary files
+    # LIST_T = threading.Thread(target=traverse, args=[sys.argv[1]])
+    # LIST_T.start()
+    FIND_PATH = os.path.join(sys.argv[1], '*')
+    LIST_T = subprocess.Popen(
+        'find {} -maxdepth 1 -type f \( -iname \*.jpg -o -iname \*.png \) && exit 0'.format(FIND_PATH),
+        shell=True, 
+        stdout=subprocess.PIPE
+    )
+    LOGGER.tag('LIST_T_WAIT').log(Msg('traverse', 'Traversing directories', prefix_color='green'))
+    LOGGER.wait('LIST_T_WAIT', Msg('traverse', 'Traversing directories', prefix_color='green'), LIST_T)
+    LOGGER.tag('LIST_T_DISP').log(Msg('traverse', '', prefix_color='green'))
+
 
     #==============================
     #       DARKNET SETUP
@@ -225,27 +211,27 @@ if __name__ == '__main__':
         CMD,
         cwd=DARKNET_DIR,
         shell=True,
-        stdin=subprocess.PIPE,
+        stdin=LIST_T.stdout,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
 
     # Start thread for uploading to DB
-    T2 = threading.Thread(target=upload)
-    T2.start()
-    LOGGER.tag('T2_WAIT').log(Msg('upload', 'Entering into DB', prefix_color='blue'))
-    LOGGER.wait('T2_WAIT', Msg('upload', 'Entering into DB', prefix_color='blue'), T2)
-    LOGGER.tag('T2_COUNT').log(Msg('upload', '0 Entered into DB', prefix_color='blue'))
+    UPLOAD_T = threading.Thread(target=upload)
+    UPLOAD_T.start()
+    LOGGER.tag('UPLOAD_T_WAIT').log(Msg('upload', 'Entering into DB', prefix_color='blue'))
+    LOGGER.wait('UPLOAD_T_WAIT', Msg('upload', 'Entering into DB', prefix_color='blue'), UPLOAD_T)
+    LOGGER.tag('UPLOAD_T_COUNT').log(Msg('upload', '0 Entered into DB', prefix_color='blue'))
 
     # Start thread for adding all necessary files
-    T1 = threading.Thread(target=traverse, args=[])
-    LOGGER.tag('T1_WAIT').log(Msg('traverse', 'Traversing directories', prefix_color='green'))
-    LOGGER.wait('T1_WAIT', Msg('traverse', 'Traversing directories', prefix_color='green'), T1)
-    LOGGER.tag('T1_DISP').log(Msg('traverse', '', prefix_color='green'))
-    T1.start()
+    LIST_T = threading.Thread(target=traverse, args=[])
+    LOGGER.tag('LIST_T_WAIT').log(Msg('traverse', 'Traversing directories', prefix_color='green'))
+    LOGGER.wait('LIST_T_WAIT', Msg('traverse', 'Traversing directories', prefix_color='green'), LIST_T)
+    LOGGER.tag('LIST_T_DISP').log(Msg('traverse', '', prefix_color='green'))
+    LIST_T.start()
 
     # Wait for threads to finish
-    T1.join()
+    LIST_T.wait()
     LOGGER.log(
         Msg(
             'traverse',
@@ -253,12 +239,12 @@ if __name__ == '__main__':
             prefix_color='green',
             msg_color='green'
         ),
-        tag_id='T1_WAIT'
+        tag_id='LIST_T_WAIT'
     )
 
     DARKNET_PROC.wait()
 
-    T2.join()
+    UPLOAD_T.join()
     LOGGER.log(
         Msg(
             'upload',
@@ -266,7 +252,7 @@ if __name__ == '__main__':
             prefix_color='blue',
             msg_color='green'
         ),
-        tag_id='T2_WAIT'
+        tag_id='UPLOAD_T_WAIT'
     )
 
     LOGGER.log(Msg('populate.py', '-----------------'))
