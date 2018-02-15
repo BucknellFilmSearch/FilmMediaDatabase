@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+<<<<<<< HEAD
 from __future__ import print_function
+=======
+
+>>>>>>> Began making changes to script to hunt down bugs
 import os
 import sys
 import subprocess
@@ -226,7 +230,7 @@ if __name__ == '__main__':
         CMD,
         cwd=DARKNET_DIR,
         shell=True,
-        stdin=subprocess.PIPE,
+        stdin=T1.stdout,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
@@ -246,7 +250,7 @@ if __name__ == '__main__':
     T1.start()
 
     # Wait for threads to finish
-    T1.join()
+    T1.wait()
     LOGGER.log(
         Msg(
             'traverse',
