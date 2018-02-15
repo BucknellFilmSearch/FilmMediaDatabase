@@ -22,7 +22,7 @@ const boundingBox = (req, res) => {
   query.confidence = query.confidence || 0.80;
   const queryCfg = {
     text: queryString,
-    values: [params.text, query.confidence]
+    values: [params.dbLineId, query.confidence]
   };
 
   // TODO: Add density count updates
@@ -34,7 +34,7 @@ const boundingBox = (req, res) => {
     }
     // Return the mapped results
     res.json({
-      results: mapBBResults(dbRes.rows) //TEMPORARY, THIS IS WRONG
+      results: mapBBResults(dbRes.rows)
     });
   });
 
