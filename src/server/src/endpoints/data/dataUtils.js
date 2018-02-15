@@ -1,7 +1,7 @@
 import _ from 'lodash';
 const mapBBResults = (rows) => {
 
-  const data = {results: []};
+  const data = [];
 
   _(rows).each((row) => {
     const {
@@ -12,13 +12,14 @@ const mapBBResults = (rows) => {
       bounding_bottom: objectBoundingBottom,
       confidence: objectConfidence
     } = row;
-    data.results.push({objectTextLabel,
+    data.push({objectTextLabel,
       objectBoundingLeft,
       objectBoundingTop,
       objectBoundingRight,
       objectBoundingBottom,
       objectConfidence});
   });
+  return data;
 };
 
 export {

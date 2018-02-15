@@ -57,13 +57,13 @@ ORDER BY
 `;
 
 const objectSearch = (req, res) => {
-  const {params} = req;
+  const { params, query } = req;
 
-  params.confidence = params.confidence || 0.75;
+  query.confidence = query.confidence || 0.8;
   // Build query
   const queryCfg = {
     text: queryString,
-    values: [params.text, params.confidence]
+    values: [params.text, query.confidence]
   };
 
   // TODO: Add density count updates
