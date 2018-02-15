@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import { textSearch } from './endpoints/search';
 import { boundingBox } from './endpoints/data/boundingBox';
+import { getContext } from './endpoints/context';
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/feedback', express.static(path.join(staticDir, 'feedback.html')));
 const apiRouter = express.Router();
 apiRouter.get('/moviesearch/:text', textSearch);
 apiRouter.get('/boundingbox/:dbLineId', boundingBox);
+apiRouter.get('/moviesearch/context/:oclcId/:lineNumber', getContext);
 app.use('/api', apiRouter);
 
 // Handle Errors
