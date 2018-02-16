@@ -38,8 +38,6 @@ const getContext = (req, res) => {
     values: [oclcId, lineNumber]
   };
 
-  // TODO: Add density count updates
-
   // Run query
   pool.query(queryCfg, (err, dbRes) => {
     if (err) {

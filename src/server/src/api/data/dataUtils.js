@@ -1,9 +1,9 @@
 import _ from 'lodash';
+
 const mapBBResults = (rows) => {
 
-  const data = [];
-
-  _(rows).each((row) => {
+  // Map the columns in each row to variable names
+  return _.map(rows, (row) => {
     const {
       text_label: objectTextLabel,
       bounding_left: objectBoundingLeft,
@@ -12,16 +12,16 @@ const mapBBResults = (rows) => {
       bounding_bottom: objectBoundingBottom,
       confidence: objectConfidence
     } = row;
-    data.push({objectTextLabel,
+
+    return {
+      objectTextLabel,
       objectBoundingLeft,
       objectBoundingTop,
       objectBoundingRight,
       objectBoundingBottom,
-      objectConfidence});
+      objectConfidence
+    };
   });
-  return data;
 };
 
-export {
-  mapBBResults
-};
+export {mapBBResults};

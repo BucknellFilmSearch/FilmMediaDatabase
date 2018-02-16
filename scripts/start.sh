@@ -26,11 +26,11 @@ colorize 'Starting Server (use ctrl-C to exit)' 2
 
 pushd src &> /dev/null
 pushd server
-npm start 2>&1 | tee ${logdir}/backend.log | log 'backend' 4 &
+yarn dev-server 2>&1 | tee ${logdir}/backend.log | log 'dev-backend' 4 &
+yarn dev-static 2>&1 | tee ${logdir}/frontend.log | log 'dev-frontend' 1
+# popd &> /dev/null
+# pushd static/js &> /dev/null
 
-popd &> /dev/null
-pushd static/js &> /dev/null
-npm start 2>&1 | tee $logdir/frontend.log | log 'frontend' 1
 
 popd &> /dev/null
 popd &> /dev/null
