@@ -49,8 +49,13 @@ gulp.task('build-ui', () => {
     entries: path.join(jsDir, 'app.jsx'),
     debug: false,
     transform: [
-      ['envify', { NODE_ENV: 'development' }],
-      ['babelify', { presets: ['es2015', 'react'], plugins: ['transform-decorators-legacy', 'transform-object-rest-spread'] }]
+      ['envify', {
+        NODE_ENV: 'development'
+      }],
+      ['babelify', {
+        presets: ['env', 'react'],
+        plugins: ['transform-decorators-legacy', 'transform-object-rest-spread']
+      }]
     ]
   })
   .bundle()
