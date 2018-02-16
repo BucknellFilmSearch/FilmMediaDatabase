@@ -8,5 +8,5 @@ const cfg = JSON.parse(readFileSync(path.join(__dirname, 'config.json')));
 // Create a pool from the config
 const pool = new Pool(cfg);
 
-// Create a singleton client pool
+// Export a singleton client pool
 export default pool;

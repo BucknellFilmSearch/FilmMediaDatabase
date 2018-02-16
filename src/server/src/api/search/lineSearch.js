@@ -69,7 +69,7 @@ const lineSearch = (req, res) => {
       res.status(err.status || 500);
       throw err;
     }
-    // Return the mapped results
+    // Send the mapped results
     res.json({
       results: mapResults(dbRes.rows)
     });

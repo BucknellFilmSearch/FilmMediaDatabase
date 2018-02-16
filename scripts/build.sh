@@ -32,6 +32,7 @@ if [[ $? == 0 ]]; then
   pushd static/js &> /dev/null
   yarn build
   popd &> /dev/null
+  echo 'Building server'
   pushd server &> /dev/null
   yarn build
   popd &> /dev/null
@@ -40,6 +41,7 @@ else
   pushd static/js &> /dev/null
   npm run build
   popd &> /dev/null
+  echo 'Building server'
   pushd server &> /dev/null
   npm run build
   popd &> /dev/null
