@@ -1,6 +1,19 @@
 import pool from '../../postgres/dbClient';
 import { mapResults } from '../search/searchUtils';
 
+/* * * * * * * * * *
+ * Context Endpoint
+ * -----------------
+ * Collects the lines that exist within close proximity of the
+ * specified line number. Returns data in the form:
+ *
+ * {
+ *  results: {
+ * } 
+ * }
+ *
+ * * * * * * * * * */
+
 const queryString = `
 SELECT
   DISTINCT mm.oclc_id,
@@ -18,11 +31,11 @@ INNER JOIN
   ON
     mt.oclc_id = mm.oclc_id
 WHERE
-  mt.oclc_id = $1:integer
+  mt.oclc_id = $1::integer
 AND
-  mt.line_number < $2:integer + 40 --magic number we got from team endframe
+  mt.line_number < $2::integer + 40 --magic number we got from team endframe
 AND
-  mt.line_number > $2:integer - 40
+  mt.line_number > $2::integer - 40
 AND
   mm.movie_or_tv_show = 'Movie'
 ORDER BY
@@ -46,8 +59,9 @@ const getContext = (req, res) => {
       throw err;
     }
     // Return the mapped results
+    console.log(JSON.stringify(mapResults(dbRes.rows), null, 2));
     res.json({
-      results: mapResults(dbRes.rows)
+      context: mapResults(dbRes.rows)
     });
   });
 };
