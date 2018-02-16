@@ -230,6 +230,13 @@ if __name__ == '__main__':
     LOGGER.tag('LIST_T_DISP').log(Msg('traverse', '', prefix_color='green'))
     LIST_T.start()
 
+    # Start thread for adding all necessary files
+    T1 = threading.Thread(target=traverse, args=[])
+    LOGGER.tag('T1_WAIT').log(Msg('traverse', 'Traversing directories', prefix_color='green'))
+    LOGGER.wait('T1_WAIT', Msg('traverse', 'Traversing directories', prefix_color='green'), T1)
+    LOGGER.tag('T1_DISP').log(Msg('traverse', '', prefix_color='green'))
+    T1.start()
+
     # Wait for threads to finish
     LIST_T.wait()
     LOGGER.log(
