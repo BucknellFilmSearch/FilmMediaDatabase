@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-
+from __future__ import print_function
 import os
 import sys
 import subprocess
 import json
 import threading
 import timeit
+import textwrap
 
 from logger import Logger, Msg
 import psycopg2
@@ -16,32 +17,24 @@ def process(img):
 
     :param: img The path to the image
     '''
-    LOGGER.log(
-        Msg(
-            'traverse',
-            'Adding: {}'.format(img),
-            prefix_color='green'
-        ),
-        tag_id='T1_DISP'
-    )
     DARKNET_PROC.stdin.write(img + '\n')
     DARKNET_PROC.stdin.flush()
 
 
-def listfiles(media_dir):
-    '''
-    Recursively generates all of the files in the given directory
-    that have .png and .jpg extensions
+# def listfiles(media_dir):
+#     '''
+#     Recursively generates all of the files in the given directory
+#     that have .png and .jpg extensions
 
-    :param: media_dir The directory to list files from
-    '''
-    for root, _, files in os.walk(media_dir):
-        for filename in files:
-            if filename.endswith('.jpg') or filename.endswith('.png'):
-                yield os.path.join(root, filename)
+#     :param: media_dir The directory to list files from
+#     '''
+#     for root, _, files in os.walk(media_dir):
+#         for filename in files:
+#             if filename.endswith('.jpg') or filename.endswith('.png'):
+#                 yield os.path.join(root, filename)
 
 
-def traverse(media_dir):
+def traverse():
     '''
     Traverses all of the files in media_dir, and checks if a given
     one has been processed already. If it has not, adds the file
@@ -49,9 +42,24 @@ def traverse(media_dir):
 
     :param: media_dir The directory to recursively check
     '''
-    for img in listfiles(media_dir):
-        process(img)
-    process('')
+    with open(os.path.join(os.path.curdir, 'files.txt')) as file_list:
+        process(file_list.read())
+    LOGGER.log(
+        Msg(
+            'traverse',
+            'Added files',
+            prefix_color='green'
+        ),
+        tag_id='T1_DISP'
+    )
+            # for filename in file_list:
+            #     try:
+            #         process(filename.strip(), count)
+            #         count += 1
+            #     except Exception as e:
+            #         print(e.message)
+            #         sys.exit(1)
+            # process('',  count)
 
 
 def upload():
@@ -63,86 +71,78 @@ def upload():
 
     movies = {}
 
-    cur_file = ''
+    cur_oclc_id = ''
+    cur_line_no = ''
 
     with open(os.path.join(THIS_FILE, '..', 'logs', 'populate.log'), 'w+') as log:
-        try:
-            while DARKNET_PROC.poll() is None:
-                recognized_object = DARKNET_PROC.stdout.readline().rstrip()
-                
-                if recognized_object == '':
-                    break
+        while DARKNET_PROC.poll() is None:
+            recognized_object = DARKNET_PROC.stdout.readline().rstrip()
+            
+            if recognized_object == '':
+                break
 
-                # JSON data
-                data = json.loads(recognized_object)
+            # JSON data
+            data = json.loads(recognized_object)
 
-                oclc_id = data['oclc_id']
-                line_no = data['db_line_id']
+            oclc_id = data['oclc_id']
+            line_no = data['db_line_id']
 
-                # Populate cache
-                if oclc_id not in movies.keys():
-                    movies[oclc_id] = {}
-                if line_no not in movies[oclc_id].keys():
-                    try:
-                        # Get DB Line ID
-                        READ_CUR_T2.execute('''
-                            SELECT db_line_id FROM media_text WHERE oclc_id = %(oclc_id)s AND line_number = %(db_line_id)s LIMIT 1;
-                        ''', data)
-                        res = READ_CUR_T2.fetchone()
-                        movies[oclc_id][line_no] = res[0]
-                    except Exception as e:
-                        LOGGER.log(
-                            Msg(
-                                'error',
-                                e.message,
-                                prefix_color='red',
-                                msg_color='red'
-                            )
-                        )
-                        file_str = '{oclc_id}/{line_no}'.format(**locals())
-                        if file_str != cur_file:
-                            log.write(file_str + '\n')
-                            cur_file = file_str
-                        # log.write('\t{label} ({confidence:.0%}) @ [{t}, {l}, {b}, {r}]\n'.format(**data))
-                        continue
+            # Populate cache
+            if oclc_id not in movies.keys():
+                movies[oclc_id] = {}
 
-                data['db_line_id'] = movies[oclc_id][line_no]
-
-                # Insert new data
-                WRITE_CUR_T2.execute('''
-                    INSERT INTO media_recognized_objects
-                    (db_line_id, text_label, confidence, bounding_left, bounding_right, bounding_top, bounding_bottom)
-                    VALUES
-                    (%(db_line_id)s, %(label)s, %(confidence)s, %(l)s, %(r)s, %(t)s, %(b)s)
-                    ON CONFLICT DO NOTHING;
+            if line_no not in movies[oclc_id].keys():
+                try:
+                    # Get DB Line ID
+                    READ_CUR_T2.execute('''
+                        SELECT db_line_id FROM media_text WHERE oclc_id = %(oclc_id)s AND line_number = %(db_line_id)s LIMIT 1;
                     ''', data)
+                    res = READ_CUR_T2.fetchone()
+                    movies[oclc_id][line_no] = res[0]
+                except Exception as e:
+                    if oclc_id != cur_oclc_id:
+                        log.write('{oclc_id}\n'.format(**locals()))
+                        cur_oclc_id = oclc_id
+                    # log.write('    {}\n'.format(e.message))
+                    continue
 
-                LOGGER.log(
-                    Msg(
-                        'upload',
-                        '{step} entered into DB'.format(**locals()),
-                        prefix_color='blue'
-                    ),
-                    tag_id='T2_COUNT'
-                )
-                if step % 100 == 0 and step > 0:
-                    CONN.commit()
-                step += 1
+            data['db_line_id'] = movies[oclc_id][line_no]
 
-            # commit all remaining lines
+            # Insert new data
+            WRITE_CUR_T2.execute('''
+                INSERT INTO media_recognized_objects
+                (db_line_id, text_label, confidence, bounding_left, bounding_right, bounding_top, bounding_bottom)
+                VALUES
+                (%(db_line_id)s, %(label)s, %(confidence)s, %(l)s, %(r)s, %(t)s, %(b)s)
+                ON CONFLICT DO NOTHING;
+                ''', data)
+
             LOGGER.log(
                 Msg(
                     'upload',
-                    '{step} entered into DB'.format(**locals()),
+                    '{step} entered into DB ({oclc_id}/{line_no})'.format(**locals()),
                     prefix_color='blue'
                 ),
                 tag_id='T2_COUNT'
             )
-            CONN.commit()
-            CONN.close()
-        except Exception as e:
-            print(e)
-            sys.exit(1)
+            if step % 100 == 0 and step > 0:
+                CONN.commit()
+            if cur_oclc_id != oclc_id or cur_line_no != line_no:
+                cur_oclc_id = oclc_id
+                cur_line_no = oclc_id
+                step += 1
+
+        # commit all remaining lines
+        LOGGER.log(
+            Msg(
+                'upload',
+                '{step} entered into DB'.format(**locals()),
+                prefix_color='blue'
+            ),
+            tag_id='T2_COUNT'
+        )
+        CONN.commit()
+        CONN.close()
 
 
 if __name__ == '__main__':
@@ -207,19 +207,12 @@ if __name__ == '__main__':
 
     START = timeit.default_timer()
 
-    # Start thread for adding all necessary files
-    # T1 = threading.Thread(target=traverse, args=[sys.argv[1]])
-    # T1.start()
-    FIND_PATH = os.path.join(sys.argv[1], '*')
-    T1 = subprocess.Popen(
-        'find {} -maxdepth 1 -type f \( -iname \*.jpg -o -iname \*.png \) && exit 0'.format(FIND_PATH),
-        shell=True, 
-        stdout=subprocess.PIPE
-    )
-    LOGGER.tag('T1_WAIT').log(Msg('traverse', 'Traversing directories', prefix_color='green'))
-    LOGGER.wait('T1_WAIT', Msg('traverse', 'Traversing directories', prefix_color='green'), T1)
-    LOGGER.tag('T1_DISP').log(Msg('traverse', '', prefix_color='green'))
-
+    # FIND_PATH = os.path.join(sys.argv[1], '*')
+    # T1 = subprocess.Popen(
+    #     'find {} -maxdepth 1 -type f \( -iname \*.jpg -o -iname \*.png \) && exit 0'.format(FIND_PATH),
+    #     shell=True, 
+    #     stdout=subprocess.PIPE
+    # )
 
     #==============================
     #       DARKNET SETUP
@@ -233,7 +226,7 @@ if __name__ == '__main__':
         CMD,
         cwd=DARKNET_DIR,
         shell=True,
-        stdin=T1.stdout,
+        stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
@@ -245,8 +238,15 @@ if __name__ == '__main__':
     LOGGER.wait('T2_WAIT', Msg('upload', 'Entering into DB', prefix_color='blue'), T2)
     LOGGER.tag('T2_COUNT').log(Msg('upload', '0 Entered into DB', prefix_color='blue'))
 
+    # Start thread for adding all necessary files
+    T1 = threading.Thread(target=traverse, args=[])
+    LOGGER.tag('T1_WAIT').log(Msg('traverse', 'Traversing directories', prefix_color='green'))
+    LOGGER.wait('T1_WAIT', Msg('traverse', 'Traversing directories', prefix_color='green'), T1)
+    LOGGER.tag('T1_DISP').log(Msg('traverse', '', prefix_color='green'))
+    T1.start()
+
     # Wait for threads to finish
-    T1.wait()
+    T1.join()
     LOGGER.log(
         Msg(
             'traverse',
