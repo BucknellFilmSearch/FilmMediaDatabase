@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import { textSearch } from './api/search';
 import { boundingBox } from './api/data/boundingBox';
 import { getContext } from './api/context';
+import { reportObject } from './api/data/reportObject';
 
 const port = 8080;
 
@@ -27,6 +28,7 @@ const apiRouter = express.Router();
 apiRouter.get('/moviesearch/:text', textSearch); // Default search endpoints
 apiRouter.get('/boundingbox/:dbLineId', boundingBox); // Retrieve all bounding boxes for a given db line id
 apiRouter.get('/moviesearch/context/:oclcId/:lineNumber', getContext); // Get the context view data for a given line
+apiRouter.put('/reportobject/:id', reportObject);
 app.use('/api', apiRouter); // Mount behind the /api sub-route
 
 // Error handling (log it and return a 500 error)
