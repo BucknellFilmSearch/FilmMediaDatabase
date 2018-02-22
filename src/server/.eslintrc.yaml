@@ -11,6 +11,7 @@ env:
 
 extends:
     "eslint:recommended"
+    "react"
 
 globals:
     assert: false

@@ -26,7 +26,7 @@ app.use('/feedback', express.static(path.join(staticDir, 'feedback.html'))); // 
 // Add API routes
 const apiRouter = express.Router();
 apiRouter.get('/moviesearch/:text', textSearch); // Default search endpoints
-apiRouter.get('/boundingbox/:dbLineId', boundingBox); // Retrieve all bounding boxes for a given db line id
+apiRouter.get('/boundingbox/:oclcId/:lineNumber', boundingBox); // Retrieve all bounding boxes for a given db line id
 apiRouter.get('/moviesearch/context/:oclcId/:lineNumber', getContext); // Get the context view data for a given line
 apiRouter.put('/reportobject/:id', reportObject);
 app.use('/api', apiRouter); // Mount behind the /api sub-route
