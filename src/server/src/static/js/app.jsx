@@ -81,6 +81,7 @@ export const reducer = (state = {search: null, context: [], searchType: 1, sortT
             };
         case 'RECEIVE_CONTEXT':
             // remap context screenshots to include key
+            console.log(action);
             let newContextScreenshots = action.context.map(screenshot =>
                     ({...screenshot, key: `oclc${action.movieOclcId}line${screenshot.movieLineNumber}`})
                 // filter out films that are already in the context

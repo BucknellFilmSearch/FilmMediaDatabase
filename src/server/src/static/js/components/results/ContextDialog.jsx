@@ -119,7 +119,7 @@ export default class ContextDialog extends React.Component {
      */
     slideLeft() {
         if (this.props.currentScreenshot != null) {
-            this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber-1)
+            this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber-2)
             this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber-2);
         }
     }
@@ -361,7 +361,6 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
                 .then(response => response.json())
                 .then(response => response.context)
                 .then(response => dispatch(receiveContext(response)));
-            // TODO - add catch handler to handle errors
         }
 
     }

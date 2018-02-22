@@ -1,5 +1,5 @@
 import pool from '../../postgres/dbClient';
-import { mapResults } from '../search/searchUtils';
+import { groupedMap } from '../utils';
 
 /* * * * * * * * * *
  * Context Endpoint
@@ -33,9 +33,9 @@ INNER JOIN
 WHERE
   mt.oclc_id = $1::integer
 AND
-  mt.line_number < $2::integer + 40 --magic number we got from team endframe
+  mt.line_number < $2::integer + 4 --magic number we got from team endframe
 AND
-  mt.line_number > $2::integer - 40
+  mt.line_number > $2::integer - 4
 AND
   mm.movie_or_tv_show = 'Movie'
 ORDER BY
@@ -59,9 +59,9 @@ const getContext = (req, res) => {
       throw err;
     }
     // Return the mapped results
-    console.log(JSON.stringify(mapResults(dbRes.rows), null, 2));
+    console.log(JSON.stringify(groupedMap(dbRes.rows)[0], null, 2));
     res.json({
-      context: mapResults(dbRes.rows)
+      context: groupedMap(dbRes.rows)[0]
     });
   });
 };
