@@ -119,7 +119,7 @@ export default class ContextDialog extends React.Component {
      */
     slideLeft() {
         if (this.props.currentScreenshot != null) {
-            this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber-2)
+            this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber-1)
             this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber-2);
         }
     }
@@ -129,7 +129,7 @@ export default class ContextDialog extends React.Component {
      */
     slideRight() {
         if (this.props.currentScreenshot != null) {
-            this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber)
+            this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber+1)
             this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber);
         }
     }
