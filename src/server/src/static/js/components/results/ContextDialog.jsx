@@ -190,7 +190,7 @@ export default class ContextDialog extends React.Component {
         .then((res) => {
             console.log(res.results);
             const newBox = { boxes: {} };
-            newBox.boxes[`${oclcId}-${lineNo}`] = _.map(res.results, res => res.bounding)
+            newBox.boxes[`${oclcId}-${lineNo}`] = _.map(_.filter(res.results, res => res.textLabel === this.props.searchTerm), res => res.bounding)
             this.setState(newBox, () => console.log(this.state));
         })
         .catch((err) => {
