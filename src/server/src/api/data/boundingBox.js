@@ -1,21 +1,30 @@
 import pool from '../../postgres/dbClient';
-import { mapBBResults } from './dataUtils';
+import { boundingBoxMap } from '../utils';
 
 const queryString = `
 SELECT
-    ro.text_label,
-    ro.bounding_left,
-    ro.bounding_top,
-    ro.bounding_right,
-    ro.bounding_bottom,
-    ro.confidence
+	bounding_top,
+	bounding_bottom,
+	bounding_left,
+	bounding_right,
+	text_label,
+	confidence,
+	db_line_id
 FROM
-    media_recognized_objects ro
-WHERE
-    ro.db_line_id = $1
+	media_recognized_objects
+WHERE 
+	db_line_id = (
+	SELECT
+		db_line_id
+	FROM
+	    media_text
+	WHERE
+	    line_number = $1::integer
+	  AND
+      oclc_id = $2::integer
+  )
   AND
-    ro.confidence >= $2
-;
+    confidence >= $3::real
 `;
 
 const boundingBox = (req, res) => {
@@ -26,7 +35,7 @@ const boundingBox = (req, res) => {
 
   const queryCfg = {
     text: queryString,
-    values: [params.dbLineId, query.confidence]
+    values: [params.lineNumber, params.oclcId, query.confidence]
   };
 
   // Query from the default pool
@@ -38,7 +47,7 @@ const boundingBox = (req, res) => {
     }
     // Send the mapped results
     res.json({
-      results: mapBBResults(dbRes.rows)
+      results: boundingBoxMap(dbRes.rows)
     });
   });
 

@@ -11,7 +11,9 @@
     "build": "gulp build"
   },
   "nodemonConfig": {
-    "ignore": ["src/static/**/*"],
+    "ignore": [
+      "src/static/**/*"
+    ],
     "execMap": {
       "js": "./node_modules/babel-cli/bin/babel-node.js"
     }
@@ -32,6 +34,7 @@
     "pg": "^7.4.1",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
+    "react-bounding-box": "^0.0.15",
     "react-dom": "^15.4.2",
     "react-dropzone": "^3.11.0",
     "react-image-gallery": "^0.7.12",

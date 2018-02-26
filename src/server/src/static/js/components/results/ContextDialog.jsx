@@ -7,6 +7,7 @@
  * Spring 2017
  */
 
+
 import renderHTML from 'react-render-html';
 import * as React from 'react';
 import Slider from 'react-slick';
@@ -19,6 +20,8 @@ import {GridTile} from 'material-ui/GridList';
 import SVGCircle from './SVGCircle.jsx';
 import ReactTooltip from 'react-tooltip';
 import RaisedButton from 'material-ui/RaisedButton';
+import BoundingBox from 'react-bounding-box';
+import _ from 'lodash';
 import {beautifyTimeStamp} from '../helpers';
 
 const TIME_LINE_LENGTH = 1150;
@@ -48,7 +51,8 @@ export default class ContextDialog extends React.Component {
 
         // state is initialized to keeping the dialog closed
         this.state = {
-            open: false
+            open: false,
+            boxes: []
         };
 
         this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -73,6 +77,7 @@ export default class ContextDialog extends React.Component {
 
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyPress);
+        this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber);
         this.setState({open: true});
     }
 
@@ -94,6 +99,7 @@ export default class ContextDialog extends React.Component {
     componentWillReceiveProps(nextProps) {
         // open the context dialog if screenshot is clicked or URL is updated
         if (this.state.open === false && nextProps.contextScreenshotMovieOclcId !== null) {
+            this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber);
             this.handleOpen();
         }
     }
@@ -104,6 +110,7 @@ export default class ContextDialog extends React.Component {
      * to in the image gallery.
      */
     svgSlideTo(index) {
+        this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, index)
         this.refs.slider.slickGoTo(index);
     }
 
@@ -111,16 +118,20 @@ export default class ContextDialog extends React.Component {
      * Slides the image gallery one to the left if able
      */
     slideLeft() {
-        if (this.props.currentScreenshot != null)
+        if (this.props.currentScreenshot != null) {
+            this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber-1)
             this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber-2);
+        }
     }
 
     /**
      * Slides the image gallery one to the right if able
      */
     slideRight() {
-        if (this.props.currentScreenshot != null)
+        if (this.props.currentScreenshot != null) {
+            this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber+1)
             this.refs.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber);
+        }
     }
 
     /**
@@ -172,6 +183,21 @@ export default class ContextDialog extends React.Component {
         hashHistory.push(newPath);
     }
 
+    retrieveBoundingBoxes(oclcId, lineNo) {
+        const bBoxApiCall = `http://localhost:8080/api/boundingbox/${oclcId}/${lineNo}`;
+        fetch(bBoxApiCall)
+        .then((res) => res.json())
+        .then((res) => {
+            console.log(res.results);
+            const newBox = { boxes: {} };
+            newBox.boxes[`${oclcId}-${lineNo}`] = _.map(_.filter(res.results, res => res.textLabel === this.props.searchTerm), res => res.bounding)
+            this.setState(newBox, () => console.log(this.state));
+        })
+        .catch((err) => {
+            console.error(err.message);
+        });
+    }
+
     /**
      * Render the context page.
      */
@@ -207,7 +233,10 @@ export default class ContextDialog extends React.Component {
                                 titleBackground={'rgba(0, 0, 0, 0.3)'}
                                 key={`img${imageNumber}`}
                             >
-                                <img src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}/>
+                                <BoundingBox
+                                  image={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}
+                                  boxes={this.state.boxes[`${this.props.currentFilm.movieOclcId}-${imageNumber}`] || []}
+                                />
                             </GridTile>
                             )
                         }
@@ -332,7 +361,6 @@ const slideAndCheckForContext = (newMovieLineNumberIndex) => {
                 .then(response => response.json())
                 .then(response => response.context)
                 .then(response => dispatch(receiveContext(response)));
-            // TODO - add catch handler to handle errors
         }
 
     }
