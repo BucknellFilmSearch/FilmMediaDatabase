@@ -138,8 +138,8 @@ export default class ResultsToolbar extends React.Component {
                             text={`${this.props.totalScreenshots} Results for '${this.props.searchTerm.replace(/&/g, ' ')}' in ${this.props.films.length} films`}/>
                     ) : null
                     }
-                    
-                    
+
+
                 </ToolbarGroup>
                 <ToolbarGroup lastChild={true}>
                     <SelectField

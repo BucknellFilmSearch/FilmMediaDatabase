@@ -23,6 +23,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import BoundingBox from 'react-bounding-box';
 import _ from 'lodash';
 import {beautifyTimeStamp} from '../helpers';
+import Checkbox from 'material-ui/Checkbox';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 
 const TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
@@ -30,7 +33,7 @@ const CIRCLE_RADIUS = 7;
 
 
 const style = {
-    margin: 12
+    margin: 12,
 };
 
 
@@ -52,7 +55,8 @@ export default class ContextDialog extends React.Component {
         // state is initialized to keeping the dialog closed
         this.state = {
             open: false,
-            boxes: []
+            boxes: [],
+            showBoundingBoxes: true
         };
 
         this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -60,6 +64,7 @@ export default class ContextDialog extends React.Component {
         this.contextDialogueColorSearch = this.contextDialogueColorSearch.bind(this);
         this.slideLeft = this.slideLeft.bind(this);
         this.slideRight = this.slideRight.bind(this);
+        this.toggleBoundingBoxes = this.toggleBoundingBoxes.bind(this);
     }
 
     /**
@@ -103,6 +108,18 @@ export default class ContextDialog extends React.Component {
             this.handleOpen();
         }
     }
+
+    toggleBoundingBoxes(event, checked){
+      this.setState({showBoundingBoxes: checked}, () => {
+        if(this.state.showBoundingBoxes){
+
+        }
+        else{
+
+        }
+      });
+    }
+
 
     /**
      * Slides the image gallery to the specified index
@@ -244,9 +261,22 @@ export default class ContextDialog extends React.Component {
                     </Slider>
                 </div>
 
-
-
                 <div className="contextDialogue">
+                    <div>
+                      <Checkbox
+                          checkedIcon={<Visibility />}
+                          uncheckedIcon={<VisibilityOff />}
+                          defaultChecked={true}
+                          label="Bounding Boxes"
+                          style={{
+                              display: 'inline-block',
+                              width: '200px',
+                              fontSize: '16px'
+                            }}
+                          checked={this.state.showBoundingBoxes}
+                          onCheck={this.toggleBoundingBoxes}
+                      />
+                    </div>
                     <IconButton onClick={this.slideLeft}>
                         <SvgIcon>
                             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
@@ -299,8 +329,9 @@ export default class ContextDialog extends React.Component {
 
                 </div>
                 <div className="colorSearchButton" >
-                        <RaisedButton onClick={this.contextDialogueColorSearch} label="Color Search" style={style} />
+                    <RaisedButton onClick={this.contextDialogueColorSearch} label="Color Search" style={style} />
                 </div>
+
             </FullscreenDialog>
         );
     }
