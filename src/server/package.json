@@ -36,7 +36,6 @@
     "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-dropzone": "^3.11.0",
-    "react-fabricjs": "^0.1.6",
     "react-image-gallery": "^0.7.12",
     "react-lazyload": "^2.2.4",
     "react-onscroll": "^1.0.1",
