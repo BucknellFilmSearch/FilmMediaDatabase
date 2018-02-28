@@ -56,7 +56,9 @@ export default class ContextDialog extends React.Component {
     this.state = {
       open: false,
       boxes: [],
-      showBoundingBoxes: true
+      showBoundingBoxes: true,
+      isBoxSelected: false,
+      selectedBox: -1
     };
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -235,6 +237,15 @@ export default class ContextDialog extends React.Component {
     });
   }
 
+  unselectBox() {
+    this.setState({isBoxSelected: false});
+  }
+
+  selectBox(id) {
+    this.setState({isBoxSelected: true});
+    this.setState({selectedBox: id});
+  }
+
   /**
    * Render the context page.
    */
@@ -273,18 +284,7 @@ export default class ContextDialog extends React.Component {
                               <BoundingBox
                                 src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}
                                 boxes={this.state.boxes[`${this.props.currentFilm.movieOclcId}-${imageNumber}`] || []}
-                                options={{
-                                  colors: {
-                                    normal: 'rgba(255,225,255,1)',
-                                    selected: 'rgba(0,225,204,1)',
-                                    unselected: 'rgba(100,100,100,1)'
-                                  },
-                                  style: {
-                                    maxWidth: '100%',
-                                    maxHeight: '90vh',
-                                    background: '#fff5'
-                                  }
-                                }}
+                                onSelectBox={this.selectBox}
                               />
                           </GridTile>
                           )
