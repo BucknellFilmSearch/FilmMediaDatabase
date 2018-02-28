@@ -220,7 +220,7 @@ export default class ContextDialog extends React.Component {
   retrieveBoundingBoxes(oclcId, lineNo) {
     // Request bounding boxes and unwrap
     const bBoxApiCall = `http://localhost:8080/api/boundingbox/${oclcId}/${lineNo}`;
-    
+
     fetch(bBoxApiCall)
     .then((res) => res.json())
     .then((res) => {
