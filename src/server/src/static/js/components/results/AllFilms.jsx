@@ -77,6 +77,8 @@ export default class AllFilms extends React.Component {
         // new search term
         const { searchTerm: oldTerm, searchType: oldType } = this.props;
         const { searchTerm: newTerm, searchType: newType } = nextProps;
+        console.log("old searchTerm: " + oldTerm);
+        console.log("new searchTerm: " + newTerm);
         if (oldTerm !== newTerm || oldType !== newType) {
             const params = {
               type:  nextProps.searchType || nextProps.routeParams.searchType || undefined
@@ -294,6 +296,7 @@ function mapStateToProps(state) {
         hasContext: state.contextMovieOclcId,
         search: state.search,
         searchType: state.searchType,
+        searchTerm: state.searchTerm,
         queueContextMovieOclcId: state.queueContextMovieOclcId,
         queueCurrentContextMovieLineNumber: state.queueCurrentContextMovieLineNumber
     }

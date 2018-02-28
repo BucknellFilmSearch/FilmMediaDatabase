@@ -108,6 +108,7 @@ export const reducer = (state = {
           response: null,
           searchTerm: action.searchTerm
         },
+        searchTerm: action.searchTerm,
         hoverMovieOclcId: null,
         hoverMovieLineNumber: null
       };
