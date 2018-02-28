@@ -6,7 +6,7 @@
  * Spring 2017
  */
 
-import * as React from "react";
+import * as React from 'react';
 let Dropzone = require('react-dropzone');
 
 
@@ -45,17 +45,18 @@ export default class PhotoDropZone extends React.Component {
     render() {
         return (
             <div>
-                <Dropzone ref="dropzone" onDrop={this.onDrop} multiple={false} disableClick={true} style="width:15px">
-                    <div id="photoModal">
-                        <img src="/static/imageFiles/photoUploadIcon.svg" />
-                        <div>
-                            <button type="button" onClick={this.onOpenClick}>
-                            Browse
-                            </button> or drag images here.
-                        </div>
-                    </div>
-                </Dropzone>
+              <Dropzone ref='dropzone' onDrop={ this.onDrop } multiple={ false } disableClick={ true } style='width:15px'>
+                <div id='photoModal'>
+                  <img src='/static/imageFiles/photoUploadIcon.svg' />
+                  <div>
+                    <button type='button' onClick={ this.onOpenClick }>
+                      Browse
+                    </button> or drag images here.
+                  </div>
+                </div>
+              </Dropzone>
             </div>
-        );
+            );
     }
-};
+}
+;

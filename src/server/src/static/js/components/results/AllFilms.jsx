@@ -51,7 +51,7 @@ export default class AllFilms extends React.Component {
         }
 
         const params = {
-          type: this.props.searchType || undefined
+          type: this.props.searchType || this.props.routeParams['searchType'] || undefined
         };
         this.props.fetchNewSearchTerm(this.props.routeParams['searchTerm'], params);
     }
@@ -68,26 +68,31 @@ export default class AllFilms extends React.Component {
         if (nextProps.queueContextMovieOclcId && nextProps.filmsLoaded) {
             this.props.dequeueContext();
             // update url if there is queued context
-            hashHistory.push(`${nextProps.routeParams['searchTerm']}/context/${nextProps.queueContextMovieOclcId}/${nextProps.queueCurrentContextMovieLineNumber}`);
+            hashHistory.push(`${nextProps.searchType}/${nextProps.routeParams.searchTerm}/context/${nextProps.queueContextMovieOclcId}/${nextProps.queueCurrentContextMovieLineNumber}`);
             return;
         }
 
         // compare old search term to new, and old context to new
 
         // new search term
-        if (nextProps.routeParams['searchTerm'] != this.props.routeParams['searchTerm']) {
+        const { searchTerm: oldTerm, searchType: oldType } = this.props;
+        const { searchTerm: newTerm, searchType: newType } = nextProps;
+        if (oldTerm !== newTerm || oldType !== newType) {
             const params = {
-              type: this.props.searchType || undefined
+              type:  nextProps.searchType || nextProps.routeParams.searchType || undefined
             };
-            this.props.fetchNewSearchTerm(nextProps.routeParams['searchTerm'], params);
+            this.props.fetchNewSearchTerm(nextProps.routeParams.searchTerm, params);
         }
+
         // swap context
-        if (nextProps.routeParams['contextOclcId'] != this.props.routeParams['contextOclcId'] ||
-            nextProps.routeParams['contextScreenshot'] != this.props.routeParams['contextScreenshot']) {
-            this.props.openContext(nextProps.routeParams['contextOclcId'], nextProps.routeParams['contextScreenshot']);
+        const { contextOclcId: oldOclcId, contextScreenshot: oldScreenshot } = this.props.routeParams;
+        const { contextOclcId: newOclcId, contextScreenshot: newScreenshot } = nextProps.routeParams;
+        if (newOclcId !== oldOclcId || newScreenshot !== oldScreenshot) {
+            this.props.openContext(newOclcId, newScreenshot);
         }
+
         // close context
-        else if ((!nextProps.routeParams.hasOwnProperty('contextOclcId') && this.props.routeParams.hasOwnProperty('contextOclcId'))) {
+        else if ((!_.has(nextProps.routeParams, 'contextOclcId') && _.has(this.props.routeParams, 'contextOclcId'))) {
             this.props.closeContext();
         }
     }
@@ -281,13 +286,6 @@ const getFilms = createSelector(
     }
 );
 
-function mapSearchType(idx) {
-  switch (idx) {
-    case 1: return 'object';
-    default: return 'line';
-  }
-}
-
 // Map Redux state to component props
 function mapStateToProps(state) {
     return {
@@ -295,7 +293,7 @@ function mapStateToProps(state) {
         films: getFilms(state),
         hasContext: state.contextMovieOclcId,
         search: state.search,
-        searchType: mapSearchType(state.searchType),
+        searchType: state.searchType,
         queueContextMovieOclcId: state.queueContextMovieOclcId,
         queueCurrentContextMovieLineNumber: state.queueCurrentContextMovieLineNumber
     }

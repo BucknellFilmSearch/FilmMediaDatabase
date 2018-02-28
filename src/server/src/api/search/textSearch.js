@@ -51,7 +51,7 @@ ORDER BY
 `;
 
 
-const lineSearch = (req, res) => {
+const textSearch = (req, res) => {
   const {params} = req;
 
   // Build query
@@ -65,9 +65,8 @@ const lineSearch = (req, res) => {
   // Run query
   pool.query(queryCfg, (err, dbRes) => {
     if (err) {
-      console.error(err);
+      console.error(err.message);
       res.status(err.status || 500);
-      throw err;
     }
     // Send the mapped results
     res.json({
@@ -76,4 +75,4 @@ const lineSearch = (req, res) => {
   });
 };
 
-export default lineSearch;
+export default textSearch;

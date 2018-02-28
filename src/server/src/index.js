@@ -2,7 +2,7 @@ import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
-import { textSearch } from './api/search';
+import { search } from './api/search';
 import { boundingBox } from './api/data/boundingBox';
 import { getContext } from './api/context';
 import { reportObject } from './api/data/reportObject';
@@ -25,7 +25,7 @@ app.use('/feedback', express.static(path.join(staticDir, 'feedback.html'))); // 
 
 // Add API routes
 const apiRouter = express.Router();
-apiRouter.get('/moviesearch/:text', textSearch); // Default search endpoints
+apiRouter.get('/moviesearch/:text', search); // Default search endpoints
 apiRouter.get('/boundingbox/:oclcId/:lineNumber', boundingBox); // Retrieve all bounding boxes for a given db line id
 apiRouter.get('/moviesearch/context/:oclcId/:lineNumber', getContext); // Get the context view data for a given line
 apiRouter.put('/reportobject/:id', reportObject);

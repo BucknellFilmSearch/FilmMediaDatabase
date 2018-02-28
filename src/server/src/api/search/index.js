@@ -1,13 +1,13 @@
-import lineSearch from './lineSearch';
+import textSearch from './textSearch';
 import objectSearch from './objectSearch';
-const textSearch = (req, res) => {
+const search = (req, res) => {
   const { query } = req;
-  const searchType = query.type || 'line';
+  const searchType = query.type || 'text';
 
   // Handle each type of search
   switch (searchType) {
-    case 'line':    // Search for text in subtitles
-      lineSearch(req, res);
+    case 'text':    // Search for text in subtitles
+      textSearch(req, res);
       break;
     case 'object':  // Search for objects in images
       objectSearch(req, res);
@@ -22,5 +22,5 @@ const textSearch = (req, res) => {
 };
 
 export {
-  textSearch
+  search
 };
