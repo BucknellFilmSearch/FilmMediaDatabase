@@ -28,7 +28,7 @@ const apiRouter = express.Router();
 apiRouter.get('/moviesearch/:text', search); // Default search endpoints
 apiRouter.get('/boundingbox/:oclcId/:lineNumber', boundingBox); // Retrieve all bounding boxes for a given db line id
 apiRouter.get('/moviesearch/context/:oclcId/:lineNumber', getContext); // Get the context view data for a given line
-apiRouter.put('/reportobject/:id', reportObject);
+apiRouter.put('/boundingbox/report/:id', reportObject);
 app.use('/api', apiRouter); // Mount behind the /api sub-route
 
 // Error handling (log it and return a 500 error)
