@@ -106,8 +106,10 @@ export const reducer = (state = {
         search: {
           status: "loading",
           response: null,
-          searchTerm: action.searchTerm
+          searchTerm: action.searchTerm,
+          searchType: action.searchType
         },
+        searchTerm: action.searchTerm,
         hoverMovieOclcId: null,
         hoverMovieLineNumber: null
       };
