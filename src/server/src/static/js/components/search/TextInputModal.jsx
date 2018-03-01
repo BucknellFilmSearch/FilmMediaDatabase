@@ -15,6 +15,8 @@ import {connect} from 'react-redux';
 import {hashHistory} from 'react-router';
 import Dialog from 'material-ui/Dialog';
 import {cleanStopWords, GENRES} from '../helpers';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import Slider from 'material-ui/Slider';
 
 const modalStyle = {
     textAlign: 'center'
@@ -76,13 +78,15 @@ export default class TextInputModal extends React.Component {
     this.state = {
       searchType: this.props.searchType || 'object',
       searchText: '',
-      errorText: ''
+      errorText: '',
+      confidenceSlider: 0.5
     };
 
     // this.handleClose =  this.props.closeFcn.bind(this);
-    this.onSelectSearchType = this.onSelectSearchType.bind(this);
     this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleConfidenceSlider = this.handleConfidenceSlider.bind(this);
+    this.onSelectSearchType = this.onSelectSearchType.bind(this);
   }
 
     /**
@@ -132,10 +136,14 @@ export default class TextInputModal extends React.Component {
         this.props.closeFcn();
     }
 
-    onSelectSearchType(event, index, type) {
-      this.setState({ searchType: type });
+    onSelectSearchType(val) {
+      console.log(val);
+      this.setState({ searchType: val });
     }
-
+    handleConfidenceSlider(event, value) {
+        this.setState({confidenceSlider: value});
+    };
+  
     render() {
 
         return (
@@ -147,8 +155,12 @@ export default class TextInputModal extends React.Component {
                         autoScrollBodyContent={true}
                         onRequestClose={() => this.handleClose()}
                     >
+                    <Tabs
+                    value={this.state.searchType}
+                    onChange={this.onSelectSearchType}>
+                    <Tab label="Object"
+                        value={'object'}>
                         <div style={modalDivStyle}>
-
                         <form id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
                             <TextField
                                 hintText='Search Phrase'
@@ -160,17 +172,35 @@ export default class TextInputModal extends React.Component {
                                 ref='updateSearchBox'
                             />
                         </form>
-
-                        <SelectField
-                            floatingLabelText='Type'
-                            value={this.state.searchType}
-                            onChange={this.onSelectSearchType}
-                            style={searchStyle}
-                        >
-                            <MenuItem value={'object'} primaryText='Objects' />
-                            <MenuItem value={'text'} primaryText='Subtitles' />
-                        </SelectField>
-
+                        </div>
+                        <div>
+                          <Slider value={this.state.confidenceSlider} onChange={this.handleConfidenceSlider} />
+                        </div>
+                        <div style={modalDivStyle}>
+                            <FlatButton
+                                label='Search'
+                                labelPosition='before'
+                                primary={true}
+                                // icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
+                                onClick={(event) => this.updateSearch(event)}
+                                style={buttonStyle}
+                            />
+                        </div>
+                    </Tab>
+                    <Tab label="Text"
+                        value={'text'}>
+                        <div style={modalDivStyle}>
+                        <form id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
+                            <TextField
+                                hintText='Search Phrase'
+                                errorText={this.state.errorText}
+                                value={this.state.searchText}
+                                style={inputStyle}
+                                onChange={this.handleChange}
+                                autoFocus
+                                ref='updateSearchBox'
+                            />
+                        </form>
                         <SelectField
                             floatingLabelText='Sort'
                             value={this.props.sortType}
@@ -204,8 +234,58 @@ export default class TextInputModal extends React.Component {
                                 style={buttonStyle}
                             />
                         </div>
-                    </Dialog>
-                </div>
+                    </Tab>
+                    <Tab label="Color"
+                        value={'color'}>
+                        <div style={modalDivStyle}>
+                        <form id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
+                            <TextField
+                                hintText='Search Phrase'
+                                errorText={this.state.errorText}
+                                value={this.state.searchText}
+                                style={inputStyle}
+                                onChange={this.handleChange}
+                                autoFocus
+                                ref='updateSearchBox'
+                            />
+                        </form>
+                        <SelectField
+                            floatingLabelText='Sort'
+                            value={this.props.sortType}
+                            onChange={this.props.onSelectSortType}
+                            style={sortStyle}
+                        >
+                            <MenuItem value={1} primaryText='Relevance' />
+                            <MenuItem value={2} primaryText='Movie Title (A-Z)' />
+                            <MenuItem value={3} primaryText='Movie Title (Z-A)' />
+                            <MenuItem value={4} primaryText='Year (New to Old)' />
+                            <MenuItem value={5} primaryText='Year (Old to New)' />
+                        </SelectField>
+
+                        <SelectField
+                            floatingLabelText='Genre'
+                            value={this.props.genre}
+                            onChange={this.props.onSelectGenre}
+                            style={sortStyle}
+                            maxHeight={200}
+                        >
+                            {GENRES.map((genre, index) => <MenuItem key={genre} value={genre} primaryText={genre} />) }
+                        </SelectField>
+                        </div>
+                        <div style={modalDivStyle}>
+                            <FlatButton
+                                label='Search'
+                                labelPosition='before'
+                                primary={true}
+                                // icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
+                                onClick={(event) => this.updateSearch(event)}
+                                style={buttonStyle}
+                            />
+                        </div>
+                    </Tab>
+                    </Tabs>
+                </Dialog>
+            </div>
         );
     }
 }

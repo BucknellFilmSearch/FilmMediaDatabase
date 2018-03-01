@@ -86,15 +86,7 @@ export default class AllFilms extends React.Component {
             }
         } = nextProps;
         // new search term
-<<<<<<< e8b4477deb37d527fa4a4939df9efa98d48728f5
-        const { searchTerm: oldTerm, searchType: oldType } = this.props;
-        const { searchTerm: newTerm, searchType: newType } = nextProps;
-        console.log("old searchTerm: " + oldTerm);
-        console.log("new searchTerm: " + newTerm);
-        if (oldTerm !== newTerm || oldType !== newType) {
-=======
         if (this.props.search === null) {
->>>>>>> Can now copy-paste urls with contexts and actually have them work
             const params = {
               type:  newSearchType || newRouteType || undefined
             };
