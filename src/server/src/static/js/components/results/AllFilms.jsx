@@ -312,6 +312,7 @@ function mapStateToProps(state) {
         hasContext: state.contextMovieOclcId,
         search: state.search,
         searchType: state.searchType,
+        searchTerm: state.searchTerm,
         queueContextMovieOclcId: state.queueContextMovieOclcId,
         queueCurrentContextMovieLineNumber: state.queueCurrentContextMovieLineNumber
     }
