@@ -67,6 +67,7 @@ export default class ContextDialog extends React.Component {
     this.slideLeft = this.slideLeft.bind(this);
     this.slideRight = this.slideRight.bind(this);
     this.toggleBoundingBoxes = this.toggleBoundingBoxes.bind(this);
+    this.reportBox = this.reportBox.bind(this);
   }
 
   /**
@@ -241,6 +242,14 @@ export default class ContextDialog extends React.Component {
     this.setState({isBoxSelected: false});
   }
 
+  reportBox() {
+    const reportApiCall = `http://localhost:8080/api/boundingbox/report/${this.state.selectedBox}`;
+    fetch(reportApiCall, {})
+    .then((res) => res.json())
+    .then((res) => {alert("Object Reported, Thank you!")}
+
+  }
+
   selectBox(id) {
     this.setState({isBoxSelected: true});
     this.setState({selectedBox: id});
@@ -361,7 +370,9 @@ export default class ContextDialog extends React.Component {
               </div>
               <div className="colorSearchButton" >
                   <RaisedButton onClick={this.contextDialogueColorSearch} label="Color Search" style={style} />
+                  <RaisedButton onClick={this.reportBox} label="Report Selected Object?" style={style} />
               </div>
+
 
           </FullscreenDialog>
       );
