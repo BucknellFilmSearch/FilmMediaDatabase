@@ -67,11 +67,8 @@ export default class ContextDialog extends React.Component {
     this.slideLeft = this.slideLeft.bind(this);
     this.slideRight = this.slideRight.bind(this);
     this.toggleBoundingBoxes = this.toggleBoundingBoxes.bind(this);
-<<<<<<< 08284ab48d06f395293df85aad84738acef04c70
     this.selectBox = this.selectBox.bind(this);
-=======
     this.reportBox = this.reportBox.bind(this);
->>>>>>> Api request made
   }
 
   /**
