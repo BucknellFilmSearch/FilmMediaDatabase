@@ -47,11 +47,11 @@ export default class AllFilms extends React.Component {
         // save context until search term is loaded
         if (this.props.routeParams['contextOclcId']) {
             this.props.queueContext(this.props.routeParams['contextOclcId'], this.props.routeParams['contextScreenshot']);
-            hashHistory.push(`${this.props.routeParams['searchTerm']}`);
+            hashHistory.push(`${this.props.routeParams.searchType}/${this.props.routeParams.searchTerm}`);
         }
 
         const params = {
-          type: this.props.searchType || this.props.routeParams['searchType'] || undefined
+          type: this.props.routeParams.searchType || undefined
         };
         this.props.fetchNewSearchTerm(this.props.routeParams['searchTerm'], params);
     }
@@ -68,22 +68,45 @@ export default class AllFilms extends React.Component {
         if (nextProps.queueContextMovieOclcId && nextProps.filmsLoaded) {
             this.props.dequeueContext();
             // update url if there is queued context
-            hashHistory.push(`${nextProps.searchType}/${nextProps.routeParams.searchTerm}/context/${nextProps.queueContextMovieOclcId}/${nextProps.queueCurrentContextMovieLineNumber}`);
+            hashHistory.push(`${nextProps.routeParams.searchType}/${nextProps.routeParams.searchTerm}/context/${nextProps.queueContextMovieOclcId}/${nextProps.queueCurrentContextMovieLineNumber}`);
             return;
         }
 
         // compare old search term to new, and old context to new
-
+        console.log('old',  this.props);
+        console.log('new', nextProps);
+        const {
+            routeParams: {
+                searchType: newRouteType,
+                searchTerm: newRouteTerm
+            },
+            search: {
+              searchTerm: newSearchTerm,
+              searchType: newSearchType
+            }
+        } = nextProps;
         // new search term
+<<<<<<< e8b4477deb37d527fa4a4939df9efa98d48728f5
         const { searchTerm: oldTerm, searchType: oldType } = this.props;
         const { searchTerm: newTerm, searchType: newType } = nextProps;
         console.log("old searchTerm: " + oldTerm);
         console.log("new searchTerm: " + newTerm);
         if (oldTerm !== newTerm || oldType !== newType) {
+=======
+        if (this.props.search === null) {
+>>>>>>> Can now copy-paste urls with contexts and actually have them work
             const params = {
-              type:  nextProps.searchType || nextProps.routeParams.searchType || undefined
+              type:  newSearchType || newRouteType || undefined
             };
-            this.props.fetchNewSearchTerm(nextProps.routeParams.searchTerm, params);
+            this.props.fetchNewSearchTerm(newSearchTerm || newRouteTerm, params);
+        } else {
+            const { search: { searchTerm: oldSearchTerm, searchType: oldSearchType } } = this.props;
+            if (oldSearchTerm !== newSearchTerm || oldSearchType !== newSearchType) {
+              const params = {
+                type:  newSearchType || newRouteType || undefined
+              };
+              this.props.fetchNewSearchTerm(newSearchTerm || newRouteTerm, params);
+            }
         }
 
         // swap context
@@ -160,10 +183,11 @@ export default class AllFilms extends React.Component {
  * Redux action for when the user requests a new search term
  * @param searchTerm New search term
  */
-export const requestNewSearchTerm = (searchTerm) => {
+export const requestNewSearchTerm = (searchTerm, searchType) => {
     return {
         type: 'REQUEST_NEW_SEARCH_TERM',
-        searchTerm
+        searchTerm,
+        searchType
     }
 };
 
@@ -187,7 +211,7 @@ const receiveNewSearchTerm = (response) => {
  */
 const fetchNewSearchTerm = (searchTerm, params) => {
     return (dispatch) => {
-        dispatch(requestNewSearchTerm(searchTerm));
+        dispatch(requestNewSearchTerm(searchTerm, params.type));
         let queryString = `http://localhost:8080/api/moviesearch/${searchTerm}`;
         if(_.has(params, 'type')){
           queryString += `?type=${params.type}`;

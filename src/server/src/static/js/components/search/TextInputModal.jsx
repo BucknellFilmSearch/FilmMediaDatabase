@@ -109,6 +109,7 @@ export default class TextInputModal extends React.Component {
             }
             // update the URL
             let newPath = `/${this.state.searchType}/${keywordOrPhrase.replace(/ /g, '&').replace('!','').replace('?','')}`;
+            console.log(newPath);
             hashHistory.push(newPath);
             this.setState({errorText: ''});
             // this.state.errorText = '';
