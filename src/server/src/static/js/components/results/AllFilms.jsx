@@ -73,31 +73,20 @@ export default class AllFilms extends React.Component {
         }
 
         // compare old search term to new, and old context to new
-        console.log('old',  this.props);
-        console.log('new', nextProps);
         const {
-            routeParams: {
-                searchType: newRouteType,
-                searchTerm: newRouteTerm
-            },
-            search: {
-              searchTerm: newSearchTerm,
-              searchType: newSearchType
-            }
+          routeParams: { searchType: newRouteType, searchTerm: newRouteTerm },
+          search: { searchTerm: newSearchTerm, searchType: newSearchType}
         } = nextProps;
+
         // new search term
         if (this.props.search === null) {
-            const params = {
-              type:  newSearchType || newRouteType || undefined
-            };
+            const params = { type:  newRouteType || newSearchType || undefined };
             this.props.fetchNewSearchTerm(newSearchTerm || newRouteTerm, params);
         } else {
-            const { search: { searchTerm: oldSearchTerm, searchType: oldSearchType } } = this.props;
-            if (oldSearchTerm !== newSearchTerm || oldSearchType !== newSearchType) {
-              const params = {
-                type:  newSearchType || newRouteType || undefined
-              };
-              this.props.fetchNewSearchTerm(newSearchTerm || newRouteTerm, params);
+            const { routeParams: { searchType: oldRouteType } } = this.props;
+            if (newSearchTerm !== newRouteTerm || newRouteType !== oldRouteType) {
+              const params = { type: newRouteType || newSearchType || undefined };
+              this.props.fetchNewSearchTerm(newRouteTerm, params);
             }
         }
 
@@ -127,16 +116,6 @@ export default class AllFilms extends React.Component {
     }
 
     render () {
-        // const muiTheme = getMuiTheme({
-        //     palette: {
-        //         primary1Color: grey800,
-        //         primary2Color: cyan700,
-        //         primary3Color: pinkA200,
-        //         accent1Color: grey800,
-        //         accent2Color: grey50,
-        //         accent3Color: grey800
-        //     }
-        // });
 
         const muiTheme = getMuiTheme({
             palette: {
