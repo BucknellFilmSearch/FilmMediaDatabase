@@ -31,7 +31,6 @@ export default class BoundingBox extends React.Component {
 
     // Bind methods
     this.onImgLoad = this.onImgLoad.bind(this);
-    this.onSelectBox = this.onSelectBox.bind(this);
   }
 
   onImgLoad(target) {
@@ -56,7 +55,7 @@ export default class BoundingBox extends React.Component {
           key={idx}
           className="bounding-box"
           style={ styles.box(box[0], box[1], box[2], box[3], this.state.scale) }
-          onClick={this.selectBox(id)};
+          onClick={() => this.props.onSelectBox(id)}
           >
             <p className="bounding-box-label">{ _.capitalize(label) }</p>
         </div>

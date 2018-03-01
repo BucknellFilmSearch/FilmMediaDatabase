@@ -67,7 +67,11 @@ export default class ContextDialog extends React.Component {
     this.slideLeft = this.slideLeft.bind(this);
     this.slideRight = this.slideRight.bind(this);
     this.toggleBoundingBoxes = this.toggleBoundingBoxes.bind(this);
+<<<<<<< HEAD
     this.reportBox = this.reportBox.bind(this);
+=======
+    this.selectBox = this.selectBox.bind(this);
+>>>>>>> 31b09025674a6bc51529a21bca468d890200e902
   }
 
   /**
@@ -251,8 +255,12 @@ export default class ContextDialog extends React.Component {
   }
 
   selectBox(id) {
-    this.setState({isBoxSelected: true});
-    this.setState({selectedBox: id});
+    this.setState({
+        isBoxSelected: true,
+        selectedBox: id
+    }, () => {
+        console.log(this.state.selectedBox);
+    });
   }
 
   /**
