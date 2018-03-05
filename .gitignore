@@ -18,3 +18,7 @@ dbConfig.json
 # Don't add build files
 **/build/
 **/server/static/
+
+# Make sure to keep credentials out
+*.ppk
+*.cred
