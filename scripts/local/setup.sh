@@ -4,12 +4,14 @@ colorize() {
     echo -e "$(tput setaf $2)$1$(tput sgr0)";
 }
 
+# if anything errors out, quit
+
 colorize() {
     echo -e "$(tput setaf $2)$1$(tput sgr0)";
 }
 
 #put me in the right dir
-pushd $(dirname $0)/../src &> /dev/null
+pushd $(dirname $0)/../../src/server >> /dev/null
 
 # Check for either npm or yarn
 type yarn &> /dev/null
@@ -25,31 +27,25 @@ else
   echo $(colorize '✔ Found yarn install:' 2) $(yarn --version)
 fi
 
-# Build js libs with yarn if it's found, otherwise with npm
+# Install js libs with yarn if it's found, otherwise with npm
 type yarn &> /dev/null
 if [[ $? == 0 ]]; then
   echo 'Installing static dependencies with yarn'
-  pushd static/js &> /dev/null
-  yarn build
-  popd &> /dev/null
-  echo 'Building server'
-  pushd server &> /dev/null
-  yarn build
-  popd &> /dev/null
+  yarn global add watchify \
+  && echo $(colorize 'Success' 2) \
+  || echo $(colorize 'Failed to install watchify - you must install it manually by running "yarn global add watchify" to run the dev build' 1)
+  yarn install &
 else
   echo 'Installing static dependencies with npm'
-  pushd static/js &> /dev/null
-  npm run build
-  popd &> /dev/null
-  echo 'Building server'
-  pushd server &> /dev/null
-  npm run build
-  popd &> /dev/null
+  popd >> /dev/null
+  npm install -g watchify \
+  && echo $(colorize 'Success' 2) \
+  || echo $(colorize 'Failed to install watchify - you must install it manually by running "npm install -g watchify" to run the dev build' 1)
+  npm install &
 fi
 
-# wait $(jobs -p)
+wait $(jobs -p)
 
 # success
-popd &> /dev/null
 echo $(colorize "✔ Setup completed successfully" 2)
 exit 0
