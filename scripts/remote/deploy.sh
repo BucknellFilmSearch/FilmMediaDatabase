@@ -44,7 +44,7 @@ addr=$(./scripts/.read.py credentials/ec2/config.json addr)
 
 # Deploy files using ssh and tar
 echo "Copying to remote"
-tar -zcf - ./build | ssh -i credentials/ec2/default_cred.pem $user@$addr 'sudo tar -zxf - --no-same-owner -C /var/www --strip-components=2; cd /var/www; npm install; pm2 startOrRestart filmtvse.yml'
+tar -zcf - ./build | ssh -i credentials/ec2/default_cred.pem $user@$addr 'sudo tar -zxf - --no-same-owner -C /var/www --strip-components=2; cd /var/www; npm install; pm2 startOrRestart pm2_config.yml'
 
 # success
 popd &> /dev/null

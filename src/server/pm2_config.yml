@@ -1,5 +1,5 @@
 apps:
-  - name   : filmtvse-server
+  - name   : filmtvse
     script : index.js
     watch  : true
     env    :
