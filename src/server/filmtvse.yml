@@ -2,5 +2,5 @@ apps:
   - name   : filmtvse-server
     script : index.js
     watch  : true
-    env_production:
+    env    :
       NODE_ENV: production
