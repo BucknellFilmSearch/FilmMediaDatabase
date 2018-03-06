@@ -16,7 +16,7 @@ nodeLogClr=1
 # Stop all jobs on ctrl-C
 trap 'kill $(jobs -p) &> /dev/null' SIGINT
 
-pushd $(dirname $0)../../ &> /dev/null
+pushd $(dirname $0)/../../ &> /dev/null
 
 # Set log directory
 mkdir -p logs

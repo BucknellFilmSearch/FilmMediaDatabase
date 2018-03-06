@@ -37,16 +37,15 @@ fi
 # Run the build, and install libraries
 echo "Running build script with $build_tool"
 ${build_tool} run build \
-  && pushd ../../
+  && popd &> /dev/null
 
-echo "Copying to remote"
 user=$(./scripts/.read.py credentials/ec2/config.json user)
 addr=$(./scripts/.read.py credentials/ec2/config.json addr)
-scp -i credentials/ec2/default_cred.pem -r build $user@$addr:/home/$user
 
-# ssh -i credentials/ec2/default_cred.pem $user@$addr 'cd build && npm install'
+# Deploy files using ssh and tar
+echo "Copying to remote"
+tar -zcf - ./build | ssh -i credentials/ec2/default_cred.pem $user@$addr 'sudo tar -zxf - --no-same-owner -C /var/www --strip-components=2 && cd /var/www && npm install; pm2 startOrRestart filmtvse.yml'
 
 # success
-popd &> /dev/null
 popd &> /dev/null
 exit 0
