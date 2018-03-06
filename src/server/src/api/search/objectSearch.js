@@ -1,5 +1,5 @@
 import pool from '../../postgres/dbClient';
-import { mapResults } from './searchUtils';
+import { groupedMap } from '../utils/map';
 
 const queryString = `
 SELECT
@@ -77,7 +77,7 @@ const objectSearch = (req, res) => {
     }
     // Return the mapped results
     res.json({
-      results: mapResults(dbRes.rows)
+      results: groupedMap(dbRes.rows)
     });
   });
 };

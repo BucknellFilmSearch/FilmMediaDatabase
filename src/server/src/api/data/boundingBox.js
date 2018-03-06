@@ -1,5 +1,5 @@
 import pool from '../../postgres/dbClient';
-import { boundingBoxMap } from '../utils';
+import { boundingBoxMap } from '../utils/map';
 
 const queryString = `
 SELECT
