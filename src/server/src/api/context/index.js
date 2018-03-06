@@ -1,5 +1,5 @@
 import pool from '../../postgres/dbClient';
-import { groupedMap } from '../utils';
+import { groupedMap } from '../utils/map';
 
 /* * * * * * * * * *
  * Context Endpoint

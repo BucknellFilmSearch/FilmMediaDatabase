@@ -1,5 +1,5 @@
 import pool from '../../postgres/dbClient';
-import { mapResults } from './searchUtils';
+import { groupedMap } from '../utils/map';
 
 const queryString = `
 SELECT
@@ -51,7 +51,7 @@ ORDER BY
 `;
 
 
-const lineSearch = (req, res) => {
+const textSearch = (req, res) => {
   const {params} = req;
 
   // Build query
@@ -65,15 +65,14 @@ const lineSearch = (req, res) => {
   // Run query
   pool.query(queryCfg, (err, dbRes) => {
     if (err) {
-      console.error(err);
+      console.error(err.message);
       res.status(err.status || 500);
-      throw err;
     }
     // Send the mapped results
     res.json({
-      results: mapResults(dbRes.rows)
+      results: groupedMap(dbRes.rows)
     });
   });
 };
 
-export default lineSearch;
+export default textSearch;

@@ -1,5 +1,6 @@
 import _ from 'lodash';
-const mapResults = (rows) => {
+
+const groupedMap = (rows) => {
 
   const oclcIdMap = {};
   const groupedData = [];
@@ -55,6 +56,5 @@ const mapResults = (rows) => {
 
   return groupedData;
 };
-export {
-  mapResults
-};
+
+export default groupedMap;
