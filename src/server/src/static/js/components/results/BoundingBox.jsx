@@ -18,6 +18,7 @@ const styles = {
       height: `${height * scale}px`
     };
   }
+
 }
 
 export default class BoundingBox extends React.Component {
@@ -38,6 +39,11 @@ export default class BoundingBox extends React.Component {
     this.setState({scale: target.clientWidth / target.naturalWidth});
   }
 
+  onSelectBox(id) {
+    //PUT IN SHIT ABOUT SELECTING UNSELECTING
+    this.props.onSelectBox(id);
+  }
+
   /**
    * Render the bounding boxes specified. The formatting of a bounding box is:
    * {
@@ -53,9 +59,9 @@ export default class BoundingBox extends React.Component {
       return (
         <div
           key={idx}
-          className="bounding-box"
-          style={ styles.box(box[0], box[1], box[2], box[3], this.state.scale) }
-          onClick={() => this.props.onSelectBox(id)}
+          className={'bounding-box' + (this.props.selectedBox === id ? ' bounding-box-selected' : '')}
+          style={styles.box(box[0], box[1], box[2], box[3], this.state.scale) }
+          onClick={() => this.onSelectBox(id)}
           >
             <p className="bounding-box-label">{ _.capitalize(label) }</p>
         </div>

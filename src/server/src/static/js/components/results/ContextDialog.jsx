@@ -68,6 +68,7 @@ export default class ContextDialog extends React.Component {
     this.slideRight = this.slideRight.bind(this);
     this.toggleBoundingBoxes = this.toggleBoundingBoxes.bind(this);
     this.selectBox = this.selectBox.bind(this);
+    this.unselectBox = this.unselectBox.bind(this);
     this.reportBox = this.reportBox.bind(this);
   }
 
@@ -240,23 +241,31 @@ export default class ContextDialog extends React.Component {
   }
 
   unselectBox() {
-    this.setState({isBoxSelected: false});
+    this.setState({
+        isBoxSelected: false,
+        selectedBox: -1});
   }
 
   reportBox() {
     const reportApiCall = `http://localhost:8080/api/boundingbox/report/${this.state.selectedBox}`;
-    fetch(reportApiCall, {})
+    fetch(reportApiCall, {
+            method: 'PUT'
+    })
     .then((res) => res.json())
-    .then((res) => {alert("Object Reported, Thank you!")}
+    .then((res) => {alert("Object Reported, Thank you!")})
 
   }
 
   selectBox(id) {
+    if (this.state.isBoxSelected && this.state.selectedBox === id) {
+        return this.unselectBox();
+    }
     this.setState({
         isBoxSelected: true,
         selectedBox: id
     }, () => {
         console.log(this.state.selectedBox);
+
     });
   }
 
@@ -298,6 +307,7 @@ export default class ContextDialog extends React.Component {
                               <BoundingBox
                                 src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}
                                 boxes={this.state.boxes[`${this.props.currentFilm.movieOclcId}-${imageNumber}`] || []}
+                                selectedBox={this.state.selectedBox}
                                 onSelectBox={this.selectBox}
                               />
                           </GridTile>
@@ -375,7 +385,7 @@ export default class ContextDialog extends React.Component {
               </div>
               <div className="colorSearchButton" >
                   <RaisedButton onClick={this.contextDialogueColorSearch} label="Color Search" style={style} />
-                  <RaisedButton onClick={this.reportBox} label="Report Selected Object?" style={style} />
+                  <RaisedButton disabled={!this.state.isBoxSelected} onClick={this.reportBox} label="Report Selected Object?" style={style} />
               </div>
 
 

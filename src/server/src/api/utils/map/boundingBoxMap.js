@@ -10,7 +10,8 @@ const boundingBoxMap = (rows) => {
       bounding_top: boundingTop,
       bounding_right: boundingRight,
       bounding_bottom: boundingBottom,
-      confidence: confidence
+      confidence: confidence,
+      id: id
     } = row;
 
     return {
@@ -21,7 +22,8 @@ const boundingBoxMap = (rows) => {
         boundingTop,                   // y
         boundingRight - boundingLeft,  // width
         boundingBottom - boundingTop   // height
-      ]
+      ],
+      id
     };
   });
 };
