@@ -55,6 +55,4 @@ const mapResults = (rows) => {
 
   return groupedData;
 };
-export {
-  mapResults
-};
+export default mapResults;

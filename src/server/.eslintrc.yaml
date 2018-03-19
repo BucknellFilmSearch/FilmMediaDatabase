@@ -2,16 +2,13 @@ parser: babel-eslint
 
 root: true
 
-ecmaFeatures:
-    modules: true
-
 env:
     node: true
     es6: true
 
 extends:
-    "eslint:recommended"
-    "react"
+    - "eslint:recommended"
+    - "plugin:react/recommended"
 
 globals:
     assert: false

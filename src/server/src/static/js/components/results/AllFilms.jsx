@@ -73,6 +73,7 @@ export default class AllFilms extends React.Component {
         }
 
         // compare old search term to new, and old context to new
+<<<<<<< HEAD
         console.log('old',  this.props);
         console.log('new', nextProps);
         const {
@@ -98,6 +99,22 @@ export default class AllFilms extends React.Component {
                 type:  newSearchType || newRouteType || undefined
               };
               this.props.fetchNewSearchTerm(newSearchTerm || newRouteTerm, params);
+=======
+        const {
+          routeParams: { searchType: newRouteType, searchTerm: newRouteTerm },
+          search: { searchTerm: newSearchTerm, searchType: newSearchType}
+        } = nextProps;
+
+        // new search term
+        if (this.props.search === null) {
+            const params = { type:  newRouteType || newSearchType || undefined };
+            this.props.fetchNewSearchTerm(newSearchTerm || newRouteTerm, params);
+        } else {
+            const { routeParams: { searchType: oldRouteType } } = this.props;
+            if (newSearchTerm !== newRouteTerm || newRouteType !== oldRouteType) {
+              const params = { type: newRouteType || newSearchType || undefined };
+              this.props.fetchNewSearchTerm(newRouteTerm, params);
+>>>>>>> 2937daf72b820464e704688d87650b9dd202e3dc
             }
         }
 
@@ -127,45 +144,27 @@ export default class AllFilms extends React.Component {
     }
 
     render () {
-        // const muiTheme = getMuiTheme({
-        //     palette: {
-        //         primary1Color: grey800,
-        //         primary2Color: cyan700,
-        //         primary3Color: pinkA200,
-        //         accent1Color: grey800,
-        //         accent2Color: grey50,
-        //         accent3Color: grey800
-        //     }
-        // });
-
-        const muiTheme = getMuiTheme({
-            palette: {
-                accent1Color: deepOrange500
-            }
-        });
 
         return (
-            <MuiThemeProvider muiTheme={muiTheme}>
-                <div>
-                    <ScrollEvent handleScrollCallback={this.handleScrollCallback} />
-                    <ResultsToolbar openSearchModal={() => this.openSearchModal()}/>
-                    <TextInputModal open={this.state.searchModalOpen} closeFcn={() => this.closeSearchModal()} />
-                    <MetadataDrawer />
-                    {this.props.hasContext && <ContextDialog />}
-                    {!this.props.filmsLoaded ? (
-                        <div style={{paddingTop: '60px'}}>
-                            <h2>Loading Relevant Films...</h2>
-                        </div>
-                    ) :
-                        this.props.films.map(function (object) {
-                            return <IndividualFilmResults
-                                key={`filmkey${object.movieOclcId}`}
-                                individualFilm={object} />;
-                            }
-                        )
-                    }
-                </div>
-            </MuiThemeProvider>
+            <div>
+                <ScrollEvent handleScrollCallback={this.handleScrollCallback} />
+                <ResultsToolbar openSearchModal={() => this.openSearchModal()}/>
+                <TextInputModal open={this.state.searchModalOpen} closeFcn={() => this.closeSearchModal()} />
+                <MetadataDrawer />
+                {this.props.hasContext && <ContextDialog />}
+                {!this.props.filmsLoaded ? (
+                    <div style={{paddingTop: '60px'}}>
+                        <h2>Loading Relevant Films...</h2>
+                    </div>
+                ) :
+                    this.props.films.map(function (object) {
+                        return <IndividualFilmResults
+                            key={`filmkey${object.movieOclcId}`}
+                            individualFilm={object} />;
+                        }
+                    )
+                }
+            </div>
         );
     }
 }
