@@ -16,6 +16,8 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import SearchContainer from "./components/search/SearchContainer.jsx";
 import AllFilms from "./components/results/AllFilms.jsx";
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'isomorphic-fetch';
 
 
@@ -28,6 +30,27 @@ export let DEBUG_MODE = true;
 
 injectTapEventPlugin();
 
+const muiTheme = getMuiTheme({
+  "palette": {
+      "primary1Color": "#2196f3",
+      "primary2Color": "#1976d2",
+      "accent1Color": "#f57c00",
+      "pickerHeaderColor": "#2196f3"
+  },
+  "toolbar": {
+      "backgroundColor": "#2196f3",
+      "color": "#ffffff",
+      "hoverColor": "rgba(255, 255, 255, 0.54)"
+  },
+  "tabs": {
+      "backgroundColor": "#f5f5f5",
+      "textColor": "#2196f3",
+      "selectedTextColor": "#64b5f6"
+  },
+  "flatButton": {
+      "textColor": "rgba(255, 255, 255, 0.54)"
+  }
+});
 
 /**
 * Generates the next state of the application. Changes are passed to the components for rerendering.
@@ -178,11 +201,13 @@ const store = createStore(
 // render the components to the page and define the routes on the page
 ReactDOM.render((
   <Provider store={ store }>
-    <Router history={ hashHistory }>
-      <Route path="/">
-        <IndexRoute component={ SearchContainer } />
-        <Route path=":searchType/:searchTerm(/context/:contextOclcId/:contextScreenshot)" component={ AllFilms } />
-      </Route>
-    </Router>
+    <MuiThemeProvider muiTheme={ muiTheme }>
+      <Router history={ hashHistory }>
+        <Route path="/">
+          <IndexRoute component={ SearchContainer } />
+          <Route path=":searchType/:searchTerm(/context/:contextOclcId/:contextScreenshot)" component={ AllFilms } />
+        </Route>
+      </Router>
+    </MuiThemeProvider>
   </Provider>
   ), document.getElementById('appContainer'));

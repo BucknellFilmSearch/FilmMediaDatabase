@@ -117,34 +117,26 @@ export default class AllFilms extends React.Component {
 
     render () {
 
-        const muiTheme = getMuiTheme({
-            palette: {
-                accent1Color: deepOrange500
-            }
-        });
-
         return (
-            <MuiThemeProvider muiTheme={muiTheme}>
-                <div>
-                    <ScrollEvent handleScrollCallback={this.handleScrollCallback} />
-                    <ResultsToolbar openSearchModal={() => this.openSearchModal()}/>
-                    <TextInputModal open={this.state.searchModalOpen} closeFcn={() => this.closeSearchModal()} />
-                    <MetadataDrawer />
-                    {this.props.hasContext && <ContextDialog />}
-                    {!this.props.filmsLoaded ? (
-                        <div style={{paddingTop: '60px'}}>
-                            <h2>Loading Relevant Films...</h2>
-                        </div>
-                    ) :
-                        this.props.films.map(function (object) {
-                            return <IndividualFilmResults
-                                key={`filmkey${object.movieOclcId}`}
-                                individualFilm={object} />;
-                            }
-                        )
-                    }
-                </div>
-            </MuiThemeProvider>
+            <div>
+                <ScrollEvent handleScrollCallback={this.handleScrollCallback} />
+                <ResultsToolbar openSearchModal={() => this.openSearchModal()}/>
+                <TextInputModal open={this.state.searchModalOpen} closeFcn={() => this.closeSearchModal()} />
+                <MetadataDrawer />
+                {this.props.hasContext && <ContextDialog />}
+                {!this.props.filmsLoaded ? (
+                    <div style={{paddingTop: '60px'}}>
+                        <h2>Loading Relevant Films...</h2>
+                    </div>
+                ) :
+                    this.props.films.map(function (object) {
+                        return <IndividualFilmResults
+                            key={`filmkey${object.movieOclcId}`}
+                            individualFilm={object} />;
+                        }
+                    )
+                }
+            </div>
         );
     }
 }
