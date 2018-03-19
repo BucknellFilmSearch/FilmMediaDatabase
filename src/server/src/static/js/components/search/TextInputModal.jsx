@@ -152,9 +152,9 @@ export default class TextInputModal extends React.Component {
                     ref='updateSearchBox'
                   />
                 </form>
-                <div style={{display: 'inline-block', width: '100%'}}>
-                  <Slider style={{width: '70%'}} value={this.state.confidenceSlider} step={0.05} min={0.4} max={1} onChange={this.handleConfidenceSlider} />
-                  {`${this.state.confidenceSlider * 100}%`}
+                <div style={{display: 'flex', justifyContent: 'center', width: '80%', textAlign: 'center', alignItems: 'middle', marginBottom: '0px', marginTop: '12px'}}>
+                  <p style={{marginTop: '24px', marginRight: '16px', marginBottom: '0px'}}>{`Confidence: ${Math.floor(this.state.confidenceSlider * 100)}%`}</p>
+                  <Slider style={{height: '30px', width: '70%', marginBottom: '0px', display: 'inline-block'}} value={this.state.confidenceSlider} step={0.05} min={0.4} max={1} onChange={this.handleConfidenceSlider} />
                 </div>
                 <FlatButton
                   label='Search'
