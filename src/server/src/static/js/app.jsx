@@ -132,10 +132,7 @@ export const reducer = (state = {
           searchTerm: action.searchTerm,
           searchType: action.searchType
         },
-<<<<<<< HEAD
-=======
         searchType: action.searchType,
->>>>>>> 2937daf72b820464e704688d87650b9dd202e3dc
         searchTerm: action.searchTerm,
         hoverMovieOclcId: null,
         hoverMovieLineNumber: null
@@ -204,14 +201,6 @@ const store = createStore(
 // render the components to the page and define the routes on the page
 ReactDOM.render((
   <Provider store={ store }>
-<<<<<<< HEAD
-    <Router history={ hashHistory }>
-      <Route path="/">
-        <IndexRoute component={ SearchContainer } />
-        <Route path=":searchType/:searchTerm(/context/:contextOclcId/:contextScreenshot)" component={ AllFilms } />
-      </Route>
-    </Router>
-=======
     <MuiThemeProvider muiTheme={ muiTheme }>
       <Router history={ hashHistory }>
         <Route path="/">
@@ -220,6 +209,5 @@ ReactDOM.render((
         </Route>
       </Router>
     </MuiThemeProvider>
->>>>>>> 2937daf72b820464e704688d87650b9dd202e3dc
   </Provider>
   ), document.getElementById('appContainer'));

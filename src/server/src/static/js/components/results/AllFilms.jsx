@@ -73,33 +73,6 @@ export default class AllFilms extends React.Component {
         }
 
         // compare old search term to new, and old context to new
-<<<<<<< HEAD
-        console.log('old',  this.props);
-        console.log('new', nextProps);
-        const {
-            routeParams: {
-                searchType: newRouteType,
-                searchTerm: newRouteTerm
-            },
-            search: {
-              searchTerm: newSearchTerm,
-              searchType: newSearchType
-            }
-        } = nextProps;
-        // new search term
-        if (this.props.search === null) {
-            const params = {
-              type:  newSearchType || newRouteType || undefined
-            };
-            this.props.fetchNewSearchTerm(newSearchTerm || newRouteTerm, params);
-        } else {
-            const { search: { searchTerm: oldSearchTerm, searchType: oldSearchType } } = this.props;
-            if (oldSearchTerm !== newSearchTerm || oldSearchType !== newSearchType) {
-              const params = {
-                type:  newSearchType || newRouteType || undefined
-              };
-              this.props.fetchNewSearchTerm(newSearchTerm || newRouteTerm, params);
-=======
         const {
           routeParams: { searchType: newRouteType, searchTerm: newRouteTerm },
           search: { searchTerm: newSearchTerm, searchType: newSearchType}
@@ -114,7 +87,6 @@ export default class AllFilms extends React.Component {
             if (newSearchTerm !== newRouteTerm || newRouteType !== oldRouteType) {
               const params = { type: newRouteType || newSearchType || undefined };
               this.props.fetchNewSearchTerm(newRouteTerm, params);
->>>>>>> 2937daf72b820464e704688d87650b9dd202e3dc
             }
         }
 

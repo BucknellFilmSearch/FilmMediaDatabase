@@ -16,14 +16,6 @@ import Dialog from 'material-ui/Dialog';
 import {cleanStopWords, GENRES} from '../helpers';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Slider from 'material-ui/Slider';
-<<<<<<< HEAD
-
-const modalStyle = {
-    textAlign: 'center'
-};
-
-=======
->>>>>>> 2937daf72b820464e704688d87650b9dd202e3dc
 /**
  * Styling to line up different input options in the text input modal
  */
