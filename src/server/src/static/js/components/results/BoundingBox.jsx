@@ -59,9 +59,15 @@ export default class BoundingBox extends React.Component {
       return (
         <div
           key={idx}
+<<<<<<< HEAD
           className={'bounding-box' + (this.props.selectedBox === id ? ' bounding-box-selected' : '')}
           style={styles.box(box[0], box[1], box[2], box[3], this.state.scale) }
           onClick={() => this.onSelectBox(id)}
+=======
+          className="bounding-box"
+          style={ styles.box(box[0], box[1], box[2], box[3], this.state.scale) }
+          onClick={() => this.props.onSelectBox(id)}
+>>>>>>> b4ad4e70691aa83e8b2e5abbde4c304b3a5f9315
           >
             <p className="bounding-box-label">{ _.capitalize(label) }</p>
         </div>
