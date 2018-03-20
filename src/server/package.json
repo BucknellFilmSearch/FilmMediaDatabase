@@ -33,6 +33,7 @@
     "material-ui": "0.16.7",
     "material-ui-fullscreen-dialog": "^0.2.0",
     "morgan": "^1.9.0",
+    "nodemailer": "^4.6.3",
     "pg": "^7.4.1",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
