@@ -37,18 +37,10 @@ const muiTheme = getMuiTheme({
       "accent1Color": "#f57c00",
       "pickerHeaderColor": "#2196f3"
   },
-  "toolbar": {
-      "backgroundColor": "#2196f3",
-      "color": "#ffffff",
-      "hoverColor": "rgba(255, 255, 255, 0.54)"
-  },
   "tabs": {
       "backgroundColor": "#f5f5f5",
       "textColor": "#2196f3",
-      "selectedTextColor": "#64b5f6"
-  },
-  "flatButton": {
-      "textColor": "rgba(255, 255, 255, 0.54)"
+      "selectedTextColor": "#ef6c00"
   }
 });
 
@@ -60,12 +52,12 @@ const muiTheme = getMuiTheme({
 * @return {*} The next state of the application
 */
 export const reducer = (state = {
-    search: null,
-    context: [],
-    searchType: undefined,
-    sortType: 1,
-    genre: 'All'
-  } , action) => {
+  search: null,
+  context: [],
+  searchType: undefined,
+  sortType: 1,
+  genre: 'All'
+}, action) => {
   switch (action.type) {
     case 'MOUSE_ENTER_SCREENSHOT':
       return {
