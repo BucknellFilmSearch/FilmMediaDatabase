@@ -8,7 +8,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
-import { cleanStopWords, GENRES } from '../helpers';
+import { cleanStopWords, GENRES } from '../../helpers';
 import { FlatButton, IconButton, MenuItem, RaisedButton, SelectField, Slider, TextField } from 'material-ui';
 import { Tab, Tabs } from 'material-ui/Tabs';
 import HelpIcon from 'material-ui/svg-icons/action/help';
@@ -60,7 +60,7 @@ const styles = {
  * Uses Material-UI input components and dropdowns to allow user input for a text based search.
  */
 @connect(mapStateToProps, mapDispatchToProps)
-export default class TextInputModal extends React.Component {
+export default class InputPanel extends React.Component {
 
   constructor(props) {
     super(props);

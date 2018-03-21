@@ -11,7 +11,7 @@ import IndividualFilmResults from './IndividualFilmResults.jsx';
 import MetadataDrawer from './MetadataDrawer.jsx';
 import ContextDialog from './ContextDialog.jsx';
 import ResultsToolbar from './ResultsToolbar.jsx';
-import InputModal from '../search/InputModal.jsx';
+import { Modal as SearchInput } from '../search/input';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 import ScrollEvent from 'react-onscroll';
@@ -118,7 +118,7 @@ export default class AllFilms extends React.Component {
       <div>
         <ScrollEvent handleScrollCallback={this.handleScrollCallback} />
         <ResultsToolbar openSearchModal={() => this.openSearchModal()} />
-        <InputModal open={this.state.searchModalOpen} closeFcn={() => this.closeSearchModal()} />
+        <SearchInput open={this.state.searchModalOpen} closeFcn={() => this.closeSearchModal()} />
         <MetadataDrawer />
         {this.props.hasContext && <ContextDialog />}
         {!this.props.filmsLoaded ? (

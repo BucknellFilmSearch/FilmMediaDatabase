@@ -8,7 +8,13 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Dialog} from 'material-ui';
-import SearchInput from './SearchInput.jsx';
+import InputPanel from './InputPanel.jsx';
+
+const styles = {
+  dialogBody: {
+    padding: 0
+  }
+}
 
 /**
  * Uses Material-UI input components and dropdowns to allow user input for a text based search.
@@ -25,13 +31,13 @@ export default class InputModal extends React.Component {
     return (
       <div id='textIconImage' className='hoverHighlight' >
         <Dialog
-          bodyStyle={{padding: 0}}
+          bodyStyle={styles.dialogBody}
           modal={false}
           open={this.props.open}
           autoScrollBodyContent={true}
           onRequestClose={() => this.handleClose()}
         >
-          <SearchInput />
+          <InputPanel />
         </Dialog>
       </div>
     );
