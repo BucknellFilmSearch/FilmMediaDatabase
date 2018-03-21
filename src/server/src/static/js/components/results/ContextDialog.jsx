@@ -67,14 +67,9 @@ export default class ContextDialog extends React.Component {
     this.slideLeft = this.slideLeft.bind(this);
     this.slideRight = this.slideRight.bind(this);
     this.toggleBoundingBoxes = this.toggleBoundingBoxes.bind(this);
-<<<<<<< HEAD
     this.selectBox = this.selectBox.bind(this);
     this.unselectBox = this.unselectBox.bind(this);
     this.reportBox = this.reportBox.bind(this);
-=======
-    this.reportBox = this.reportBox.bind(this);
-    this.selectBox = this.selectBox.bind(this);
->>>>>>> b4ad4e70691aa83e8b2e5abbde4c304b3a5f9315
   }
 
   /**
@@ -246,49 +241,31 @@ export default class ContextDialog extends React.Component {
   }
 
   unselectBox() {
-<<<<<<< HEAD
     this.setState({
         isBoxSelected: false,
         selectedBox: -1});
-=======
-    this.setState({isBoxSelected: false});
->>>>>>> b4ad4e70691aa83e8b2e5abbde4c304b3a5f9315
   }
 
   reportBox() {
     const reportApiCall = `http://localhost:8080/api/boundingbox/report/${this.state.selectedBox}`;
     fetch(reportApiCall, {
-<<<<<<< HEAD
-            method: 'PUT'
-    })
-    .then((res) => res.json())
-    .then((res) => {alert("Object Reported, Thank you!")})
-=======
         method: 'PUT'
     })
     .then((res) => res.json())
     .then((res) => {alert("Object Reported, Thank you!")})
     .catch(error => error);
->>>>>>> b4ad4e70691aa83e8b2e5abbde4c304b3a5f9315
 
   }
 
   selectBox(id) {
-<<<<<<< HEAD
     if (this.state.isBoxSelected && this.state.selectedBox === id) {
         return this.unselectBox();
     }
-=======
->>>>>>> b4ad4e70691aa83e8b2e5abbde4c304b3a5f9315
     this.setState({
         isBoxSelected: true,
         selectedBox: id
     }, () => {
         console.log(this.state.selectedBox);
-<<<<<<< HEAD
-
-=======
->>>>>>> b4ad4e70691aa83e8b2e5abbde4c304b3a5f9315
     });
   }
 
@@ -330,10 +307,7 @@ export default class ContextDialog extends React.Component {
                               <BoundingBox
                                 src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}
                                 boxes={this.state.boxes[`${this.props.currentFilm.movieOclcId}-${imageNumber}`] || []}
-<<<<<<< HEAD
                                 selectedBox={this.state.selectedBox}
-=======
->>>>>>> b4ad4e70691aa83e8b2e5abbde4c304b3a5f9315
                                 onSelectBox={this.selectBox}
                               />
                           </GridTile>
@@ -411,12 +385,7 @@ export default class ContextDialog extends React.Component {
               </div>
               <div className="colorSearchButton" >
                   <RaisedButton onClick={this.contextDialogueColorSearch} label="Color Search" style={style} />
-<<<<<<< HEAD
                   <RaisedButton disabled={!this.state.isBoxSelected} onClick={this.reportBox} label="Report Selected Object?" style={style} />
-=======
-                  <RaisedButton onClick={this.reportBox} label="Report Selected Object?" style={style} />
-                  
->>>>>>> b4ad4e70691aa83e8b2e5abbde4c304b3a5f9315
               </div>
 
 
