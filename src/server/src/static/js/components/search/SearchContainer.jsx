@@ -72,7 +72,7 @@ export default class SearchContainer extends React.Component {
           <span>Use the color search to find scenes in films with similar colors to images you upload.</span>
           <br />
           <span>Click on one of the options below to get started.</span>
-          <br />
+          <br style={{flex: '1 0 auto'}}/>
           <Footer/>
         </div>
       </div>

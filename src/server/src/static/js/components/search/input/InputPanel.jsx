@@ -12,6 +12,8 @@ import { cleanStopWords, GENRES } from '../../helpers';
 import { FlatButton, IconButton, MenuItem, RaisedButton, SelectField, Slider, TextField } from 'material-ui';
 import { Tab, Tabs } from 'material-ui/Tabs';
 import HelpIcon from 'material-ui/svg-icons/action/help';
+import Dropzone from 'react-dropzone';
+import {FileCloudUpload} from 'material-ui/svg-icons';
 /**
  * Styling to line up different input options in the text input modal
  */
@@ -75,6 +77,7 @@ export default class InputPanel extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleConfidenceSlider = this.handleConfidenceSlider.bind(this);
     this.onSelectSearchType = this.onSelectSearchType.bind(this);
+    this.onDrop = this.onDrop.bind(this);
   }
 
   /**
@@ -117,6 +120,11 @@ export default class InputPanel extends React.Component {
   }
   handleConfidenceSlider(event, value) {
     this.setState({confidenceSlider: value});
+  }
+
+  onDrop(acceptedFiles, rejectedFiles) {
+    // do stuff with files...
+    console.log('add functionality to handle dropping here!');
   }
 
   render() {
@@ -202,39 +210,13 @@ export default class InputPanel extends React.Component {
           </Tab>
           <Tab label="Match Colors"
             value='color'>
-            <div style={styles.tabs.div}>
-            <form id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
-              <TextField
-                hintText='Search Phrase'
-                errorText={this.state.errorText}
-                value={this.state.searchText}
-                style={styles.input}
-                onChange={this.handleChange}
-                autoFocus
-                ref='updateSearchBox'
-              />
-            </form>
-            <SelectField
-              floatingLabelText='Sort'
-              value={this.props.sortType}
-              onChange={this.props.onSelectSortType}
-              style={styles.dropdown}
-            >
-              <MenuItem value={1} primaryText='Relevance' />
-              <MenuItem value={2} primaryText='Movie Title (A-Z)' />
-              <MenuItem value={3} primaryText='Movie Title (Z-A)' />
-              <MenuItem value={4} primaryText='Year (New to Old)' />
-              <MenuItem value={5} primaryText='Year (Old to New)' />
-            </SelectField>
-            <SelectField
-              floatingLabelText='Genre'
-              value={this.props.genre}
-              onChange={this.props.onSelectGenre}
-              style={styles.dropdown}
-              maxHeight={200}
-            >
-              {GENRES.map((genre) => <MenuItem key={genre} value={genre} primaryText={genre} />) }
-            </SelectField>
+            <div style={{...styles.tabs.div, marginTop: '24px', marginBottom: '24px'}}>
+              <Dropzone onDrop={this.onDrop} style={{width: '350px', height: '250px', border: '1.5px dashed #ccc', borderRadius: '5px', background: '#fafafa'}}>
+                <div style={{...styles.tabs.div, height: '100%'}}>
+                <FileCloudUpload style={{width: '48px', height: '48px'}} color={'#ccc'}/>
+                <p style={{color: '#ccc'}}>Drag and drop your file here</p>
+                </div>
+              </Dropzone>
             </div>
         </Tab>
       </Tabs>
