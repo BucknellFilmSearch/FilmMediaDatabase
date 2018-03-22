@@ -63,18 +63,10 @@ export default class SearchContainer extends React.Component {
           <h1>The Film Search Engine</h1>
           <h3>Research films like never before.</h3>
         </div>
-        <div id='subText' className='filmSearch'>
-          <div style={styles.input} >
-            <SearchInput />
-          </div>
-          <span>Find out what was happening in a film when a specific phrase was said using the text search.</span>
-          <br />
-          <span>Use the color search to find scenes in films with similar colors to images you upload.</span>
-          <br />
-          <span>Click on one of the options below to get started.</span>
-          <br style={{flex: '1 0 auto'}}/>
-          <Footer/>
+        <div style={styles.input} >
+          <SearchInput />
         </div>
+        <Footer/>
       </div>
     );
   }
