@@ -9,55 +9,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
 import { cleanStopWords, GENRES } from '../../helpers';
-import { FlatButton, IconButton, MenuItem, RaisedButton, SelectField, Slider, TextField } from 'material-ui';
+import { IconButton, MenuItem, RaisedButton, SelectField, Slider, TextField } from 'material-ui';
 import { Tab, Tabs } from 'material-ui/Tabs';
 import HelpIcon from 'material-ui/svg-icons/action/help';
 import Dropzone from 'react-dropzone';
 import {FileCloudUpload} from 'material-ui/svg-icons';
-/**
- * Styling to line up different input options in the text input modal
- */
-const styles = {
-  tabs: {
-    root: {
-      textAlign: 'center'
-    },
-    div: {
-      width: '100%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'column'
-    },
-    mods: {
-      display: 'flex',
-      justifyContent: 'center',
-      width: '80%',
-      textAlign: 'center',
-      alignItems: 'middle',
-      marginBottom: '0px',
-      marginTop: '12px'
-    }
-  },
-  slider: {
-    height: '30px',
-    width: '70%',
-    marginBottom: '0px',
-    display: 'inline-block'
-  },
-  input: {
-    top: '8px',
-    width: '90%'
-  },
-  dropdown: {
-    top: '-4px',
-    float: 'left'
-  },
-  button: {
-    float: 'center',
-    marginBottom: 8
-  }
-};
+import { InputPanel as styles } from './styling';
+
 /**
  * Uses Material-UI input components and dropdowns to allow user input for a text based search.
  */
@@ -68,11 +26,10 @@ export default class InputPanel extends React.Component {
     super(props);
     this.state = {
       searchType: this.props.searchType || 'object',
-      searchText: '',
+      searchText: this.props.searchTerm || '',
       errorText: '',
       confidenceSlider: 0.8
     };
-    // this.handleClose =  this.props.closeFcn.bind(this);
     this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleConfidenceSlider = this.handleConfidenceSlider.bind(this);
@@ -87,11 +44,10 @@ export default class InputPanel extends React.Component {
   updateSearch(event) {
         // stop default form submission behavior
     event.preventDefault();
-    let keywordOrPhrase = this.refs.updateSearchBox.getValue();
-    keywordOrPhrase = cleanStopWords(keywordOrPhrase);
+    const keywordOrPhrase = cleanStopWords(this.state.searchText);
     this.setState({searchText: ''});
     if (keywordOrPhrase === '') {
-      this.state.errorText = 'Your search has returned too many results.';
+      this.setState({errorText: 'Your search has returned too many results.'});
     } else {
             // Send search type to global state if changed
       if (this.state.searchType !== this.props.searchType) {
@@ -103,8 +59,7 @@ export default class InputPanel extends React.Component {
       console.log(newPath);
       hashHistory.push(newPath);
       this.setState({errorText: ''});
-            // this.state.errorText = '';
-      this.handleClose();
+      this.props.handleClose();
     }
   }
   updateSearchForEnterKeypress(event) {
@@ -129,14 +84,14 @@ export default class InputPanel extends React.Component {
 
   render() {
     return (
-      <div style={styles.tabs.root} >
+      <div style={styles.tab.container} >
         <Tabs
           value={this.state.searchType}
           onChange={this.onSelectSearchType}>
           <Tab label="Find Objects"
             value='object'>
-            <div style={styles.tabs.div}>
-              <form style={styles.tabs.div} id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
+            <div style={styles.tab.div}>
+              <form style={styles.tab.div} id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
                 <TextField
                   hintText='Search Phrase'
                   errorText={this.state.errorText}
@@ -144,11 +99,10 @@ export default class InputPanel extends React.Component {
                   style={styles.input}
                   onChange={this.handleChange}
                   autoFocus
-                  ref='updateSearchBox'
                 />
               </form>
-              <div style={styles.tabs.mods}>
-                <p style={{marginTop: '8px', marginRight: '16px', marginBottom: '0px', width: '30%'}}>
+              <div style={styles.tab.filter}>
+                <p style={styles.slider.description}>
                   <IconButton
                     tooltipPosition='top-center'
                     tooltip='Lower confidence will return more items'
@@ -159,7 +113,7 @@ export default class InputPanel extends React.Component {
                   {`Confidence: ${Math.floor(this.state.confidenceSlider * 100)}%`}
                 </p>
                 <Slider
-                  style={styles.slider}
+                  style={styles.slider.component}
                   value={this.state.confidenceSlider}
                   step={0.05}
                   min={0.4}
@@ -171,21 +125,21 @@ export default class InputPanel extends React.Component {
           </Tab>
           <Tab label="Search Dialogue"
               value='text'>
-            <div style={styles.tabs.div}>
-              <form style={styles.tabs.div} id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
+            <div style={styles.tab.div}>
+              <form style={styles.tab.div} id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
                 <TextField
+                  defaultValue={this.props.searchTerm}
                   hintText='Search Phrase'
                   errorText={this.state.errorText}
                   value={this.state.searchText}
                   style={styles.input}
                   onChange={this.handleChange}
                   autoFocus
-                  ref='updateSearchBox'
                 />
               </form>
-              <div style={styles.tabs.mods}>
+              <div style={styles.tab.filter}>
                 <SelectField
-                  floatingLabelText='Sort'
+                  floatingLabelText='Sort By'
                   value={this.props.sortType}
                   onChange={this.props.onSelectSortType}
                   style={styles.dropdown}
@@ -210,10 +164,10 @@ export default class InputPanel extends React.Component {
           </Tab>
           <Tab label="Match Colors"
             value='color'>
-            <div style={{...styles.tabs.div, marginTop: '24px', marginBottom: '24px'}}>
-              <Dropzone onDrop={this.onDrop} style={{width: '350px', height: '250px', border: '1.5px dashed #ccc', borderRadius: '5px', background: '#fafafa'}}>
-                <div style={{...styles.tabs.div, height: '100%'}}>
-                <FileCloudUpload style={{width: '48px', height: '48px'}} color={'#ccc'}/>
+            <div style={{...styles.tab.div, marginTop: '24px', marginBottom: '24px'}}>
+              <Dropzone onDrop={this.onDrop} style={styles.dropzone.component}>
+                <div style={{...styles.tab.div, height: '100%'}}>
+                <FileCloudUpload style={styles.dropzone.icon} color={'#ccc'}/>
                 <p style={{color: '#ccc'}}>Drag and drop your file here</p>
                 </div>
               </Dropzone>
@@ -224,7 +178,6 @@ export default class InputPanel extends React.Component {
         label='Search'
         labelPosition='before'
         primary={true}
-        // icon={<SearchIcon style={{verticalAlign: 'middle'}}/>}
         onClick={(event) => this.updateSearch(event)}
         style={styles.button}
       />
@@ -232,9 +185,11 @@ export default class InputPanel extends React.Component {
     );
   }
 }
-/**
- * Handles Redux for searches
- */
+
+//=====================//
+//       REDUX         //
+//=====================//
+
 const selectSearchType = (searchType) => {
   return {
     type: 'SELECT_SEARCH_TYPE',

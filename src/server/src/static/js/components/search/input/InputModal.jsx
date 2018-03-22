@@ -1,45 +1,40 @@
-/**
- * This file provides inputs for the user to do a text search.
- *
- * Author: Team EndFrame
- * Organization: Bucknell University
- * Spring 2017
- */
 import * as React from 'react';
-import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import {Dialog} from 'material-ui';
 import InputPanel from './InputPanel.jsx';
-
-const styles = {
-  dialogBody: {
-    padding: 0
-  }
-}
 
 /**
  * Uses Material-UI input components and dropdowns to allow user input for a text based search.
  */
-export default class InputModal extends React.Component {
+class InputModal extends React.Component {
 
 
   handleClose() {
-    this.setState({ errorText: '' });
     this.props.closeFcn();
   }
 
   render() {
     return (
-      <div id='textIconImage' className='hoverHighlight' >
+      <div>
         <Dialog
-          bodyStyle={styles.dialogBody}
+          bodyStyle={{ padding: 0}}
           modal={false}
           open={this.props.open}
           autoScrollBodyContent={true}
           onRequestClose={() => this.handleClose()}
         >
-          <InputPanel />
+          <InputPanel handleClose={() => this.handleClose()} />
         </Dialog>
       </div>
     );
   }
 }
+
+InputModal.propTypes = {
+  /** Whether or not the modal is currently open */
+  open: PropTypes.bool.isRequired,
+  /** Fires when the modal should be closed */
+  closeFcn: PropTypes.func.isRequired
+};
+
+export default InputModal;
