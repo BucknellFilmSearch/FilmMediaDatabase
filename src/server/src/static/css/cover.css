@@ -145,6 +145,11 @@
   color: rgb(255, 166, 0);
   background: #fff4;
 }
+.bounding-box-selected {
+  border: 2px solid rgb(255, 166, 0);
+  color: rgb(255, 166, 0);
+  background: #fff4;
+}
 
 .bounding-box-label {
   color: inherit;
