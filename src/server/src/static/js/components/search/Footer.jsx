@@ -7,7 +7,8 @@
  */
 
 import * as React from 'react';
-import { Dialog, FlatButton, RaisedButton, Snackbar, TextField } from 'material-ui';
+import { Dialog, FlatButton, RaisedButton, Snackbar, TextField, IconButton } from 'material-ui';
+import ActionHelp from 'material-ui/svg-icons/action/help';
 
 const styles = {
   button: {
@@ -15,9 +16,9 @@ const styles = {
     padding: 0
   },
   feedback: {
-    form: {
+    row: {
       display: 'flex',
-      flexDirection: 'column',
+      alignItems: 'center',
       justifyContent: 'center'
     },
     message: {
@@ -48,7 +49,8 @@ export default class Footer extends React.Component {
       openContact: false,
       contact: {
         email: '',
-        msg: ''
+        msg: '',
+        err: ''
       }
     };
     this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
@@ -112,34 +114,41 @@ export default class Footer extends React.Component {
   }
 
   handleContactSend() {
-    console.log(`Sending: ${this.state.contact.msg}`);
-    console.log(`From: ${this.state.contact.email}`);
-    fetch('http://localhost:8080/api/contact', {
-      method: 'POST',
-      body: JSON.stringify(this.state.contact),
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then((res) => res.json())
-    .then(res => {
-      if (res.success === true) {
-        console.log('Yay');
-        this.setState({
-          snackbar: {
-            open: true,
-            msg: 'Message sent successfully'
-          }
-        }, () => this.handleContactCancel());
-      } else {
-        this.setState({
-          snackbar: {
-            open: true,
-            msg: 'Message failed to send. Please try again later'
-          }
-        });
-      }
-    });
+    if (this.state.contact.msg === '') {
+      this.setState({
+        contact: {
+          ...this.state.contact,
+          err: 'Field required'
+        }
+      });
+    } else {
+      fetch('http://localhost:8080/api/contact', {
+        method: 'POST',
+        body: JSON.stringify(this.state.contact),
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => res.json())
+      .then(res => {
+        if (res.success === true) {
+          console.log('Yay');
+          this.setState({
+            snackbar: {
+              open: true,
+              msg: 'Message sent successfully'
+            }
+          }, () => this.handleContactCancel());
+        } else {
+          this.setState({
+            snackbar: {
+              open: true,
+              msg: 'Message failed to send. Please try again later'
+            }
+          });
+        }
+      });
+    }
   }
 
   static handleOpenGithub() {
@@ -186,28 +195,35 @@ export default class Footer extends React.Component {
           went on the design and build the user interface.
         </Dialog>
         <Dialog title='Contact Us!' actions={this.getContactActions()} modal={ false } open={ this.state.openContact } autoScrollBodyContent={ true } onRequestClose={ this.handleContactCancel }>
-          <form style={styles.feedback.form}>
+          
+            <div style={styles.feedback.form}>
+              <TextField
+                onChange={(event, text) => this.setState({ contact: { ...this.state.contact, email: text }})}
+                value={this.state.contact.email}
+                floatingLabelText="Email Address"
+              />
+              <IconButton
+                tooltipPosition='bottom-center'
+                tooltip='Enter email to hear back'
+                iconStyle={{ width: 16, height: 16, color: '#bbb'}}
+              >
+                <ActionHelp />
+              </IconButton>
+            </div>
             <TextField
-              onChange={(event, text) => this.setState({ contact: { ...this.state.contact, email: text }})}
-              value={this.state.contact.email}
-              hintText="Email Address (Required)"
-              floatingLabelText="Email Address"
-            />
-            <TextField
-              onChange={(event, text) => this.setState({ contact: { ...this.state.contact, msg: text }})}
+              onChange={(event, text) => this.setState({ contact: { ...this.state.contact, msg: text, err: '' }})}
               value={this.state.contact.msg}
               style={styles.feedback.message}
-              hintText="Enter your message"
-              floatingLabelText="Message"
+              floatingLabelText="Enter your message"
+              errorText={this.state.contact.err}
               multiLine={true}
               rows={4}
             />
-          </form>
         </Dialog>
         <Snackbar
           open={this.state.snackbar.open}
           message={this.state.snackbar.msg}
-          autoHideDuration={4000}
+          autoHideDuration={3000}
           action="OK"
           onRequestClose={this.handleSnackbarClose}
         />

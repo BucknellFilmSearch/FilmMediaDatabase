@@ -37,13 +37,14 @@ gulp.task('build', ['build-ui'], () => {
   gulp.src(['src/**/*.js', '!src/**/static/**/*']).pipe(babel()).pipe(gulp.dest(buildDir));
   gulp.src('src/**/*.json').pipe(gulp.dest(buildDir));
   gulp.src('filmtvse.yml').pipe(gulp.dest(buildDir));
-  gulp.src(path.join(credDir, 'postgres', 'config.json')).pipe(gulp.dest(path.join(buildDir, 'postgres')))
+  gulp.src(path.join(credDir, 'postgres', 'config.json')).pipe(gulp.dest(path.join(buildDir, 'postgres')));
+  gulp.src(path.join(credDir, 'contact', 'config.json')).pipe(gulp.dest(path.join(buildDir, 'api', 'contact')));
 
   // Move static files
-  gulp.src(path.join(staticDir, 'css','*')).pipe(gulp.dest(path.join(buildDir, 'static','css')));
-  gulp.src(path.join(staticDir, 'imageFiles','*')).pipe(gulp.dest(path.join(buildDir, 'static','imageFiles')));
+  gulp.src(path.join(staticDir, 'css', '*')).pipe(gulp.dest(path.join(buildDir, 'static', 'css')));
+  gulp.src(path.join(staticDir, 'imageFiles', '*')).pipe(gulp.dest(path.join(buildDir, 'static', 'imageFiles')));
   gulp.src(path.join(staticDir, 'index.html')).pipe(gulp.dest(path.join(buildDir, 'static')));
-  gulp.src(path.join(staticDir, 'js','*.js')).pipe(gulp.dest(path.join(buildDir, 'static','js')));
+  gulp.src(path.join(staticDir, 'js', '*.js')).pipe(gulp.dest(path.join(buildDir, 'static', 'js')));
 });
 
 // Build the UI
