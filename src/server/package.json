@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint src",
-    "dev-static": "watchify ./src/static/js/app.jsx -o ./src/static/js/bundle.js -t [ envify ] -t [ babelify --presets [ es2015 react ] --plugins [transform-object-rest-spread transform-decorators-legacy] ] -v",
-    "dev-server": "nodemon src/index.js",
+    "dev-static": "./node_modules/watchify/bin/cmd.js ./src/static/js/app.jsx -o ./src/static/js/bundle.js -t [ envify ] -t [ babelify --presets [ es2015 react ] --plugins [transform-object-rest-spread transform-decorators-legacy] ] -v",
+    "dev-server": "./node_modules/nodemon/bin/nodemon.js src/index.js",
     "clean": "gulp clean",
     "build": "gulp build"
   },
