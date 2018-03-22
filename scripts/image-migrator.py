@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
 import httplib2
 import requests
 from bs4 import BeautifulSoup, SoupStrainer
@@ -7,7 +8,7 @@ import boto3
 from PIL import Image
 import requests
 from io import BytesIO
-from multiprocessing.dummy import Pool as ThreadPool
+from multiprocessing import Pool
 import signal
 import sys
 
@@ -27,22 +28,22 @@ for link in BeautifulSoup(response, "html.parser", parse_only=SoupStrainer('a'))
       oclc_id_array += [oclc_id]
 
 def worker(oclc_id):
-  print "---------------------" + oclc_id + "-------------------------"
+  print('Starting on:', oclc_id)
   r = requests.get(URL + oclc_id + '/')
   data = r.text
   soup = BeautifulSoup(data, "html.parser")
   for link in soup.find_all('a'):
     image_name = link.get('href')
     if '.png' in image_name:
-      print(image_name)
+      print(oclc_id + '/' + image_name)
       response = requests.get(URL + oclc_id + '/' + image_name)
       data = BytesIO(response.content)
       file_name = oclc_id + "/" + image_name
       bucket.put_object(Key=file_name, Body=data)
-  print "--------------- DONE WITH " + oclc_id + " -------------------"
+  print('Finished:', oclc_id)
 
 #set up threading
-pool = ThreadPool(8)
+pool = Pool(16)
 results = pool.map(worker, oclc_id_array)
 pool.close()
 pool.join()
