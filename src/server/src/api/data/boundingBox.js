@@ -9,10 +9,11 @@ SELECT
 	bounding_right,
 	text_label,
 	confidence,
-	db_line_id
+	db_line_id,
+	id
 FROM
 	media_recognized_objects
-WHERE 
+WHERE
 	db_line_id = (
 	SELECT
 		db_line_id

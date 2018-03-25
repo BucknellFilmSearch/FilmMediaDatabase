@@ -17,5 +17,9 @@ if __name__ == '__main__':
     with open(args.file) as f:
         cfg = json.loads(f.read())
 
+    path = args.key.split('.')
+    for key in path:
+        cfg = cfg[key]
+
     # Print value and exit
-    print(cfg[args.key])
+    print(cfg)

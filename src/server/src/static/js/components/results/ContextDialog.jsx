@@ -56,7 +56,9 @@ export default class ContextDialog extends React.Component {
     this.state = {
       open: false,
       boxes: [],
-      showBoundingBoxes: true
+      showBoundingBoxes: true,
+      isBoxSelected: false,
+      selectedBox: -1
     };
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -65,6 +67,9 @@ export default class ContextDialog extends React.Component {
     this.slideLeft = this.slideLeft.bind(this);
     this.slideRight = this.slideRight.bind(this);
     this.toggleBoundingBoxes = this.toggleBoundingBoxes.bind(this);
+    this.selectBox = this.selectBox.bind(this);
+    this.unselectBox = this.unselectBox.bind(this);
+    this.reportBox = this.reportBox.bind(this);
   }
 
   /**
@@ -220,7 +225,7 @@ export default class ContextDialog extends React.Component {
   retrieveBoundingBoxes(oclcId, lineNo) {
     // Request bounding boxes and unwrap
     const bBoxApiCall = `http://localhost:8080/api/boundingbox/${oclcId}/${lineNo}`;
-    
+
     fetch(bBoxApiCall)
     .then((res) => res.json())
     .then((res) => {
@@ -232,6 +237,35 @@ export default class ContextDialog extends React.Component {
         boxes[`${oclcId}-${lineNo}-disabled`] = res.results;
       }
       this.setState({ boxes }, () => console.log(this.state));
+    });
+  }
+
+  unselectBox() {
+    this.setState({
+        isBoxSelected: false,
+        selectedBox: -1});
+  }
+
+  reportBox() {
+    const reportApiCall = `http://localhost:8080/api/boundingbox/report/${this.state.selectedBox}`;
+    fetch(reportApiCall, {
+        method: 'PUT'
+    })
+    .then((res) => res.json())
+    .then((res) => {alert("Object Reported, Thank you!")})
+    .catch(error => error);
+
+  }
+
+  selectBox(id) {
+    if (this.state.isBoxSelected && this.state.selectedBox === id) {
+        return this.unselectBox();
+    }
+    this.setState({
+        isBoxSelected: true,
+        selectedBox: id
+    }, () => {
+        console.log(this.state.selectedBox);
     });
   }
 
@@ -273,18 +307,8 @@ export default class ContextDialog extends React.Component {
                               <BoundingBox
                                 src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}
                                 boxes={this.state.boxes[`${this.props.currentFilm.movieOclcId}-${imageNumber}`] || []}
-                                options={{
-                                  colors: {
-                                    normal: 'rgba(255,225,255,1)',
-                                    selected: 'rgba(0,225,204,1)',
-                                    unselected: 'rgba(100,100,100,1)'
-                                  },
-                                  style: {
-                                    maxWidth: '100%',
-                                    maxHeight: '90vh',
-                                    background: '#fff5'
-                                  }
-                                }}
+                                selectedBox={this.state.selectedBox}
+                                onSelectBox={this.selectBox}
                               />
                           </GridTile>
                           )
@@ -361,7 +385,9 @@ export default class ContextDialog extends React.Component {
               </div>
               <div className="colorSearchButton" >
                   <RaisedButton onClick={this.contextDialogueColorSearch} label="Color Search" style={style} />
+                  <RaisedButton disabled={!this.state.isBoxSelected} onClick={this.reportBox} label="Report Selected Object?" style={style} />
               </div>
+
 
           </FullscreenDialog>
       );

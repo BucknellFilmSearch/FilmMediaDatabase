@@ -36,11 +36,11 @@ fi
 
 # Run the build, and install libraries
 echo "Running build script with $build_tool"
-${build_tool} run build \
+$build_tool run build \
   && popd &> /dev/null
 
-user=$(./scripts/.read.py credentials/ec2/config.json user)
-addr=$(./scripts/.read.py credentials/ec2/config.json addr)
+user=$(./scripts/utils/read.py credentials/ec2/config.json user)
+addr=$(./scripts/utils/read.py credentials/ec2/config.json addr)
 
 # Deploy files using ssh and tar
 echo "Copying to remote"

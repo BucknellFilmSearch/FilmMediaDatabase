@@ -25,9 +25,28 @@ logdir=$(pwd)/logs
 colorize 'Starting Server (use ctrl-C to exit)' 2
 pushd src/server/ &> /dev/null
 
+build_tool=''
+
+# Check for either npm or yarn
+type yarn &> /dev/null
+if [[ $? != 0 ]]; then
+  type npm &> /dev/null
+  if [[ $? != 0 ]]; then
+    # Ask user to install yarn or npm if neither is found
+    echo $(colorize "✘ Please install https://yarnpkg.com/en/ or https://www.npmjs.com/ and then run this script again..." 1)
+    exit 1
+  else
+    build_tool='npm'
+    echo $(colorize '✔ Found npm install:' 2) $(npm --version)
+  fi
+else
+  build_tool='yarn'
+  echo $(colorize '✔ Found yarn install:' 2) $(yarn --version)
+fi
+
 # Start frontend and backend watching servers
-yarn dev-server 2>&1 | tee ${logdir}/backend.log | log 'dev-backend' 4 &
-yarn dev-static 2>&1 | tee ${logdir}/frontend.log | log 'dev-frontend' 1
+$build_tool dev-server 2>&1 | tee ${logdir}/backend.log | log 'dev-backend' 4 &
+$build_tool dev-static 2>&1 | tee ${logdir}/frontend.log | log 'dev-frontend' 1
 
 popd &> /dev/null
 popd &> /dev/null
