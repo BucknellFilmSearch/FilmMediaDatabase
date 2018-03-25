@@ -1,5 +1,10 @@
+language: node_js
+node_js:
+  - "8.9.0"
 install: ./scripts/local/setup.sh
-before_script: yarn global add eslint
-script: pushd src/server/ && eslint . && popd && ./scripts/local/build.sh
+before_script: cd src/server
+script:
+  - ./src/server/src/node_modules/eslint/bin/eslint.js src/server/src/api/ src/serversrc/postgres/
+  - ./scripts/local/build.sh
 git:
   submodules: false
