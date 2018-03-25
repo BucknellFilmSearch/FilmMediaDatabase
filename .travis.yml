@@ -1,0 +1,5 @@
+install: ./scripts/local/setup.sh
+before_script: yarn global add eslint
+script: pushd src/server/ && eslint . && popd && ./scripts/local/build.sh
+git:
+  submodules: false
