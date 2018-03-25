@@ -1,4 +1,4 @@
-# Film Search Engine
+# Film Search Engine [![Build Status](https://travis-ci.org/BucknellFilmSearch/FilmMediaDatabase.svg?branch=master)](https://travis-ci.org/BucknellFilmSearch/FilmMediaDatabase)
 
 ## Original Project:
 * Professor Dr. John Hunter, Comparative Humanities
