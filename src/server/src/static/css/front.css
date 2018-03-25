@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
+html {
+  position: relative;
+  min-height: 100vh;
+}
+body {
+  margin-bottom: 100px; /* bottom = footer height */
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
 /* Styling for search page */
 #frontPage {
   font-family: 'Roboto', sans-serif;
@@ -21,15 +34,15 @@
 
 #subText {
   font-size: 16px;
-  font-weight: bold;
   text-align: center;
 }
 
 #footer {
+  display: flex;
+  justify-content: center;
   position: absolute;
-  right: 0;
   bottom: 0;
-  left: 0;
+  width: 100%;
 }
 
 #searchIcons {

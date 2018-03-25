@@ -99,6 +99,7 @@ rules:
     valid-jsdoc: [2, { prefer: { "return": "returns"}, requireParamDescription: false}]
     wrap-iife: 2
     yoda: [2, "never"]
+    react/prop-types: [2, { skipUndeclared: true }]
 
     # Previously on by default in node environment
     no-catch-shadow: 0

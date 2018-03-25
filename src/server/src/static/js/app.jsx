@@ -16,6 +16,8 @@ import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
 import SearchContainer from "./components/search/SearchContainer.jsx";
 import AllFilms from "./components/results/AllFilms.jsx";
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'isomorphic-fetch';
 
 
@@ -28,6 +30,19 @@ export let DEBUG_MODE = true;
 
 injectTapEventPlugin();
 
+const muiTheme = getMuiTheme({
+  "palette": {
+      "primary1Color": "#2196f3",
+      "primary2Color": "#1976d2",
+      "accent1Color": "#f57c00",
+      "pickerHeaderColor": "#2196f3"
+  },
+  "tabs": {
+      "backgroundColor": "#f5f5f5",
+      "textColor": "#2196f3",
+      "selectedTextColor": "#ef6c00"
+  }
+});
 
 /**
 * Generates the next state of the application. Changes are passed to the components for rerendering.
@@ -37,12 +52,12 @@ injectTapEventPlugin();
 * @return {*} The next state of the application
 */
 export const reducer = (state = {
-    search: null,
-    context: [],
-    searchType: undefined,
-    sortType: 1,
-    genre: 'All'
-  } , action) => {
+  search: null,
+  context: [],
+  searchType: undefined,
+  sortType: 1,
+  genre: 'All'
+}, action) => {
   switch (action.type) {
     case 'MOUSE_ENTER_SCREENSHOT':
       return {
@@ -178,11 +193,13 @@ const store = createStore(
 // render the components to the page and define the routes on the page
 ReactDOM.render((
   <Provider store={ store }>
-    <Router history={ hashHistory }>
-      <Route path="/">
-        <IndexRoute component={ SearchContainer } />
-        <Route path=":searchType/:searchTerm(/context/:contextOclcId/:contextScreenshot)" component={ AllFilms } />
-      </Route>
-    </Router>
+    <MuiThemeProvider muiTheme={ muiTheme }>
+      <Router history={ hashHistory }>
+        <Route path="/">
+          <IndexRoute component={ SearchContainer } />
+          <Route path=":searchType/:searchTerm(/context/:contextOclcId/:contextScreenshot)" component={ AllFilms } />
+        </Route>
+      </Router>
+    </MuiThemeProvider>
   </Provider>
   ), document.getElementById('appContainer'));
