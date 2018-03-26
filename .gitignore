@@ -12,6 +12,7 @@ logs/
 dbConfig.json
 /images/*
 *.sql
+/scripts/bboxIn/*
 
 # Don't add config files
 **/*/config.json

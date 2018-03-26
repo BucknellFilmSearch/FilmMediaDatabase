@@ -1,3 +1,11 @@
+'''
+Things to do:
+Add class name
+configure paths
+Change parsing to one file for input coordinates from 
+'''
+
+
 # -*- coding: utf-8 -*-
 """
 Created on Wed Dec  9 14:55:43 2015
@@ -7,10 +15,10 @@ Email: gnxr9@mail.missouri.edu
 """
 
 import os
-from os import walk, getcwd
+from os import walk, getcwd, listdir
 from PIL import Image
+import glob
 
-classes = ["stopsign"]
 
 def convert(size, box):
     dw = 1./size[0]
@@ -27,18 +35,14 @@ def convert(size, box):
     
     
 """-------------------------------------------------------------------""" 
-
-""" Configure Paths"""   
-mypath = "labels/stopsign_original/"
-outpath = "labels/stopsign/"
-
-cls = "stopsign"
-if cls not in classes:
-    exit(0)
-cls_id = classes.index(cls)
-
+mypath = "bboxIn/"
+bboxExt = "filelist_LBP.txt"
+classes = listdir(mypath)
+for i in range(len(classes) -1) :
+    if classes[i].startswith(".") :
+        classes.pop(i)
 wd = getcwd()
-list_file = open('%s/%s_list.txt'%(wd, cls), 'w')
+out_file = open('%s/filelist_LBP_YOLO.txt'%(wd), 'w')
 
 """ Get input text file list """
 txt_name_list = []
@@ -48,21 +52,15 @@ for (dirpath, dirnames, filenames) in walk(mypath):
 print(txt_name_list)
 
 """ Process """
-for txt_name in txt_name_list:
+for classifier in classes:
     # txt_file =  open("Labels/stop_sign/001.txt", "r")
     
     """ Open input text files """
-    txt_path = mypath + txt_name
+    txt_path = mypath + classifier + '/' + bboxExt
     print("Input:" + txt_path)
     txt_file = open(txt_path, "r")
     lines = txt_file.read().split('\r\n')   #for ubuntu, use "\r\n" instead of "\n"
-    
-    """ Open output text files """
-    txt_outpath = outpath + txt_name
-    print("Output:" + txt_outpath)
-    txt_outfile = open(txt_outpath, "w")
-    
-    
+
     """ Convert the data to YOLO format """
     ct = 0
     for line in lines:
@@ -72,17 +70,16 @@ for txt_name in txt_name_list:
         if(len(line) >= 2):
             ct = ct + 1
             print(line + "\n")
-            elems = line.split(' ')
+            elems = line.split('\t')
             print(elems)
-            xmin = elems[0]
-            xmax = elems[2]
-            ymin = elems[1]
-            ymax = elems[3]
-            #
-            img_path = str('%s/images/%s/%s.JPEG'%(wd, cls, os.path.splitext(txt_name)[0]))
-            #t = magic.from_file(img_path)
-            #wh= re.search('(\d+) x (\d+)', t).groups()
-            im=Image.open(img_path)
+            img_path = wd + "/" + mypath + classifier + '/' + elems[0]
+            #possible rearrange
+            xmin = elems[1]
+            xmax = elems[3]
+            ymin = elems[2]
+            ymax = elems[4]
+
+            im= Image.open(img_path)
             w= int(im.size[0])
             h= int(im.size[1])
             #w = int(xmax) - int(xmin)
@@ -92,10 +89,37 @@ for txt_name in txt_name_list:
             b = (float(xmin), float(xmax), float(ymin), float(ymax))
             bb = convert((w,h), b)
             print(bb)
-            txt_outfile.write(str(cls_id) + " " + " ".join([str(a) for a in bb]) + '\n')
+            out_file.write(str(classes.index(classifier)) + " " + " ".join([str(a) for a in bb]) + '\n')
+out_file.close() 
 
-    """ Save those images with bb into list"""
-    if(ct != 0):
-        list_file.write('%s/images/%s/%s.JPEG\n'%(wd, cls, os.path.splitext(txt_name)[0]))
-                
-list_file.close() 
+# Prepare test and train files
+
+# Current directory
+imageDir = os.path.dirname(os.path.abspath(__file__)) + "/" + mypath
+
+# Directory where the data will reside, relative to 'darknet.exe'
+path_data = 'bboxOut/'
+
+# Percentage of images to be used for the test set
+percentage_test = 10
+
+# Create and/or truncate train.txt and test.txt
+file_train = open('train.txt', 'w')  
+file_test = open('test.txt', 'w')
+
+# Populate train.txt and test.txt
+counter = 1  
+index_test = round(100 / percentage_test)
+for classifier in classes :
+    print(os.path.join(imageDir + classifier + "/" , "*.jpg"))
+    for pathAndFilename in glob.iglob(os.path.join(imageDir + classifier + "/" , "*.jpg")) :  
+        title, ext = os.path.splitext(os.path.basename(pathAndFilename))
+
+        if counter == index_test:
+            counter = 1
+            file_test.write(path_data + title + '.jpg' + "\n")
+            #print("Adding " + pathAndFilename + " to tester")
+        else:
+            file_train.write(path_data + title + '.jpg' + "\n")
+            counter = counter + 1
+            #print("Adding " + pathAndFilename + " to trainer")

@@ -1,3 +1,6 @@
 [submodule "submodules/darknet"]
 	path = submodules/darknet
 	url = git@github.com:emm035/darknet.git
+[submodule "BBox-Label-Tool"]
+	path = BBox-Label-Tool
+	url = git@github.com:puzzledqs/BBox-Label-Tool.git
