@@ -6,15 +6,16 @@ import { search } from './api/search';
 import { boundingBox } from './api/data/boundingBox';
 import { getContext } from './api/context';
 import { reportObject } from './api/data/reportObject';
+import { sendMessage } from './api/contact';
 
 const port = 8080;
 
 const app = express();
 
 // Add body parser
-let urlencodedParser = bodyParser.urlencoded({ extended: false });
-app.use(urlencodedParser); // Use a body parser for url-encoded requests
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms')); // Request logging
+app.use(bodyParser.json()); // Use a body parser for json requests
+app.use(bodyParser.urlencoded({ extended: false })); // Use a body parser for url-encoded requests
+app.use(morgan(':method :status :url - :response-time ms')); // Request logging
 
 // Add static server capabilities
 const staticDir = path.join(__dirname, 'static');
@@ -29,6 +30,7 @@ apiRouter.get('/moviesearch/:text', search); // Default search endpoints
 apiRouter.get('/boundingbox/:oclcId/:lineNumber', boundingBox); // Retrieve all bounding boxes for a given db line id
 apiRouter.get('/moviesearch/context/:oclcId/:lineNumber', getContext); // Get the context view data for a given line
 apiRouter.put('/boundingbox/report/:id', reportObject);
+apiRouter.post('/contact', sendMessage);
 app.use('/api', apiRouter); // Mount behind the /api sub-route
 
 // Error handling (log it and return a 500 error)
@@ -36,6 +38,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   console.log(res);
   res.status(err.status || 500).send(err);
+  next();
 });
 
 // Listen on port 8080
