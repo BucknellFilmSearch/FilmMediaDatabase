@@ -36,7 +36,7 @@ gulp.task('build', ['build-ui'], () => {
   // Pipe all JS files and JSON configs
   gulp.src(['src/**/*.js', '!src/**/static/**/*']).pipe(babel()).pipe(gulp.dest(buildDir));
   gulp.src('src/**/*.json').pipe(gulp.dest(buildDir));
-  gulp.src('filmtvse.yml').pipe(gulp.dest(buildDir));
+  gulp.src('pm2_config.yml').pipe(gulp.dest(buildDir));
   gulp.src(path.join(credDir, 'postgres', 'config.json')).pipe(gulp.dest(path.join(buildDir, 'postgres')));
   gulp.src(path.join(credDir, 'contact', 'config.json')).pipe(gulp.dest(path.join(buildDir, 'api', 'contact')));
 

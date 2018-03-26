@@ -122,7 +122,7 @@ export default class Footer extends React.Component {
         }
       });
     } else {
-      fetch('http://localhost:8080/api/contact', {
+      fetch(`http://${window.location.host}/api/contact`, {
         method: 'POST',
         body: JSON.stringify(this.state.contact),
         credentials: 'same-origin',
@@ -143,7 +143,7 @@ export default class Footer extends React.Component {
           this.setState({
             snackbar: {
               open: true,
-              msg: 'Message failed to send. Please try again later'
+              msg: `Message failed to send: ${res.message}`
             }
           });
         }
