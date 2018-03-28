@@ -1,31 +1,6 @@
 # Film Search Engine
 [![Build Status](https://travis-ci.org/BucknellFilmSearch/FilmMediaDatabase.svg?branch=master)](https://travis-ci.org/BucknellFilmSearch/FilmMediaDatabase)
 
-## Original Project:
-* Professor Dr. John Hunter, Comparative Humanities
-* Justin Eyster '17, Summer Research Student
-* Dale Hartman '18, Presidential Fellow
-
-
-# Modern Interface Design for Film Search Engine
-
-
-A team of four senior Computer Science and Engineering students worked to create an intuitive user interface for the Film Search Engine. The information for that project is listed below.
-
-
-## Team Endframe:  
-* Nadeem Nasimi '17  
-* Elliot Radsliff '17  
-* Anmol Singh '17  
-* Devon Wasson '17  
-
-
-
-## Senior Design, CSCI 475/6, Bucknell University  
-* Semesters: Fall 2016/Spring 2017  
-* Advisor: <a href="http://www.eg.bucknell.edu/~brk009/">Professor Dr. Brian King</a>, Computer Science  
-* Client: Professor Dr. John Hunter, Comparative Humanities  
-
 ## Abstract:
 The Film Search Engine started as a database of lines of dialogue from films with a corresponding screenshot. Each screenshot was taken from the film during the time the line of dialogue was being spoken. This relational database allows users to search for text and be returned images, which is invaluable in film and media research. However, an idea is only as good as its ability to be reached by its users. The database needed a website which would not only allow users to conduct their research, but allow them to do so quickly and intuitively. 
 
@@ -33,51 +8,90 @@ Our project aimed to make a well designed web interface to aid in the research b
 
 ## Installation:
 
-These instructions are written for UNIX machines (ie MacOS and Linux). These instructions can still be followed for Windows, but some commands may differ.
+The following instructions are intended to be used with a BASH shell. Note that if run on a machine that does not support BASH, most, if not all of the scripts will not work. If running from Windows, we recommend using the [Ubuntu Subsystem](https://docs.microsoft.com/en-us/windows/wsl/install-win10) for this
 
-### System Requirements
+### Required Dependencies
+- [`Python`](https://www.python.org/"): A language that is used in many of the scripts in this project
+- [`Pip`](https://pip.pypa.io/en/stable/): a python package manager. This is used to install all the backend dependencies.
+- [`Node JS`](https://nodejs.org/en/download/): A lightweight JavaScript runtime. Bundled with Node is [`NPM`](https://www.npmjs.com/)(node package manager), which is used to install and manage the project's JavaScript dependencies.
+- [`PostgresQL`](https://www.postgresql.org/download/): A SQL database that conforms to the ANSI-SQL:2008 standard.
 
-* Python: the language most of the backend code is written in. It can be installed from <a href="https://www.python.org/">here</a>.
-* Pip: a python package manager. This is used to install all the backend dependencies. It is typically comes bundled with Python, or can be installed from <a href="https://pip.pypa.io/en/stable/">here</a>.
-* Node: a JavaScript runtime. Bundled with Node is npm (node package manager), which is used to install the JavaScript dependencies. It can be installed from <a href="https://nodejs.org/en/download/">here</a>.
+### Optional (but recommended) Dependencies
+- [`Yarn`](https://yarnpkg.com/en/docs/install): A JavaScript package manager maintained by Facebook that is interchangeable with NPM, but uses a local cache for already installed libraries and is often faster than NPM
 
 
-### Installation Instructions
+### Setup
 
 These steps only need to be followed once to set up the development environment. 
 
-* Install all required software listed above by following their respective installation guides.
-* Clone the repository from GitLab: `git clone git@gitlab.bucknell.edu:jde012/cell-phone-cinema-project.git`
-* Enter the source folder and install the python requirements: `cd src && pip install -r requirements.txt`
-* Enter the JavaScript folder and install the node requirements: `cd static/js && npm install`
-* Copy the postgresSettings.py file in the 'cell-phone-cinema-project\src\Dev Files' directory up one level to the 'src' directory
-* Edit this new postgresSettings.py file, changing the username field to match your database username
+```bash
+# 1. Install all required dependencies listed above
+# 2. Ensure you have files set up in the 'credentials' directory as specified
 
+# 3. Clone the repository:
+$ git clone https://github.com/BucknellFilmSearch/FilmMediaDatabase.git
 
-### Run Instructions
+# 4. Run the setup script:
+$ ./scripts/local/setup.sh
+```
 
-These steps need to be followed before each development session. 
+### Development
 
-* Open a terminal window and enter the src/ directory
-* Run `python main.py`
-* Open a second terminal window and enter the src/static/js directory
-* Run `npm start` and wait for the JavaScript file to generate
-* Go to localhost:8080 in your web browser
+This project is set up to run in a development mode that will watch for changes to source files and reload the server/frontend when they change.
 
+To run the development server:
+
+```bash
+# Run the dev-server script
+$ ./scripts/local/start.sh
+```
+
+### Deployment
+
+Deploying the project involves compiling all ES6 code into ES5 (supported by more browsers & node), inserting necessary configuration files, and packaging the frontend code into a browser-friendly JavaScript file. This enables faster execution for the server at runtime.
+
+There are two ways to build/deploy the project, as shown below:
+
+__Method 1:__ Automated build and relocation (recommended)
+
+This method will build the project and then use the credentials specified in `/credentials/ec2` to deploy the project to the specified Amazon EC2 instance.
+
+```bash
+# Run deployment script
+$ ./scripts/local/deploy.sh
+```
+
+__Method 2:__ Automated build with manual relocation
+
+This method will only build the project, allowing the resulting directory to be moved to a location as desired
+
+```bash
+# Run build script
+$ ./scripts/local/build.sh
+
+# Move to desired location
+$ mv ./build <location>
+```
 
 ### Web Development Tips
 
-* Use Google Chrome and its debugging tools
-* Install <a href="https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi">React Developer Tools</a> to debug issues with React
-* Install <a href="https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en">Redux DevTools</a> to debug issues with Redux
-* If JavaScript files aren’t updating in the browser after modifying the code locally:
-* Make sure that Chrome isn’t caching the old JavaScript file (disable cache is checked in the network tab of the developer tools)
-* Make sure npm start is running (steps 3-4 in Run instructions) 
+- Use Google Chrome and its debugging tools
+- Install the [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi) for React debugging
+- Install [Redux DevTools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en) for Redux debugging
+- If JavaScript files aren’t updating in the browser after modifying the code locally:
+  - Make sure that Chrome isn’t caching the old JavaScript file (disable cache is checked in the network tab of the developer tools)
+  - Use `⌃+⇧+R` (Windows/Linux) or `⌘+⇧+R` (Mac) to refresh the page cache
 
 
 ### Adding Dependencies
 
-Any time a new Python dependency is installed using Pip, it should also be added to requirements.txt. Similarly, any time a new JavaScript dependency installed using npm, it should also be added to package.json. 
+#### Python
+
+
+
+#### JavaScript
+
+
 
 ## File Structure:
 For the website for this project, most of the files used can be found in the static folder. 
@@ -87,10 +101,10 @@ Static/css contains the css files for the website. front.css contains the style 
 Static/imageFiles contains the images used throughout the website. 140x197.jpg and 720x480.jpg can be used as placeholder images if you cannot connect to the database. logo.jpg, photoIcon.jpg, and textIcon.jpg can all be viewed on the front page. photoUploadIcon.jpg can be seen in the color search modal.
 
 Static/js contains all of the javascript files relevant to the website. Static/js/components contains three folders, /graphs, /results, and /search.
-* `/graphs` contains the .jsx files relevant to data visualizations. This is currently not included in the website but is compatible with our design.  
-* `/results` contains the .jsx files for the results and context pages. AllFilms.jsx is the main file, which includes references to the other files in the folder.
-* `/search` contains the .jsx files for the home page. SearchContainer.jsx is the main file, which includes references to the other files.
-* In the root folder, `/docs` contains the documentation for the project as done by Team Endframe. The docs folder contains the user document, design document, poster for our final presentation, and a pdf of our slides for our final presentation. 
+- `/graphs` contains the .jsx files relevant to data visualizations. This is currently not included in the website but is compatible with our design.  
+- `/results` contains the .jsx files for the results and context pages. AllFilms.jsx is the main file, which includes references to the other files in the folder.
+- `/search` contains the .jsx files for the home page. SearchContainer.jsx is the main file, which includes references to the other files.
+- In the root folder, `/docs` contains the documentation for the project as done by Team Endframe. The docs folder contains the user document, design document, poster for our final presentation, and a pdf of our slides for our final presentation. 
 
 
 # Historical README Information:
@@ -110,3 +124,23 @@ of the specified keyword/phrase, with a screenshot, along with metadata informat
 the movies containing the keyword/phrase.
 
 For academic, educational, & personal use.
+
+
+## Contributors
+
+### Original Project:
+- Professor Dr. John Hunter, Comparative Humanities
+- Justin Eyster '17, Summer Research Student
+- Dale Hartman '18, Presidential Fellow
+
+### Modern Interface Design for Film Search Engine
+- Nadeem Nasimi '17  
+- Elliot Radsliff '17  
+- Anmol Singh '17  
+- Devon Wasson '17
+
+### Object Search and Backend Rewrite
+- Andrew Capuano '18
+- Stefano Cobelli '18
+- Eric Marshall '18
+- Cole Whitley '18
