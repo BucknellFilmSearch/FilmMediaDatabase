@@ -17,7 +17,7 @@ const boundingBoxMap = (rows) => {
     return {
       confidence,
       textLabel,
-      bounding: [ 
+      bounding: [
         boundingLeft,                  // x
         boundingTop,                   // y
         boundingRight - boundingLeft,  // width

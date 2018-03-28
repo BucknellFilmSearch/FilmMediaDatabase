@@ -9,7 +9,7 @@ import { groupedMap } from '../utils/map';
  *
  * {
  *  results: {
- * } 
+ * }
  * }
  *
  * * * * * * * * * */

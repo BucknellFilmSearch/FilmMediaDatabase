@@ -23,7 +23,7 @@ const reportObject = (req, res) => {
   };
 
   // Query from the default pool
-  pool.query(queryCfg, (err, dbRes) => {
+  pool.query(queryCfg, (err) => {
     if (err) {
       console.error(err);
       res.status(err.status || 500);
