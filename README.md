@@ -5,12 +5,11 @@
 
 ## Table of Contents
 
-1. [About](#about)
-2. [Installation](#installation)
-3. [Execution](#execution)
-4. [Adding Dependencies](#adding-dependencies)
-5. [File Structure](#file-structure)
-6. [Contributors](#contributors)
+1. [Installation](#installation)
+2. [Execution](#execution)
+3. [Adding Dependencies](#adding-dependencies)
+4. [File Structure](#file-structure)
+5. [Contributors](#contributors)
 
 
 
