@@ -35,44 +35,7 @@ export default class MetadataDrawer extends React.Component {
   render() {
 
     let movieDetails = this.props.movieDetails;
-
-<<<<<<< HEAD
-    let imgSrc = movieDetails !== null ? `http://www.filmtvsearch.net/static/imageFiles/${movieDetails.movieOclcId}.gif` : null;
-=======
-        let imgSrc = movieDetails != null ? `${process.env.IMG_SRC}${movieDetails.movieOclcId}.gif` : null;
-        
-        return (
-            <Drawer docked={true} open={true} openSecondary={true} zDepth={1} containerStyle={{height: 'calc(100% - 72px)', top: 72}}>
-                {movieDetails == null ? (
-                        <div>
-                            <div className="movieTitleInMetadataDrawer">
-                                The Film Search Engine<br />
-                            </div>
-                            <LazyLoad height={197}>
-                                <img className="thumbnail" src={imgSrc} width="140" height="197" />
-                            </LazyLoad>
-                            <div className="metadataDrawerDialogueContainer">
-                                <br /><br />Mouse over an image for details.<br />Click on an image for more options.
-                            </div>
-                            <Paper>
-                                <div className="metadataDrawerTimelineContainer">
-                                    <svg height="70" width="200">
-                                        <line x1="10" y1="50" x2="210" y2="50" stroke={"grey"} strokeWidth={1} />
-                                    </svg>
-                                    {beautifyTimeStamp("00:00:00,000")}
-                                </div>
-                            </Paper>
-                        </div>
-                    ) : (
-                        <div>
-                            <div className="movieTitleInMetadataDrawer">
-                                {movieDetails.movieTitle} ({movieDetails.movieReleaseYear}) <br />
-                            </div>
-                                <LazyLoad height={197}>
-                                    <img className="thumbnail" src={imgSrc} width="140" height="197" />
-                                </LazyLoad>
-                            <div className="metadataDrawerDialogueContainer">
->>>>>>> Images are now fetched from the S3 Bucket
+    let imgSrc = movieDetails !== null ? `${process.env.IMG_SRC}${movieDetails.movieOclcId}.gif` : null;
 
     return (
       <Drawer docked={true} open={true} openSecondary={true} zDepth={1} containerStyle={{height: 'calc(100% - 72px)', top: 72}}>
