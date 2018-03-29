@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint src",
-    "dev-static": "./node_modules/watchify/bin/cmd.js ./src/static/js/app.jsx -o ./src/static/js/bundle.js -t [ envify ] -t [ babelify --presets [ es2015 react ] --plugins [transform-object-rest-spread transform-decorators-legacy] ] -v",
+    "dev-static": "echo $IMG_SRC && ./node_modules/watchify/bin/cmd.js ./src/static/js/app.jsx -o ./src/static/js/bundle.js -t [ babelify --presets [ es2015 react ] --plugins [transform-object-rest-spread transform-decorators-legacy] ] -t [ envify --NODE_ENV production --IMG_SRC $IMG_SRC ] -v",
     "dev-server": "./node_modules/nodemon/bin/nodemon.js src/index.js",
     "clean": "gulp clean",
     "build": "gulp build"
@@ -42,6 +42,7 @@
     "react-dropzone": "^3.11.0",
     "react-image-gallery": "^0.7.12",
     "react-lazyload": "^2.2.4",
+    "react-markdown": "^3.3.0",
     "react-onscroll": "^1.0.1",
     "react-redux": "^5.0.2",
     "react-render-html": "^0.6.0",

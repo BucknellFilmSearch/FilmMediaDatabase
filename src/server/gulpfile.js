@@ -1,5 +1,6 @@
 'use strict';
 
+var fs = require('fs');
 var babel = require('gulp-babel');
 var browserify = require('browserify');
 var buffer = require('vinyl-buffer');
@@ -29,6 +30,8 @@ gulp.task('build', ['build-ui'], () => {
     delete _json.scripts.clean;
     delete _json.scripts.lint;
     delete _json.devDependencies;
+    delete _json['dev-static'];
+    delete _json['dev-server'];
     _json.scripts.start = 'NODE_ENV=production node index.js';
     return _json;
   })).pipe(gulp.dest(buildDir));
@@ -49,16 +52,20 @@ gulp.task('build', ['build-ui'], () => {
 
 // Build the UI
 gulp.task('build-ui', () => {
+
+  const siteCfg = JSON.parse(fs.readFileSync(path.join(credDir, 'config.json')));
+
   return browserify({
     entries: path.join(jsDir, 'app.jsx'),
     debug: false,
     transform: [
-      ['envify', {
-        NODE_ENV: 'development'
-      }],
       ['babelify', {
         presets: ['env', 'react'],
         plugins: ['transform-decorators-legacy', 'transform-object-rest-spread']
+      }],
+      ['envify', {
+        IMG_SRC: siteCfg.imgSrc,
+        NODE_ENV: 'production'
       }]
     ]
   })
