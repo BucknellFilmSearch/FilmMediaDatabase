@@ -35,7 +35,7 @@ export default class MetadataDrawer extends React.Component {
 
         let movieDetails = this.props.movieDetails;
 
-        let imgSrc = movieDetails != null ? "http://www.filmtvsearch.net/static/imageFiles/" + movieDetails.movieOclcId + ".gif" : null;
+        let imgSrc = movieDetails != null ? `${process.env.IMG_SRC}${movieDetails.movieOclcId}.gif` : null;
         
         return (
             <Drawer docked={true} open={true} openSecondary={true} zDepth={1} containerStyle={{height: 'calc(100% - 72px)', top: 72}}>

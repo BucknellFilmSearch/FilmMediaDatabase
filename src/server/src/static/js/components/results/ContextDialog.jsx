@@ -201,7 +201,7 @@ export default class ContextDialog extends React.Component {
         key={`tooltip${result.movieLineNumber}`}
       >
         <img height='100'
-          src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${result.movieLineNumber}.png`}
+          src={`${process.env.IMG_SRC}${this.props.currentFilm.movieOclcId}/${result.movieLineNumber}.png`}
         />
       </ReactTooltip>
       );
@@ -305,7 +305,7 @@ export default class ContextDialog extends React.Component {
                               key={`img${imageNumber}`}
                           >
                               <BoundingBox
-                                src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}
+                                src={`${process.env.IMG_SRC}${this.props.currentFilm.movieOclcId}/${imageNumber}.png`}
                                 boxes={this.state.boxes[`${this.props.currentFilm.movieOclcId}-${imageNumber}`] || []}
                                 selectedBox={this.state.selectedBox}
                                 onSelectBox={this.selectBox}
