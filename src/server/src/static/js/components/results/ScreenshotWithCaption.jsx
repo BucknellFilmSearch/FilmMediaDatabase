@@ -34,7 +34,7 @@ export default class ScreenshotWithCaption extends React.Component {
      */
   render() {
 
-    let imgSrc = `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.movieOclcId}/${this.props.screenshotDetails.movieLineNumber}.png`;
+    let imgSrc = `${process.env.IMG_SRC}${this.props.movieOclcId}/${this.props.screenshotDetails.movieLineNumber}.png`;
 
     return (
       <GridTile
