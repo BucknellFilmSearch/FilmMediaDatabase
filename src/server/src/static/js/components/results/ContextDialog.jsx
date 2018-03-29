@@ -199,7 +199,7 @@ export default class ContextDialog extends Component {
         key={`tooltip${result.movieLineNumber}`}
       >
         <img height='100'
-          src={`http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.currentFilm.movieOclcId}/${result.movieLineNumber}.png`}
+          src={`${process.env.IMG_SRC}${this.props.currentFilm.movieOclcId}/${result.movieLineNumber}.png`}
         />
       </ReactTooltip>
       );
