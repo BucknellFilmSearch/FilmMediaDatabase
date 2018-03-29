@@ -237,7 +237,12 @@ export default class Footer extends React.Component {
           of the film database and the back-end logic. The senior design team, Team Endframe, comprised of Anmol Singh, Devon Wasson, Elliot Radsliff, and Nadeem Nasimi,
           went on the design and build the user interface.
         </Dialog>
+<<<<<<< HEAD
         <Dialog title='Contact Us!' actions={this.getContactActions()} modal={ false } open={ this.state.openContact } autoScrollBodyContent={ true } onRequestClose={ this.handleContactCancel }>
+=======
+        <Dialog title='Help' actions={this.getContactActions()} modal={ false } open={ this.state.openContact } autoScrollBodyContent={ true } onRequestClose={ this.handleContactCancel }>
+          
+>>>>>>> Started adding help section to footer
             <div style={styles.feedback.form}>
               <TextField
                 onChange={(event, text) => this.setState({ contact: { ...this.state.contact, email: text }})}
