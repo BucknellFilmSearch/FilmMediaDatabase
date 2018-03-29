@@ -8,6 +8,7 @@
 
 import * as React from 'react';
 import { Dialog, FlatButton, RaisedButton, Snackbar, TextField, IconButton } from 'material-ui';
+import Markdown from 'react-markdown';
 import ActionHelp from 'material-ui/svg-icons/action/help';
 
 const styles = {
@@ -26,6 +27,30 @@ const styles = {
     }
   }
 };
+
+const helpMarkdown = `
+
+## Overview
+
+The Film Search Engine is a database of screenshots and subtitles from various movies, created with the intent of
+aiding film scholars in finding connections between films that they might otherwise miss. The Film Search engine
+allows for 3 types of searching: [Object Search](#object-search), [Subtitle Search](#subtitle-search), and
+[Color Search](#color-search). Each type of search is described in more detail below.
+
+
+## Object Search
+
+Object Search allows you to search for objects that appear in the screenshots held in the database. To search for an
+object, first select the "Find Objects" tab. This will display a text field and slider component.
+
+The text field allows you to enter a type of object, and the slider adjusts the threshold of confidence. What this means
+is that for a lower threshold, the minimum confidence (as given by the recognition algorithm) is lower for the given
+search.
+
+## Subtitle Search
+
+## Color Search
+`;
 
 /**
  * The footer contains four buttons that link to additional information
@@ -46,6 +71,7 @@ export default class Footer extends React.Component {
       },
       openProject: false,
       openAbout: false,
+      openHelp: false,
       openContact: false,
       contact: {
         email: '',
@@ -58,6 +84,8 @@ export default class Footer extends React.Component {
     this.handleCloseProject = this.handleCloseProject.bind(this);
     this.handleOpenAbout = this.handleOpenAbout.bind(this);
     this.handleCloseAbout = this.handleCloseAbout.bind(this);
+    this.handleOpenHelp = this.handleOpenHelp.bind(this);
+    this.handleCloseHelp = this.handleCloseHelp.bind(this);
     this.handleOpenContact = this.handleOpenContact.bind(this);
     this.handleContactCancel = this.handleContactCancel.bind(this);
     this.handleContactSend = this.handleContactSend.bind(this);
@@ -94,6 +122,19 @@ export default class Footer extends React.Component {
   handleCloseAbout() {
     this.setState({
       openAbout: false
+    });
+  }
+
+  handleOpenHelp() {
+    console.log(process.env);
+    this.setState({
+      openHelp: true
+    });
+  }
+
+  handleCloseHelp() {
+    this.setState({
+      openHelp: false
     });
   }
 
@@ -152,7 +193,7 @@ export default class Footer extends React.Component {
   }
 
   static handleOpenGithub() {
-    window.open('http://www.github.com');
+    window.open('http://www.github.com/BucknellFilmSearch/');
   }
 
   getDefaultActions(handler = () => {}) {
@@ -177,6 +218,7 @@ export default class Footer extends React.Component {
     return (
       <div id='footer'>
         <RaisedButton label='About the Project' style={ styles.button } onTouchTap={ this.handleOpenProject } />
+        <RaisedButton label='Help' style={ styles.button } onTouchTap={ this.handleOpenHelp } />
         <RaisedButton label='About Us' style={ styles.button } onTouchTap={ this.handleOpenAbout } />
         <RaisedButton label='GitHub' style={ styles.button } onTouchTap={ Footer.handleOpenGithub } />
         <RaisedButton label='Contact Us!' style={ styles.button } primary={ true } onTouchTap={ this.handleOpenContact } />
@@ -219,6 +261,9 @@ export default class Footer extends React.Component {
               multiLine={true}
               rows={4}
             />
+        </Dialog>
+        <Dialog title='Contact Us!' modal={ false } open={ this.state.openHelp } autoScrollBodyContent={ true } onRequestClose={ this.handleCloseHelp }>
+          <Markdown source={helpMarkdown}/>
         </Dialog>
         <Snackbar
           open={this.state.snackbar.open}
