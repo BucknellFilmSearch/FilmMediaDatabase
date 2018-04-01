@@ -9,12 +9,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
 import { cleanStopWords, GENRES } from '../../helpers';
-import { IconButton, MenuItem, RaisedButton, SelectField, Slider, TextField } from 'material-ui';
+import { IconButton, MenuItem, RaisedButton, SelectField, Slider, TextField, AutoComplete } from 'material-ui';
 import { Tab, Tabs } from 'material-ui/Tabs';
 import HelpIcon from 'material-ui/svg-icons/action/help';
 import Dropzone from 'react-dropzone';
 import {FileCloudUpload} from 'material-ui/svg-icons';
 import { InputPanel as styles } from './styling';
+import _ from 'lodash';
 
 /**
  * Uses Material-UI input components and dropdowns to allow user input for a text based search.
@@ -28,13 +29,25 @@ export default class InputPanel extends React.Component {
       searchType: this.props.searchType || 'object',
       searchText: this.props.searchTerm || '',
       errorText: '',
-      confidenceSlider: 0.8
+      confidenceSlider: 0.8,
+      classes: []
     };
     this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleConfidenceSlider = this.handleConfidenceSlider.bind(this);
     this.onSelectSearchType = this.onSelectSearchType.bind(this);
     this.onDrop = this.onDrop.bind(this);
+  }
+
+  componentWillMount() {
+    fetch(`http://${window.location.host}/api/classes`)
+    .then(res => res.json())
+    .then(res => res.results)
+    .then(data => {
+      this.setState({
+        classes: data
+      });
+    });
   }
 
   /**
@@ -46,7 +59,9 @@ export default class InputPanel extends React.Component {
     event.preventDefault();
     const keywordOrPhrase = cleanStopWords(this.state.searchText);
     this.setState({searchText: ''});
-    if (keywordOrPhrase === '') {
+    if (this.state.searchType === 'object' && _.find(this.state.classes, className => className === this.state.searchText) === undefined) {
+      this.setState({errorText: `'${this.state.searchText}' is not a recognized object type`});
+    } else if (keywordOrPhrase === '') {
       this.setState({errorText: 'Your search has returned too many results.'});
     } else {
             // Send search type to global state if changed
@@ -59,7 +74,9 @@ export default class InputPanel extends React.Component {
       console.log(newPath);
       hashHistory.push(newPath);
       this.setState({errorText: ''});
-      this.props.handleClose();
+      if (this.props.handleClose) {
+        this.props.handleClose();
+      }
     }
   }
   updateSearchForEnterKeypress(event) {
@@ -67,7 +84,7 @@ export default class InputPanel extends React.Component {
     event.preventDefault();
     this.updateSearch(event);
   }
-  handleChange(event, newValue) {
+  handleChange(newValue) {
     this.setState({searchText: newValue});
   }
   onSelectSearchType(val) {
@@ -92,12 +109,17 @@ export default class InputPanel extends React.Component {
             value='object'>
             <div style={styles.tab.div}>
               <form style={styles.tab.div} id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
-                <TextField
+                <AutoComplete
+                  searchText={this.state.searchText}
+                  dataSource={this.state.classes}
                   hintText='Search Phrase'
                   errorText={this.state.errorText}
-                  value={this.state.searchText}
-                  style={styles.input}
-                  onChange={this.handleChange}
+                  // value={this.state.searchText}
+                  style={styles.tab.div}
+                  fullWidth={true}
+                  textFieldStyle={styles.input}
+                  filter={AutoComplete.fuzzyFilter}
+                  onUpdateInput={this.handleChange}
                   autoFocus
                 />
               </form>
@@ -128,7 +150,6 @@ export default class InputPanel extends React.Component {
             <div style={styles.tab.div}>
               <form style={styles.tab.div} id='textForm' onSubmit={this.updateSearchForEnterKeypress}>
                 <TextField
-                  defaultValue={this.props.searchTerm}
                   hintText='Search Phrase'
                   errorText={this.state.errorText}
                   value={this.state.searchText}
