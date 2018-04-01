@@ -7,6 +7,7 @@ import { boundingBox } from './api/data/boundingBox';
 import { getContext } from './api/context';
 import { reportObject } from './api/data/reportObject';
 import { sendMessage } from './api/contact';
+import { classList } from './api/data/classList';
 
 const port = 8080;
 
@@ -29,6 +30,7 @@ const apiRouter = express.Router();
 apiRouter.get('/moviesearch/:text', search); // Default search endpoints
 apiRouter.get('/boundingbox/:oclcId/:lineNumber', boundingBox); // Retrieve all bounding boxes for a given db line id
 apiRouter.get('/moviesearch/context/:oclcId/:lineNumber', getContext); // Get the context view data for a given line
+apiRouter.get('/classes', classList);
 apiRouter.put('/boundingbox/report/:id', reportObject);
 apiRouter.post('/contact', sendMessage);
 app.use('/api', apiRouter); // Mount behind the /api sub-route
