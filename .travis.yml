@@ -7,3 +7,6 @@ script:
   - popd && ./scripts/local/build.sh
 git:
   submodules: false
+notifications:
+  on_success: never
+  on_failure: always
