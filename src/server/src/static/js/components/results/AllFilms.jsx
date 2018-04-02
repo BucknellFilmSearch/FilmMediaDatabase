@@ -92,20 +92,9 @@ export default class AllFilms extends React.Component {
     const { contextOclcId: newOclcId, contextScreenshot: newScreenshot } = nextProps.routeParams;
     if (newOclcId !== oldOclcId || newScreenshot !== oldScreenshot) {
       this.props.openContext(newOclcId, newScreenshot);
-    }
-
-    // close context
-    else if ((!_.has(nextProps.routeParams, 'contextOclcId') && _.has(this.props.routeParams, 'contextOclcId'))) {
+    } else if ((!_.has(nextProps.routeParams, 'contextOclcId') && _.has(this.props.routeParams, 'contextOclcId'))) {
       this.props.closeContext();
     }
-  }
-
-  openSearchModal() {
-    this.setState({searchModalOpen: true});
-  }
-
-  closeSearchModal() {
-    this.setState({searchModalOpen: false});
   }
 
   handleScrollCallback() {
@@ -137,7 +126,9 @@ export default class AllFilms extends React.Component {
 
 /**
 * Redux action for when the user requests a new search term
-* @param searchTerm New search term
+* @param {string} searchTerm New search term
+* @param {string} searchType The type of search to run (one of: text, object, color)
+* @returns {object} The action for requesting a new search term
 */
 export const requestNewSearchTerm = (searchTerm, searchType) => {
   return {
@@ -150,7 +141,8 @@ export const requestNewSearchTerm = (searchTerm, searchType) => {
 
 /**
 * Redux action for when the API call is received for the requested search term.
-* @param response Response to the API call
+* @param {array} response Response to the API call
+* @returns {object} The action for handling a new set of search results
 */
 const receiveNewSearchTerm = (response) => {
   return {
@@ -163,7 +155,9 @@ const receiveNewSearchTerm = (response) => {
 /**
 * Composite Redux action for fetching a new search term. Requests the search term,
 * makes the API call, and submits an action when the API call returns data.
-* @param searchTerm New search term
+* @param {string} searchTerm New search term
+* @param {object} params The search parameters to include (type, sort, etc.)
+* @returns {function} A function that will submit a request for a new search term
 */
 const fetchNewSearchTerm = (searchTerm, params) => {
   return (dispatch) => {
@@ -181,8 +175,9 @@ const fetchNewSearchTerm = (searchTerm, params) => {
 
 /**
 * Redux action when the user requests opening the context for a given screenshot
-* @param movieOclcId The movieOclcId corresponding to the context they requested
-* @param movieLineNumber The movieLineNumber corresponding to the context they requested
+* @param {number} movieOclcId The movieOclcId corresponding to the context they requested
+* @param {number} movieLineNumber The movieLineNumber corresponding to the context they requested
+* @returns {object} The action for opening an image's context
 */
 const openContext = (movieOclcId, movieLineNumber) => {
   return {
@@ -196,8 +191,9 @@ const openContext = (movieOclcId, movieLineNumber) => {
 /**
 * Redux action when the user directly requests the context for a film before entering a
 * search. This action queues the requesting the context until the search is completed.
-* @param movieOclcId The movieOclcId corresponding to the context they requested
-* @param movieLineNumber The movieLineNumber corresponding to the context they requested
+* @param {number} movieOclcId The movieOclcId corresponding to the context they requested
+* @param {number} movieLineNumber The movieLineNumber corresponding to the context they requested
+* @returns {object} The action for queuing a new context
 */
 const queueContext = (movieOclcId, movieLineNumber) => {
   return {
@@ -210,6 +206,7 @@ const queueContext = (movieOclcId, movieLineNumber) => {
 
 /**
 * Redux action that dequeues the pending context request when the API call is eventually made.
+* @returns {object} The action for dequeuing a context
 */
 const dequeueContext = () => {
   return {
@@ -221,6 +218,7 @@ const dequeueContext = () => {
 /**
 * Redux action that triggers when the user scrolls on the screen. This removes the metadata from the
 * metadata drawer when they scroll.
+* @returns {object} The action for signifying the user's scroll
 */
 const scrollScreen = () => {
   return {
@@ -231,6 +229,7 @@ const scrollScreen = () => {
 
 /**
 * Redux action that triggers when the user wishes to close the context dialog.
+* @returns {object} The action for closing the context dialog
 */
 const closeContextDialog = () => {
   return {
@@ -243,7 +242,6 @@ const areFilmsLoaded = (state) => state.search && state.search.status == 'loaded
 const getSearchResponse = (state) => areFilmsLoaded(state) ? [...state.search.response] : [];
 const getSortType = (state) => state.sortType;
 const getGenre = (state) => state.genre;
-const getSearchType = (state) => state.searchType;
 const getFilms = createSelector(
   [ getSearchResponse, getSortType, getGenre],
   (films, sortType, genre) => {

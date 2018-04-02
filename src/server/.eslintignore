@@ -1,0 +1,14 @@
+node_modules/**/*
+**/*.ico
+**/*.jpg
+**/*.svg
+**/*.css
+**/*.html
+src/static/js/bundle.js
+src/static/js/base64.js
+src/static/js/bootstrap.min.js
+src/static/js/canvas2image.js
+src/static/js/excanvas.min.js
+src/static/js/ie10-viewport-bug-workaround.js
+src/static/js/jquery.flot.min.js
+src/static/js/jquery.flot.saveAsImage.js
