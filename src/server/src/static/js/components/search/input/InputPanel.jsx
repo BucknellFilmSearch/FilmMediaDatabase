@@ -114,7 +114,6 @@ export default class InputPanel extends React.Component {
                   dataSource={this.state.classes}
                   hintText='Search Phrase'
                   errorText={this.state.errorText}
-                  // value={this.state.searchText}
                   style={styles.tab.div}
                   fullWidth={true}
                   textFieldStyle={styles.input}
@@ -154,7 +153,7 @@ export default class InputPanel extends React.Component {
                   errorText={this.state.errorText}
                   value={this.state.searchText}
                   style={styles.input}
-                  onChange={this.handleChange}
+                  onChange={(evt, newText) => this.handleChange(newText)}
                   autoFocus
                 />
               </form>
