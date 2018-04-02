@@ -9,16 +9,17 @@
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
-import ReactDOM from "react-dom";
+import ReactDOM from 'react-dom';
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import { Provider } from 'react-redux';
-import SearchContainer from "./components/search/SearchContainer.jsx";
-import AllFilms from "./components/results/AllFilms.jsx";
+import SearchContainer from './components/search/SearchContainer.jsx';
+import AllFilms from './components/results/AllFilms.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import 'isomorphic-fetch';
+import _ from 'lodash';
 
 
 // allows use of chrome extension to monitor react performance
@@ -31,25 +32,25 @@ export let DEBUG_MODE = true;
 injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
-  "palette": {
-      "primary1Color": "#2196f3",
-      "primary2Color": "#1976d2",
-      "accent1Color": "#f57c00",
-      "pickerHeaderColor": "#2196f3"
+  'palette': {
+    'primary1Color': '#2196f3',
+    'primary2Color': '#1976d2',
+    'accent1Color': '#f57c00',
+    'pickerHeaderColor': '#2196f3'
   },
-  "tabs": {
-      "backgroundColor": "#f5f5f5",
-      "textColor": "#2196f3",
-      "selectedTextColor": "#ef6c00"
+  'tabs': {
+    'backgroundColor': '#f5f5f5',
+    'textColor': '#2196f3',
+    'selectedTextColor': '#ef6c00'
   }
 });
 
 /**
 * Generates the next state of the application. Changes are passed to the components for rerendering.
 *
-* @param state The previous state of the application
-* @param action An action triggered by the user or an API call
-* @return {*} The next state of the application
+* @param {object} state The previous state of the application
+* @param {object} action An action triggered by the user or an API call
+* @returns {*} The next state of the application
 */
 export const reducer = (state = {
   search: null,
@@ -74,14 +75,14 @@ export const reducer = (state = {
     case 'OPEN_CONTEXT':
       return {
         ...state,
-        contextMovieOclcId: parseInt(action.movieOclcId),
-        currentContextMovieLineNumber: parseInt(action.movieLineNumber)
+        contextMovieOclcId: parseInt(action.movieOclcId, 10),
+        currentContextMovieLineNumber: parseInt(action.movieLineNumber, 10)
       };
     case 'QUEUE_CONTEXT':
       return {
         ...state,
-        queueContextMovieOclcId: parseInt(action.movieOclcId),
-        queueCurrentContextMovieLineNumber: parseInt(action.movieLineNumber)
+        queueContextMovieOclcId: parseInt(action.movieOclcId, 10),
+        queueCurrentContextMovieLineNumber: parseInt(action.movieLineNumber, 10)
       };
     case 'DEQUEUE_CONTEXT':
       return {
@@ -101,25 +102,21 @@ export const reducer = (state = {
         currentContextMovieLineNumber: null
       };
     case 'RECEIVE_CONTEXT':
-      // remap context screenshots to include key
-      console.log(action);
-      let newContextScreenshots = action.context.map(screenshot => ({
-        ...screenshot,
-        key: `oclc${action.movieOclcId}line${screenshot.movieLineNumber}`
-      })
-      // filter out films that are already in the context
-      ).filter(newScreenshot => state.context.find(contextScreenshot => newScreenshot.key == contextScreenshot.key) === undefined
-      );
-
       return {
         ...state,
-        context: state.context.concat(newContextScreenshots)
+        context: _.concat(
+          state.context,
+          _(action.context)
+            .map(img => ({ ...img, key: `oclc${action.movieOclcId}line${img.movieLineNumber}` })) // remap context screenshots to include key
+            .filter(img => _.find(state.context, ctxImg => img.key === ctxImg.key) === undefined) // Filter out screenshots that already exist in the context
+            .compact().value()
+        )
       };
     case 'REQUEST_NEW_SEARCH_TERM':
       return {
         ...state,
         search: {
-          status: "loading",
+          status: 'loading',
           response: null,
           searchTerm: action.searchTerm,
           searchType: action.searchType
@@ -131,30 +128,22 @@ export const reducer = (state = {
       };
     case 'RECEIVE_NEW_SEARCH_TERM':
 
-      // flatten 2D list containing screenshots for each film to a 1D list
-      let newSearchResultsScreenshots = action.response.map(film =>
-      // collect screenshots from each film
-      film.results.map(screenshot => ({
-        ...screenshot,
-        key: `oclc${film.movieOclcId}line${screenshot.movieLineNumber}`
-      })
-      )
-      // flatten list of screenshots
-      ).reduce(
-        ((screenshots, filmScreenshots) => screenshots.concat(filmScreenshots)), []
-      // filter out films that are already in the context
-      ).filter(newScreenshot => state.context.find(contextScreenshot => newScreenshot.key == contextScreenshot.key) === undefined
-      );
-
       return {
         ...state,
         search: {
-          status: "loaded",
+          status: 'loaded',
           response: action.response,
           searchType: state.search.searchType,
           searchTerm: state.search.searchTerm
         },
-        context: state.context.concat(newSearchResultsScreenshots)
+        context: _.concat(
+          state.context,
+          _.map(action.response, film =>
+            _(film.results)
+              .map(img => ({ ...img, key: `oclc${film.movieOclcId}line${img.movieLineNumber}` }))) // remap context screenshots to include key
+              .reduce((imgs, filmImgs) => _.concat(imgs, filmImgs), []) // flatten list of screenshots
+              .filter(img => state.context.find(ctxImg => img.key === ctxImg.key) === undefined) // filter out films that are already in the context)
+          )
       };
     case 'SCROLL_INTO_FILM':
       return {
@@ -177,7 +166,7 @@ export const reducer = (state = {
         genre: action.genre
       };
     default:
-      return state
+      return state;
   }
 };
 
