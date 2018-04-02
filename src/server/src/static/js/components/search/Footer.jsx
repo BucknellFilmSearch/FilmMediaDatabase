@@ -170,6 +170,7 @@ export default class Footer extends React.Component {
 
   /**
    * Renders the buttons and dialogs to the homepage using Material-UI components.
+   * @returns {object} The JSX object representing this class
    */
   render() {
     // actions for the project box modal
@@ -195,7 +196,6 @@ export default class Footer extends React.Component {
           went on the design and build the user interface.
         </Dialog>
         <Dialog title='Contact Us!' actions={this.getContactActions()} modal={ false } open={ this.state.openContact } autoScrollBodyContent={ true } onRequestClose={ this.handleContactCancel }>
-          
             <div style={styles.feedback.form}>
               <TextField
                 onChange={(event, text) => this.setState({ contact: { ...this.state.contact, email: text }})}
