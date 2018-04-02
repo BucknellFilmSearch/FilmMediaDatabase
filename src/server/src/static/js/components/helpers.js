@@ -6,7 +6,8 @@
 * Spring 2017
 */
 
-export const STOP_WORDS = ['a', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', 'aren\'t',
+/** A list of words that should stop the search if there is no other part to the query */
+const STOP_WORDS = ['a', 'above', 'after', 'again', 'against', 'all', 'am', 'an', 'and', 'any', 'are', 'aren\'t',
   'as', 'at', 'be', 'because', 'been', 'before', 'being', 'below', 'between', 'both', 'but', 'by', 'can\'t', 'cannot',
   'could', 'couldn\'t', 'did', 'didn\'t', 'do', 'does', 'doesn\'t', 'doing', 'don\'t', 'down', 'during', 'each',
   'few', 'for', 'from', 'further', 'had', 'hadn\'t', 'has', 'hasn\'t', 'have', 'haven\'t', 'having', 'he',
@@ -21,9 +22,9 @@ export const STOP_WORDS = ['a', 'above', 'after', 'again', 'against', 'all', 'am
   'when\'s', 'where', 'where\'s', 'which', 'while', 'who', 'who\'s', 'whom', 'why', 'why\'s', 'with', 'won\'t',
   'would', 'wouldn\'t', 'you', 'you\'d', 'you\'ll', 'you\'re', 'you\'ve', 'your', 'yours', 'yourself', 'yourselves'];
 
-export const GENRES = ['All', 'Action', 'Thriller', 'Comedy', 'Family', 'Adventure', 'Mystery', 'Romance', 'Sci-Fi',
+/** The genres available in the search engine */
+const GENRES = ['All', 'Action', 'Thriller', 'Comedy', 'Family', 'Adventure', 'Mystery', 'Romance', 'Sci-Fi',
   'Horror', 'Drama', 'Biography', 'Fantasy', 'Crime', 'War', 'Animation', 'History', 'Musical'];
-
 
 /**
 * Converts a timestamp to a scaled horizontal offset for the vertical bar in the timeline.
@@ -32,42 +33,42 @@ export const GENRES = ['All', 'Action', 'Thriller', 'Comedy', 'Family', 'Adventu
 * @param totalMovieRuntime The total runtime of the film, in minutes
 * @return {number} The horizontal offset in pixels
 */
-export function timeStampToMinutes(movieStartTimeStamp, totalMovieRuntime) {
+
+function timeStampToMinutes(movieStartTimeStamp, totalMovieRuntime) {
   // Horizontal length of the timeline in the metadata drawer (in pixels)
   const timeLineLength = 200;
 
   const splitString = movieStartTimeStamp.split(':');
-  return Math.ceil((10 + parseInt(splitString[0]) * 60 + parseInt(splitString[1])) / totalMovieRuntime * timeLineLength);
+  return Math.ceil((10 + parseInt(splitString[0], 10) * 60 + parseInt(splitString[1], 10)) / totalMovieRuntime * timeLineLength);
 }
-
 
 /**
 * Removes milliseconds in a screenshot's timestamp
 *
-* @param movieStartTimeStamp A timestamp of a line of dialogue in the format hours:minutes:seconds,milliseconds
-* @return {*}  A timestamp of a line of dialogue in the format hours:minutes:seconds
+* @param {string} movieStartTimeStamp A timestamp in the format 'hours:minutes:seconds,milliseconds'
+* @returns {*}  A timestamp in the format 'hours:minutes:seconds'
 */
-export function beautifyTimeStamp(movieStartTimeStamp) {
+function beautifyTimeStamp(movieStartTimeStamp) {
   const splitString = movieStartTimeStamp.split(',');
   return (splitString[0]);
 }
+
 /**
 * Takes a search string and removes any stop words as parameters and returns the cleaned string
 *
-* @param input A string to be stripped of stop words
+* @param {string} input A string to be stripped of stop words
 * @returns {string} without stop words
 */
-export function cleanStopWords(input) {
+function cleanStopWords(input) {
   let splitString = input.toLowerCase().split(' ');
   var buildString = '';
   for (var i = 0; i < splitString.length; i++) {
     if (!(STOP_WORDS.includes(splitString[i]))) {
       // If it is the first non stop word
-      if (buildString == '') {
+      if (buildString === '') {
         buildString = splitString[i];
-      }
-      // If it is a middle non stop word or last non stop word
-      else {
+      } else {
+        // If it is a middle non stop word or last non stop word
         buildString = buildString + ' ' + splitString[i];
       }
     }
@@ -75,7 +76,7 @@ export function cleanStopWords(input) {
   return buildString;
 }
 
-export function relevanceSort(a, b) {
+function relevanceSort(a, b) {
   if (a.results.length > b.results.length) {
     return -1;
   } else if (a.results.length < b.results.length) {
@@ -85,11 +86,11 @@ export function relevanceSort(a, b) {
   }
 }
 
-export function alphabeticalSort(a, b) {
+function alphabeticalSort(a, b) {
   return a.movieTitle.localeCompare(b.movieTitle);
 }
 
-export function yearSort(a, b) {
+function yearSort(a, b) {
   if (a.movieReleaseYear > b.movieReleaseYear) {
     return -1;
   } else if (a.movieReleaseYear < b.movieReleaseYear) {
@@ -98,4 +99,15 @@ export function yearSort(a, b) {
     return 0;
   }
 }
+
+export {
+  STOP_WORDS,
+  GENRES,
+  timeStampToMinutes,
+  beautifyTimeStamp,
+  cleanStopWords,
+  relevanceSort,
+  alphabeticalSort,
+  yearSort
+};
 
