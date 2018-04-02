@@ -3,7 +3,7 @@ node_js:
   - "8.9.0"
 install: ./scripts/local/setup.sh
 script:
-  - pushd src/server/ && ./node_modules/eslint/bin/eslint.js src/api/ src/postgres/
+  - pushd src/server/ && ./node_modules/eslint/bin/eslint.js src/api/ src/static/js/components/ src/static/js/components/app.jsx src/postgres/
   - popd && ./scripts/local/build.sh
 git:
   submodules: false
