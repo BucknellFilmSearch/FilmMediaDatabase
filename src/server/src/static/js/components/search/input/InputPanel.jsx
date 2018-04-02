@@ -53,6 +53,9 @@ export default class InputPanel extends React.Component {
   /**
    * takes the search phrase and returns results in the results page. If they searched for only stop word(s),
    * a warning is displayed and no search is made.
+   *
+   * @param {object} event The event called by a form for submission
+   * @returns {undefined}
    */
   updateSearch(event) {
         // stop default form submission behavior
