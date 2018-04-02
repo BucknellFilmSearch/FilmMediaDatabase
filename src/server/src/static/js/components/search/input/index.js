@@ -4,4 +4,4 @@ import Panel from './InputPanel.jsx';
 export {
   Modal,
   Panel
-}
+};
