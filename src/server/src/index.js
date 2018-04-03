@@ -26,7 +26,7 @@ app.use('/static', express.static(staticDir)); // Serve through the /static path
 app.use('/feedback', express.static(path.join(staticDir, 'feedback.html'))); // TODO - Fix feedback page
 
 // Add API routes
-const apiRouter = express.Router();
+const apiRouter = new express.Router();
 apiRouter.get('/moviesearch/:text', search); // Default search endpoints
 apiRouter.get('/boundingbox/:oclcId/:lineNumber', boundingBox); // Retrieve all bounding boxes for a given db line id
 apiRouter.get('/moviesearch/context/:oclcId/:lineNumber', getContext); // Get the context view data for a given line

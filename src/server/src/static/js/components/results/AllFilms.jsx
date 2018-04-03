@@ -29,9 +29,6 @@ import _ from 'lodash';
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AllFilms extends React.Component {
 
-  /**
-  * Binds event handler to the class.
-  */
   constructor(props) {
     super(props);
     this.handleScrollCallback = this.handleScrollCallback.bind(this);
@@ -246,7 +243,7 @@ const closeContextDialog = () => {
 };
 
 
-const areFilmsLoaded = (state) => state.search && state.search.status == 'loaded';
+const areFilmsLoaded = (state) => state.search && state.search.status === 'loaded';
 const getSearchResponse = (state) => areFilmsLoaded(state) ? [...state.search.response] : [];
 const getSortType = (state) => state.sortType;
 const getGenre = (state) => state.genre;
