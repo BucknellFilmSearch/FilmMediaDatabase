@@ -29,9 +29,6 @@ export default class ScreenshotWithCaption extends React.Component {
     return (splitString[0]);
   }
 
-    /**
-     * Render the ScreenshotWithCaption
-     */
   render() {
 
     let imgSrc = `http://www.filmtvsearch.net/static/imageFiles/screenshots/${this.props.movieOclcId}/${this.props.screenshotDetails.movieLineNumber}.png`;
@@ -67,8 +64,9 @@ export default class ScreenshotWithCaption extends React.Component {
 
 /**
  * Redux action for when the user mouses over a screenshot, which is used to populate the MetadataDrawer
- * @param movieOclcId The movieOclcId corresponding to the hovered screenshot
- * @param movieLineNumber The movieLineNumber corresponding to the hovered screenshot
+ * @param {number} movieOclcId The movieOclcId corresponding to the hovered screenshot
+ * @param {number} movieLineNumber The movieLineNumber corresponding to the hovered screenshot
+ * @returns {object} A redux action for when the mouse enters a screenshot
  */
 const mouseEnterScreenshot = (movieOclcId, movieLineNumber) => {
   return {
