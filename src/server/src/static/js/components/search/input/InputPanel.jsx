@@ -98,6 +98,8 @@ export default class InputPanel extends React.Component {
   onDrop(acceptedFiles, rejectedFiles) {
     // do stuff with files...
     console.log('add functionality to handle dropping here!');
+    console.log(acceptedFiles);
+    console.log(rejectedFiles);
   }
 
   render() {
