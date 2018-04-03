@@ -18,8 +18,7 @@ const styles = {
       height: `${height * scale}px`
     };
   }
-
-}
+};
 
 export default class BoundingBox extends React.Component {
   constructor(props) {
@@ -32,6 +31,7 @@ export default class BoundingBox extends React.Component {
 
     // Bind methods
     this.onImgLoad = this.onImgLoad.bind(this);
+    this.onSelectBox = this.onSelectBox.bind(this);
   }
 
   onImgLoad(target) {
@@ -40,8 +40,8 @@ export default class BoundingBox extends React.Component {
   }
 
   onSelectBox(id) {
-    //PUT IN SHIT ABOUT SELECTING UNSELECTING
-    this.props.onSelectBox(id);
+    // Handle box selection
+    this.props.onSelectBox(id, this.props.display);
   }
 
   /**
@@ -52,30 +52,38 @@ export default class BoundingBox extends React.Component {
    *   bounding: [ <x>, <y>, <w>, <h> ]
    * }
    * @param {*} boxes The bounding boxes and labels to draw
+   * @returns {object} The JSX object representing this class
    */
   getBoxes(boxes) {
     // Sort the boxes so the smallest area goes on top and create the divs for them
-    return _.map(boxes.sort(({bounding: a}, {bounding: b}) => b[2]*b[3] - a[2]*a[3]), ({bounding: box, textLabel: label, id}, idx) => {
+    return _.map(boxes.sort(({bounding: a}, {bounding: b}) => b[2] * b[3] - a[2] * a[3]), ({bounding: box, textLabel: label, id}, idx) => {
       return (
         <div
           key={idx}
-          className={'bounding-box' + (this.props.selectedBox === id ? ' bounding-box-selected' : '')}
+          className={
+            'bounding-box'
+            + (this.props.selectedBox === id ? ' bounding-box-selected' : '')
+            + (this.props.display === false ? ' bounding-box-hidden' : '')
+          }
           style={styles.box(box[0], box[1], box[2], box[3], this.state.scale) }
           onClick={() => this.onSelectBox(id)}
           >
             <p className="bounding-box-label">{ _.capitalize(label) }</p>
         </div>
-      )
+      );
     });
   }
-
 
   render() {
     return (
       <div style={styles.fill}>
-        <img onLoad={({target}) => {this.onImgLoad(target);}} style={styles.fill} src={this.props.src}/>
+        <img
+          onLoad={({target}) => this.onImgLoad(target)}
+          style={styles.fill}
+          src={this.props.src}
+        />
         {this.getBoxes(this.props.boxes || [])}
       </div>
     );
   }
-};
+}

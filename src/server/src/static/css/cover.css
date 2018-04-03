@@ -133,6 +133,7 @@
   border: 2px solid rgb(127, 255, 212);
   color: rgb(255, 255, 255, 0);
   background: #fff0;
+  opacity: 1;
   -o-transition: .5s;
   -ms-transition: .5s;
   -moz-transition: .5s;
@@ -145,6 +146,7 @@
   color: rgb(255, 166, 0);
   background: #fff4;
 }
+
 .bounding-box-selected {
   border: 2px solid rgb(255, 166, 0);
   color: rgb(255, 166, 0);
@@ -153,6 +155,10 @@
 
 .bounding-box-label {
   color: inherit;
+}
+
+.bounding-box-hidden {
+  opacity: 0;
 }
 
 /*Conext Timeline centering */

@@ -10,7 +10,7 @@ class InputModal extends React.Component {
 
 
   handleClose() {
-    this.props.closeFcn();
+    this.props.handleClose();
   }
 
   render() {
@@ -34,7 +34,7 @@ InputModal.propTypes = {
   /** Whether or not the modal is currently open */
   open: PropTypes.bool.isRequired,
   /** Fires when the modal should be closed */
-  closeFcn: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired
 };
 
 export default InputModal;
