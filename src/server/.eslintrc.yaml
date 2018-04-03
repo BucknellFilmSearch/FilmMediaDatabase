@@ -24,6 +24,7 @@ globals:
     fetch: false
     window: false
     document: false
+    hashHistory: false
 
 rules:
     indent: [2, 2, {SwitchCase: 1}]

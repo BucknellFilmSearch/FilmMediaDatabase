@@ -69,12 +69,10 @@ export default class InputPanel extends React.Component {
     } else {
             // Send search type to global state if changed
       if (this.state.searchType !== this.props.searchType) {
-        console.log('Pushing new search type to global state');
         this.props.onSelectSearchType(this.state.searchType);
       }
             // update the URL
       let newPath = `/${this.state.searchType}/${keywordOrPhrase.replace(/ /g, '&').replace('!', '').replace('?', '')}`;
-      console.log(newPath);
       hashHistory.push(newPath);
       this.setState({errorText: ''});
       if (this.props.handleClose) {

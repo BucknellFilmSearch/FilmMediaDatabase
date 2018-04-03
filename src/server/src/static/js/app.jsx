@@ -127,7 +127,8 @@ export const reducer = (state = {
         hoverMovieLineNumber: null
       };
     case 'RECEIVE_NEW_SEARCH_TERM':
-
+      console.log(
+      );
       return {
         ...state,
         search: {
@@ -138,12 +139,13 @@ export const reducer = (state = {
         },
         context: _.concat(
           state.context,
-          _.map(action.response, film =>
+          _.flatMap(action.response, film =>
             _(film.results)
-              .map(img => ({ ...img, key: `oclc${film.movieOclcId}line${img.movieLineNumber}` }))) // remap context screenshots to include key
+              .map(img => ({ ...img, key: `oclc${film.movieOclcId}line${img.movieLineNumber}` })) // remap context screenshots to include key
               .reduce((imgs, filmImgs) => _.concat(imgs, filmImgs), []) // flatten list of screenshots
-              .filter(img => state.context.find(ctxImg => img.key === ctxImg.key) === undefined) // filter out films that are already in the context)
+              .filter(img => state.context.find(ctxImg => img.key === ctxImg.key) === undefined) // filter out films that are already in the context
           )
+        )
       };
     case 'SCROLL_INTO_FILM':
       return {

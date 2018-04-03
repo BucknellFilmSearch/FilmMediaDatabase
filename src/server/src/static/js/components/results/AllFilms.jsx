@@ -32,8 +32,8 @@ export default class AllFilms extends React.Component {
   /**
   * Binds event handler to the class.
   */
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handleScrollCallback = this.handleScrollCallback.bind(this);
     this.state = {
       searchModalOpen: false
@@ -53,12 +53,20 @@ export default class AllFilms extends React.Component {
     this.props.fetchNewSearchTerm(this.props.routeParams.searchTerm, params);
   }
 
+  /**
+   * Handle the search modal opening
+   * @returns {undefined}
+   */
   openSearchModal() {
     this.setState({ searchModalOpen: true });
   }
 
+  /**
+   * Handle the search modal closing
+   * @returns {undefined}
+   */
   closeSearchModal() {
-    this.setState({ searchModalOpen: true });
+    this.setState({ searchModalOpen: false });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -107,7 +115,7 @@ export default class AllFilms extends React.Component {
       <div>
         <ScrollEvent handleScrollCallback={this.handleScrollCallback} />
         <ResultsToolbar openSearchModal={() => this.openSearchModal()} />
-        <SearchInput open={this.state.searchModalOpen} closeFcn={() => this.closeSearchModal()} />
+        <SearchInput open={this.state.searchModalOpen} handleClose={() => this.closeSearchModal()} />
         <MetadataDrawer />
         {this.props.hasContext && <ContextDialog />}
         {!this.props.filmsLoaded ? (
