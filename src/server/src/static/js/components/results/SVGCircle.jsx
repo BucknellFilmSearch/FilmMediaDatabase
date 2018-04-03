@@ -17,43 +17,40 @@ import * as React from 'react';
 */
 export default class SVGCircle extends React.Component {
 
-    constructor() {
-        super();
-        this.state = {
-            active: false
-        };
-    }
+  constructor() {
+    super();
+    this.state = {
+      active: false
+    };
+  }
 
-    /**
-     * Slides the image gallery to the linked screenshot.
-     */
-    click() {
-        this.props.slideTo(this.props.index);
-        this.setState(
-            {
-                active: true
-            }
-        );
-    }
+  /**
+   * Slides the image gallery to the linked screenshot.
+   * @returns {undefined}
+   */
+  click() {
+    this.props.slideTo(this.props.index);
+    this.setState({
+      active: true
+    });
+  }
 
-    /**
-     * Render the svg circle.
-     */
-    render() {
-        return(
-            <svg>
-                <circle
-                    className="timelineCircles"
-                    onClick={this.click.bind(this)}
-                    cx={this.props.x}
-                    cy={this.props.y}
-                    r={this.props.radius}
-                    stroke={"#6097b2"}
-                    strokeWidth={2}
-                    data-tip data-for={'SVGCircle' + this.props.index}
-                    fill={"#afe5ff"}
-                    fillOpacity={0}/>
-            </svg>
-        );
-    }
+  render() {
+    return (
+      <svg>
+        <circle
+          className="timelineCircles"
+          onClick={this.click.bind(this)}
+          cx={this.props.x}
+          cy={this.props.y}
+          r={this.props.radius}
+          stroke={'#6097b2'}
+          strokeWidth={2}
+          data-tip data-for={'SVGCircle' + this.props.index}
+          fill={'#afe5ff'}
+          fillOpacity={0}
+        />
+      </svg>
+    );
+  }
 }
