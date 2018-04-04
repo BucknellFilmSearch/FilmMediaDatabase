@@ -4,6 +4,7 @@ node_modules/**/*
 **/*.svg
 **/*.css
 **/*.html
+**/*.md
 src/static/js/bundle.js
 src/static/js/base64.js
 src/static/js/bootstrap.min.js
