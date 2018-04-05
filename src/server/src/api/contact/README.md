@@ -1,4 +1,4 @@
-# context/
+# contact/
 
 Endpoint for handling feedback sending. Uses Nodemailer as a transporter to send emails
 

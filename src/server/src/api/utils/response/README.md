@@ -10,7 +10,7 @@ Wraps JSON formatted data so that it's of the form:
 
 ```json
 {
-    "status": number,
-    "results": /* Data */
+    "status": "number",
+    "results": "data"
 }
 ```
