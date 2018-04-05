@@ -17,6 +17,6 @@ Sends a JSON formatted list of classes.
 
 ### [reportObject.js](reportObject.js)
 
-Handler for reporting an incorrect bounding on an image.
+Handler for reporting an incorrect bounding box on an image.
 
-Sends a JSON formatted response structured using the [bounding box map structure](../utils/map/README.md)
+Sends a JSON formatted response with the ID of the removed bounding box
