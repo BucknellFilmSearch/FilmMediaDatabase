@@ -12,7 +12,7 @@ var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 
 const buildDir = path.join(__dirname, '..', '..', 'build');
-const credDir = path.join(__dirname, '..', '..', 'credentials');
+const configDir = path.join(__dirname, '..', '..', 'configuration');
 const staticDir = path.join(__dirname, 'src', 'static');
 const jsDir = path.join(staticDir, 'js');
 
@@ -37,8 +37,8 @@ gulp.task('build', ['build-ui'], () => {
   gulp.src(['src/**/*.js', '!src/**/static/**/*']).pipe(babel()).pipe(gulp.dest(buildDir));
   gulp.src('src/**/*.json').pipe(gulp.dest(buildDir));
   gulp.src('pm2_config.yml').pipe(gulp.dest(buildDir));
-  gulp.src(path.join(credDir, 'postgres', 'config.json')).pipe(gulp.dest(path.join(buildDir, 'postgres')));
-  gulp.src(path.join(credDir, 'contact', 'config.json')).pipe(gulp.dest(path.join(buildDir, 'api', 'contact')));
+  gulp.src(path.join(configDir, 'postgres', 'config.json')).pipe(gulp.dest(path.join(buildDir, 'postgres')));
+  gulp.src(path.join(configDir, 'contact', 'config.json')).pipe(gulp.dest(path.join(buildDir, 'api', 'contact')));
 
   // Move static files
   gulp.src(path.join(staticDir, 'css', '*')).pipe(gulp.dest(path.join(buildDir, 'static', 'css')));

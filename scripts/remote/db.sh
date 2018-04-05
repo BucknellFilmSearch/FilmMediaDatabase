@@ -16,11 +16,11 @@ else
 fi
 
 # Get all login info for the db from the config file
-user=$(./scripts/utils/read.py credentials/postgres/config.json production.user)
-host=$(./scripts/utils/read.py credentials/postgres/config.json production.host)
-database=$(./scripts/utils/read.py credentials/postgres/config.json production.database)
-password=$(./scripts/utils/read.py credentials/postgres/config.json production.password)
-port=$(./scripts/utils/read.py credentials/postgres/config.json production.port)
+user=$(./scripts/utils/read.py configuration/postgres/config.json production.user)
+host=$(./scripts/utils/read.py configuration/postgres/config.json production.host)
+database=$(./scripts/utils/read.py configuration/postgres/config.json production.database)
+password=$(./scripts/utils/read.py configuration/postgres/config.json production.password)
+port=$(./scripts/utils/read.py configuration/postgres/config.json production.port)
 
 printf "Logging into $database@$host:$port as $user\n"
 
