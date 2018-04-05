@@ -1,5 +1,5 @@
-import pool from '../../postgres/dbClient';
 import { groupedMap } from '../utils/map';
+import { query as queryDb } from '../utils/db';
 
 const queryString = `
 SELECT
@@ -62,16 +62,11 @@ const textSearch = (req, res) => {
 
   // TODO: Add density count updates
 
-  // Run query
-  pool.query(queryCfg, (err, dbRes) => {
-    if (err) {
-      console.error(err.message);
-      res.status(err.status || 500);
-    }
-    // Send the mapped results
-    res.json({
-      results: groupedMap(dbRes.rows)
-    });
+  // Run query and send response
+  queryDb(queryCfg, {
+    mapper: groupedMap,
+    err: () => res.status(500),
+    cb: (data) => res.json(data)
   });
 };
 

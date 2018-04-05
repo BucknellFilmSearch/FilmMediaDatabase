@@ -37,8 +37,7 @@ app.use('/api', apiRouter); // Mount behind the /api sub-route
 
 // Error handling (log it and return a 500 error)
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  console.log(res);
+  console.error(err.message);
   res.status(err.status || 500).send(err);
   next();
 });

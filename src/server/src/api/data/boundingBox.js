@@ -1,27 +1,27 @@
-import pool from '../../postgres/dbClient';
 import { boundingBoxMap } from '../utils/map';
+import { query as queryDb } from '../utils/db';
 
 const queryString = `
 SELECT
-	bounding_top,
-	bounding_bottom,
-	bounding_left,
-	bounding_right,
-	text_label,
-	confidence,
-	db_line_id,
-	id
+  bounding_top,
+  bounding_bottom,
+  bounding_left,
+  bounding_right,
+  text_label,
+  confidence,
+  db_line_id,
+  id
 FROM
-	media_recognized_objects
+  media_recognized_objects
 WHERE
-	db_line_id = (
-	SELECT
-		db_line_id
-	FROM
-	    media_text
-	WHERE
-	    line_number = $1::integer
-	  AND
+  db_line_id = (
+  SELECT
+    db_line_id
+  FROM
+      media_text
+  WHERE
+      line_number = $1::integer
+    AND
       oclc_id = $2::integer
   )
   AND
@@ -39,19 +39,12 @@ const boundingBox = (req, res) => {
     values: [params.lineNumber, params.oclcId, query.confidence]
   };
 
-  // Query from the default pool
-  pool.query(queryCfg, (err, dbRes) => {
-    if (err) {
-      console.error(err);
-      res.status(err.status || 500);
-      throw err;
-    }
-    // Send the mapped results
-    res.json({
-      results: boundingBoxMap(dbRes.rows)
-    });
+  // Run query and send response
+  queryDb(queryCfg, {
+    mapper: boundingBoxMap,
+    err: () => res.status(500),
+    cb: (data) => res.json(data)
   });
-
 };
 
 export {

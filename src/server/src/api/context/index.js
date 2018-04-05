@@ -1,18 +1,5 @@
-import pool from '../../postgres/dbClient';
+import { query } from '../utils/db';
 import { groupedMap } from '../utils/map';
-
-/* * * * * * * * * *
- * Context Endpoint
- * -----------------
- * Collects the lines that exist within close proximity of the
- * specified line number. Returns data in the form:
- *
- * {
- *  results: {
- * }
- * }
- *
- * * * * * * * * * */
 
 const queryString = `
 SELECT
@@ -42,8 +29,7 @@ ORDER BY
   mt.line_number`;
 
 const getContext = (req, res) => {
-  const { params } = req;
-  const { oclcId, lineNumber } = params;
+  const { params: { oclcId, lineNumber } } = req;
 
   // Build query
   const queryCfg = {
@@ -51,18 +37,15 @@ const getContext = (req, res) => {
     values: [oclcId, lineNumber]
   };
 
+  const customMap = (data) => groupedMap(data)[0];
+  const customWrapper = (data, status) => ({ status, context: data });
+
   // Run query
-  pool.query(queryCfg, (err, dbRes) => {
-    if (err) {
-      console.error(err);
-      res.status(err.status || 500);
-      throw err;
-    }
-    // Return the mapped results
-    console.log(JSON.stringify(groupedMap(dbRes.rows)[0], null, 2));
-    res.json({
-      context: groupedMap(dbRes.rows)[0]
-    });
+  query(queryCfg, {
+    mapper: customMap,
+    wrapper: customWrapper,
+    err: res.status(500),
+    cb: (data) => res.json(data)
   });
 };
 

@@ -1,4 +1,4 @@
-import pool from '../../postgres/dbClient';
+import { query } from '../utils/db';
 import _ from 'lodash';
 
 const queryString = `
@@ -15,18 +15,11 @@ const classList = (req, res) => {
   };
 
   // Query from the default pool
-  pool.query(queryCfg, (err, dbRes) => {
-    if (err) {
-      console.error(err);
-      res.status(err.status || 500);
-      throw err;
-    }
-    // Send the mapped results
-    res.json({
-      results: _.map(dbRes.rows, (row) => row.text_label)
-    });
+  query(queryCfg, {
+    mapper: (data) => _.map(data, (row) => row.text_label),
+    err: () => res.status(500),
+    cb: (data) => res.json(data)
   });
-
 };
 
 export {
