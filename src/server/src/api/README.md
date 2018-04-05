@@ -6,8 +6,8 @@ All API calls returning data will have the data wrapped in the following code st
 
 ```json
 {
-    "status": /* Status # */,
-    "result": /* Data */
+    "status": "number",
+    "result": "data"
 }
 ```
 
