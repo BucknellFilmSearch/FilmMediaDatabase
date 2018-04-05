@@ -9,7 +9,7 @@ const env = process.env.NODE_ENV || 'development';
 
 // Paths to follow for different envs
 const productionCfgPath = path.join(__dirname, 'config.json');
-const developmentCfgPath = path.join(__dirname, '..', '..', '..', '..', '..', 'credentials', 'contact', 'config.json');
+const developmentCfgPath = path.join(__dirname, '..', '..', '..', '..', '..', 'configuration', 'contact', 'config.json');
 const cfg = JSON.parse(readFileSync((env === 'production') ? productionCfgPath : developmentCfgPath));
 
 const transporter = nodemailer.createTransport({
