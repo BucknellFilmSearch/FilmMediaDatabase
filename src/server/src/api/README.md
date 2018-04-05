@@ -16,4 +16,4 @@ All API calls returning data will have the data wrapped in the following code st
 - [Feedback sending](contact/)
 - [Requests for data](data/)
 - [All searches](search/)
-- [Utilities](contact/)
+- [Utilities](utils/)
