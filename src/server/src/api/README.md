@@ -11,7 +11,6 @@ All API calls returning data will have the data wrapped in the following code st
 }
 ```
 
--
 ### Contains
 - [Feedback sending](contact/README.md)
 - [Requests for data](data/README.md)
