@@ -134,11 +134,11 @@ __NOTE:__ Each subdirectory has its own README.txt with a more in-depth descript
     - [`local`](scripts/local) - Scripts that are used for local maintenance/builds
     - [`remote`](scripts/remote) - Scripts that are used for deployment/remote management
     - [`utils`](scripts/utils) - Utility scripts for use in other scripts/migration
-- `config` - All config files that should NOT be included in the repository for security reasons
-    - `aws` - AWS credentials
-    - `contact` - SMTP Credentials
-    - `ec2` - EC2 Credentials
-    - `postgres` - Postgres credentials
+- [`configuration`](configuration) - All config files that should NOT be included in the repository for security reasons
+    - [`aws`](configuration/api) - AWS credentials
+    - [`contact`](configuration/contact) - SMTP Credentials
+    - [`ec2`](configuration/ec2) - EC2 Credentials
+    - [`postgres`](configuration/postgres) - Postgres credentials
 
 For the website for this project, most of the files used can be found in the static folder. 
 
