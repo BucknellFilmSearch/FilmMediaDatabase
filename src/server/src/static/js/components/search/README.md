@@ -1,5 +1,5 @@
 # search/
--
+
 This folder contains all of the react components that handles running the searches.
 
 ### [Footer.jsx](Footer.jsx)

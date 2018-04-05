@@ -1,5 +1,5 @@
 # input/
--
+
 This folder contains the files that relate directly to searching. The tabbed search panel is contained here as well as the panel in modal form.
 
 ### [InputPanel.jsx](InputPanel.jsx)

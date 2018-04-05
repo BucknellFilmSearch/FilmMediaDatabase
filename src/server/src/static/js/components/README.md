@@ -1,5 +1,5 @@
 # components/
--
+
 This folder contains all the react components that we use for this project.
 
 ## Contains

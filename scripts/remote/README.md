@@ -1,5 +1,5 @@
 # remote/
--
+
 This folder contains scripts that handle remote deployment of our application on AWS.
 
 ### [db.sh](db.sh)

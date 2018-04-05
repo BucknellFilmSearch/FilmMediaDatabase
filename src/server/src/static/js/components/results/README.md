@@ -1,5 +1,5 @@
 # results/
--
+
 This folder contains all of the react components that handle displaying the search results.
 
 ### [AllFilms.jsx](AllFilms.jsx)
