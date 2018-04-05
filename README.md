@@ -128,18 +128,17 @@ $ yarn add <new_dependency>
 
 __NOTE:__ Each subdirectory has its own README.txt with a more in-depth description of its contents and own subdirectories
 
-- `src` - All source code files in the project
-    - `server` - All code related to the server/frontend
-- `scripts`
-    - `local` - Scripts that are used for local maintenance/builds
-    - `remote` - Scripts that are used for deployment/remote management
-    - `utils` - Utility scripts for use in other scripts/migration
+- `[src](src)` - All source code files in the project
+    - `[server](src/server)` - All code related to the server/frontend
+- `[scripts](scripts)`
+    - `[local](scripts/local)` - Scripts that are used for local maintenance/builds
+    - `[remote](scripts/remote)` - Scripts that are used for deployment/remote management
+    - `[utils](scripts/utils)` - Utility scripts for use in other scripts/migration
 - `config` - All config files that should NOT be included in the repository for security reasons
     - `aws` - AWS credentials
     - `contact` - SMTP Credentials
     - `ec2` - EC2 Credentials
     - `postgres` - Postgres credentials
-- `docs`
 
 For the website for this project, most of the files used can be found in the static folder. 
 
