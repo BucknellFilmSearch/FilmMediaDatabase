@@ -30,9 +30,9 @@ const apiRouter = new express.Router();
 apiRouter.get('/moviesearch/:text', search); // Default search endpoints
 apiRouter.get('/boundingbox/:oclcId/:lineNumber', boundingBox); // Retrieve all bounding boxes for a given db line id
 apiRouter.get('/moviesearch/context/:oclcId/:lineNumber', getContext); // Get the context view data for a given line
-apiRouter.get('/classes', classList);
-apiRouter.put('/boundingbox/report/:id', reportObject);
-apiRouter.post('/contact', sendMessage);
+apiRouter.get('/classes', classList); // Get a list of all ojbect classes in the database
+apiRouter.put('/boundingbox/report/:id', reportObject); // Reports a bounding box as being incorrect
+apiRouter.post('/contact', sendMessage); // Send a message to the maintainers
 app.use('/api', apiRouter); // Mount behind the /api sub-route
 
 // Error handling (log it and return a 500 error)
