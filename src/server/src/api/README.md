@@ -13,7 +13,7 @@ All API calls returning data will have the data wrapped in the following code st
 
 ## Contains
 
-- [Feedback sending](contact/README.md)
-- [Requests for data](data/README.md)
-- [All searches](search/README.md)
-- [Utilities](contact/README.md)
+- [Feedback sending](contact/)
+- [Requests for data](data/)
+- [All searches](search/)
+- [Utilities](contact/)
