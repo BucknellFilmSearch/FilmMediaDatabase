@@ -1,1 +1,0 @@
-# PostgreSQL Config Files
