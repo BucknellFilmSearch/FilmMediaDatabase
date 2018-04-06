@@ -39,12 +39,12 @@ echo "Running build script with $build_tool"
 $build_tool run build \
   && popd &> /dev/null
 
-user=$(./scripts/utils/read.py credentials/ec2/config.json user)
-addr=$(./scripts/utils/read.py credentials/ec2/config.json addr)
+user=$(./scripts/utils/read.py configuration/ec2/config.json user)
+addr=$(./scripts/utils/read.py configuration/ec2/config.json addr)
 
 # Deploy files using ssh and tar
 echo "Copying to remote"
-tar -zcf - ./build | ssh -i credentials/ec2/default_cred.pem $user@$addr 'sudo tar -zxf - --no-same-owner -C /var/www --strip-components=2; cd /var/www; npm install; pm2 startOrRestart pm2_config.yml'
+tar -zcf - ./build | ssh -i configuration/ec2/default_cred.pem $user@$addr 'sudo tar -zxf - --no-same-owner -C /var/www --strip-components=2; cd /var/www; npm install; pm2 startOrRestart pm2_config.yml'
 
 # success
 popd &> /dev/null

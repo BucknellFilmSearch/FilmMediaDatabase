@@ -1,3 +1,4 @@
 *.pem
 *.json
 *.yaml
+*.yml
