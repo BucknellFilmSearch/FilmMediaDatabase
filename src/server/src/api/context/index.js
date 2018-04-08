@@ -44,7 +44,7 @@ const getContext = (req, res) => {
   query(queryCfg, {
     mapper: customMap,
     wrapper: customWrapper,
-    err: res.status(500),
+    err: () => res.status(500),
     cb: (data) => res.json(data)
   });
 };
