@@ -35,7 +35,7 @@ export default class MetadataDrawer extends React.Component {
   render() {
 
     let movieDetails = this.props.movieDetails;
-    let imgSrc = movieDetails !== null ? `${process.env.IMG_SRC}${movieDetails.movieOclcId}.gif` : null;
+    let imgSrc = movieDetails !== null ? `${process.env.IMG_SRC}covers/${movieDetails.movieOclcId}.gif` : null;
 
     return (
       <Drawer docked={true} open={true} openSecondary={true} zDepth={1} containerStyle={{height: 'calc(100% - 72px)', top: 72}}>
@@ -71,7 +71,7 @@ export default class MetadataDrawer extends React.Component {
               <div className="metadataDrawerDialogueContainer">
                 {movieDetails.runtimeInMinutes} minutes <br /> <br />
                 Line {this.props.screenshotDetails.movieLineNumber}: <br />
-                {`"${renderHTML(this.props.screenshotDetails.movieLineText)}"`} <br />
+                {renderHTML(this.props.screenshotDetails.movieLineText)} <br />
               </div>
               <Paper>
                 <div className="metadataDrawerTimelineContainer">
