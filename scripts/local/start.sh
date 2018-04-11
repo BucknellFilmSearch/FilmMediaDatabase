@@ -22,6 +22,9 @@ pushd $(dirname $0)/../../ &> /dev/null
 mkdir -p logs
 logdir=$(pwd)/logs
 
+# Load the image URL into a variable for use in the scripts
+export IMG_SRC=$(./scripts/utils/read.py ./configuration/config.json imgSrc)
+
 colorize 'Starting Server (use ctrl-C to exit)' 2
 pushd src/server/ &> /dev/null
 
