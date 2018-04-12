@@ -88,7 +88,7 @@ export default class AllFilms extends React.Component {
       const { routeParams: { searchType: oldRouteType } } = this.props;
       if (newSearchTerm !== newRouteTerm || newRouteType !== oldRouteType) {
         const params = { type: newRouteType || newSearchType || undefined };
-        this.props.fetchNewSearchTerm(newRouteTerm, params);
+        this.props.fetchNewSearchTerm(decodeURIComponent(newRouteTerm), params);
       }
     }
 

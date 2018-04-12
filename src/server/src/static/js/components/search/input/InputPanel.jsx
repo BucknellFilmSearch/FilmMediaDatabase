@@ -8,7 +8,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
-import { cleanStopWords, GENRES } from '../../helpers';
+import { GENRES } from '../../helpers';
 import { IconButton, MenuItem, RaisedButton, SelectField, Slider, TextField, AutoComplete } from 'material-ui';
 import { Tab, Tabs } from 'material-ui/Tabs';
 import HelpIcon from 'material-ui/svg-icons/action/help';
@@ -60,7 +60,7 @@ export default class InputPanel extends React.Component {
   updateSearch(event) {
         // stop default form submission behavior
     event.preventDefault();
-    const keywordOrPhrase = cleanStopWords(this.state.searchText);
+    const keywordOrPhrase = encodeURIComponent(this.state.searchText);
     this.setState({searchText: ''});
     if (this.state.searchType === 'object' && _.find(this.state.classes, className => className === this.state.searchText) === undefined) {
       this.setState({errorText: `'${this.state.searchText}' is not a recognized object type`});
@@ -72,7 +72,7 @@ export default class InputPanel extends React.Component {
         this.props.onSelectSearchType(this.state.searchType);
       }
             // update the URL
-      let newPath = `/${this.state.searchType}/${keywordOrPhrase.replace(/ /g, '&').replace('!', '').replace('?', '')}`;
+      let newPath = `/${this.state.searchType}/${keywordOrPhrase}`;
       hashHistory.push(newPath);
       this.setState({errorText: ''});
       if (this.props.handleClose) {

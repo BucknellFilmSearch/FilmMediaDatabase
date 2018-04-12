@@ -35,7 +35,7 @@ INNER JOIN
 WHERE
     mt.oclc_id = mm.oclc_id
   AND
-    mt.search_vector @@ to_tsquery('english', $1::text)
+    mt.search_vector @@ plainto_tsquery('english', $1::text)
 GROUP BY
   mm.oclc_id,
   mt.db_line_id,
