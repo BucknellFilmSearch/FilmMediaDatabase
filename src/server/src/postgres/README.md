@@ -1,8 +1,9 @@
 # postgres/
 
-This folder contains configuration files for the postgres database.
+Files for PostgreSQL on the server
 
 ## Contains
 
 ### [dbClient.js](dbClient.js)
-The database client specifying production or development environments.
+
+Exports the database client singleton as its default.

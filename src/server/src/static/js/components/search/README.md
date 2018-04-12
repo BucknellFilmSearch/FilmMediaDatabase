@@ -2,6 +2,10 @@
 
 This folder contains all of the react components that handles running the searches.
 
+## Contains
+
+- [Search Input Components](input)
+
 ### [Footer.jsx](Footer.jsx)
 This file renders our footer with flat buttons that link to other components or websites.
 
