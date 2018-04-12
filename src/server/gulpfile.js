@@ -53,7 +53,7 @@ gulp.task('build', ['build-ui'], () => {
 // Build the UI
 gulp.task('build-ui', () => {
 
-  const siteCfg = JSON.parse(fs.readFileSync(path.join(credDir, 'config.json')));
+  const siteCfg = JSON.parse(fs.readFileSync(path.join(configDir, 'config.json')));
 
   return browserify({
     entries: path.join(jsDir, 'app.jsx'),
