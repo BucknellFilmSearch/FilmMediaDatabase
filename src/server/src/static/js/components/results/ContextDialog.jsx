@@ -224,7 +224,7 @@ export default class ContextDialog extends Component {
    */
   retrieveBoundingBoxes(oclcId, lineNo) {
     // Request bounding boxes and unwrap
-    const bBoxApiCall = `http://${window.location.host}/api/boundingbox/${oclcId}/${lineNo}`;
+    const bBoxApiCall = `${window.location.origin}/api/boundingbox/${oclcId}/${lineNo}`;
 
     if (!_.has(this.state.boxes, `${oclcId}-${lineNo - 1}`)) {
       fetch(bBoxApiCall)
@@ -248,7 +248,7 @@ export default class ContextDialog extends Component {
   }
 
   reportBox() {
-    const reportApiCall = `http://${window.location.host}/api/boundingbox/report/${this.state.selectedBox}`;
+    const reportApiCall = `${window.location.origin}/api/boundingbox/report/${this.state.selectedBox}`;
     fetch(reportApiCall, {
       method: 'PUT'
     })

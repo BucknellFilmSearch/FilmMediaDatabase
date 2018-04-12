@@ -40,7 +40,7 @@ export default class InputPanel extends React.Component {
   }
 
   componentWillMount() {
-    fetch(`http://${window.location.host}/api/classes`)
+    fetch(`${window.location.origin}/api/classes`)
     .then(res => res.json())
     .then(res => res.results)
     .then(data => {

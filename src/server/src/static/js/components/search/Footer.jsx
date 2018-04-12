@@ -150,7 +150,7 @@ export default class Footer extends React.Component {
     if (this.state.contact.msg === '') {
       this.setState({ contact: { ...this.state.contact, err: 'Field required' } });
     } else {
-      fetch(`http://${window.location.host}/api/contact`, {
+      fetch(`${window.location.origin}/api/contact`, {
         method: 'POST',
         body: JSON.stringify(this.state.contact),
         credentials: 'same-origin',
