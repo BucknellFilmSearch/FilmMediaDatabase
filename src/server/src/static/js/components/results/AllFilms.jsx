@@ -47,7 +47,7 @@ export default class AllFilms extends React.Component {
     const params = {
       type: this.props.routeParams.searchType || undefined
     };
-    this.props.fetchNewSearchTerm(this.props.routeParams.searchTerm, params);
+    this.props.fetchNewSearchTerm(decodeURIComponent(this.props.routeParams.searchTerm), params);
   }
 
   /**
@@ -167,7 +167,7 @@ const receiveNewSearchTerm = (response) => {
 const fetchNewSearchTerm = (searchTerm, params) => {
   return (dispatch) => {
     dispatch(requestNewSearchTerm(searchTerm, params.type));
-    let queryString = `http://${window.location.host}/api/moviesearch/${searchTerm}`;
+    let queryString = `${window.location.origin}/api/moviesearch/${searchTerm}`;
     if (_.has(params, 'type')) {
       queryString += `?type=${params.type}`;
     }
