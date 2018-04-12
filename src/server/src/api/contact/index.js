@@ -12,6 +12,7 @@ const productionCfgPath = path.join(__dirname, 'config.json');
 const developmentCfgPath = path.join(__dirname, '..', '..', '..', '..', '..', 'configuration', 'contact', 'config.json');
 const cfg = JSON.parse(readFileSync((env === 'production') ? productionCfgPath : developmentCfgPath));
 
+// Nodemailer transporter - actually does the sending
 const transporter = nodemailer.createTransport({
   host: 'email-smtp.us-east-1.amazonaws.com',
   port: 465,
@@ -19,13 +20,22 @@ const transporter = nodemailer.createTransport({
   auth: cfg.auth
 });
 
-const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+/**
+ * Verifies an email address
+ * @param {string} address The email address to check
+ * @returns {boolean} Whether or not the email address is valid
+ */
 const isValidEmailAddress = (address) => {
+  const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return address.match(emailRegex) !== null;
 };
 
+
 const sendMessage = ({ body: {email, msg} }, res) => {
+  // Makes sure the email address is valid
   if (email === '' || isValidEmailAddress(email)) {
+    // Build and send an email
     transporter.sendMail({
       to: _.join(cfg.recipients, ', '),
       replyTo: email,
@@ -34,6 +44,7 @@ const sendMessage = ({ body: {email, msg} }, res) => {
       subject: `${moment().format('M/D/YYYY h:mm a')} - Film Search Engine Feedback`,
       text: msg
     }, (err) => {
+      // Handle return values
       if (err) {
         console.log(err.message);
         res.status(500);
