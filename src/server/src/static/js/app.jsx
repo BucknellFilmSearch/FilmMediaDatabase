@@ -56,6 +56,7 @@ export const reducer = (state = {
   search: null,
   context: [],
   searchType: undefined,
+  confidence: 0.8,
   sortType: 1,
   genre: 'All'
 }, action) => {
@@ -119,21 +120,22 @@ export const reducer = (state = {
           status: 'loading',
           response: null,
           searchTerm: action.searchTerm,
-          searchType: action.searchType
+          searchType: action.searchType,
+          confidence: action.confidence
         },
+        confidence: action.confidence,
         searchType: action.searchType,
         searchTerm: action.searchTerm,
         hoverMovieOclcId: null,
         hoverMovieLineNumber: null
       };
     case 'RECEIVE_NEW_SEARCH_TERM':
-      console.log(
-      );
       return {
         ...state,
         search: {
           status: 'loaded',
           response: action.response,
+          confidence: state.search.confidence,
           searchType: state.search.searchType,
           searchTerm: state.search.searchTerm
         },
@@ -166,6 +168,11 @@ export const reducer = (state = {
       return {
         ...state,
         genre: action.genre
+      };
+    case 'UPDATE_CONFIDENCE':
+      return {
+        ...state,
+        confidence: action.confidence
       };
     default:
       return state;

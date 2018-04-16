@@ -45,7 +45,8 @@ export default class AllFilms extends React.Component {
     }
 
     const params = {
-      type: this.props.routeParams.searchType || undefined
+      type: this.props.routeParams.searchType || undefined,
+      confidence: this.props.confidence
     };
     this.props.fetchNewSearchTerm(decodeURIComponent(this.props.routeParams.searchTerm), params);
   }
@@ -74,20 +75,41 @@ export default class AllFilms extends React.Component {
       return;
     }
 
-    // compare old search term to new, and old context to new
+    // Pull out incoming values for paths/search/confidence
     const {
       routeParams: { searchType: newRouteType, searchTerm: newRouteTerm },
-      search: { searchTerm: newSearchTerm, searchType: newSearchType}
+      search: { searchTerm: newSearchTerm, searchType: newSearchType},
+      location: { query: { confidence } }
     } = nextProps;
 
-    // new search term
+    const newConfidence = parseFloat(confidence);
+
+    // No search run yet
     if (this.props.search === null) {
-      const params = { type: newRouteType || newSearchType || undefined };
+      console.log(3);
+      const params = {
+        type: newRouteType || newSearchType || undefined,
+        confidence: newConfidence || nextProps.confidence
+      };
       this.props.fetchNewSearchTerm(newSearchTerm || newRouteTerm, params);
+    // If a search already exists
     } else {
-      const { routeParams: { searchType: oldRouteType } } = this.props;
-      if (newSearchTerm !== newRouteTerm || newRouteType !== oldRouteType) {
-        const params = { type: newRouteType || newSearchType || undefined };
+      // Pull out current values
+      const {
+        routeParams: {
+          searchType: oldRouteType
+        },
+        confidence: oldConfidence
+      } = this.props;
+      console.log(2);
+      // If existing values don't match incoming values
+      if (newSearchTerm !== newRouteTerm || newRouteType !== oldRouteType || oldConfidence !== newConfidence) {
+        // Map new params
+        console.log(oldConfidence, '=>', newConfidence);
+        const params = {
+          type: newRouteType || newSearchType || undefined,
+          confidence: newConfidence || nextProps.confidence
+        };
         this.props.fetchNewSearchTerm(decodeURIComponent(newRouteTerm), params);
       }
     }
@@ -135,11 +157,12 @@ export default class AllFilms extends React.Component {
 * @param {string} searchType The type of search to run (one of: text, object, color)
 * @returns {object} The action for requesting a new search term
 */
-export const requestNewSearchTerm = (searchTerm, searchType) => {
+export const requestNewSearchTerm = (searchTerm, searchType, confidence) => {
   return {
     type: 'REQUEST_NEW_SEARCH_TERM',
     searchTerm,
-    searchType
+    searchType,
+    confidence
   };
 };
 
@@ -166,10 +189,11 @@ const receiveNewSearchTerm = (response) => {
 */
 const fetchNewSearchTerm = (searchTerm, params) => {
   return (dispatch) => {
-    dispatch(requestNewSearchTerm(searchTerm, params.type));
+    dispatch(requestNewSearchTerm(searchTerm, params.type, params.confidence));
     let queryString = `${window.location.origin}/api/moviesearch/${searchTerm}`;
-    if (_.has(params, 'type')) {
-      queryString += `?type=${params.type}`;
+
+    if (_.keys(params).length !== 0) {
+      queryString += `?${_(params).keys().map(key => `${key}=${params[key]}`).join('&')}`;
     }
     return fetch(queryString)
     .then(response => response.json())
@@ -276,6 +300,7 @@ function mapStateToProps(state) {
     search: state.search,
     searchType: state.searchType,
     searchTerm: state.searchTerm,
+    confidence: state.confidence,
     queueContextMovieOclcId: state.queueContextMovieOclcId,
     queueCurrentContextMovieLineNumber: state.queueCurrentContextMovieLineNumber
   };
