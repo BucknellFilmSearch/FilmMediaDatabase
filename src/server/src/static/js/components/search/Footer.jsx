@@ -221,7 +221,7 @@ export default class Footer extends React.Component {
         <RaisedButton
           label='GitHub'
           style={ styles.button }
-          onTouchTap={ () => window.open('http://www.github.com/BucknellFilmSearch/') }
+          onTouchTap={ () => window.open('https://www.github.com/BucknellFilmSearch/') }
         />
         <RaisedButton
           label='Contact Us!'
