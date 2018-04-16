@@ -155,6 +155,7 @@ export default class AllFilms extends React.Component {
 * Redux action for when the user requests a new search term
 * @param {string} searchTerm New search term
 * @param {string} searchType The type of search to run (one of: text, object, color)
+* @param {string} confidence The minimum confidence bound for the search
 * @returns {object} The action for requesting a new search term
 */
 export const requestNewSearchTerm = (searchTerm, searchType, confidence) => {
