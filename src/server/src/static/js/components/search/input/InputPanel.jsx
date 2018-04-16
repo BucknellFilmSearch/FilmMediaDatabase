@@ -29,12 +29,12 @@ export default class InputPanel extends React.Component {
       searchType: this.props.searchType || 'object',
       searchText: this.props.searchTerm || '',
       errorText: '',
-      confidenceSlider: 0.8,
+      confidence: this.props.confidence || 0.8,
       classes: []
     };
     this.updateSearchForEnterKeypress = this.updateSearchForEnterKeypress.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleConfidenceSlider = this.handleConfidenceSlider.bind(this);
+    this.onUpdateConfidence = this.onUpdateConfidence.bind(this);
     this.onSelectSearchType = this.onSelectSearchType.bind(this);
     this.onDrop = this.onDrop.bind(this);
   }
@@ -50,6 +50,13 @@ export default class InputPanel extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      ...this.state,
+      confidence: nextProps.confidence
+    });
+  }
+
   /**
    * takes the search phrase and returns results in the results page. If they searched for only stop word(s),
    * a warning is displayed and no search is made.
@@ -62,17 +69,29 @@ export default class InputPanel extends React.Component {
     event.preventDefault();
     const keywordOrPhrase = encodeURIComponent(this.state.searchText);
     this.setState({searchText: ''});
+
+    // Checks for illegal object
     if (this.state.searchType === 'object' && _.find(this.state.classes, className => className === this.state.searchText) === undefined) {
       this.setState({errorText: `'${this.state.searchText}' is not a recognized object type`});
+
+    // Checks for empty search phrase
     } else if (keywordOrPhrase === '') {
       this.setState({errorText: 'Your search has returned too many results.'});
+
+    // Runs the request
     } else {
-            // Send search type to global state if changed
+      // Send search type to global state if changed
       if (this.state.searchType !== this.props.searchType) {
         this.props.onSelectSearchType(this.state.searchType);
       }
+
+      // Update the confidence level
+      if (this.state.confidence !== this.props.confidence) {
+        this.props.onUpdateConfidence(this.state.confidence);
+      }
+
             // update the URL
-      let newPath = `/${this.state.searchType}/${keywordOrPhrase}`;
+      let newPath = `/${this.state.searchType}/${keywordOrPhrase}?confidence=${this.state.confidence}`;
       hashHistory.push(newPath);
       this.setState({errorText: ''});
       if (this.props.handleClose) {
@@ -91,8 +110,8 @@ export default class InputPanel extends React.Component {
   onSelectSearchType(val) {
     this.setState({ searchType: val });
   }
-  handleConfidenceSlider(event, value) {
-    this.setState({confidenceSlider: value});
+  onUpdateConfidence(event, value) {
+    this.setState({confidence: value});
   }
 
   onDrop(acceptedFiles, rejectedFiles) {
@@ -134,15 +153,15 @@ export default class InputPanel extends React.Component {
                   >
                     <HelpIcon />
                   </IconButton>
-                  {`Confidence: ${Math.floor(this.state.confidenceSlider * 100)}%`}
+                  {`Confidence: ${Math.floor(this.state.confidence * 100)}%`}
                 </p>
                 <Slider
                   style={styles.slider.component}
-                  value={this.state.confidenceSlider}
+                  value={this.state.confidence}
                   step={0.05}
                   min={0.4}
                   max={1}
-                  onChange={this.handleConfidenceSlider}
+                  onChange={this.onUpdateConfidence}
                 />
               </div>
             </div>
@@ -231,9 +250,16 @@ const selectGenre = (genre) => {
     genre
   };
 };
+const updateConfidence = (confidence) => {
+  return {
+    type: 'UPDATE_CONFIDENCE',
+    confidence
+  };
+};
 // Map Redux state to component props
 function mapStateToProps(state) {
   return {
+    confidence: state.confidence,
     searchType: state.searchType,
     sortType: state.sortType,
     genre: state.genre,
@@ -245,6 +271,7 @@ function mapStateToProps(state) {
 // Map Redux actions to component props
 function mapDispatchToProps(dispatch) {
   return {
+    onUpdateConfidence: (confidence) => dispatch(updateConfidence(confidence)),
     onSelectSearchType: (searchType) => dispatch(selectSearchType(searchType)),
     onSelectSortType: (event, index, sortType) => dispatch(selectSortType(sortType)),
     onSelectGenre: (event, index, genre) => dispatch(selectGenre(genre))
