@@ -82,7 +82,7 @@ export default class AllFilms extends React.Component {
       location: { query: { confidence } }
     } = nextProps;
 
-    const newConfidence = parseFloat(confidence);
+    const newConfidence = parseFloat(confidence || this.props.confidence);
 
     // No search run yet
     if (this.props.search === null) {
