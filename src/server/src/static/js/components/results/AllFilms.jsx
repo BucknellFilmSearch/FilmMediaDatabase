@@ -82,11 +82,11 @@ export default class AllFilms extends React.Component {
       location: { query: { confidence } }
     } = nextProps;
 
+    // Use pre-existing confidence if not specified
     const newConfidence = parseFloat(confidence || this.props.confidence);
 
     // No search run yet
     if (this.props.search === null) {
-      console.log(3);
       const params = {
         type: newRouteType || newSearchType || undefined,
         confidence: newConfidence || nextProps.confidence
@@ -101,11 +101,9 @@ export default class AllFilms extends React.Component {
         },
         confidence: oldConfidence
       } = this.props;
-      console.log(2);
       // If existing values don't match incoming values
       if (newSearchTerm !== newRouteTerm || newRouteType !== oldRouteType || oldConfidence !== newConfidence) {
         // Map new params
-        console.log(oldConfidence, '=>', newConfidence);
         const params = {
           type: newRouteType || newSearchType || undefined,
           confidence: newConfidence || nextProps.confidence

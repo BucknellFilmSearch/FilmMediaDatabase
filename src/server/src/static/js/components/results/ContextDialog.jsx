@@ -27,8 +27,9 @@ import Visibility from 'material-ui/svg-icons/action/visibility';
 import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import _ from 'lodash';
 import { Snackbar } from 'material-ui';
+import { hashHistory } from 'react-router';
 
-const TIME_LINE_LENGTH = 1150;
+let TIME_LINE_LENGTH = 1150;
 const STROKE_WIDTH = 3;
 const CIRCLE_RADIUS = 7;
 
@@ -76,6 +77,7 @@ export default class ContextDialog extends Component {
     this.selectBox = this.selectBox.bind(this);
     this.deselectBox = this.deselectBox.bind(this);
     this.reportBox = this.reportBox.bind(this);
+    this.buildTimeline = this.buildTimeline.bind(this);
   }
 
   /**
@@ -107,9 +109,13 @@ export default class ContextDialog extends Component {
   }
 
   handleClose() {
-    this.setState({open: false});
+    this.setState({open: false}, () => {
+      const { searchType, searchTerm } = this.props;
+      setTimeout(() => hashHistory.push(`${searchType}/${searchTerm}`), 500);
+
+    });
     // TODO: Remove this. It's a terrible idea because it doesn't preserve history
-    window.history.back();
+    // window.history.back();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -117,7 +123,9 @@ export default class ContextDialog extends Component {
     if (this.state.open === false && nextProps.contextScreenshotMovieOclcId !== null) {
       this.handleOpen();
     }
-    this.retrieveBoundingBoxes(nextProps.currentFilm.movieOclcId, nextProps.currentScreenshot.movieLineNumber);
+    if (this.currentFilm && this.currentScreenshot) {
+      this.retrieveBoundingBoxes(nextProps.currentFilm.movieOclcId, nextProps.currentScreenshot.movieLineNumber);
+    }
   }
 
   /**
@@ -138,7 +146,10 @@ export default class ContextDialog extends Component {
    * @returns {undefined}
    */
   svgSlideTo(index) {
-    this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, index);
+    // TODO: - Left image will fail to load most of the time
+    // Might be implemented better down the road?
+
+    // this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, index);
     this.slider.slickGoTo(index);
   }
 
@@ -148,7 +159,7 @@ export default class ContextDialog extends Component {
    */
   slideLeft() {
     if (this.props.currentScreenshot !== null) {
-      this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber - 1);
+      // this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber - 1);
       this.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber - 2);
     }
   }
@@ -159,7 +170,7 @@ export default class ContextDialog extends Component {
    */
   slideRight() {
     if (this.props.currentScreenshot !== null) {
-      this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber + 1);
+      // this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber + 1);
       this.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber);
     }
   }
@@ -276,6 +287,47 @@ export default class ContextDialog extends Component {
     }
   }
 
+  buildTimeline() {
+
+    try {
+      TIME_LINE_LENGTH = this.ctxTimeline.offsetWidth * 0.8;
+    } catch (err) {
+      console.log();
+    }
+
+    let lineNo = -1;
+    try {
+      lineNo = this.props.currentScreenshot.movieLineNumber;
+    } catch (err) {
+      console.log();
+    }
+
+    const totalLines = this.props.currentFilm.totalNumberOfLines;
+    const tick = Math.ceil((lineNo - 1) / totalLines * TIME_LINE_LENGTH) + CIRCLE_RADIUS + STROKE_WIDTH;
+
+    return (
+      <div>
+        <svg height="70" width={TIME_LINE_LENGTH + 2 * (CIRCLE_RADIUS + 5)}>
+          <line x1={CIRCLE_RADIUS} y1="50" x2={10 + TIME_LINE_LENGTH} y2="50" stroke={'grey'} strokeWidth={1} />
+          {this.getScreenShotTimes()}
+          {
+            this.props.currentScreenshot !== null ? (
+              <line
+                x1={tick}
+                x2={tick}
+                y1="35"
+                y2="65"
+                strokeWidth={2}
+                stroke={'black'}
+              />
+            ) : null
+          }
+        </svg>
+          {this.createImageTooltips()}
+      </div>
+    );
+  }
+
   /**
    * Render the context page.
    * @returns {object} The JSX object representing this class
@@ -296,7 +348,10 @@ export default class ContextDialog extends Component {
               slidesToScroll={1}
               infinite={false}
               initialSlide={this.props.currentMovieLineNumber - 1}
-              afterChange={this.props.onSlideAndCheckForContext}
+              afterChange={(idx) => {
+                this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, idx);
+                this.props.onSlideAndCheckForContext(idx);
+              }}
               nextArrow={null}
               prevArrow={null}
               lazyLoad={true}
@@ -365,29 +420,8 @@ export default class ContextDialog extends Component {
             )
           }
         </div>
-        <div className="ContextTimeLine">
-          {this.props.currentFilm !== null ? (
-            <div>
-              <svg height="70" width={TIME_LINE_LENGTH + 2 * (CIRCLE_RADIUS + 5)}>
-                <line x1={CIRCLE_RADIUS} y1="50" x2={10 + TIME_LINE_LENGTH} y2="50" stroke={'grey'} strokeWidth={1} />
-                {this.getScreenShotTimes()}
-                {
-                  this.props.currentScreenshot !== null ? (
-                    <line
-                      x1={Math.ceil((this.props.currentScreenshot.movieLineNumber - 1) / this.props.currentFilm.totalNumberOfLines * TIME_LINE_LENGTH) + CIRCLE_RADIUS + STROKE_WIDTH}
-                      x2={Math.ceil((this.props.currentScreenshot.movieLineNumber - 1) / this.props.currentFilm.totalNumberOfLines * TIME_LINE_LENGTH) + CIRCLE_RADIUS + STROKE_WIDTH}
-                      y1="35"
-                      y2="65"
-                      strokeWidth={2}
-                      stroke={'black'}
-                    />
-                  ) : null
-                }
-              </svg>
-                {this.createImageTooltips()}
-            </div>
-            ) : null
-          }
+        <div className="ContextTimeLine" ref={ (cmp) => this.ctxTimeline = cmp }>
+          {this.props.currentFilm !== null ? this.buildTimeline() : null}
         </div>
         <div className="colorSearchButton" >
             <RaisedButton onClick={this.contextDialogueColorSearch} label="Color Search" style={style} />
@@ -467,8 +501,6 @@ const getClickedScreenshotMovieOclcId = (state) => state.contextMovieOclcId;
 
 const getCurrentContextMovieLineNumber = (state) => state.currentContextMovieLineNumber;
 
-// const getCurrentContextMovieLineNumber = (state) => state.currentContextMovieLineNumber;
-
 const getSearchResponse = (state) => state.search && state.search.response;
 
 const getCurrentFilm = createSelector(
@@ -502,6 +534,7 @@ function mapStateToProps(state) {
     currentFilm: getCurrentFilm(state),
     currentScreenshot: getCurrentScreenshot(state),
     images: getImages(state),
+    searchType: state.search && state.search.searchType ? state.search.searchType : null,
     searchTerm: state.search && state.search.searchTerm ? state.search.searchTerm : null
   };
 }

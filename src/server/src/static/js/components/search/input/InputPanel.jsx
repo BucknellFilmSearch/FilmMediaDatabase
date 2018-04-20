@@ -141,6 +141,7 @@ export default class InputPanel extends React.Component {
                   textFieldStyle={styles.input}
                   filter={AutoComplete.fuzzyFilter}
                   onUpdateInput={this.handleChange}
+                  menuStyle={{maxHeight: '30vh', overflowY: 'auto'}}
                   autoFocus
                 />
               </form>
