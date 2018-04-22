@@ -110,8 +110,12 @@ export default class ContextDialog extends Component {
 
   handleClose() {
     this.setState({open: false}, () => {
-      const { searchType, searchTerm } = this.props;
-      setTimeout(() => hashHistory.push(`${searchType}/${searchTerm}`), 500);
+      const {
+        searchType,
+        searchTerm,
+        confidence
+      } = this.props;
+      setTimeout(() => hashHistory.push(`${searchType}/${searchTerm}?confidence=${confidence}`), 500);
 
     });
     // TODO: Remove this. It's a terrible idea because it doesn't preserve history
@@ -235,7 +239,7 @@ export default class ContextDialog extends Component {
    */
   retrieveBoundingBoxes(oclcId, lineNo) {
     // Request bounding boxes and unwrap
-    const bBoxApiCall = `${window.location.origin}/api/boundingbox/${oclcId}/${lineNo}`;
+    const bBoxApiCall = `${window.location.origin}/api/boundingbox/${oclcId}/${lineNo}?confidence=${this.props.confidence}`;
 
     if (!_.has(this.state.boxes, `${oclcId}-${lineNo - 1}`)) {
       fetch(bBoxApiCall)
@@ -296,13 +300,15 @@ export default class ContextDialog extends Component {
     }
 
     let lineNo = -1;
+    let totalLines = -1;
     try {
       lineNo = this.props.currentScreenshot.movieLineNumber;
+      totalLines = this.props.currentFilm.totalNumberOfLines;
     } catch (err) {
       console.log();
+      return null;
     }
 
-    const totalLines = this.props.currentFilm.totalNumberOfLines;
     const tick = Math.ceil((lineNo - 1) / totalLines * TIME_LINE_LENGTH) + CIRCLE_RADIUS + STROKE_WIDTH;
 
     return (
@@ -374,6 +380,7 @@ export default class ContextDialog extends Component {
                   boxes={this.state.boxes[`${this.props.currentFilm.movieOclcId}-${imageNumber}`] || []}
                   selectedBox={this.state.selectedBox}
                   onSelectBox={this.selectBox}
+                  confidence={this.props.confidence}
                   display={this.state.showBoundingBoxes && imageNumber === this.props.currentMovieLineNumber}
                 />
               </GridTile>
@@ -535,7 +542,8 @@ function mapStateToProps(state) {
     currentScreenshot: getCurrentScreenshot(state),
     images: getImages(state),
     searchType: state.search && state.search.searchType ? state.search.searchType : null,
-    searchTerm: state.search && state.search.searchTerm ? state.search.searchTerm : null
+    searchTerm: state.search && state.search.searchTerm ? state.search.searchTerm : null,
+    confidence: state.search && state.search.confidence ? state.search.confidence : null
   };
 }
 

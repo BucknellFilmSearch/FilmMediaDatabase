@@ -56,8 +56,10 @@ export default class BoundingBox extends React.Component {
    */
   getBoxes(boxes) {
     // Sort the boxes so the smallest area goes on top and create the divs for them
-    return _.map(boxes.sort(({bounding: a}, {bounding: b}) => b[2] * b[3] - a[2] * a[3]), ({bounding: box, textLabel: label, id}, idx) => {
-      return (
+    return _(boxes.sort(({bounding: a}, {bounding: b}) => b[2] * b[3] - a[2] * a[3]))
+      .filter(box => box.confidence >= this.props.confidenc || 0.8)
+      .map(({bounding: box, textLabel: label, id}, idx) => {
+        return (
         <div
           key={idx}
           className={
@@ -70,8 +72,8 @@ export default class BoundingBox extends React.Component {
           >
             <p className="bounding-box-label">{ _.capitalize(label) }</p>
         </div>
-      );
-    });
+        );
+      }).value();
   }
 
   render() {
