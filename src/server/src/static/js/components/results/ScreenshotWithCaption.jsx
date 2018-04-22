@@ -52,7 +52,7 @@ export default class ScreenshotWithCaption extends React.Component {
             <img src={imgSrc}
               width={'100%'}
               onMouseEnter={() => this.props.onMouseEnterScreenshot()}
-              onClick={() => hashHistory.push(`${this.props.searchType}/${this.props.searchTerm}/context/${this.props.movieOclcId}/${this.props.screenshotDetails.movieLineNumber}`)} />
+              onClick={() => hashHistory.push(`${this.props.searchType}/${this.props.searchTerm}/context/${this.props.movieOclcId}/${this.props.screenshotDetails.movieLineNumber}?confidence=${this.props.confidence}`)} />
           </ReactCSSTransitionGroup>
         </LazyLoad>
       </GridTile>
@@ -79,6 +79,7 @@ const mouseEnterScreenshot = (movieOclcId, movieLineNumber) => {
 // Map Redux state to component props
 function mapStateToProps(state) {
   return {
+    confidence: state.confidence,
     searchType: state.searchType,
     searchTerm: state.search && state.search.searchTerm ? state.search.searchTerm : null
   };

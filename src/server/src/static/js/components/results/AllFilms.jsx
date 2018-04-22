@@ -38,15 +38,19 @@ export default class AllFilms extends React.Component {
   }
 
   componentDidMount() {
+    const {
+      routeParams: { searchType, searchTerm, contextOclcId, contextScreenshot },
+      location: { query: { confidence } }
+    } = this.props;
     // save context until search term is loaded
-    if (this.props.routeParams.contextOclcId) {
-      this.props.queueContext(this.props.routeParams.contextOclcId, this.props.routeParams.contextScreenshot);
-      hashHistory.push(`${this.props.routeParams.searchType}/${this.props.routeParams.searchTerm}`);
+    if (contextOclcId) {
+      this.props.queueContext(contextOclcId, contextScreenshot);
+      hashHistory.push(`${searchType}/${searchTerm}?confidence=${confidence || this.props.confidence}`);
     }
 
     const params = {
       type: this.props.routeParams.searchType || undefined,
-      confidence: this.props.confidence
+      confidence: confidence || this.props.confidence
     };
     this.props.fetchNewSearchTerm(decodeURIComponent(this.props.routeParams.searchTerm), params);
   }
@@ -68,12 +72,6 @@ export default class AllFilms extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.queueContextMovieOclcId && nextProps.filmsLoaded) {
-      this.props.dequeueContext();
-      // update url if there is queued context
-      hashHistory.push(`${nextProps.routeParams.searchType}/${nextProps.routeParams.searchTerm}/context/${nextProps.queueContextMovieOclcId}/${nextProps.queueCurrentContextMovieLineNumber}`);
-      return;
-    }
 
     // Pull out incoming values for paths/search/confidence
     const {
@@ -81,6 +79,13 @@ export default class AllFilms extends React.Component {
       search: { searchTerm: newSearchTerm, searchType: newSearchType},
       location: { query: { confidence } }
     } = nextProps;
+
+    if (nextProps.queueContextMovieOclcId && nextProps.filmsLoaded) {
+      this.props.dequeueContext();
+      // update url if there is queued context
+      hashHistory.push(`${nextProps.routeParams.searchType}/${nextProps.routeParams.searchTerm}/context/${nextProps.queueContextMovieOclcId}/${nextProps.queueCurrentContextMovieLineNumber}?confidence=${confidence || this.props.confidence}`);
+      return;
+    }
 
     // Use pre-existing confidence if not specified
     const newConfidence = parseFloat(confidence || this.props.confidence);
