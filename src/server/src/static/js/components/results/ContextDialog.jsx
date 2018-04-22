@@ -427,7 +427,9 @@ export default class ContextDialog extends Component {
             )
           }
         </div>
-        <div className="ContextTimeLine" ref={ (cmp) => this.ctxTimeline = cmp }>
+        <div className="ContextTimeLine" ref={ (cmp) => {
+          this.ctxTimeline = cmp;
+        } }>
           {this.props.currentFilm !== null ? this.buildTimeline() : null}
         </div>
         <div className="colorSearchButton" >
