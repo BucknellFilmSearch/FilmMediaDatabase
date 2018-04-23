@@ -154,7 +154,7 @@ export default class ContextDialog extends Component {
     // Might be implemented better down the road?
 
     // this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, index);
-    this.slider.slickGoTo(index);
+    this.deselectBox(() => this.slider.slickGoTo(index));
   }
 
   /**
@@ -164,7 +164,7 @@ export default class ContextDialog extends Component {
   slideLeft() {
     if (this.props.currentScreenshot !== null) {
       // this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber - 1);
-      this.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber - 2);
+      this.deselectBox(() => this.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber - 2));
     }
   }
 
@@ -175,7 +175,8 @@ export default class ContextDialog extends Component {
   slideRight() {
     if (this.props.currentScreenshot !== null) {
       // this.retrieveBoundingBoxes(this.props.currentFilm.movieOclcId, this.props.currentScreenshot.movieLineNumber + 1);
-      this.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber);
+      this.deselectBox(() => this.slider.slickGoTo(this.props.currentScreenshot.movieLineNumber));
+
     }
   }
 
@@ -255,11 +256,11 @@ export default class ContextDialog extends Component {
     }
   }
 
-  deselectBox() {
+  deselectBox(cb = () => {}) {
     this.setState({
       isBoxSelected: false,
       selectedBox: -1
-    });
+    }, cb);
   }
 
   reportBox() {
@@ -274,7 +275,16 @@ export default class ContextDialog extends Component {
           msg: 'Object Reported, Thank you!',
           open: true
         }
-      });
+      }, () => this.deselectBox(() => {
+        setTimeout(() => {
+          this.setState({
+            snackbar: {
+              msg: '',
+              open: false
+            }
+          });
+        }, 4000);
+      }));
       return res;
     })
     .catch(error => error);
