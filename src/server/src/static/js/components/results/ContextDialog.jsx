@@ -189,7 +189,6 @@ export default class ContextDialog extends Component {
   getScreenShotTimes() {
     return this.props.currentFilm.results.map((result) =>
       <SVGCircle
-        slideTo={this.svgSlideTo.bind(this)}
         index={result.movieLineNumber - 1}
         key={`screenshot${result.movieLineNumber}`}
         x={Math.ceil((result.movieLineNumber - 1) / (this.props.currentFilm.totalNumberOfLines) * (TIME_LINE_LENGTH)) + CIRCLE_RADIUS + STROKE_WIDTH}
