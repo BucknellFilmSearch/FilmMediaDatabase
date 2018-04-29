@@ -30,7 +30,9 @@ If running from Windows, we recommend using the
     [`NPM`](https://www.npmjs.com/)(node package manager), which is used to install and manage the project's JavaScript
     dependencies.
 
-- [`PostgresQL`](https://www.postgresql.org/download/): A SQL database that conforms to the ANSI-SQL:2008 standard.
+- [`PostgresQL`](https://www.postgresql.org/download/): A SQL database that conforms to the ANSI-SQL:2008 standard. The
+    database maintenance scripts provided assume that the default user on the development machine has all superuser
+    permissions.
 
 ### Optional (but recommended) Dependencies
 - [`Yarn`](https://yarnpkg.com/en/docs/install): A JavaScript package manager maintained by Facebook that is
@@ -53,9 +55,28 @@ These steps only need to be followed once to set up the development environment.
 
 # 3.  Clone the repository:
 $ git clone https://github.com/BucknellFilmSearch/FilmMediaDatabase.git
+$ cd FilmMediaDatabase
 
-# 4.  Run the setup script:
+# 4.  Copy your configuration files into the 'configuration' directory
+$ rm -rf configuration && cp -R /path/to/config/directory configuration
+
+# 5.  Run the setup script:
 $ ./scripts/local/setup.sh
+
+# 6.  Create a Postgres database for the project
+$ psql postgres
+
+  # IN PSQL
+  # -------------------------------
+  # CREATE DATABASE filmtvse;
+  # \q
+  # -------------------------------
+
+# 7.  (OPTION 1) Run the database creator if starting with no data
+$ ./scripts/utils/createDb.sh
+#     (OPTION 2) Run the database duplicator if you want to get data
+#                from an existing database (duplicates the production)
+$ ./scripts/utils/duplicateDb.sh
 ```
 
 ## Execution
