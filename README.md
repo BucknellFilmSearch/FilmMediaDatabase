@@ -193,7 +193,7 @@ __NOTE:__ Each subdirectory has its own README.txt with a more in-depth descript
     - [`remote`](scripts/remote) - Scripts that are used for deployment/remote management
     - [`utils`](scripts/utils) - Utility scripts for use in other scripts/migration
 - [`configuration`](configuration) - All config files that should NOT be included in the repository for security reasons
-    - [`aws`](configuration/api) - AWS credentials
+    - [`api`](configuration/api) - AWS credentials
     - [`contact`](configuration/contact) - SMTP Credentials
     - [`ec2`](configuration/ec2) - EC2 Credentials
     - [`postgres`](configuration/postgres) - Postgres credentials
