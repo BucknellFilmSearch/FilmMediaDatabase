@@ -77,6 +77,27 @@ $ ./scripts/utils/createDb.sh
 #     (OPTION 2) Run the database duplicator if you want to get data
 #                from an existing database (duplicates the production)
 $ ./scripts/utils/duplicateDb.sh
+
+# 8.  Gain User Access: Go to your ./configuration/postgres/config.json file and change the “development” user to match the “production” user. 
+
+# 9.  Create a Postgres User
+$ psql postgres
+
+  # IN PSQL
+  # -------------------------------
+  # CREATE USER <development user>;
+  # GRANT ALL PRIVILEGES ON DATABASE filmtvse TO <development user>;
+  # \q
+  # -------------------------------
+
+# 10.  Ensure all access rights 
+$ psql postgres
+
+  # IN PSQL
+  # -------------------------------
+  # GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO <development user>;
+  # \q
+  # -------------------------------
 ```
 
 ## Execution
