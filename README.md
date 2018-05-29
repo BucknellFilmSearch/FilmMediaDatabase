@@ -91,7 +91,7 @@ $ psql postgres
   # -------------------------------
 
 # 10.  Ensure all access rights 
-$ psql postgres
+$ psql filmtvse
 
   # IN PSQL
   # -------------------------------
