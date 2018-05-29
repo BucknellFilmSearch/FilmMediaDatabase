@@ -129,7 +129,7 @@ the specified ssh host.
 
 ```bash
 # Run deployment script
-$ ./scripts/local/deploy.sh
+$ ./scripts/remote/deploy.sh
 ```
 
 __Method 2:__ Automated build with manual relocation
