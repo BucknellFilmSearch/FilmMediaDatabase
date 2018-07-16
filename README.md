@@ -240,3 +240,6 @@ presentation.
 - Stefano Cobelli '18
 - Eric Marshall '18
 - Cole Whitley '18
+
+### Color Search and Backend Connection
+- Sarah Eckermann '20
