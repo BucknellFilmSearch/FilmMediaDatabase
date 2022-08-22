@@ -2,4 +2,4 @@ SQLAlchemy==1.1.1
 psycopg2==2.6.2
 pyzmail==1.0.3
 wsgiref==0.1.2
-numpy==1.13.0rc1
+numpy==1.22.0
